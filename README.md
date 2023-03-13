@@ -1,3 +1,3 @@
 WIP.
 
-Docs: https://effect-ts.github.io/io
+Docs: https://effect-ts.github.io/platform
