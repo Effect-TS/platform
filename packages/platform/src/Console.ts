@@ -8,7 +8,8 @@ import * as Context from "@effect/data/Context"
  * @category models
  */
 export interface Console {
-  log(message: any): void
+  log(...args: Array<any>): void
+  logError(...args: Array<any>): void
 }
 
 /**
