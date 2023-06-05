@@ -2,55 +2,15 @@
  * @since 1.0.0
  */
 import type * as Brand from "@effect/data/Brand"
-import type * as Data from "@effect/data/Data"
 import type { Option } from "@effect/data/Option"
 import type * as Effect from "@effect/io/Effect"
 import type { Scope } from "@effect/io/Scope"
-import * as internal from "@effect/platform/internal/fileSystem"
-
-/**
- * @since 1.0.0
- * @category type id
- */
-export const FileSystemErrorId: unique symbol = internal.FileSystemErrorId
-
-/**
- * @since 1.0.0
- * @category type id
- */
-export type FileSystemErrorId = typeof FileSystemErrorId
 
 /**
  * @since 1.0.0
  * @category models
  */
-export interface FileSystemError extends Data.Case {
-  readonly [FileSystemErrorId]: typeof FileSystemErrorId
-  readonly _tag: "FileSystemError"
-}
-
-/**
- * @since 1.0.0
- * @category models
- */
-export interface FileSyscallError extends Data.Case {
-  readonly [FileSystemErrorId]: typeof FileSystemErrorId
-  readonly _tag: "FileSyscallError"
-  readonly method: string
-}
-
-/**
- * @since 1.0.0
- * @category constructor
- */
-export const FileSystemError: Data.Case.Constructor<FileSystemError, "_tag" | FileSystemErrorId> =
-  internal.FileSystemError
-
-/**
- * @since 1.0.0
- * @category models
- */
-type FileDescriptor = Brand.Branded<number, "FileDescriptor">
+export type FileDescriptor = Brand.Branded<number, "FileDescriptor">
 
 /**
  * @since 1.0.0
