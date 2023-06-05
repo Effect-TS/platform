@@ -4,9 +4,14 @@
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "@effect/platform": ["./build/esm/index.js"],
-      "@effect/platform/*": ["./build/esm/*"]
+      "@effect/platform/test/*": ["./packages/platform/build/test/*"],
+      "@effect/platform/examples/*": ["./packages/platform/build/examples/*"],
+      "@effect/platform/*": ["./packages/platform/build/esm/*"],
     }
   },
-  "include": ["./build/esm/**/*.js"]
+  "include": [
+    "./packages/platform/build/esm/**/*.js",
+    "./packages/platform/build/test/**/*.js",
+    "./packages/platform/build/examples/**/*.js",
+  ]
 }
