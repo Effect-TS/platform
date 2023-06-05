@@ -12,26 +12,12 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [accessors](#accessors)
-  - [log](#log)
 - [context](#context)
   - [Console](#console)
 - [models](#models)
   - [Console (interface)](#console-interface)
 
 ---
-
-# accessors
-
-## log
-
-**Signature**
-
-```ts
-export declare const log: (message: any) => Effect.Effect<Console, never, void>
-```
-
-Added in v1.0.0
 
 # context
 
@@ -40,7 +26,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Console: any
+export declare const Console: Context.Tag<Console, Console>
 ```
 
 Added in v1.0.0
