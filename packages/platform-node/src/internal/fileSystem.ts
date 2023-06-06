@@ -10,7 +10,10 @@ import * as OS from "node:os"
 import * as Path from "node:path"
 
 const handleErrnoException = (method: string) =>
-  (err: NodeJS.ErrnoException, [path]: [path: NFS.PathLike, ...args: Array<any>]) => {
+  (
+    err: NodeJS.ErrnoException,
+    [path]: [path: NFS.PathLike | number, ...args: Array<any>]
+  ) => {
     let reason: Error.SystemErrorReason = "Unknown"
 
     switch (err.code) {
@@ -61,12 +64,36 @@ const handleBadArgument = (method: string) =>
       message: (err as Error).message ?? String(err)
     })
 
-const nodeAccess = effectify(NFS.access, handleErrnoException("access"), handleBadArgument("access"))
-const nodeCopyFile = effectify(NFS.copyFile, handleErrnoException("copyFile"), handleBadArgument("copyFile"))
-const nodeChmod = effectify(NFS.chmod, handleErrnoException("chmod"), handleBadArgument("chmod"))
-const nodeChown = effectify(NFS.chown, handleErrnoException("chown"), handleBadArgument("chown"))
-const nodeLink = effectify(NFS.link, handleErrnoException("link"), handleBadArgument("link"))
-const nodeMkdir = effectify(NFS.mkdir, handleErrnoException("makeDirectory"), handleBadArgument("makeDirectory"))
+const nodeAccess = effectify(
+  NFS.access,
+  handleErrnoException("access"),
+  handleBadArgument("access")
+)
+const nodeCopyFile = effectify(
+  NFS.copyFile,
+  handleErrnoException("copyFile"),
+  handleBadArgument("copyFile")
+)
+const nodeChmod = effectify(
+  NFS.chmod,
+  handleErrnoException("chmod"),
+  handleBadArgument("chmod")
+)
+const nodeChown = effectify(
+  NFS.chown,
+  handleErrnoException("chown"),
+  handleBadArgument("chown")
+)
+const nodeLink = effectify(
+  NFS.link,
+  handleErrnoException("link"),
+  handleBadArgument("link")
+)
+const nodeMkdir = effectify(
+  NFS.mkdir,
+  handleErrnoException("makeDirectory"),
+  handleBadArgument("makeDirectory")
+)
 const nodeMkdtemp = (method: string) =>
   effectify(
     NFS.mkdtemp,
@@ -75,7 +102,11 @@ const nodeMkdtemp = (method: string) =>
   )
 
 const remove = (method: string) => {
-  const nodeRm = effectify(NFS.rm, handleErrnoException(method), handleBadArgument(method))
+  const nodeRm = effectify(
+    NFS.rm,
+    handleErrnoException(method),
+    handleBadArgument(method)
+  )
   return (path: string, options?: FileSystem.RemoveOptions) => nodeRm(path, { recursive: options?.recursive ?? false })
 }
 
@@ -84,7 +115,9 @@ const makeTempDirectory = (method: string) => {
   return (options?: FileSystem.MakeTempDirectoryOptions) =>
     Effect.suspend(() => {
       const prefix = options?.prefix ?? ""
-      const directory = typeof options?.directory === "string" ? Path.join(options.directory, ".") : OS.tmpdir()
+      const directory = typeof options?.directory === "string"
+        ? Path.join(options.directory, ".")
+        : OS.tmpdir()
 
       return mkdtemp(prefix ? Path.join(directory, prefix) : directory)
     })
@@ -92,7 +125,9 @@ const makeTempDirectory = (method: string) => {
 
 const makeTempDirectoryScoped_ = makeTempDirectory("makeTempDirectoryScoped")
 const removeTempDirectoryScoped = remove("makeTempDirectoryScoped")
-const makeTempDirectoryScoped = (options?: FileSystem.MakeTempDirectoryOptions) =>
+const makeTempDirectoryScoped = (
+  options?: FileSystem.MakeTempDirectoryOptions
+) =>
   Effect.acquireRelease(
     makeTempDirectoryScoped_(options),
     (directory) => Effect.orDie(removeTempDirectoryScoped(directory))
@@ -102,12 +137,56 @@ const makeTempDirectoryFile = makeTempDirectory("makeTempFile")
 const randomHexString = (bytes: number) => Effect.sync(() => Crypto.randomBytes(bytes).toString("hex"))
 const makeTempFile = (options?: FileSystem.MakeTempFileOptions) =>
   pipe(
-    Effect.zip(
-      makeTempDirectoryFile(options),
-      randomHexString(6)
-    )
+    Effect.zip(makeTempDirectoryFile(options), randomHexString(6))
     // TODO: open file
   )
+
+const nodeOpen = effectify(
+  NFS.open,
+  handleErrnoException("open"),
+  handleBadArgument("open")
+)
+const nodeClose = effectify(
+  NFS.close,
+  handleErrnoException("open"),
+  handleBadArgument("open")
+)
+const open = (path: string, options?: FileSystem.OpenFileOptions) =>
+  pipe(
+    Effect.acquireRelease(
+      nodeOpen(path, options?.flag ?? "r", options?.mode),
+      (fd) => Effect.orDie(nodeClose(fd))
+    ),
+    Effect.map((fd) => makeFile(File.Descriptor(fd)))
+  )
+
+const makeFile = (fd: File.File.Descriptor) =>
+  File.make({
+    fd,
+    read: read(fd),
+    readAlloc: readAlloc(fd)
+  })
+
+const nodeRead = effectify(
+  NFS.read,
+  handleErrnoException("read"),
+  handleBadArgument("read")
+)
+const read = (fd: File.File.Descriptor) =>
+  (buffer: Uint8Array, options?: File.FileReadOptions) =>
+    Effect.map(
+      nodeRead(fd, {
+        buffer,
+        length: options?.length ? Number(options.length) : undefined,
+        offset: options?.offset ? Number(options.offset) : undefined
+      }),
+      FileSystem.Size
+    )
+
+const readAlloc = (fd: File.File.Descriptor) =>
+  (size: FileSystem.Size, options?: File.FileReadOptions) =>
+    /** TODO */
+    null as any
 
 const fileSystemImpl = FileSystem.make({
   access(path, options) {
@@ -140,7 +219,6 @@ const fileSystemImpl = FileSystem.make({
   },
   makeTempDirectory: makeTempDirectory("makeTempDirectory"),
   makeTempDirectoryScoped,
-  makeTempFile(options) {
-  },
+  makeTempFile(options) {},
   remove: remove("remove")
 })

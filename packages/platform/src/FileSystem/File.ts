@@ -11,7 +11,9 @@ import type { Size } from "@effect/platform/FileSystem"
  * @since 1.0.0
  * @category type id
  */
-export const FileTypeId: unique symbol = Symbol.for("@effect/platform/FileSystem/File")
+export const FileTypeId: unique symbol = Symbol.for(
+  "@effect/platform/FileSystem/File"
+)
 
 /**
  * @since 1.0.0
@@ -27,11 +29,23 @@ export interface File {
   readonly [FileTypeId]: FileTypeId
   readonly fd: File.Descriptor
   readonly stat: Effect.Effect<never, PlatformError, File.Info>
-  readonly read: (buffer: Uint8Array, options?: FileReadOptions) => Effect.Effect<never, PlatformError, Size>
-  readonly readAlloc: (size: Size, options?: FileReadOptions) => Effect.Effect<never, PlatformError, Option<Uint8Array>>
-  readonly truncate: (length?: Size) => Effect.Effect<never, PlatformError, void>
-  readonly write: (buffer: Uint8Array) => Effect.Effect<never, PlatformError, Size>
-  readonly writeAll: (buffer: Uint8Array) => Effect.Effect<never, PlatformError, void>
+  readonly read: (
+    buffer: Uint8Array,
+    options?: FileReadOptions
+  ) => Effect.Effect<never, PlatformError, Size>
+  readonly readAlloc: (
+    size: Size,
+    options?: FileReadOptions
+  ) => Effect.Effect<never, PlatformError, Option<Uint8Array>>
+  readonly truncate: (
+    length?: Size
+  ) => Effect.Effect<never, PlatformError, void>
+  readonly write: (
+    buffer: Uint8Array
+  ) => Effect.Effect<never, PlatformError, Size>
+  readonly writeAll: (
+    buffer: Uint8Array
+  ) => Effect.Effect<never, PlatformError, void>
 }
 
 /**
@@ -85,7 +99,7 @@ export namespace File {
  * @since 1.0.0
  * @category constructor
  */
-export const FileDescriptor = Brand.nominal<File.Descriptor>()
+export const Descriptor = Brand.nominal<File.Descriptor>()
 
 /**
  * @since 1.0.0

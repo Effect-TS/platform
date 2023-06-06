@@ -77,13 +77,24 @@ export interface MakeTempFileOptions {
  * @since 1.0.0
  * @category model
  */
+export type OpenFlag =
+  | "r"
+  | "r+"
+  | "w"
+  | "wx"
+  | "w+"
+  | "wx+"
+  | "a"
+  | "ax"
+  | "a+"
+  | "ax+"
+
+/**
+ * @since 1.0.0
+ * @category model
+ */
 export interface OpenFileOptions {
-  readonly read?: boolean
-  readonly write?: boolean
-  readonly append?: boolean
-  readonly truncate?: boolean
-  readonly create?: boolean
-  readonly createNew?: boolean
+  readonly flag?: OpenFlag
   readonly mode?: number
 }
 
@@ -125,9 +136,7 @@ export interface StreamOptions {
  * @category model
  */
 export interface WriteFileOptions {
-  readonly append?: boolean
-  readonly create?: boolean
-  readonly createNew?: boolean
+  readonly flag?: OpenFlag
   readonly mode?: number
 }
 
@@ -136,34 +145,76 @@ export interface WriteFileOptions {
  * @category model
  */
 export interface FileSystem {
-  readonly access: (path: string, options?: AccessFileOptions) => Effect.Effect<never, PlatformError, void>
+  readonly access: (
+    path: string,
+    options?: AccessFileOptions
+  ) => Effect.Effect<never, PlatformError, void>
   readonly copyFile: (
     fromPath: string,
     toPath: string
   ) => Effect.Effect<never, PlatformError, void>
-  readonly chmod: (path: string, mode: number) => Effect.Effect<never, PlatformError, void>
-  readonly chown: (path: string, uid: number, gid: number) => Effect.Effect<never, PlatformError, void>
+  readonly chmod: (
+    path: string,
+    mode: number
+  ) => Effect.Effect<never, PlatformError, void>
+  readonly chown: (
+    path: string,
+    uid: number,
+    gid: number
+  ) => Effect.Effect<never, PlatformError, void>
   readonly link: (
     fromPath: string,
     toPath: string
   ) => Effect.Effect<never, PlatformError, void>
-  readonly makeDirectory: (path: string, options?: MakeDirectoryOptions) => Effect.Effect<never, PlatformError, void>
-  readonly makeTempDirectory: (options?: MakeTempDirectoryOptions) => Effect.Effect<never, PlatformError, string>
-  readonly makeTempDirectoryScoped: (options?: MakeTempDirectoryOptions) => Effect.Effect<Scope, PlatformError, string>
-  readonly makeTempFile: (options?: MakeTempFileOptions) => Effect.Effect<Scope, PlatformError, File>
-  readonly open: (path: string, options?: OpenFileOptions) => Effect.Effect<Scope, PlatformError, File>
+  readonly makeDirectory: (
+    path: string,
+    options?: MakeDirectoryOptions
+  ) => Effect.Effect<never, PlatformError, void>
+  readonly makeTempDirectory: (
+    options?: MakeTempDirectoryOptions
+  ) => Effect.Effect<never, PlatformError, string>
+  readonly makeTempDirectoryScoped: (
+    options?: MakeTempDirectoryOptions
+  ) => Effect.Effect<Scope, PlatformError, string>
+  readonly makeTempFile: (
+    options?: MakeTempFileOptions
+  ) => Effect.Effect<Scope, PlatformError, File>
+  readonly open: (
+    path: string,
+    options?: OpenFileOptions
+  ) => Effect.Effect<Scope, PlatformError, File>
   readonly readDirectory: (
     path: string,
     options?: ReadDirectoryOptions
   ) => Effect.Effect<never, PlatformError, Uint8Array>
-  readonly readFile: (path: string) => Effect.Effect<never, PlatformError, Uint8Array>
-  readonly readLink: (path: string) => Effect.Effect<never, PlatformError, string>
-  readonly realPath: (path: string) => Effect.Effect<never, PlatformError, string>
-  readonly remove: (path: string, options?: RemoveOptions) => Effect.Effect<never, PlatformError, void>
-  readonly rename: (oldPath: string, newPath: string) => Effect.Effect<never, PlatformError, void>
-  readonly sink: (path: string, options?: SinkOptions) => Sink<never, PlatformError, Uint8Array, never, void>
-  readonly stat: (path: string) => Effect.Effect<never, PlatformError, File.Info>
-  readonly stream: (path: string, options?: StreamOptions) => Stream<never, PlatformError, Uint8Array>
+  readonly readFile: (
+    path: string
+  ) => Effect.Effect<never, PlatformError, Uint8Array>
+  readonly readLink: (
+    path: string
+  ) => Effect.Effect<never, PlatformError, string>
+  readonly realPath: (
+    path: string
+  ) => Effect.Effect<never, PlatformError, string>
+  readonly remove: (
+    path: string,
+    options?: RemoveOptions
+  ) => Effect.Effect<never, PlatformError, void>
+  readonly rename: (
+    oldPath: string,
+    newPath: string
+  ) => Effect.Effect<never, PlatformError, void>
+  readonly sink: (
+    path: string,
+    options?: SinkOptions
+  ) => Sink<never, PlatformError, Uint8Array, never, void>
+  readonly stat: (
+    path: string
+  ) => Effect.Effect<never, PlatformError, File.Info>
+  readonly stream: (
+    path: string,
+    options?: StreamOptions
+  ) => Stream<never, PlatformError, Uint8Array>
   readonly symlink: (
     fromPath: string,
     toPath: string
