@@ -1,75 +1,29 @@
 /**
  * @since 1.0.0
  */
-import * as Brand from "@effect/data/Brand"
+import type * as Brand from "@effect/data/Brand"
 import type { Tag } from "@effect/data/Context"
-import type { Option } from "@effect/data/Option"
 import type * as Effect from "@effect/io/Effect"
 import type { Scope } from "@effect/io/Scope"
 import type { PlatformError } from "@effect/platform/Error"
+import type { File } from "@effect/platform/FileSystem/File"
 import * as internal from "@effect/platform/internal/fileSystem"
 import type { Sink } from "@effect/stream/Sink"
 import type { Stream } from "@effect/stream/Stream"
 
 /**
+ * Represents a size in bytes.
+ *
  * @since 1.0.0
  * @category model
  */
-export type FileDescriptor = Brand.Branded<number, "FileDescriptor">
+export type Size = Brand.Branded<bigint, "Size">
 
 /**
  * @since 1.0.0
  * @category constructor
  */
-export const FileDescriptor = Brand.nominal<FileDescriptor>()
-
-/**
- * @since 1.0.0
- * @category model
- */
-export interface File {
-  readonly fd: FileDescriptor
-  readonly stat: Effect.Effect<never, PlatformError, FileInfo>
-  readonly read: (buffer: Uint8Array, options?: FileReadOptions) => Effect.Effect<never, PlatformError, number>
-  readonly truncate: (length?: number) => Effect.Effect<never, PlatformError, void>
-  readonly write: (buffer: Uint8Array) => Effect.Effect<never, PlatformError, number>
-}
-
-/**
- * @since 1.0.0
- * @category model
- */
-export interface FileReadOptions {
-  readonly offset?: number
-  readonly length?: number
-}
-
-/**
- * @since 1.0.0
- * @category model
- */
-export interface FileInfo {
-  readonly isFile: boolean
-  readonly isDirectory: boolean
-  readonly isSymbolicLink: boolean
-  readonly isBlockDevice: boolean
-  readonly isCharacterDevice: boolean
-  readonly isFIFO: boolean
-  readonly isSocket: boolean
-  readonly mtime: Option<Date>
-  readonly atime: Option<Date>
-  readonly birthtime: Option<Date>
-  readonly dev: number
-  readonly ino: Option<number>
-  readonly mode: number
-  readonly nlink: Option<number>
-  readonly uid: Option<number>
-  readonly gid: Option<number>
-  readonly rdev: Option<number>
-  readonly size: number
-  readonly blksize: Option<number>
-  readonly blocks: Option<number>
-}
+export const Size: (bytes: number | bigint) => Size = internal.Size
 
 /**
  * @since 1.0.0
@@ -161,9 +115,9 @@ export interface SinkOptions extends OpenFileOptions {}
  */
 export interface StreamOptions {
   bufferSize?: number
-  bytesToRead?: number
-  chunkSize?: number
-  offset?: number
+  bytesToRead?: Size
+  chunkSize?: Size
+  offset?: Size
 }
 
 /**
@@ -208,7 +162,7 @@ export interface FileSystem {
   readonly remove: (path: string, options?: RemoveOptions) => Effect.Effect<never, PlatformError, void>
   readonly rename: (oldPath: string, newPath: string) => Effect.Effect<never, PlatformError, void>
   readonly sink: (path: string, options?: SinkOptions) => Sink<never, PlatformError, Uint8Array, never, void>
-  readonly stat: (path: string) => Effect.Effect<never, PlatformError, FileInfo>
+  readonly stat: (path: string) => Effect.Effect<never, PlatformError, File.Info>
   readonly stream: (path: string, options?: StreamOptions) => Stream<never, PlatformError, Uint8Array>
   readonly symlink: (
     fromPath: string,
@@ -216,7 +170,7 @@ export interface FileSystem {
   ) => Effect.Effect<never, PlatformError, void>
   readonly truncate: (
     path: string,
-    length?: number
+    length?: Size
   ) => Effect.Effect<never, PlatformError, void>
   readonly utime: (
     path: string,
