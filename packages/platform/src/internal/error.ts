@@ -7,7 +7,7 @@ export const PlatformErrorTypeId: Error.PlatformErrorTypeId = Symbol.for(
 ) as Error.PlatformErrorTypeId
 
 const make = <A extends Error.PlatformError>(tag: A["_tag"]) =>
-  (props: Omit<A, Error.PlatformErrorTypeId | keyof Data.Case | "_tag">): A =>
+  (props: Omit<A, Error.PlatformError.ProvidedFields>): A =>
     Data.struct({
       [PlatformErrorTypeId]: PlatformErrorTypeId,
       _tag: tag,
