@@ -17,12 +17,12 @@ Added in v1.0.0
   - [make](#make)
 - [model](#model)
   - [AccessFileOptions (interface)](#accessfileoptions-interface)
-  - [DirectoryEntry (interface)](#directoryentry-interface)
   - [FileSystem (interface)](#filesystem-interface)
   - [MakeDirectoryOptions (interface)](#makedirectoryoptions-interface)
-  - [MakeTempDirOptions (interface)](#maketempdiroptions-interface)
+  - [MakeTempDirectoryOptions (interface)](#maketempdirectoryoptions-interface)
   - [MakeTempFileOptions (interface)](#maketempfileoptions-interface)
   - [OpenFileOptions (interface)](#openfileoptions-interface)
+  - [OpenFlag (type alias)](#openflag-type-alias)
   - [ReadDirectoryOptions (interface)](#readdirectoryoptions-interface)
   - [RemoveOptions (interface)](#removeoptions-interface)
   - [SinkOptions (interface)](#sinkoptions-interface)
@@ -30,7 +30,7 @@ Added in v1.0.0
   - [StreamOptions (interface)](#streamoptions-interface)
   - [WriteFileOptions (interface)](#writefileoptions-interface)
 - [tag](#tag)
-  - [tag](#tag-1)
+  - [FileSystem](#filesystem)
 
 ---
 
@@ -72,21 +72,6 @@ export interface AccessFileOptions {
 
 Added in v1.0.0
 
-## DirectoryEntry (interface)
-
-**Signature**
-
-```ts
-export interface DirectoryEntry {
-  readonly name: string
-  readonly isDirectory: boolean
-  readonly isFile: boolean
-  readonly isSymbolicLink: boolean
-}
-```
-
-Added in v1.0.0
-
 ## FileSystem (interface)
 
 **Signature**
@@ -98,15 +83,15 @@ export interface FileSystem {
   readonly chmod: (path: string, mode: number) => Effect.Effect<never, PlatformError, void>
   readonly chown: (path: string, uid: number, gid: number) => Effect.Effect<never, PlatformError, void>
   readonly link: (fromPath: string, toPath: string) => Effect.Effect<never, PlatformError, void>
-  readonly makeTempDir: (options?: MakeTempDirOptions) => Effect.Effect<never, PlatformError, string>
-  readonly makeTempDirScoped: (options?: MakeTempDirOptions) => Effect.Effect<Scope, PlatformError, string>
-  readonly makeTempFile: (options?: MakeTempFileOptions) => Effect.Effect<never, PlatformError, string>
   readonly makeDirectory: (path: string, options?: MakeDirectoryOptions) => Effect.Effect<never, PlatformError, void>
+  readonly makeTempDirectory: (options?: MakeTempDirectoryOptions) => Effect.Effect<never, PlatformError, string>
+  readonly makeTempDirectoryScoped: (options?: MakeTempDirectoryOptions) => Effect.Effect<Scope, PlatformError, string>
+  readonly makeTempFile: (options?: MakeTempFileOptions) => Effect.Effect<Scope, PlatformError, File>
   readonly open: (path: string, options?: OpenFileOptions) => Effect.Effect<Scope, PlatformError, File>
   readonly readDirectory: (
     path: string,
     options?: ReadDirectoryOptions
-  ) => Effect.Effect<never, PlatformError, Uint8Array>
+  ) => Effect.Effect<never, PlatformError, ReadonlyArray<string>>
   readonly readFile: (path: string) => Effect.Effect<never, PlatformError, Uint8Array>
   readonly readLink: (path: string) => Effect.Effect<never, PlatformError, string>
   readonly realPath: (path: string) => Effect.Effect<never, PlatformError, string>
@@ -145,12 +130,12 @@ export interface MakeDirectoryOptions {
 
 Added in v1.0.0
 
-## MakeTempDirOptions (interface)
+## MakeTempDirectoryOptions (interface)
 
 **Signature**
 
 ```ts
-export interface MakeTempDirOptions {
+export interface MakeTempDirectoryOptions {
   readonly directory?: string
   readonly prefix?: string
 }
@@ -177,14 +162,19 @@ Added in v1.0.0
 
 ```ts
 export interface OpenFileOptions {
-  readonly read?: boolean
-  readonly write?: boolean
-  readonly append?: boolean
-  readonly truncate?: boolean
-  readonly create?: boolean
-  readonly createNew?: boolean
+  readonly flag?: OpenFlag
   readonly mode?: number
 }
+```
+
+Added in v1.0.0
+
+## OpenFlag (type alias)
+
+**Signature**
+
+```ts
+export type OpenFlag = 'r' | 'r+' | 'w' | 'wx' | 'w+' | 'wx+' | 'a' | 'ax' | 'a+' | 'ax+'
 ```
 
 Added in v1.0.0
@@ -256,9 +246,7 @@ Added in v1.0.0
 
 ```ts
 export interface WriteFileOptions {
-  readonly append?: boolean
-  readonly create?: boolean
-  readonly createNew?: boolean
+  readonly flag?: OpenFlag
   readonly mode?: number
 }
 ```
@@ -267,12 +255,12 @@ Added in v1.0.0
 
 # tag
 
-## tag
+## FileSystem
 
 **Signature**
 
 ```ts
-export declare const tag: Tag<FileSystem, FileSystem>
+export declare const FileSystem: Tag<FileSystem, FileSystem>
 ```
 
 Added in v1.0.0

@@ -1,6 +1,6 @@
 ---
 title: Error.ts
-nav_order: 2
+nav_order: 3
 parent: "@effect/platform-node"
 ---
 
@@ -12,21 +12,57 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [model](#model)
+- [error](#error)
+  - [BadArgument](#badargument)
   - [PlatformError](#platformerror)
+  - [SystemError](#systemerror)
+- [model](#model)
+  - [SystemErrorReason](#systemerrorreason)
 - [type id](#type-id)
   - [PlatformErrorTypeId](#platformerrortypeid)
 
 ---
 
-# model
+# error
+
+## BadArgument
+
+**Signature**
+
+```ts
+export declare const BadArgument: (props: Omit<BadArgument, PlatformError.ProvidedFields>) => BadArgument
+```
+
+Added in v1.0.0
 
 ## PlatformError
 
 **Signature**
 
 ```ts
-export declare const PlatformError: PlatformError
+export declare const PlatformError: any
+```
+
+Added in v1.0.0
+
+## SystemError
+
+**Signature**
+
+```ts
+export declare const SystemError: (props: Omit<SystemError, PlatformError.ProvidedFields>) => SystemError
+```
+
+Added in v1.0.0
+
+# model
+
+## SystemErrorReason
+
+**Signature**
+
+```ts
+export declare const SystemErrorReason: any
 ```
 
 Added in v1.0.0

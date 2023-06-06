@@ -13,8 +13,10 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructor](#constructor)
-  - [FileDescriptor](#filedescriptor)
+  - [Descriptor](#descriptor)
   - [make](#make)
+- [guard](#guard)
+  - [isFile](#isfile)
 - [model](#model)
   - [File (interface)](#file-interface)
   - [FileReadOptions (interface)](#filereadoptions-interface)
@@ -26,12 +28,12 @@ Added in v1.0.0
 
 # constructor
 
-## FileDescriptor
+## Descriptor
 
 **Signature**
 
 ```ts
-export declare const FileDescriptor: Brand.Brand.Constructor<File.Descriptor>
+export declare const Descriptor: Brand.Brand.Constructor<File.Descriptor>
 ```
 
 Added in v1.0.0
@@ -42,6 +44,18 @@ Added in v1.0.0
 
 ```ts
 export declare const make: (impl: Omit<File, FileTypeId>) => File
+```
+
+Added in v1.0.0
+
+# guard
+
+## isFile
+
+**Signature**
+
+```ts
+export declare const isFile: (u: unknown) => u is File
 ```
 
 Added in v1.0.0

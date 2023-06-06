@@ -12,21 +12,22 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [constructor](#constructor)
+- [error](#error)
   - [BadArgument](#badargument)
-  - [SystemError](#systemerror)
-- [models](#models)
   - [BadArgument (interface)](#badargument-interface)
   - [PlatformError (type alias)](#platformerror-type-alias)
-  - [SystemError (interface)](#systemerror-interface)
+  - [SystemError](#systemerror)
+- [model](#model)
   - [SystemErrorReason (type alias)](#systemerrorreason-type-alias)
+- [models](#models)
+  - [SystemError (interface)](#systemerror-interface)
 - [type id](#type-id)
   - [PlatformErrorTypeId](#platformerrortypeid)
   - [PlatformErrorTypeId (type alias)](#platformerrortypeid-type-alias)
 
 ---
 
-# constructor
+# error
 
 ## BadArgument
 
@@ -37,18 +38,6 @@ export declare const BadArgument: (props: Omit<BadArgument, PlatformError.Provid
 ```
 
 Added in v1.0.0
-
-## SystemError
-
-**Signature**
-
-```ts
-export declare const SystemError: (props: Omit<SystemError, PlatformError.ProvidedFields>) => SystemError
-```
-
-Added in v1.0.0
-
-# models
 
 ## BadArgument (interface)
 
@@ -72,19 +61,17 @@ export type PlatformError = BadArgument | SystemError
 
 Added in v1.0.0
 
-## SystemError (interface)
+## SystemError
 
 **Signature**
 
 ```ts
-export interface SystemError extends PlatformError.Base {
-  readonly _tag: 'SystemError'
-  readonly reason: SystemErrorReason
-  readonly pathOrDescriptor: string | number
-}
+export declare const SystemError: (props: Omit<SystemError, PlatformError.ProvidedFields>) => SystemError
 ```
 
 Added in v1.0.0
+
+# model
 
 ## SystemErrorReason (type alias)
 
@@ -100,8 +87,26 @@ export type SystemErrorReason =
   | 'PermissionDenied'
   | 'TimedOut'
   | 'UnexpectedEof'
+  | 'Unknown'
   | 'WouldBlock'
   | 'WriteZero'
+```
+
+Added in v1.0.0
+
+# models
+
+## SystemError (interface)
+
+**Signature**
+
+```ts
+export interface SystemError extends PlatformError.Base {
+  readonly _tag: 'SystemError'
+  readonly reason: SystemErrorReason
+  readonly syscall?: string
+  readonly pathOrDescriptor: string | number
+}
 ```
 
 Added in v1.0.0

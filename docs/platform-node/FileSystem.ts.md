@@ -1,6 +1,6 @@
 ---
 title: FileSystem.ts
-nav_order: 3
+nav_order: 4
 parent: "@effect/platform-node"
 ---
 
@@ -14,10 +14,20 @@ Added in v1.0.0
 
 - [constructor](#constructor)
   - [Size](#size)
+- [layer](#layer)
+  - [layer](#layer-1)
 - [model](#model)
-  - [FileSystem](#filesystem)
+  - [MakeDirectoryOptions](#makedirectoryoptions)
+  - [MakeTempDirOptions](#maketempdiroptions)
+  - [MakeTempFileOptions](#maketempfileoptions)
   - [OpenFileOptions](#openfileoptions)
+  - [ReadDirectoryOptions](#readdirectoryoptions)
+  - [RemoveOptions](#removeoptions)
+  - [SinkOptions](#sinkoptions)
+  - [StreamOptions](#streamoptions)
   - [WriteFileOptions](#writefileoptions)
+- [tag](#tag)
+  - [FileSystem](#filesystem)
 
 ---
 
@@ -33,14 +43,46 @@ export declare const Size: (bytes: number | bigint) => Size
 
 Added in v1.0.0
 
-# model
+# layer
 
-## FileSystem
+## layer
 
 **Signature**
 
 ```ts
-export declare const FileSystem: FileSystem
+export declare const layer: Layer<never, never, FileSystem>
+```
+
+Added in v1.0.0
+
+# model
+
+## MakeDirectoryOptions
+
+**Signature**
+
+```ts
+export declare const MakeDirectoryOptions: MakeDirectoryOptions
+```
+
+Added in v1.0.0
+
+## MakeTempDirOptions
+
+**Signature**
+
+```ts
+export declare const MakeTempDirOptions: MakeTempDirectoryOptions
+```
+
+Added in v1.0.0
+
+## MakeTempFileOptions
+
+**Signature**
+
+```ts
+export declare const MakeTempFileOptions: MakeTempFileOptions
 ```
 
 Added in v1.0.0
@@ -55,12 +97,64 @@ export declare const OpenFileOptions: OpenFileOptions
 
 Added in v1.0.0
 
+## ReadDirectoryOptions
+
+**Signature**
+
+```ts
+export declare const ReadDirectoryOptions: ReadDirectoryOptions
+```
+
+Added in v1.0.0
+
+## RemoveOptions
+
+**Signature**
+
+```ts
+export declare const RemoveOptions: RemoveOptions
+```
+
+Added in v1.0.0
+
+## SinkOptions
+
+**Signature**
+
+```ts
+export declare const SinkOptions: SinkOptions
+```
+
+Added in v1.0.0
+
+## StreamOptions
+
+**Signature**
+
+```ts
+export declare const StreamOptions: StreamOptions
+```
+
+Added in v1.0.0
+
 ## WriteFileOptions
 
 **Signature**
 
 ```ts
 export declare const WriteFileOptions: WriteFileOptions
+```
+
+Added in v1.0.0
+
+# tag
+
+## FileSystem
+
+**Signature**
+
+```ts
+export declare const FileSystem: Tag<FileSystem, FileSystem>
 ```
 
 Added in v1.0.0

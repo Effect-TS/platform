@@ -12,33 +12,33 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [context](#context)
-  - [tag](#tag)
-- [model](#model)
+- [layer](#layer)
+  - [layer](#layer-1)
+- [tag](#tag)
   - [Console](#console)
 
 ---
 
-# context
+# layer
 
-## tag
+## layer
 
 **Signature**
 
 ```ts
-export declare const tag: Tag<Console, Console>
+export declare const layer: Layer<never, never, Console>
 ```
 
 Added in v1.0.0
 
-# model
+# tag
 
 ## Console
 
 **Signature**
 
 ```ts
-export declare const Console: Console
+export declare const Console: Tag<Console, Console>
 ```
 
 Added in v1.0.0

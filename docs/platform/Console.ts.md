@@ -12,24 +12,12 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [context](#context)
-  - [tag](#tag)
 - [model](#model)
   - [Console (interface)](#console-interface)
+- [tag](#tag)
+  - [Console](#console)
 
 ---
-
-# context
-
-## tag
-
-**Signature**
-
-```ts
-export declare const tag: Context.Tag<Console, Console>
-```
-
-Added in v1.0.0
 
 # model
 
@@ -42,6 +30,18 @@ export interface Console {
   log(...args: Array<any>): void
   logError(...args: Array<any>): void
 }
+```
+
+Added in v1.0.0
+
+# tag
+
+## Console
+
+**Signature**
+
+```ts
+export declare const Console: Context.Tag<Console, Console>
 ```
 
 Added in v1.0.0
