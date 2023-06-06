@@ -14,6 +14,6 @@ export interface Console {
 
 /**
  * @since 1.0.0
- * @category context
+ * @category tag
  */
-export const tag: Context.Tag<Console, Console> = Context.Tag<Console>()
+export const Console: Context.Tag<Console, Console> = Context.Tag<Console>()

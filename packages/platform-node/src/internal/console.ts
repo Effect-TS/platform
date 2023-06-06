@@ -3,7 +3,7 @@ import * as Layer from "@effect/io/Layer"
 import * as Console from "@effect/platform/Console"
 
 /** @internal */
-const consoleImpl = Console.tag.of({
+const consoleImpl = Console.Console.of({
   log(...args) {
     return Effect.sync(() => {
       console.log(...args)
@@ -17,4 +17,4 @@ const consoleImpl = Console.tag.of({
 })
 
 /** @internal */
-export const layer = Layer.succeed(Console.tag, consoleImpl)
+export const layer = Layer.succeed(Console.Console, consoleImpl)
