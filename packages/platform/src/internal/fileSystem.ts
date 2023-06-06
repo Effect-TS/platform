@@ -19,13 +19,13 @@ export const make = (impl: Omit<FileSystem, "stream" | "sink">): FileSystem => {
     ...impl,
     stream: (path, options) =>
       pipe(
-        impl.open(path, { read: true }),
+        impl.open(path, { flag: "r" }),
         Effect.map((file) => stream(file, options)),
         Stream.unwrapScoped
       ),
     sink: (path, options) =>
       pipe(
-        impl.open(path, { write: true, ...options }),
+        impl.open(path, { flag: "w", ...options }),
         Effect.map((file) => Sink.forEach((_: Uint8Array) => file.writeAll(_))),
         Sink.unwrapScoped
       )
