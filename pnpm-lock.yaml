@@ -122,6 +122,9 @@ importers:
       '@effect/io':
         specifier: ^0.26.0
         version: 0.26.0
+      '@effect/stream':
+        specifier: ^0.22.0
+        version: 0.22.0
     publishDirectory: dist
 
 packages:
@@ -734,6 +737,13 @@ packages:
       '@fp-ts/core': 0.0.11
       '@fp-ts/data': 0.0.41
     dev: true
+
+  /@effect/stream@0.22.0:
+    resolution: {integrity: sha512-kmn3CquMfrCVDtU4hrEzvP+rreBt0g0T41QapDvNmFD7bnhJXGoeLTNRZr6MVnKg4M/ubVWlhZ+Qa7IMKezRgg==}
+    dependencies:
+      '@effect/data': 0.12.4
+      '@effect/io': 0.26.0
+    dev: false
 
   /@esbuild/android-arm64@0.17.19:
     resolution: {integrity: sha512-KBMWvEZooR7+kzY0BtbTQn0OAYY7CsiydT63pVEaPtVYF0hXbUaOyZog37DKxK7NF3XacBJOpYT4adIJh+avxA==}

@@ -1,21 +1,31 @@
 /**
  * @since 1.0.0
  */
-import type * as Brand from "@effect/data/Brand"
+import * as Brand from "@effect/data/Brand"
+import type { Tag } from "@effect/data/Context"
 import type { Option } from "@effect/data/Option"
 import type * as Effect from "@effect/io/Effect"
 import type { Scope } from "@effect/io/Scope"
 import type { PlatformError } from "@effect/platform/Error"
+import * as internal from "@effect/platform/internal/fileSystem"
+import type { Sink } from "@effect/stream/Sink"
+import type { Stream } from "@effect/stream/Stream"
 
 /**
  * @since 1.0.0
- * @category models
+ * @category model
  */
 export type FileDescriptor = Brand.Branded<number, "FileDescriptor">
 
 /**
  * @since 1.0.0
- * @category models
+ * @category constructor
+ */
+export const FileDescriptor = Brand.nominal<FileDescriptor>()
+
+/**
+ * @since 1.0.0
+ * @category model
  */
 export interface File {
   readonly fd: FileDescriptor
@@ -27,7 +37,7 @@ export interface File {
 
 /**
  * @since 1.0.0
- * @category models
+ * @category model
  */
 export interface FileReadOptions {
   readonly offset?: number
@@ -36,7 +46,7 @@ export interface FileReadOptions {
 
 /**
  * @since 1.0.0
- * @category models
+ * @category model
  */
 export interface FileInfo {
   readonly isFile: boolean
@@ -63,7 +73,7 @@ export interface FileInfo {
 
 /**
  * @since 1.0.0
- * @category models
+ * @category model
  */
 export interface AccessFileOptions {
   readonly ok?: boolean
@@ -73,7 +83,7 @@ export interface AccessFileOptions {
 
 /**
  * @since 1.0.0
- * @category models
+ * @category model
  */
 export interface DirectoryEntry {
   readonly name: string
@@ -84,7 +94,7 @@ export interface DirectoryEntry {
 
 /**
  * @since 1.0.0
- * @category models
+ * @category model
  */
 export interface MakeDirectoryOptions {
   readonly recursive?: boolean
@@ -93,7 +103,7 @@ export interface MakeDirectoryOptions {
 
 /**
  * @since 1.0.0
- * @category models
+ * @category model
  */
 export interface MakeTempDirOptions {
   readonly directory?: string
@@ -102,7 +112,7 @@ export interface MakeTempDirOptions {
 
 /**
  * @since 1.0.0
- * @category models
+ * @category model
  */
 export interface MakeTempFileOptions {
   readonly directory?: string
@@ -111,7 +121,7 @@ export interface MakeTempFileOptions {
 
 /**
  * @since 1.0.0
- * @category models
+ * @category model
  */
 export interface OpenFileOptions {
   readonly read?: boolean
@@ -125,7 +135,7 @@ export interface OpenFileOptions {
 
 /**
  * @since 1.0.0
- * @category models
+ * @category model
  */
 export interface ReadDirectoryOptions {
   readonly recursive?: boolean
@@ -133,7 +143,7 @@ export interface ReadDirectoryOptions {
 
 /**
  * @since 1.0.0
- * @category models
+ * @category model
  */
 export interface RemoveOptions {
   readonly recursive?: boolean
@@ -141,7 +151,24 @@ export interface RemoveOptions {
 
 /**
  * @since 1.0.0
- * @category models
+ * @category model
+ */
+export interface SinkOptions extends OpenFileOptions {}
+
+/**
+ * @since 1.0.0
+ * @category model
+ */
+export interface StreamOptions {
+  bufferSize?: number
+  bytesToRead?: number
+  chunkSize?: number
+  offset?: number
+}
+
+/**
+ * @since 1.0.0
+ * @category model
  */
 export interface WriteFileOptions {
   readonly append?: boolean
@@ -152,7 +179,7 @@ export interface WriteFileOptions {
 
 /**
  * @since 1.0.0
- * @category models
+ * @category model
  */
 export interface FileSystem {
   readonly access: (path: string, options?: AccessFileOptions) => Effect.Effect<never, PlatformError, void>
@@ -167,6 +194,7 @@ export interface FileSystem {
     toPath: string
   ) => Effect.Effect<never, PlatformError, void>
   readonly makeTempDir: (options?: MakeTempDirOptions) => Effect.Effect<never, PlatformError, string>
+  readonly makeTempDirScoped: (options?: MakeTempDirOptions) => Effect.Effect<Scope, PlatformError, string>
   readonly makeTempFile: (options?: MakeTempFileOptions) => Effect.Effect<never, PlatformError, string>
   readonly makeDirectory: (path: string, options?: MakeDirectoryOptions) => Effect.Effect<never, PlatformError, void>
   readonly open: (path: string, options?: OpenFileOptions) => Effect.Effect<Scope, PlatformError, File>
@@ -179,7 +207,9 @@ export interface FileSystem {
   readonly realPath: (path: string) => Effect.Effect<never, PlatformError, string>
   readonly remove: (path: string, options?: RemoveOptions) => Effect.Effect<never, PlatformError, void>
   readonly rename: (oldPath: string, newPath: string) => Effect.Effect<never, PlatformError, void>
+  readonly sink: (path: string, options?: SinkOptions) => Sink<never, PlatformError, Uint8Array, never, void>
   readonly stat: (path: string) => Effect.Effect<never, PlatformError, FileInfo>
+  readonly stream: (path: string, options?: StreamOptions) => Stream<never, PlatformError, Uint8Array>
   readonly symlink: (
     fromPath: string,
     toPath: string
@@ -199,3 +229,15 @@ export interface FileSystem {
     options?: WriteFileOptions
   ) => Effect.Effect<never, PlatformError, void>
 }
+
+/**
+ * @since 1.0.0
+ * @category tag
+ */
+export const tag: Tag<FileSystem, FileSystem> = internal.tag
+
+/**
+ * @since 1.0.0
+ * @category constructor
+ */
+export const make: (impl: Omit<FileSystem, "stream" | "sink">) => FileSystem = internal.make

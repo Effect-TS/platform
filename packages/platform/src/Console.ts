@@ -5,7 +5,7 @@ import * as Context from "@effect/data/Context"
 
 /**
  * @since 1.0.0
- * @category models
+ * @category model
  */
 export interface Console {
   log(...args: Array<any>): void
