@@ -12,11 +12,6 @@ export type {
    * @since 1.0.0
    * @category model
    */
-  FileSystem,
-  /**
-   * @since 1.0.0
-   * @category model
-   */
   MakeDirectoryOptions,
   /**
    * @since 1.0.0
@@ -63,12 +58,12 @@ export type {
 export {
   /**
    * @since 1.0.0
-   * @category constructor
-   */
-  Size,
-  /**
-   * @since 1.0.0
    * @category tag
    */
-  tag
+  FileSystem,
+  /**
+   * @since 1.0.0
+   * @category constructor
+   */
+  Size
 } from "@effect/platform/FileSystem"

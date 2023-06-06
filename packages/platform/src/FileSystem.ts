@@ -239,7 +239,7 @@ export interface FileSystem {
  * @since 1.0.0
  * @category tag
  */
-export const tag: Tag<FileSystem, FileSystem> = internal.tag
+export const FileSystem: Tag<FileSystem, FileSystem> = internal.tag
 
 /**
  * @since 1.0.0
