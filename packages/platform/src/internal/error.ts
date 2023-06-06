@@ -18,7 +18,4 @@ const make = <A extends Error.PlatformError>(tag: A["_tag"]) =>
 export const badArgument = make<Error.BadArgument>("BadArgument")
 
 /** @internal */
-export const permissionDenied = make<Error.PermissionDenied>("PermissionDenied")
-
-/** @internal */
 export const systemError = make<Error.SystemError>("SystemError")

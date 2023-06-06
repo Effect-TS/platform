@@ -20,7 +20,7 @@ export type PlatformErrorTypeId = typeof PlatformErrorTypeId
  * @since 1.0.0
  * @category models
  */
-export type PlatformError = BadArgument | SystemError | PermissionDenied
+export type PlatformError = BadArgument | SystemError
 
 /**
  * @since 1.0.0
@@ -68,6 +68,7 @@ export type SystemErrorReason =
   | "Busy"
   | "InvalidData"
   | "NotFound"
+  | "PermissionDenied"
   | "TimedOut"
   | "UnexpectedEof"
   | "WouldBlock"
@@ -88,21 +89,3 @@ export interface SystemError extends PlatformError.Base {
  * @category constructor
  */
 export const SystemError: (props: Omit<SystemError, PlatformError.ProvidedFields>) => SystemError = internal.systemError
-
-/**
- * @since 1.0.0
- * @category models
- */
-export interface PermissionDenied extends PlatformError.Base {
-  readonly _tag: "PermissionDenied"
-  readonly module: "FileSystem"
-  readonly method: string
-  readonly pathOrDescriptor: string | number
-}
-
-/**
- * @since 1.0.0
- * @category constructor
- */
-export const PermissionDenied: (props: Omit<PermissionDenied, PlatformError.ProvidedFields>) => PermissionDenied =
-  internal.permissionDenied
