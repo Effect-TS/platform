@@ -189,7 +189,7 @@ const makeTempDirectoryScoped = (() => {
   ) =>
     Effect.acquireRelease(
       makeDirectory(options),
-      (directory) => Effect.orDie(removeDirectory(directory))
+      (directory) => Effect.orDie(removeDirectory(directory, { recursive: true }))
     )
 })()
 
