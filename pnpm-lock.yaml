@@ -127,6 +127,22 @@ importers:
         version: 0.22.0
     publishDirectory: dist
 
+  packages/platform-node:
+    dependencies:
+      '@effect/data':
+        specifier: ^0.12.5
+        version: 0.12.5
+      '@effect/io':
+        specifier: ^0.26.0
+        version: 0.26.0
+      '@effect/platform':
+        specifier: workspace:^
+        version: link:../platform/dist
+      '@effect/stream':
+        specifier: ^0.22.0
+        version: 0.22.0
+    publishDirectory: dist
+
 packages:
 
   /@ampproject/remapping@2.2.1:
@@ -4501,7 +4517,7 @@ packages:
       '@jest/types': 26.6.2
       '@types/stack-utils': 2.0.1
       chalk: 4.1.2
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       micromatch: 4.0.5
       pretty-format: 26.6.2
       slash: 3.0.0
@@ -4581,7 +4597,7 @@ packages:
   /jsonfile@4.0.0:
     resolution: {integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==}
     optionalDependencies:
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
     dev: true
 
   /kind-of@3.2.2:

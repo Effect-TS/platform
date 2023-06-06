@@ -13,15 +13,11 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructor](#constructor)
-  - [FileDescriptor](#filedescriptor)
+  - [Size](#size)
   - [make](#make)
 - [model](#model)
   - [AccessFileOptions (interface)](#accessfileoptions-interface)
   - [DirectoryEntry (interface)](#directoryentry-interface)
-  - [File (interface)](#file-interface)
-  - [FileDescriptor (type alias)](#filedescriptor-type-alias)
-  - [FileInfo (interface)](#fileinfo-interface)
-  - [FileReadOptions (interface)](#filereadoptions-interface)
   - [FileSystem (interface)](#filesystem-interface)
   - [MakeDirectoryOptions (interface)](#makedirectoryoptions-interface)
   - [MakeTempDirOptions (interface)](#maketempdiroptions-interface)
@@ -30,6 +26,7 @@ Added in v1.0.0
   - [ReadDirectoryOptions (interface)](#readdirectoryoptions-interface)
   - [RemoveOptions (interface)](#removeoptions-interface)
   - [SinkOptions (interface)](#sinkoptions-interface)
+  - [Size (type alias)](#size-type-alias)
   - [StreamOptions (interface)](#streamoptions-interface)
   - [WriteFileOptions (interface)](#writefileoptions-interface)
 - [tag](#tag)
@@ -39,12 +36,12 @@ Added in v1.0.0
 
 # constructor
 
-## FileDescriptor
+## Size
 
 **Signature**
 
 ```ts
-export declare const FileDescriptor: Brand.Brand.Constructor<FileDescriptor>
+export declare const Size: (bytes: number | bigint) => Size
 ```
 
 Added in v1.0.0
@@ -90,76 +87,6 @@ export interface DirectoryEntry {
 
 Added in v1.0.0
 
-## File (interface)
-
-**Signature**
-
-```ts
-export interface File {
-  readonly fd: FileDescriptor
-  readonly stat: Effect.Effect<never, PlatformError, FileInfo>
-  readonly read: (buffer: Uint8Array, options?: FileReadOptions) => Effect.Effect<never, PlatformError, number>
-  readonly truncate: (length?: number) => Effect.Effect<never, PlatformError, void>
-  readonly write: (buffer: Uint8Array) => Effect.Effect<never, PlatformError, number>
-}
-```
-
-Added in v1.0.0
-
-## FileDescriptor (type alias)
-
-**Signature**
-
-```ts
-export type FileDescriptor = Brand.Branded<number, 'FileDescriptor'>
-```
-
-Added in v1.0.0
-
-## FileInfo (interface)
-
-**Signature**
-
-```ts
-export interface FileInfo {
-  readonly isFile: boolean
-  readonly isDirectory: boolean
-  readonly isSymbolicLink: boolean
-  readonly isBlockDevice: boolean
-  readonly isCharacterDevice: boolean
-  readonly isFIFO: boolean
-  readonly isSocket: boolean
-  readonly mtime: Option<Date>
-  readonly atime: Option<Date>
-  readonly birthtime: Option<Date>
-  readonly dev: number
-  readonly ino: Option<number>
-  readonly mode: number
-  readonly nlink: Option<number>
-  readonly uid: Option<number>
-  readonly gid: Option<number>
-  readonly rdev: Option<number>
-  readonly size: number
-  readonly blksize: Option<number>
-  readonly blocks: Option<number>
-}
-```
-
-Added in v1.0.0
-
-## FileReadOptions (interface)
-
-**Signature**
-
-```ts
-export interface FileReadOptions {
-  readonly offset?: number
-  readonly length?: number
-}
-```
-
-Added in v1.0.0
-
 ## FileSystem (interface)
 
 **Signature**
@@ -186,10 +113,10 @@ export interface FileSystem {
   readonly remove: (path: string, options?: RemoveOptions) => Effect.Effect<never, PlatformError, void>
   readonly rename: (oldPath: string, newPath: string) => Effect.Effect<never, PlatformError, void>
   readonly sink: (path: string, options?: SinkOptions) => Sink<never, PlatformError, Uint8Array, never, void>
-  readonly stat: (path: string) => Effect.Effect<never, PlatformError, FileInfo>
+  readonly stat: (path: string) => Effect.Effect<never, PlatformError, File.Info>
   readonly stream: (path: string, options?: StreamOptions) => Stream<never, PlatformError, Uint8Array>
   readonly symlink: (fromPath: string, toPath: string) => Effect.Effect<never, PlatformError, void>
-  readonly truncate: (path: string, length?: number) => Effect.Effect<never, PlatformError, void>
+  readonly truncate: (path: string, length?: Size) => Effect.Effect<never, PlatformError, void>
   readonly utime: (
     path: string,
     atime: Date | number,
@@ -296,6 +223,18 @@ export interface SinkOptions extends OpenFileOptions {}
 
 Added in v1.0.0
 
+## Size (type alias)
+
+Represents a size in bytes.
+
+**Signature**
+
+```ts
+export type Size = Brand.Branded<bigint, 'Size'>
+```
+
+Added in v1.0.0
+
 ## StreamOptions (interface)
 
 **Signature**
@@ -303,9 +242,9 @@ Added in v1.0.0
 ```ts
 export interface StreamOptions {
   bufferSize?: number
-  bytesToRead?: number
-  chunkSize?: number
-  offset?: number
+  bytesToRead?: Size
+  chunkSize?: Size
+  offset?: Size
 }
 ```
 

@@ -1,7 +1,7 @@
 ---
 title: Console.ts
 nav_order: 1
-parent: "@effect/platform"
+parent: "@effect/platform-node"
 ---
 
 ## Console overview
@@ -15,7 +15,7 @@ Added in v1.0.0
 - [context](#context)
   - [tag](#tag)
 - [model](#model)
-  - [Console (interface)](#console-interface)
+  - [Console](#console)
 
 ---
 
@@ -26,22 +26,19 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const tag: Context.Tag<Console, Console>
+export declare const tag: Tag<Console, Console>
 ```
 
 Added in v1.0.0
 
 # model
 
-## Console (interface)
+## Console
 
 **Signature**
 
 ```ts
-export interface Console {
-  log(...args: Array<any>): void
-  logError(...args: Array<any>): void
-}
+export declare const Console: Console
 ```
 
 Added in v1.0.0

@@ -7,11 +7,19 @@
       "@effect/platform/test/*": ["./packages/platform/build/test/*"],
       "@effect/platform/examples/*": ["./packages/platform/build/examples/*"],
       "@effect/platform/*": ["./packages/platform/build/esm/*"],
+
+      "@effect/platform-node/test/*": ["./packages/platform-node/build/test/*"],
+      "@effect/platform-node/examples/*": ["./packages/platform-node/build/examples/*"],
+      "@effect/platform-node/*": ["./packages/platform-node/build/esm/*"],
     }
   },
   "include": [
     "./packages/platform/build/esm/**/*.js",
     "./packages/platform/build/test/**/*.js",
     "./packages/platform/build/examples/**/*.js",
+
+    "./packages/platform-node/build/esm/**/*.js",
+    "./packages/platform-node/build/test/**/*.js",
+    "./packages/platform-node/build/examples/**/*.js",
   ]
 }

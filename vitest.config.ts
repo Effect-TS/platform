@@ -16,7 +16,10 @@ export default defineConfig({
   resolve: {
     alias: {
       "@effect/platform/test": path.join(__dirname, "packages/platform/test"),
-      "@effect/platform": path.join(__dirname, "packages/platform/src")
+      "@effect/platform": path.join(__dirname, "packages/platform/src"),
+
+      "@effect/platform-node/test": path.join(__dirname, "packages/platform-node/test"),
+      "@effect/platform-node": path.join(__dirname, "packages/platform-node/src")
     }
   }
 })

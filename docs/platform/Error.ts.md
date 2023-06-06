@@ -14,11 +14,9 @@ Added in v1.0.0
 
 - [constructor](#constructor)
   - [BadArgument](#badargument)
-  - [PermissionDenied](#permissiondenied)
   - [SystemError](#systemerror)
 - [models](#models)
   - [BadArgument (interface)](#badargument-interface)
-  - [PermissionDenied (interface)](#permissiondenied-interface)
   - [PlatformError (type alias)](#platformerror-type-alias)
   - [SystemError (interface)](#systemerror-interface)
   - [SystemErrorReason (type alias)](#systemerrorreason-type-alias)
@@ -36,16 +34,6 @@ Added in v1.0.0
 
 ```ts
 export declare const BadArgument: (props: Omit<BadArgument, PlatformError.ProvidedFields>) => BadArgument
-```
-
-Added in v1.0.0
-
-## PermissionDenied
-
-**Signature**
-
-```ts
-export declare const PermissionDenied: (props: Omit<PermissionDenied, PlatformError.ProvidedFields>) => PermissionDenied
 ```
 
 Added in v1.0.0
@@ -74,27 +62,12 @@ export interface BadArgument extends PlatformError.Base {
 
 Added in v1.0.0
 
-## PermissionDenied (interface)
-
-**Signature**
-
-```ts
-export interface PermissionDenied extends PlatformError.Base {
-  readonly _tag: 'PermissionDenied'
-  readonly module: 'FileSystem'
-  readonly method: string
-  readonly pathOrDescriptor: string | number
-}
-```
-
-Added in v1.0.0
-
 ## PlatformError (type alias)
 
 **Signature**
 
 ```ts
-export type PlatformError = BadArgument | SystemError | PermissionDenied
+export type PlatformError = BadArgument | SystemError
 ```
 
 Added in v1.0.0
@@ -124,6 +97,7 @@ export type SystemErrorReason =
   | 'Busy'
   | 'InvalidData'
   | 'NotFound'
+  | 'PermissionDenied'
   | 'TimedOut'
   | 'UnexpectedEof'
   | 'WouldBlock'

@@ -39,6 +39,10 @@
       "@effect/platform/test/*": ["./packages/platform/test/*"],
       "@effect/platform/examples/*": ["./packages/platform/examples/*"],
       "@effect/platform/*": ["./packages/platform/src/*"],
+
+      "@effect/platform-node/test/*": ["./packages/platform-node/test/*"],
+      "@effect/platform-node/examples/*": ["./packages/platform-node/examples/*"],
+      "@effect/platform-node/*": ["./packages/platform-node/src/*"],
     },
     "plugins": [{ "name": "@effect/language-service" }]
   },
