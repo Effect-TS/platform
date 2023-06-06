@@ -18,7 +18,7 @@ export type PlatformErrorTypeId = typeof PlatformErrorTypeId
 
 /**
  * @since 1.0.0
- * @category models
+ * @category error
  */
 export type PlatformError = BadArgument | SystemError
 
@@ -46,7 +46,7 @@ export namespace PlatformError {
 
 /**
  * @since 1.0.0
- * @category models
+ * @category error
  */
 export interface BadArgument extends PlatformError.Base {
   readonly _tag: "BadArgument"
@@ -54,13 +54,13 @@ export interface BadArgument extends PlatformError.Base {
 
 /**
  * @since 1.0.0
- * @category constructor
+ * @category error
  */
 export const BadArgument: (props: Omit<BadArgument, PlatformError.ProvidedFields>) => BadArgument = internal.badArgument
 
 /**
  * @since 1.0.0
- * @category models
+ * @category model
  */
 export type SystemErrorReason =
   | "AlreadyExists"
@@ -71,6 +71,7 @@ export type SystemErrorReason =
   | "PermissionDenied"
   | "TimedOut"
   | "UnexpectedEof"
+  | "Unknown"
   | "WouldBlock"
   | "WriteZero"
 
@@ -81,11 +82,12 @@ export type SystemErrorReason =
 export interface SystemError extends PlatformError.Base {
   readonly _tag: "SystemError"
   readonly reason: SystemErrorReason
+  readonly syscall?: string
   readonly pathOrDescriptor: string | number
 }
 
 /**
  * @since 1.0.0
- * @category constructor
+ * @category error
  */
 export const SystemError: (props: Omit<SystemError, PlatformError.ProvidedFields>) => SystemError = internal.systemError

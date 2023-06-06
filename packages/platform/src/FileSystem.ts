@@ -59,7 +59,7 @@ export interface MakeDirectoryOptions {
  * @since 1.0.0
  * @category model
  */
-export interface MakeTempDirOptions {
+export interface MakeTempDirectoryOptions {
   readonly directory?: string
   readonly prefix?: string
 }
@@ -147,10 +147,10 @@ export interface FileSystem {
     fromPath: string,
     toPath: string
   ) => Effect.Effect<never, PlatformError, void>
-  readonly makeTempDir: (options?: MakeTempDirOptions) => Effect.Effect<never, PlatformError, string>
-  readonly makeTempDirScoped: (options?: MakeTempDirOptions) => Effect.Effect<Scope, PlatformError, string>
-  readonly makeTempFile: (options?: MakeTempFileOptions) => Effect.Effect<never, PlatformError, string>
   readonly makeDirectory: (path: string, options?: MakeDirectoryOptions) => Effect.Effect<never, PlatformError, void>
+  readonly makeTempDirectory: (options?: MakeTempDirectoryOptions) => Effect.Effect<never, PlatformError, string>
+  readonly makeTempDirectoryScoped: (options?: MakeTempDirectoryOptions) => Effect.Effect<Scope, PlatformError, string>
+  readonly makeTempFile: (options?: MakeTempFileOptions) => Effect.Effect<Scope, PlatformError, File>
   readonly open: (path: string, options?: OpenFileOptions) => Effect.Effect<Scope, PlatformError, File>
   readonly readDirectory: (
     path: string,
