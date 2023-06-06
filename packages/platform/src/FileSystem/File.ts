@@ -23,6 +23,12 @@ export type FileTypeId = typeof FileTypeId
 
 /**
  * @since 1.0.0
+ * @category guard
+ */
+export const isFile = (u: unknown): u is File => typeof u === "object" && u !== null && FileTypeId in u
+
+/**
+ * @since 1.0.0
  * @category model
  */
 export interface File {

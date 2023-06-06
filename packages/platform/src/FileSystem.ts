@@ -39,17 +39,6 @@ export interface AccessFileOptions {
  * @since 1.0.0
  * @category model
  */
-export interface DirectoryEntry {
-  readonly name: string
-  readonly isDirectory: boolean
-  readonly isFile: boolean
-  readonly isSymbolicLink: boolean
-}
-
-/**
- * @since 1.0.0
- * @category model
- */
 export interface MakeDirectoryOptions {
   readonly recursive?: boolean
   readonly mode?: number
@@ -186,7 +175,7 @@ export interface FileSystem {
   readonly readDirectory: (
     path: string,
     options?: ReadDirectoryOptions
-  ) => Effect.Effect<never, PlatformError, Uint8Array>
+  ) => Effect.Effect<never, PlatformError, ReadonlyArray<string>>
   readonly readFile: (
     path: string
   ) => Effect.Effect<never, PlatformError, Uint8Array>

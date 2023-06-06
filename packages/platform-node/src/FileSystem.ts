@@ -2,12 +2,11 @@
  * @since 1.0.0
  */
 
+import type { Layer } from "@effect/io/Layer"
+import * as internal from "@effect/platform-node/internal/fileSystem"
+import type { FileSystem } from "@effect/platform/FileSystem"
+
 export type {
-  /**
-   * @since 1.0.0
-   * @category model
-   */
-  DirectoryEntry,
   /**
    * @since 1.0.0
    * @category model
@@ -67,3 +66,9 @@ export {
    */
   Size
 } from "@effect/platform/FileSystem"
+
+/**
+ * @since 1.0.0
+ * @category layer
+ */
+export const layer: Layer<never, never, FileSystem> = internal.layer
