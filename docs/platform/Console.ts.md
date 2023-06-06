@@ -14,7 +14,7 @@ Added in v1.0.0
 
 - [context](#context)
   - [Console](#console)
-- [models](#models)
+- [model](#model)
   - [Console (interface)](#console-interface)
 
 ---
@@ -31,7 +31,7 @@ export declare const Console: Context.Tag<Console, Console>
 
 Added in v1.0.0
 
-# models
+# model
 
 ## Console (interface)
 
@@ -39,7 +39,8 @@ Added in v1.0.0
 
 ```ts
 export interface Console {
-  log(message: any): void
+  log(...args: Array<any>): void
+  logError(...args: Array<any>): void
 }
 ```
 
