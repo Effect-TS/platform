@@ -5,6 +5,7 @@ import type * as Brand from "@effect/data/Brand"
 import type { Option } from "@effect/data/Option"
 import type * as Effect from "@effect/io/Effect"
 import type { Scope } from "@effect/io/Scope"
+import type { PlatformError } from "@effect/platform/Error"
 
 /**
  * @since 1.0.0
@@ -18,10 +19,10 @@ export type FileDescriptor = Brand.Branded<number, "FileDescriptor">
  */
 export interface File {
   readonly fd: FileDescriptor
-  readonly stat: Effect.Effect<never, FileSystemError, FileInfo>
-  readonly read: (buffer: Uint8Array, options?: FileReadOptions) => Effect.Effect<never, FileSystemError, number>
-  readonly truncate: (length?: number) => Effect.Effect<never, FileSystemError, void>
-  readonly write: (buffer: Uint8Array) => Effect.Effect<never, FileSystemError, number>
+  readonly stat: Effect.Effect<never, PlatformError, FileInfo>
+  readonly read: (buffer: Uint8Array, options?: FileReadOptions) => Effect.Effect<never, PlatformError, number>
+  readonly truncate: (length?: number) => Effect.Effect<never, PlatformError, void>
+  readonly write: (buffer: Uint8Array) => Effect.Effect<never, PlatformError, number>
 }
 
 /**
@@ -154,47 +155,47 @@ export interface WriteFileOptions {
  * @category models
  */
 export interface FileSystem {
-  readonly access: (path: string, options?: AccessFileOptions) => Effect.Effect<never, FileSystemError, void>
+  readonly access: (path: string, options?: AccessFileOptions) => Effect.Effect<never, PlatformError, void>
   readonly copyFile: (
     fromPath: string,
     toPath: string
-  ) => Effect.Effect<never, FileSystemError, void>
-  readonly chmod: (path: string, mode: number) => Effect.Effect<never, FileSystemError, void>
-  readonly chown: (path: string, uid: number, gid: number) => Effect.Effect<never, FileSystemError, void>
+  ) => Effect.Effect<never, PlatformError, void>
+  readonly chmod: (path: string, mode: number) => Effect.Effect<never, PlatformError, void>
+  readonly chown: (path: string, uid: number, gid: number) => Effect.Effect<never, PlatformError, void>
   readonly link: (
     fromPath: string,
     toPath: string
-  ) => Effect.Effect<never, FileSystemError, void>
-  readonly makeTempDir: (options?: MakeTempDirOptions) => Effect.Effect<never, FileSystemError, string>
-  readonly makeTempFile: (options?: MakeTempFileOptions) => Effect.Effect<never, FileSystemError, string>
-  readonly makeDirectory: (path: string, options?: MakeDirectoryOptions) => Effect.Effect<never, FileSystemError, void>
-  readonly open: (path: string, options?: OpenFileOptions) => Effect.Effect<Scope, FileSystemError, File>
+  ) => Effect.Effect<never, PlatformError, void>
+  readonly makeTempDir: (options?: MakeTempDirOptions) => Effect.Effect<never, PlatformError, string>
+  readonly makeTempFile: (options?: MakeTempFileOptions) => Effect.Effect<never, PlatformError, string>
+  readonly makeDirectory: (path: string, options?: MakeDirectoryOptions) => Effect.Effect<never, PlatformError, void>
+  readonly open: (path: string, options?: OpenFileOptions) => Effect.Effect<Scope, PlatformError, File>
   readonly readDirectory: (
     path: string,
     options?: ReadDirectoryOptions
-  ) => Effect.Effect<never, FileSystemError, Uint8Array>
-  readonly readFile: (path: string) => Effect.Effect<never, FileSystemError, Uint8Array>
-  readonly readLink: (path: string) => Effect.Effect<never, FileSystemError, string>
-  readonly realPath: (path: string) => Effect.Effect<never, FileSystemError, string>
-  readonly remove: (path: string, options?: RemoveOptions) => Effect.Effect<never, FileSystemError, void>
-  readonly rename: (oldPath: string, newPath: string) => Effect.Effect<never, FileSystemError, void>
-  readonly stat: (path: string) => Effect.Effect<never, FileSystemError, FileInfo>
+  ) => Effect.Effect<never, PlatformError, Uint8Array>
+  readonly readFile: (path: string) => Effect.Effect<never, PlatformError, Uint8Array>
+  readonly readLink: (path: string) => Effect.Effect<never, PlatformError, string>
+  readonly realPath: (path: string) => Effect.Effect<never, PlatformError, string>
+  readonly remove: (path: string, options?: RemoveOptions) => Effect.Effect<never, PlatformError, void>
+  readonly rename: (oldPath: string, newPath: string) => Effect.Effect<never, PlatformError, void>
+  readonly stat: (path: string) => Effect.Effect<never, PlatformError, FileInfo>
   readonly symlink: (
     fromPath: string,
     toPath: string
-  ) => Effect.Effect<never, FileSystemError, void>
+  ) => Effect.Effect<never, PlatformError, void>
   readonly truncate: (
     path: string,
     length?: number
-  ) => Effect.Effect<never, FileSystemError, void>
+  ) => Effect.Effect<never, PlatformError, void>
   readonly utime: (
     path: string,
     atime: Date | number,
     mtime: Date | number
-  ) => Effect.Effect<never, FileSystemError, void>
+  ) => Effect.Effect<never, PlatformError, void>
   readonly writeFile: (
     path: string,
     data: Uint8Array,
     options?: WriteFileOptions
-  ) => Effect.Effect<never, FileSystemError, void>
+  ) => Effect.Effect<never, PlatformError, void>
 }
