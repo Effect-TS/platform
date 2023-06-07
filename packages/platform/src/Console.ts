@@ -1,8 +1,10 @@
 /**
  * @since 1.0.0
  */
-import * as Context from "@effect/data/Context"
+import type * as Context from "@effect/data/Context"
 import type { Effect } from "@effect/io/Effect"
+import type { Layer } from "@effect/io/Layer"
+import * as internal from "@effect/platform/internal/console"
 
 /**
  * @since 1.0.0
@@ -34,4 +36,10 @@ export interface Console {
  * @since 1.0.0
  * @category tag
  */
-export const Console: Context.Tag<Console, Console> = Context.Tag<Console>()
+export const Console: Context.Tag<Console, Console> = internal.Console
+
+/**
+ * @since 1.0.0
+ * @category layer
+ */
+export const layer: Layer<never, never, Console> = internal.layer

@@ -1,9 +1,16 @@
+import { Tag } from "@effect/data/Context"
 import * as Effect from "@effect/io/Effect"
 import * as Layer from "@effect/io/Layer"
-import * as Console from "@effect/platform/Console"
+import type { Console as Console_ } from "@effect/platform/Console"
+
+/**
+ * @since 1.0.0
+ * @category tag
+ */
+export const Console = Tag<Console_>()
 
 /** @internal */
-const consoleImpl = Console.Console.of({
+const consoleImpl = Console.of({
   assert(condition, ...args) {
     return Effect.sync(() => {
       console.assert(condition, ...args)
@@ -95,4 +102,4 @@ const consoleImpl = Console.Console.of({
 })
 
 /** @internal */
-export const layer = Layer.succeed(Console.Console, consoleImpl)
+export const layer = Layer.succeed(Console, consoleImpl)
