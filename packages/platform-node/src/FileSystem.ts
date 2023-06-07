@@ -16,7 +16,7 @@ export type {
    * @since 1.0.0
    * @category model
    */
-  MakeTempDirectoryOptions as MakeTempDirOptions,
+  MakeTempDirectoryOptions,
   /**
    * @since 1.0.0
    * @category model

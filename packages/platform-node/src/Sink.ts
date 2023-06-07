@@ -23,5 +23,5 @@ export interface FromWritableOptions {
 export const fromWritable: <E, A>(
   evaluate: LazyArg<Writable>,
   onError: (error: unknown) => E,
-  { encoding, endOnClose }?: FromWritableOptions
+  options?: FromWritableOptions
 ) => Sink<never, E, A, never, void> = internal.fromWritable
