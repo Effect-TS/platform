@@ -212,7 +212,7 @@ export interface FileSystem {
     path: string,
     length?: Size
   ) => Effect.Effect<never, PlatformError, void>
-  readonly utime: (
+  readonly utimes: (
     path: string,
     atime: Date | number,
     mtime: Date | number
