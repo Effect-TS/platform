@@ -10,14 +10,16 @@ const babelConfig = require("./.babel.mjs.json")
 export default defineConfig({
   plugins: [babel({ babel: babelConfig })],
   test: {
-    include: ["./test/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
-    exclude: ["./test/utils/**/*.ts", "./test/**/*.init.ts"],
+    include: ["packages/*/test/**/*.test.ts"],
     globals: true
   },
   resolve: {
     alias: {
-      "@effect/platform/test": path.join(__dirname, "test"),
-      "@effect/platform": path.join(__dirname, "src")
+      "@effect/platform/test": path.join(__dirname, "packages/platform/test"),
+      "@effect/platform": path.join(__dirname, "packages/platform/src"),
+
+      "@effect/platform-node/test": path.join(__dirname, "packages/platform-node/test"),
+      "@effect/platform-node": path.join(__dirname, "packages/platform-node/src")
     }
   }
 })
