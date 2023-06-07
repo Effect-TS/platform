@@ -12,124 +12,6 @@ import type { Sink } from "@effect/stream/Sink"
 import type { Stream } from "@effect/stream/Stream"
 
 /**
- * Represents a size in bytes.
- *
- * @since 1.0.0
- * @category model
- */
-export type Size = Brand.Branded<bigint, "Size">
-
-/**
- * @since 1.0.0
- * @category constructor
- */
-export const Size: (bytes: number | bigint) => Size = internal.Size
-
-/**
- * @since 1.0.0
- * @category model
- */
-export interface AccessFileOptions {
-  readonly ok?: boolean
-  readonly readable?: boolean
-  readonly writable?: boolean
-}
-
-/**
- * @since 1.0.0
- * @category model
- */
-export interface MakeDirectoryOptions {
-  readonly recursive?: boolean
-  readonly mode?: number
-}
-
-/**
- * @since 1.0.0
- * @category model
- */
-export interface MakeTempDirectoryOptions {
-  readonly directory?: string
-  readonly prefix?: string
-}
-
-/**
- * @since 1.0.0
- * @category model
- */
-export interface MakeTempFileOptions {
-  readonly directory?: string
-  readonly prefix?: string
-}
-
-/**
- * @since 1.0.0
- * @category model
- */
-export type OpenFlag =
-  | "r"
-  | "r+"
-  | "w"
-  | "wx"
-  | "w+"
-  | "wx+"
-  | "a"
-  | "ax"
-  | "a+"
-  | "ax+"
-
-/**
- * @since 1.0.0
- * @category model
- */
-export interface OpenFileOptions {
-  readonly flag?: OpenFlag
-  readonly mode?: number
-}
-
-/**
- * @since 1.0.0
- * @category model
- */
-export interface ReadDirectoryOptions {
-  readonly recursive?: boolean
-}
-
-/**
- * @since 1.0.0
- * @category model
- */
-export interface RemoveOptions {
-  readonly recursive?: boolean
-}
-
-/**
- * @since 1.0.0
- * @category model
- */
-export interface SinkOptions extends OpenFileOptions {}
-
-/**
- * @since 1.0.0
- * @category model
- */
-export interface StreamOptions {
-  readonly bufferSize?: number
-  readonly bytesToRead?: Size
-  readonly chunkSize?: Size
-  readonly offset?: Size
-}
-
-/**
- * @since 1.0.0
- * @category model
- */
-export interface WriteFileOptions {
-  readonly flag?: OpenFlag
-  readonly mode?: number
-}
-
-/**
  * @since 1.0.0
  * @category model
  */
@@ -222,6 +104,124 @@ export interface FileSystem {
     data: Uint8Array,
     options?: WriteFileOptions
   ) => Effect.Effect<never, PlatformError, void>
+}
+
+/**
+ * Represents a size in bytes.
+ *
+ * @since 1.0.0
+ * @category model
+ */
+export type Size = Brand.Branded<bigint, "Size">
+
+/**
+ * @since 1.0.0
+ * @category constructor
+ */
+export const Size: (bytes: number | bigint) => Size = internal.Size
+
+/**
+ * @since 1.0.0
+ * @category model
+ */
+export type OpenFlag =
+  | "r"
+  | "r+"
+  | "w"
+  | "wx"
+  | "w+"
+  | "wx+"
+  | "a"
+  | "ax"
+  | "a+"
+  | "ax+"
+
+/**
+ * @since 1.0.0
+ * @category options
+ */
+export interface AccessFileOptions {
+  readonly ok?: boolean
+  readonly readable?: boolean
+  readonly writable?: boolean
+}
+
+/**
+ * @since 1.0.0
+ * @category options
+ */
+export interface MakeDirectoryOptions {
+  readonly recursive?: boolean
+  readonly mode?: number
+}
+
+/**
+ * @since 1.0.0
+ * @category options
+ */
+export interface MakeTempDirectoryOptions {
+  readonly directory?: string
+  readonly prefix?: string
+}
+
+/**
+ * @since 1.0.0
+ * @category options
+ */
+export interface MakeTempFileOptions {
+  readonly directory?: string
+  readonly prefix?: string
+}
+
+/**
+ * @since 1.0.0
+ * @category options
+ */
+export interface OpenFileOptions {
+  readonly flag?: OpenFlag
+  readonly mode?: number
+}
+
+/**
+ * @since 1.0.0
+ * @category options
+ */
+export interface ReadDirectoryOptions {
+  readonly recursive?: boolean
+}
+
+/**
+ * @since 1.0.0
+ * @category options
+ */
+export interface RemoveOptions {
+  readonly recursive?: boolean
+}
+
+/**
+ * @since 1.0.0
+ * @category options
+ */
+export interface SinkOptions extends OpenFileOptions {}
+
+/**
+ * @since 1.0.0
+ * @category options
+ */
+export interface StreamOptions {
+  readonly bufferSize?: number
+  readonly bytesToRead?: Size
+  readonly chunkSize?: Size
+  readonly offset?: Size
+}
+
+/**
+ * @since 1.0.0
+ * @category options
+ */
+export interface WriteFileOptions {
+  readonly flag?: OpenFlag
+  readonly mode?: number
 }
 
 /**
