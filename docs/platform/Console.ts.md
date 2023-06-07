@@ -49,17 +49,19 @@ export interface Console {
   dir(...args: Array<any>): Effect<never, never, void>
   dirxml(...args: Array<any>): Effect<never, never, void>
   error(...args: Array<any>): Effect<never, never, void>
-  group(options?: {
-    readonly label?: string
-    readonly collapsed?: boolean
-  }): <R, E, A>(self: Effect<R, E, A>) => Effect<R, E, A>
+  group(options?: { readonly label?: string; readonly collapsed?: boolean }): Effect<Scope, never, void>
   info(...args: Array<any>): Effect<never, never, void>
   log(...args: Array<any>): Effect<never, never, void>
   table(tabularData: any, properties?: ReadonlyArray<string>): Effect<never, never, void>
-  time(label?: string): <R, E, A>(self: Effect<R, E, A>) => Effect<R, E, A>
+  time(label?: string): Effect<Scope, never, void>
   timeLog(label?: string, ...args: Array<any>): Effect<never, never, void>
   trace(...args: Array<any>): Effect<never, never, void>
   warn(...args: Array<any>): Effect<never, never, void>
+  withGroup(options?: {
+    readonly label?: string
+    readonly collapsed?: boolean
+  }): <R, E, A>(self: Effect<R, E, A>) => Effect<R, E, A>
+  withTime(label?: string): <R, E, A>(self: Effect<R, E, A>) => Effect<R, E, A>
 }
 ```
 
