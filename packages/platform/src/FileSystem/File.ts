@@ -77,14 +77,22 @@ export namespace File {
    * @since 1.0.0
    * @category model
    */
+  export type Type =
+    | "File"
+    | "Directory"
+    | "SymbolicLink"
+    | "BlockDevice"
+    | "CharacterDevice"
+    | "FIFO"
+    | "Socket"
+    | "Unknown"
+
+  /**
+   * @since 1.0.0
+   * @category model
+   */
   export interface Info {
-    readonly isFile: boolean
-    readonly isDirectory: boolean
-    readonly isSymbolicLink: boolean
-    readonly isBlockDevice: boolean
-    readonly isCharacterDevice: boolean
-    readonly isFIFO: boolean
-    readonly isSocket: boolean
+    readonly type: Type
     readonly mtime: Option<Date>
     readonly atime: Option<Date>
     readonly birthtime: Option<Date>

@@ -405,13 +405,21 @@ const rename = (() => {
 // == stat
 
 const makeFileInfo = (stat: NFS.Stats): File.File.Info => ({
-  isFile: stat.isFile(),
-  isDirectory: stat.isDirectory(),
-  isSymbolicLink: stat.isSymbolicLink(),
-  isBlockDevice: stat.isBlockDevice(),
-  isCharacterDevice: stat.isCharacterDevice(),
-  isFIFO: stat.isFIFO(),
-  isSocket: stat.isSocket(),
+  type: stat.isFile() ?
+    "File" :
+    stat.isDirectory() ?
+    "Directory" :
+    stat.isSymbolicLink() ?
+    "SymbolicLink" :
+    stat.isBlockDevice() ?
+    "BlockDevice" :
+    stat.isCharacterDevice() ?
+    "CharacterDevice" :
+    stat.isFIFO() ?
+    "FIFO" :
+    stat.isSocket() ?
+    "Socket" :
+    "Unknown",
   mtime: Option.fromNullable(stat.mtime),
   atime: Option.fromNullable(stat.atime),
   birthtime: Option.fromNullable(stat.birthtime),
