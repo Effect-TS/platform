@@ -138,6 +138,9 @@ importers:
       '@effect/platform':
         specifier: workspace:^
         version: link:../platform/dist
+      '@effect/stream':
+        specifier: ^0.22.0
+        version: 0.22.0
     publishDirectory: dist
 
 packages:
