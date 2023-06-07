@@ -12,12 +12,26 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [layer](#layer)
+  - [layer](#layer-1)
 - [model](#model)
   - [Console (interface)](#console-interface)
 - [tag](#tag)
   - [Console](#console)
 
 ---
+
+# layer
+
+## layer
+
+**Signature**
+
+```ts
+export declare const layer: Layer<never, never, Console>
+```
+
+Added in v1.0.0
 
 # model
 

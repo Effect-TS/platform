@@ -18,7 +18,7 @@ Added in v1.0.0
   - [layer](#layer-1)
 - [model](#model)
   - [MakeDirectoryOptions](#makedirectoryoptions)
-  - [MakeTempDirOptions](#maketempdiroptions)
+  - [MakeTempDirectoryOptions](#maketempdirectoryoptions)
   - [MakeTempFileOptions](#maketempfileoptions)
   - [OpenFileOptions](#openfileoptions)
   - [ReadDirectoryOptions](#readdirectoryoptions)
@@ -67,12 +67,12 @@ export declare const MakeDirectoryOptions: MakeDirectoryOptions
 
 Added in v1.0.0
 
-## MakeTempDirOptions
+## MakeTempDirectoryOptions
 
 **Signature**
 
 ```ts
-export declare const MakeTempDirOptions: MakeTempDirectoryOptions
+export declare const MakeTempDirectoryOptions: MakeTempDirectoryOptions
 ```
 
 Added in v1.0.0

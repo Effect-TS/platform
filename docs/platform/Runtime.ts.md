@@ -1,7 +1,7 @@
 ---
 title: Runtime.ts
-nav_order: 5
-parent: "@effect/platform-node"
+nav_order: 6
+parent: "@effect/platform"
 ---
 
 ## Runtime overview
@@ -13,10 +13,8 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [model](#model)
-  - [RunMain](#runmain)
-  - [Teardown](#teardown)
-- [runtime](#runtime)
-  - [runMain](#runmain)
+  - [RunMain (interface)](#runmain-interface)
+  - [Teardown (interface)](#teardown-interface)
 - [teardown](#teardown)
   - [defaultTeardown](#defaultteardown)
 
@@ -24,34 +22,26 @@ Added in v1.0.0
 
 # model
 
-## RunMain
+## RunMain (interface)
 
 **Signature**
 
 ```ts
-export declare const RunMain: RunMain
+export interface RunMain {
+  <E, A>(effect: Effect<never, E, A>, teardown?: Teardown): void
+}
 ```
 
 Added in v1.0.0
 
-## Teardown
+## Teardown (interface)
 
 **Signature**
 
 ```ts
-export declare const Teardown: Teardown
-```
-
-Added in v1.0.0
-
-# runtime
-
-## runMain
-
-**Signature**
-
-```ts
-export declare const runMain: RunMain
+export interface Teardown {
+  <E, A>(exit: Exit.Exit<E, A>, onExit: (code: number) => void): void
+}
 ```
 
 Added in v1.0.0
