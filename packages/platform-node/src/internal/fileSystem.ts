@@ -186,8 +186,8 @@ const remove = removeFactory("remove")
 // == makeTempDirectoryScoped
 
 const makeTempDirectoryScoped = (() => {
-  const makeDirectory = makeTempDirectoryFactory("makeTempDirectoryScoped/make")
-  const removeDirectory = removeFactory("makeTempDirectoryScoped/remove")
+  const makeDirectory = makeTempDirectoryFactory("makeTempDirectoryScoped")
+  const removeDirectory = removeFactory("makeTempDirectoryScoped")
   return (
     options?: FileSystem.MakeTempDirectoryOptions
   ) =>
@@ -338,8 +338,8 @@ const makeFile = (() => {
 // == makeTempFile
 
 const makeTempFileFactory = (method: string) => {
-  const makeDirectory = makeTempDirectoryFactory(`${method}/make`)
-  const open = openFactory(`${method}/open`)
+  const makeDirectory = makeTempDirectoryFactory(method)
+  const open = openFactory(method)
   const randomHexString = (bytes: number) => Effect.sync(() => Crypto.randomBytes(bytes).toString("hex"))
   return (options?: FileSystem.MakeTempFileOptions) =>
     pipe(
@@ -354,7 +354,7 @@ const makeTempFile = makeTempFileFactory("makeTempFile")
 
 const makeTempFileScoped = (() => {
   const makeFile = makeTempFileFactory("makeTempFileScoped")
-  const removeFile = removeFactory("makeTempFileScoped/remove")
+  const removeFile = removeFactory("makeTempFileScoped")
   return (options?: FileSystem.MakeTempFileOptions) =>
     Effect.acquireRelease(
       makeFile(options),
