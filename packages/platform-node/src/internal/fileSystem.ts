@@ -162,7 +162,7 @@ const makeTempDirectoryFactory = (method: string) => {
         ? Path.join(options.directory, ".")
         : OS.tmpdir()
 
-      return nodeMkdtemp(prefix ? Path.join(directory, prefix) : directory)
+      return nodeMkdtemp(prefix ? Path.join(directory, prefix) : directory + "/")
     })
 }
 const makeTempDirectory = makeTempDirectoryFactory("makeTempDirectory")
