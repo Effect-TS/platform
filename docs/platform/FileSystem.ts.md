@@ -13,9 +13,14 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructor](#constructor)
+  - [FileDescriptor](#filedescriptor)
   - [Size](#size)
   - [make](#make)
+- [guard](#guard)
+  - [isFile](#isfile)
 - [model](#model)
+  - [File (interface)](#file-interface)
+  - [FileReadOptions (interface)](#filereadoptions-interface)
   - [FileSystem (interface)](#filesystem-interface)
   - [OpenFlag (type alias)](#openflag-type-alias)
   - [Size (type alias)](#size-type-alias)
@@ -32,10 +37,23 @@ Added in v1.0.0
   - [WriteFileOptions (interface)](#writefileoptions-interface)
 - [tag](#tag)
   - [FileSystem](#filesystem)
+- [type id](#type-id)
+  - [FileTypeId](#filetypeid)
+  - [FileTypeId (type alias)](#filetypeid-type-alias)
 
 ---
 
 # constructor
+
+## FileDescriptor
+
+**Signature**
+
+```ts
+export declare const FileDescriptor: Brand.Brand.Constructor<File.Descriptor>
+```
+
+Added in v1.0.0
 
 ## Size
 
@@ -57,7 +75,51 @@ export declare const make: (impl: Omit<FileSystem, 'stream' | 'sink'>) => FileSy
 
 Added in v1.0.0
 
+# guard
+
+## isFile
+
+**Signature**
+
+```ts
+export declare const isFile: (u: unknown) => u is File
+```
+
+Added in v1.0.0
+
 # model
+
+## File (interface)
+
+**Signature**
+
+```ts
+export interface File {
+  readonly [FileTypeId]: (_: never) => unknown
+  readonly fd: File.Descriptor
+  readonly stat: Effect.Effect<never, PlatformError, File.Info>
+  readonly read: (buffer: Uint8Array, options?: FileReadOptions) => Effect.Effect<never, PlatformError, Size>
+  readonly readAlloc: (size: Size, options?: FileReadOptions) => Effect.Effect<never, PlatformError, Option<Uint8Array>>
+  readonly truncate: (length?: Size) => Effect.Effect<never, PlatformError, void>
+  readonly write: (buffer: Uint8Array) => Effect.Effect<never, PlatformError, Size>
+  readonly writeAll: (buffer: Uint8Array) => Effect.Effect<never, PlatformError, void>
+}
+```
+
+Added in v1.0.0
+
+## FileReadOptions (interface)
+
+**Signature**
+
+```ts
+export interface FileReadOptions {
+  readonly offset?: Size
+  readonly length?: Size
+}
+```
+
+Added in v1.0.0
 
 ## FileSystem (interface)
 
@@ -372,6 +434,28 @@ Added in v1.0.0
 
 ```ts
 export declare const FileSystem: Tag<FileSystem, FileSystem>
+```
+
+Added in v1.0.0
+
+# type id
+
+## FileTypeId
+
+**Signature**
+
+```ts
+export declare const FileTypeId: typeof FileTypeId
+```
+
+Added in v1.0.0
+
+## FileTypeId (type alias)
+
+**Signature**
+
+```ts
+export type FileTypeId = typeof FileTypeId
 ```
 
 Added in v1.0.0
