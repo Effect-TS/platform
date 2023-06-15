@@ -26,6 +26,7 @@ Added in v1.0.0
   - [Size (type alias)](#size-type-alias)
 - [options](#options)
   - [AccessFileOptions (interface)](#accessfileoptions-interface)
+  - [CopyOptions (interface)](#copyoptions-interface)
   - [MakeDirectoryOptions (interface)](#makedirectoryoptions-interface)
   - [MakeTempDirectoryOptions (interface)](#maketempdirectoryoptions-interface)
   - [MakeTempFileOptions (interface)](#maketempfileoptions-interface)
@@ -132,6 +133,12 @@ export interface FileSystem {
    * You can optionally specify the level of access to check for.
    */
   readonly access: (path: string, options?: AccessFileOptions) => Effect.Effect<never, PlatformError, void>
+  /**
+   * Copy a file or directory from `fromPath` to `toPath`.
+   *
+   * Equivalent to `cp -r`.
+   */
+  readonly copy: (fromPath: string, toPath: string, options?: CopyOptions) => Effect.Effect<never, PlatformError, void>
   /**
    * Copy a file from `fromPath` to `toPath`.
    */
@@ -307,6 +314,19 @@ export interface AccessFileOptions {
   readonly ok?: boolean
   readonly readable?: boolean
   readonly writable?: boolean
+}
+```
+
+Added in v1.0.0
+
+## CopyOptions (interface)
+
+**Signature**
+
+```ts
+export interface CopyOptions {
+  readonly overwrite?: boolean
+  readonly preserveTimestamps?: boolean
 }
 ```
 
