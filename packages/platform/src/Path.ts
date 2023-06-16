@@ -2,8 +2,11 @@
  * @since 1.0.0
  */
 
+import type { Tag } from "@effect/data/Context"
 import type { Effect } from "@effect/io/Effect"
+import type { Layer } from "@effect/io/Layer"
 import type { BadArgument } from "@effect/platform/Error"
+import * as internal from "@effect/platform/internal/path"
 
 /**
  * @since 1.0.0
@@ -22,7 +25,7 @@ export interface Path {
   readonly parse: (path: string) => Path.Parsed
   readonly relative: (from: string, to: string) => string
   readonly resolve: (...pathSegments: ReadonlyArray<string>) => string
-  readonly toFileUrl: (path: string) => URL
+  readonly toFileUrl: (path: string) => Effect<never, BadArgument, URL>
   readonly toNamespacedPath: (path: string) => string
 }
 
@@ -42,3 +45,20 @@ export namespace Path {
     readonly name: string
   }
 }
+
+/**
+ * @since 1.0.0
+ * @category tag
+ */
+export const Path: Tag<Path, Path> = internal.Path
+
+/**
+ * An implementation of the Path interface that can be used in all environments
+ * (including browsers).
+ *
+ * It uses the POSIX standard for paths.
+ *
+ * @since 1.0.0
+ * @category layer
+ */
+export const layer: Layer<never, never, Path> = internal.layer
