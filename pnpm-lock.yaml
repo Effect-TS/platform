@@ -131,12 +131,13 @@ importers:
       '@effect/stream':
         specifier: ^0.22.0
         version: 0.22.0
-      '@types/path-browserify':
-        specifier: ^1.0.0
-        version: 1.0.0
       path-browserify:
         specifier: ^1.0.1
         version: 1.0.1
+    devDependencies:
+      '@types/path-browserify':
+        specifier: ^1.0.0
+        version: 1.0.0
     publishDirectory: dist
 
   packages/platform-node:
@@ -1287,7 +1288,7 @@ packages:
 
   /@types/path-browserify@1.0.0:
     resolution: {integrity: sha512-XMCcyhSvxcch8b7rZAtFAaierBYdeHXVvg2iYnxOV0MCQHmPuRRmGZPFDRzPayxcGiiSL1Te9UIO+f3cuj0tfw==}
-    dev: false
+    dev: true
 
   /@types/semver@6.2.3:
     resolution: {integrity: sha512-KQf+QAMWKMrtBMsB8/24w53tEsxllMj6TuA80TT/5igJalLI/zm0L3oXRbIAl4Ohfc85gyHX/jhMwsVkmhLU4A==}
