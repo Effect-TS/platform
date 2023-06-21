@@ -1,3 +1,6 @@
+/**
+ * @since 1.0.0
+ */
 import type * as Brand from "@effect/data/Brand"
 import type { Tag } from "@effect/data/Context"
 import type { Effect } from "@effect/io/Effect"

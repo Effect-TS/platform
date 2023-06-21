@@ -1,3 +1,6 @@
+/**
+ * @since 1.0.0
+ */
 import type { HashMap } from "@effect/data/HashMap"
 import type { Option } from "@effect/data/Option"
 import * as internal from "@effect/platform/internal/process/command"
