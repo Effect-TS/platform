@@ -32,6 +32,8 @@ export interface StandardCommand {
   readonly args: ReadonlyArray<string>
   readonly env: HashMap<string, string>
   readonly workingDirectory: Option<string>
+  readonly gid: Option<number>
+  readonly uid: Option<number>
 }
 
 /**

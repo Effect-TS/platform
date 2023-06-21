@@ -9,6 +9,9 @@ export const ProcessTypeId: Process.ProcessTypeId = Symbol.for("@effect/platform
 export const ExitCode = Brand.nominal<Process.ExitCode>()
 
 /** @internal */
+export const Id = Brand.nominal<Process.Process.Id>()
+
+/** @internal */
 export const ProcessExecutor = Tag<Process.ProcessExecutor>()
 
 /** @internal */

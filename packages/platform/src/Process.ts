@@ -40,6 +40,7 @@ export type ProcessTypeId = typeof ProcessTypeId
  */
 export interface Process {
   readonly [ProcessTypeId]: (_: never) => unknown
+  readonly pid: Process.Id
   readonly exitCode: Effect<never, PlatformError, ExitCode>
   readonly isAlive: Effect<never, PlatformError, boolean>
   /** Defaults to SIGTERM */
@@ -47,6 +48,17 @@ export interface Process {
   readonly stderr: Stream<never, PlatformError, Uint8Array>
   readonly stdin: Sink<never, PlatformError, Uint8Array, never, void>
   readonly stdout: Stream<never, PlatformError, Uint8Array>
+}
+
+/**
+ * @since 1.0.0
+ */
+export namespace Process {
+  /**
+   * @since 1.0.0
+   * @category models
+   */
+  export type Id = Brand.Branded<number, "Process.Id">
 }
 
 /**
@@ -103,6 +115,12 @@ export type ExitCode = Brand.Branded<number, "ExitCode">
  * @category constructors
  */
 export const ExitCode: Brand.Brand.Constructor<ExitCode> = internal.ExitCode
+
+/**
+ * @since 1.0.0
+ * @category constructors
+ */
+export const Id: Brand.Brand.Constructor<Process.Id> = internal.Id
 
 /**
  * @since 1.0.0
