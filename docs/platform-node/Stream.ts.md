@@ -43,8 +43,8 @@ Added in v1.0.0
 
 ```ts
 export interface FromReadableOptions {
-  /** Defaults to 64kb */
-  readonly chunkSize?: Size
+  /** Defaults to None, which lets Node.js decide the chunk size */
+  readonly chunkSize?: Option<Size>
 }
 ```
 
