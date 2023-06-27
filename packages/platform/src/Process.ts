@@ -5,6 +5,7 @@ import type * as Brand from "@effect/data/Brand"
 import type { Tag } from "@effect/data/Context"
 import type { Effect } from "@effect/io/Effect"
 import type { PlatformError } from "@effect/platform/Error"
+import type { FileSystem } from "@effect/platform/FileSystem"
 import * as internal from "@effect/platform/internal/process"
 import type { Command } from "@effect/platform/Process/Command"
 import type { Sink } from "@effect/stream/Sink"
@@ -15,7 +16,7 @@ import type { Stream } from "@effect/stream/Stream"
  * @category models
  */
 export interface ProcessExecutor {
-  readonly start: (command: Command) => Effect<never, PlatformError, Process>
+  readonly start: (command: Command) => Effect<FileSystem, PlatformError, Process>
 }
 
 /**
@@ -39,12 +40,12 @@ export type ProcessTypeId = typeof ProcessTypeId
  * @category models
  */
 export interface Process {
-  readonly [ProcessTypeId]: (_: never) => unknown
+  readonly [ProcessTypeId]: ProcessTypeId
   readonly pid: Process.Id
-  readonly exitCode: Effect<never, PlatformError, ExitCode>
-  readonly isAlive: Effect<never, PlatformError, boolean>
-  /** Defaults to SIGTERM */
-  readonly kill: (signal?: Signal) => Effect<never, PlatformError, void>
+  // readonly exitCode: Effect<never, PlatformError, ExitCode>
+  // readonly isAlive: Effect<never, PlatformError, boolean>
+  // /** Defaults to SIGTERM */
+  // readonly kill: (signal?: Signal) => Effect<never, PlatformError, void>
   readonly stderr: Stream<never, PlatformError, Uint8Array>
   readonly stdin: Sink<never, PlatformError, Uint8Array, never, void>
   readonly stdout: Stream<never, PlatformError, Uint8Array>
@@ -126,5 +127,6 @@ export const Id: Brand.Brand.Constructor<Process.Id> = internal.Id
  * @since 1.0.0
  * @category constructors
  */
-export const makeExecutor: (start: (command: Command) => Effect<never, PlatformError, Process>) => ProcessExecutor =
-  internal.makeExecutor
+export const makeExecutor: (
+  start: (command: Command) => Effect<FileSystem, PlatformError, Process>
+) => ProcessExecutor = internal.makeExecutor
