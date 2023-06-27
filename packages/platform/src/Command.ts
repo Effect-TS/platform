@@ -4,8 +4,10 @@
 import type { HashMap } from "@effect/data/HashMap"
 import type { Option } from "@effect/data/Option"
 import type { NonEmptyReadonlyArray } from "@effect/data/ReadonlyArray"
+import type { Effect } from "@effect/io/Effect"
 import type { PlatformError } from "@effect/platform/Error"
-import * as internal from "@effect/platform/internal/process/command"
+import * as internal from "@effect/platform/internal/command"
+import type { Process, ProcessExecutor } from "@effect/platform/Process"
 import type { Stream } from "@effect/stream/Stream"
 
 /**
@@ -42,7 +44,7 @@ export declare namespace Command {
    * @since 1.0.0
    * @category models
    */
-  export type Input = Stream<never, PlatformError, number>
+  export type Input = CommandInput
   /**
    * Configures the pipes that are established between the parent and child
    * processes `stderr` and `stdout` streams.
@@ -50,8 +52,26 @@ export declare namespace Command {
    * @since 1.0.0
    * @category models
    */
-  export type Output = "inherit" | "pipe"
+  export type Output = CommandOutput
 }
+
+/**
+ * Configures the pipe that is established between the parent and child
+ * processes' `stdin` stream.
+ *
+ * @since 1.0.0
+ * @category models
+ */
+export type CommandInput = Stream<never, PlatformError, Uint8Array>
+
+/**
+ * Configures the pipes that are established between the parent and child
+ * processes `stderr` and `stdout` streams.
+ *
+ * @since 1.0.0
+ * @category models
+ */
+export type CommandOutput = "inherit" | "pipe"
 
 /**
  * @since 1.0.0
@@ -128,6 +148,14 @@ export const pipeTo: {
   (into: Command): (self: Command) => Command
   (self: Command, into: Command): Command
 } = internal.pipeTo
+
+/**
+ * Start running the command and return a handle to the running process.
+ *
+ * @since 1.0.0
+ * @category execution
+ */
+export const run: (command: Command) => Effect<ProcessExecutor, PlatformError, Process> = internal.run
 
 /**
  * Specify the standard error stream for a command.

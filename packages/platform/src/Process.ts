@@ -4,10 +4,9 @@
 import type * as Brand from "@effect/data/Brand"
 import type { Tag } from "@effect/data/Context"
 import type { Effect } from "@effect/io/Effect"
+import type { Command } from "@effect/platform/Command"
 import type { PlatformError } from "@effect/platform/Error"
-import type { FileSystem } from "@effect/platform/FileSystem"
 import * as internal from "@effect/platform/internal/process"
-import type { Command } from "@effect/platform/Process/Command"
 import type { Sink } from "@effect/stream/Sink"
 import type { Stream } from "@effect/stream/Stream"
 
@@ -16,7 +15,7 @@ import type { Stream } from "@effect/stream/Stream"
  * @category models
  */
 export interface ProcessExecutor {
-  readonly start: (command: Command) => Effect<FileSystem, PlatformError, Process>
+  readonly start: (command: Command) => Effect<never, PlatformError, Process>
 }
 
 /**
@@ -27,11 +26,13 @@ export const ProcessExecutor: Tag<ProcessExecutor, ProcessExecutor> = internal.P
 
 /**
  * @since 1.0.0
+ * @category symbols
  */
 export const ProcessTypeId: unique symbol = internal.ProcessTypeId
 
 /**
  * @since 1.0.0
+ * @category symbols
  */
 export type ProcessTypeId = typeof ProcessTypeId
 
@@ -53,13 +54,19 @@ export interface Process {
 
 /**
  * @since 1.0.0
+ * @category models
+ */
+export type ProcessId = Brand.Branded<number, "ProcessId">
+
+/**
+ * @since 1.0.0
  */
 export namespace Process {
   /**
    * @since 1.0.0
    * @category models
    */
-  export type Id = Brand.Branded<number, "Process.Id">
+  export type Id = ProcessId
 }
 
 /**
@@ -128,5 +135,5 @@ export const Id: Brand.Brand.Constructor<Process.Id> = internal.Id
  * @category constructors
  */
 export const makeExecutor: (
-  start: (command: Command) => Effect<FileSystem, PlatformError, Process>
+  start: (command: Command) => Effect<never, PlatformError, Process>
 ) => ProcessExecutor = internal.makeExecutor

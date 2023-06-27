@@ -8,7 +8,6 @@ tmp/
 build/
 dist/
 .cache/
-.devenv
 .direnv/
 .idea/
 packages/*/docs

@@ -2,8 +2,11 @@ import * as Chunk from "@effect/data/Chunk"
 import { dual } from "@effect/data/Function"
 import * as HashMap from "@effect/data/HashMap"
 import * as Option from "@effect/data/Option"
-import ReadonlyArray from "@effect/data/ReadonlyArray"
-import type * as Command from "@effect/platform/Process/Command"
+import type ReadonlyArray from "@effect/data/ReadonlyArray"
+import * as Effect from "@effect/io/Effect"
+import type * as Command from "@effect/platform/Command"
+import type { PlatformError } from "@effect/platform/Error"
+import * as Process from "@effect/platform/Process"
 import * as Stream from "@effect/stream/Stream"
 
 /** @internal */
@@ -11,7 +14,7 @@ export const CommandTypeId: Command.CommandTypeId = Symbol.for("@effect/platform
 
 /** @internal */
 export const flatten = (self: Command.Command): ReadonlyArray.NonEmptyReadonlyArray<Command.StandardCommand> =>
-  ReadonlyArray.fromIterable(flattenLoop(self)) as unknown as ReadonlyArray.NonEmptyReadonlyArray<
+  Array.from(flattenLoop(self)) as unknown as ReadonlyArray.NonEmptyReadonlyArray<
     Command.StandardCommand
   >
 
@@ -136,6 +139,12 @@ export const stdout: {
     }
   }
 })
+
+/** @internal */
+export const run = (
+  command: Command.Command
+): Effect.Effect<Process.ProcessExecutor, PlatformError, Process.Process> =>
+  Effect.flatMap(Process.ProcessExecutor, (executor) => executor.start(command))
 
 /** @internal */
 export const workingDirectory: {

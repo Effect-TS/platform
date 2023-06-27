@@ -1,6 +1,6 @@
 ---
 title: Console.ts
-nav_order: 1
+nav_order: 2
 parent: "@effect/platform"
 ---
 
