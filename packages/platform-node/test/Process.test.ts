@@ -16,24 +16,16 @@ describe("Process", () => {
   it("start", () =>
     runPromise(Effect.gen(function*(_) {
       const command = Command.make("echo", "-n", "test")
-      const result = yield* _(
-        Command.start(command),
-        Effect.flatMap((process) => Stream.runCollect(process.stdout)),
-        Effect.map((chunk) => Array.from(chunk).map((bytes) => Buffer.from(bytes).toString("utf-8")))
-      )
-      expect(result).toEqual(["test"])
+      const result = yield* _(Command.string(command))
+      expect(result).toEqual("test")
     })))
 
   it("should accept streaming stdin", () =>
     runPromise(Effect.gen(function*(_) {
       const stdin = Stream.make(Buffer.from("a b c", "utf-8"))
       const command = pipe(Command.make("cat"), Command.stdin(stdin))
-      const result = yield* _(
-        Command.start(command),
-        Effect.flatMap((process) => Stream.runCollect(process.stdout)),
-        Effect.map((chunk) => Array.from(chunk).map((bytes) => Buffer.from(bytes).toString("utf-8")))
-      )
-      expect(result).toEqual(["a b c"])
+      const result = yield* _(Command.string(command))
+      expect(result).toEqual("a b c")
     })))
 
   it("should support piping commands together", () =>
@@ -43,12 +35,8 @@ describe("Process", () => {
         Command.pipeTo(Command.make("cat")),
         Command.pipeTo(Command.make("sort"))
       )
-      const result = yield* _(
-        Command.start(command),
-        Effect.flatMap((process) => Stream.runCollect(process.stdout)),
-        Effect.map((chunk) => Array.from(chunk).map((bytes) => Buffer.from(bytes).toString("utf-8")))
-      )
+      const result = yield* _(Command.string(command))
       // TODO: command.lines
-      expect(result).toEqual(["1\n2\n3\n"])
+      expect(result).toEqual("1\n2\n3\n")
     })))
 })

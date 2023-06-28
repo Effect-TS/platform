@@ -101,6 +101,15 @@ export interface PipedCommand extends Command.Proto {
 }
 
 /**
+ * Returns `true` if the specified value is a `Command`, otherwise returns
+ * `false`.
+ *
+ * @since 1.0.0
+ * @category refinements
+ */
+export const isCommand: (u: unknown) => u is Command = internal.isCommand
+
+/**
  * Specify the environment variables that will be used when running this command.
  *
  * @since 1.0.0
@@ -156,6 +165,25 @@ export const pipeTo: {
  * @category execution
  */
 export const start: (command: Command) => Effect<ProcessExecutor, PlatformError, Process> = internal.start
+
+/**
+ * Start running the command and return the output as a `Stream`.
+ *
+ * @since 1.0.0
+ * @category execution
+ */
+export const stream: (command: Command) => Stream<ProcessExecutor, PlatformError, Uint8Array> = internal.stream
+
+/**
+ * Runs the command returning the entire output as a string with the
+ * specified encoding.
+ *
+ * If an encoding is not specified, the encoding will default to `utf-8`.
+ *
+ * @since 1.0.0
+ * @category execution
+ */
+export const string = internal.string
 
 /**
  * Specify the standard error stream for a command.

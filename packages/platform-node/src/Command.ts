@@ -43,6 +43,11 @@ export {
   flatten,
   /**
    * @since 1.0.0
+   * @category refinements
+   */
+  isCommand,
+  /**
+   * @since 1.0.0
    * @category constructors
    */
   make,
@@ -71,6 +76,16 @@ export {
    * @category combinators
    */
   stdout,
+  /**
+   * @since 1.0.0
+   * @category execution
+   */
+  stream,
+  /**
+   * @since 1.0.0
+   * @category execution
+   */
+  string,
   /**
    * @since 1.0.0
    * @category combinators

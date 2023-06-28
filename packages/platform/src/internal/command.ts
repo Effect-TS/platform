@@ -1,5 +1,5 @@
 import * as Chunk from "@effect/data/Chunk"
-import { dual } from "@effect/data/Function"
+import { dual, pipe } from "@effect/data/Function"
 import * as HashMap from "@effect/data/HashMap"
 import * as Option from "@effect/data/Option"
 import type ReadonlyArray from "@effect/data/ReadonlyArray"
@@ -7,10 +7,15 @@ import * as Effect from "@effect/io/Effect"
 import type * as Command from "@effect/platform/Command"
 import type { PlatformError } from "@effect/platform/Error"
 import * as Process from "@effect/platform/Process"
+import * as Sink from "@effect/stream/Sink"
 import * as Stream from "@effect/stream/Stream"
+import { TextDecoder } from "node:util"
 
 /** @internal */
 export const CommandTypeId: Command.CommandTypeId = Symbol.for("@effect/platform/Command") as Command.CommandTypeId
+
+/** @internal */
+export const isCommand = (u: unknown): u is Command.Command => typeof u === "object" && u != null && CommandTypeId in u
 
 /** @internal */
 export const flatten = (self: Command.Command): ReadonlyArray.NonEmptyReadonlyArray<Command.StandardCommand> =>
@@ -146,7 +151,27 @@ export const start = (
 ): Effect.Effect<Process.ProcessExecutor, PlatformError, Process.Process> =>
   Effect.flatMap(Process.ProcessExecutor, (executor) => executor.start(command))
 
-// export const string = (command: Command.Command): Effect.Effect<Process.ProcessExecutor, PlatformError, string> =>
+/** @internal */
+export const stream = (
+  command: Command.Command
+): Stream.Stream<Process.ProcessExecutor, PlatformError, Uint8Array> =>
+  Stream.flatMap(Stream.fromEffect(start(command)), (process) => process.stdout)
+
+const collectUint8Array: Sink.Sink<never, never, Uint8Array, never, Uint8Array> = Sink.foldLeftChunks(
+  new Uint8Array(),
+  (bytes, chunk: Chunk.Chunk<Uint8Array>) => Chunk.reduce(chunk, bytes, (acc, curr) => Buffer.concat([acc, curr]))
+)
+
+/** @internal */
+export const string = dual<
+  (encoding?: string) => (command: Command.Command) => Effect.Effect<Process.ProcessExecutor, PlatformError, string>,
+  (command: Command.Command, encoding?: string) => Effect.Effect<Process.ProcessExecutor, PlatformError, string>
+>((args) => isCommand(args[0]), (command, encoding = "utf-8") =>
+  pipe(
+    start(command),
+    Effect.flatMap((process) => Stream.run(process.stdout, collectUint8Array)),
+    Effect.map((bytes) => new TextDecoder(encoding).decode(bytes))
+  ))
 
 /** @internal */
 export const workingDirectory: {
