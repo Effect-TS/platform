@@ -55,7 +55,7 @@ export {
    * @since 1.0.0
    * @category execution
    */
-  run,
+  start,
   /**
    * @since 1.0.0
    * @category combinators

@@ -155,7 +155,7 @@ export const pipeTo: {
  * @since 1.0.0
  * @category execution
  */
-export const run: (command: Command) => Effect<ProcessExecutor, PlatformError, Process> = internal.run
+export const start: (command: Command) => Effect<ProcessExecutor, PlatformError, Process> = internal.start
 
 /**
  * Specify the standard error stream for a command.

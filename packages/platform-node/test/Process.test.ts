@@ -13,11 +13,11 @@ const runPromise = <E, A>(self: Effect.Effect<FileSystem.FileSystem | Process.Pr
   )
 
 describe("Process", () => {
-  it("execute", () =>
+  it("start", () =>
     runPromise(Effect.gen(function*(_) {
       const command = Command.make("echo", "-n", "test")
       const result = yield* _(
-        Command.run(command),
+        Command.start(command),
         Effect.flatMap((process) => Stream.runCollect(process.stdout)),
         Effect.map((chunk) => Array.from(chunk).map((bytes) => Buffer.from(bytes).toString("utf-8")))
       )
@@ -29,7 +29,7 @@ describe("Process", () => {
       const stdin = Stream.make(Buffer.from("a b c", "utf-8"))
       const command = pipe(Command.make("cat"), Command.stdin(stdin))
       const result = yield* _(
-        Command.run(command),
+        Command.start(command),
         Effect.flatMap((process) => Stream.runCollect(process.stdout)),
         Effect.map((chunk) => Array.from(chunk).map((bytes) => Buffer.from(bytes).toString("utf-8")))
       )
@@ -44,7 +44,7 @@ describe("Process", () => {
         Command.pipeTo(Command.make("sort"))
       )
       const result = yield* _(
-        Command.run(command),
+        Command.start(command),
         Effect.flatMap((process) => Stream.runCollect(process.stdout)),
         Effect.map((chunk) => Array.from(chunk).map((bytes) => Buffer.from(bytes).toString("utf-8")))
       )

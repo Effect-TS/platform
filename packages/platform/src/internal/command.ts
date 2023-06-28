@@ -141,10 +141,12 @@ export const stdout: {
 })
 
 /** @internal */
-export const run = (
+export const start = (
   command: Command.Command
 ): Effect.Effect<Process.ProcessExecutor, PlatformError, Process.Process> =>
   Effect.flatMap(Process.ProcessExecutor, (executor) => executor.start(command))
+
+// export const string = (command: Command.Command): Effect.Effect<Process.ProcessExecutor, PlatformError, string> =>
 
 /** @internal */
 export const workingDirectory: {
