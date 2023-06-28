@@ -58,15 +58,15 @@ export const make = (command: string, ...args: Array<string>): Command.Command =
 
 /** @internal */
 export const env: {
-  (environment: HashMap.HashMap<string, string>): (self: Command.Command) => Command.Command
-  (self: Command.Command, environment: HashMap.HashMap<string, string>): Command.Command
+  (environment: Record<string, string>): (self: Command.Command) => Command.Command
+  (self: Command.Command, environment: Record<string, string>): Command.Command
 } = dual<
-  (environment: HashMap.HashMap<string, string>) => (self: Command.Command) => Command.Command,
-  (self: Command.Command, environment: HashMap.HashMap<string, string>) => Command.Command
+  (environment: Record<string, string>) => (self: Command.Command) => Command.Command,
+  (self: Command.Command, environment: Record<string, string>) => Command.Command
 >(2, (self, environment) => {
   switch (self._tag) {
     case "StandardCommand": {
-      return { ...self, env: HashMap.union(self.env, environment) }
+      return { ...self, env: HashMap.union(self.env, HashMap.fromIterable(Object.entries(environment))) }
     }
     case "PipedCommand": {
       return pipeTo(env(self.left, environment), env(self.right, environment))
