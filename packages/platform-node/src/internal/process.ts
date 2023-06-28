@@ -47,12 +47,61 @@ const runCommand = (fileSystem: FileSystem.FileSystem) =>
                   stdin = fromWritable(() => handle.stdin!, (e) => e as PlatformError)
                 }
 
+                const pid = Process.ProcessId(handle.pid)
                 const stderr = fromReadable<PlatformError, Buffer>(() => handle.stderr!, (e) => e as any)
                 const stdout = fromReadable<PlatformError, Buffer>(() => handle.stdout!, (e) => e as any)
 
+                const exitCode: Process.Process["exitCode"] = Effect.asyncInterrupt((resume) => {
+                  handle.on("exit", (code, signal) => {
+                    if (code !== null) {
+                      resume(Effect.succeed(Process.ExitCode(code)))
+                    } else {
+                      // If code is `null`, then `signal` must be defined. See the NodeJS
+                      // documentation for the `"exit"` event on a `child_process`.
+                      // https://nodejs.org/api/child_process.html#child_process_event_exit
+                      // TODO: fixme
+                      resume(
+                        Effect.fail(
+                          new Error(
+                            `Process interrupted due to receipt of signal: ${signal}`
+                          ) as unknown as PlatformError
+                        )
+                      )
+                    }
+                  })
+                  // Make sure to terminate the running process if the fiber is
+                  // terminated
+                  return Effect.sync(() => {
+                    handle.kill("SIGKILL")
+                  })
+                })
+
+                const isRunning = Effect.sync(() =>
+                  handle.exitCode === null &&
+                  handle.signalCode === null &&
+                  !handle.killed
+                )
+
+                const kill: Process.Process["kill"] = (signal = "SIGTERM") =>
+                  // TODO: refine or die?
+                  Effect.asyncInterrupt((resume) => {
+                    handle.kill(signal)
+                    handle.on("exit", () => {
+                      resume(Effect.unit())
+                    })
+                    // Make sure to terminate the running process if the fiber
+                    // is terminated
+                    return Effect.sync(() => {
+                      handle.kill("SIGKILL")
+                    })
+                  })
+
                 resume(Effect.succeed<Process.Process>({
                   [Process.ProcessTypeId]: Process.ProcessTypeId,
-                  pid: Process.ProcessId(handle.pid),
+                  pid,
+                  exitCode,
+                  isRunning,
+                  kill,
                   stdin,
                   stderr,
                   stdout

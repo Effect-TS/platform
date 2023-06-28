@@ -56,13 +56,36 @@ export type ProcessTypeId = typeof ProcessTypeId
  */
 export interface Process {
   readonly [ProcessTypeId]: ProcessTypeId
+  /**
+   * The process identifier.
+   */
   readonly pid: ProcessId
-  // readonly exitCode: Effect<never, PlatformError, ExitCode>
-  // readonly isAlive: Effect<never, PlatformError, boolean>
-  // /** Defaults to SIGTERM */
-  // readonly kill: (signal?: Signal) => Effect<never, PlatformError, void>
+  /**
+   * Waits for the process to exit and returns the `ExitCode` of the command
+   * that was run.
+   */
+  readonly exitCode: Effect<never, PlatformError, ExitCode>
+  /**
+   * Returns `true` if the process is still running, otherwise returns `false`.
+   */
+  readonly isRunning: Effect<never, PlatformError, boolean>
+  /**
+   * Kills the running process with the provided signal.
+   *
+   * If no signal is provided, the signal will defaults to `SIGTERM`.
+   */
+  readonly kill: (signal?: Signal) => Effect<never, PlatformError, void>
+  /**
+   * The standard error stream of the process.
+   */
   readonly stderr: Stream<never, PlatformError, Uint8Array>
+  /**
+   * The standard input sink of the process.
+   */
   readonly stdin: Sink<never, PlatformError, Uint8Array, never, void>
+  /**
+   * The standard output stream of the process.
+   */
   readonly stdout: Stream<never, PlatformError, Uint8Array>
 }
 

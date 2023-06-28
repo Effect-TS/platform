@@ -5,7 +5,10 @@ import * as Command from "@effect/platform-node/Command"
 import * as FileSystem from "@effect/platform-node/FileSystem"
 import * as Process from "@effect/platform-node/Process"
 import * as Stream from "@effect/stream/Stream"
+import * as Path from "node:path"
 import { describe, expect } from "vitest"
+
+const TEST_BASH_SCRIPTS_DIRECTORY = Path.join(__dirname, "fixtures", "bash")
 
 const runPromise = <E, A>(self: Effect.Effect<FileSystem.FileSystem | Process.ProcessExecutor, E, A>) =>
   Effect.runPromise(
@@ -18,6 +21,34 @@ describe("Process", () => {
       const command = Command.make("echo", "-n", "test")
       const result = yield* $(Command.string(command))
       expect(result).toEqual("test")
+    })))
+
+  // TODO: cleanup this test
+  it("should capture stderr and stdout separately", () =>
+    runPromise(Effect.gen(function*($) {
+      const command = pipe(
+        Command.make("./duplex.sh"),
+        Command.workingDirectory(TEST_BASH_SCRIPTS_DIRECTORY)
+      )
+      const process = yield* $(Command.start(command))
+      const result = yield* $(pipe(
+        process.stdout,
+        Stream.zip(process.stderr),
+        Stream.runCollect,
+        Effect.map((bytes) => {
+          const decoder = new TextDecoder("utf-8")
+          return Array.from(bytes).flatMap(([left, right]) =>
+            [
+              decoder.decode(left),
+              decoder.decode(right)
+            ] as const
+          )
+        })
+      ))
+      expect(result).toEqual([
+        "stdout1\nstdout2\n",
+        "stderr1\nstderr2\n"
+      ])
     })))
 
   it("should accept streaming stdin", () =>
@@ -46,5 +77,19 @@ describe("Process", () => {
       const result = yield* $(Command.string(command))
       // TODO: command.lines
       expect(result).toEqual("1\n2\n3\n")
+    })))
+
+  it("should be able to kill a running process", () =>
+    runPromise(Effect.gen(function*($) {
+      const command = pipe(
+        Command.make("./repeat.sh"),
+        Command.workingDirectory(TEST_BASH_SCRIPTS_DIRECTORY)
+      )
+      const process = yield* $(Command.start(command))
+      const isRunningBeforeKill = yield* $(process.isRunning)
+      yield* $(process.kill())
+      const isRunningAfterKill = yield* $(process.isRunning)
+      expect(isRunningBeforeKill).toBe(true)
+      expect(isRunningAfterKill).toBe(false)
     })))
 })
