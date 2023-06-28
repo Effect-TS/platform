@@ -15,7 +15,21 @@ import type { Stream } from "@effect/stream/Stream"
  * @category models
  */
 export interface ProcessExecutor {
+  /**
+   * Start running the command and return a handle to the running process.
+   */
   readonly start: (command: Command) => Effect<never, PlatformError, Process>
+  /**
+   * Runs the command returning the entire output as a string with the
+   * specified encoding.
+   *
+   * If an encoding is not specified, the encoding will default to `utf-8`.
+   */
+  readonly string: (command: Command, encoding?: string) => Effect<never, PlatformError, string>
+  /**
+   * Start running the command and return the output as a `Stream`.
+   */
+  readonly stream: (command: Command) => Stream<never, PlatformError, Uint8Array>
 }
 
 /**
