@@ -54,7 +54,7 @@ const runCommand = (
 
               resume(Effect.succeed<Process.Process>({
                 [Process.ProcessTypeId]: Process.ProcessTypeId,
-                pid: handle.pid! as Process.Process.Id,
+                pid: Process.ProcessId(handle.pid),
                 stdin,
                 stderr,
                 stdout

@@ -42,7 +42,7 @@ export type ProcessTypeId = typeof ProcessTypeId
  */
 export interface Process {
   readonly [ProcessTypeId]: ProcessTypeId
-  readonly pid: Process.Id
+  readonly pid: ProcessId
   // readonly exitCode: Effect<never, PlatformError, ExitCode>
   // readonly isAlive: Effect<never, PlatformError, boolean>
   // /** Defaults to SIGTERM */
@@ -128,7 +128,7 @@ export const ExitCode: Brand.Brand.Constructor<ExitCode> = internal.ExitCode
  * @since 1.0.0
  * @category constructors
  */
-export const Id: Brand.Brand.Constructor<Process.Id> = internal.Id
+export const ProcessId: Brand.Brand.Constructor<Process.Id> = internal.ProcessId
 
 /**
  * @since 1.0.0

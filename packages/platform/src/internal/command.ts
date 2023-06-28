@@ -9,7 +9,6 @@ import type { PlatformError } from "@effect/platform/Error"
 import * as Process from "@effect/platform/Process"
 import * as Sink from "@effect/stream/Sink"
 import * as Stream from "@effect/stream/Stream"
-import { TextDecoder } from "node:util"
 
 /** @internal */
 export const CommandTypeId: Command.CommandTypeId = Symbol.for("@effect/platform/Command") as Command.CommandTypeId
