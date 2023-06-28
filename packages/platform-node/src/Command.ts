@@ -40,6 +40,11 @@ export {
    * @since 1.0.0
    * @category combinators
    */
+  feed,
+  /**
+   * @since 1.0.0
+   * @category combinators
+   */
   flatten,
   /**
    * @since 1.0.0
@@ -56,6 +61,11 @@ export {
    * @category combinators
    */
   pipeTo,
+  /**
+   * @since 1.0.0
+   * @category combinators
+   */
+  redirectTo,
   /**
    * @since 1.0.0
    * @category execution

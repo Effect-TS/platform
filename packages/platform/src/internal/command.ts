@@ -16,6 +16,12 @@ export const CommandTypeId: Command.CommandTypeId = Symbol.for("@effect/platform
 export const isCommand = (u: unknown): u is Command.Command => typeof u === "object" && u != null && CommandTypeId in u
 
 /** @internal */
+export const feed = dual<
+  (input: string) => (self: Command.Command) => Command.Command,
+  (self: Command.Command, input: string) => Command.Command
+>(2, (self, input) => stdin(self, Stream.fromChunk(Chunk.of(new TextEncoder().encode(input)))))
+
+/** @internal */
 export const flatten = (self: Command.Command): ReadonlyArray.NonEmptyReadonlyArray<Command.StandardCommand> =>
   Array.from(flattenLoop(self)) as unknown as ReadonlyArray.NonEmptyReadonlyArray<
     Command.StandardCommand

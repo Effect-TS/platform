@@ -94,8 +94,7 @@ const runCommand = (fileSystem: FileSystem.FileSystem) =>
               Stream.flatMap((process) => process.stdout)
             ),
           pipe(
-            head,
-            runCommand(fileSystem),
+            runCommand(fileSystem)(head),
             Stream.flatMap((process) => process.stdout)
           )
         )

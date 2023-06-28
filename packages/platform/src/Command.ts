@@ -121,6 +121,14 @@ export const env: {
 } = internal.env
 
 /**
+ * Feed a string to standard input (default encoding of UTF-8).
+ */
+export const feed: {
+  (input: string): (self: Command) => Command
+  (self: Command, input: string): Command
+} = internal.feed
+
+/**
  * Flatten this command to a non-empty array of standard commands.
  *
  * * For a `StandardCommand`, this simply returns a `1` element array
@@ -183,7 +191,10 @@ export const stream: (command: Command) => Stream<ProcessExecutor, PlatformError
  * @since 1.0.0
  * @category execution
  */
-export const string = internal.string
+export const string: {
+  (encoding?: string): (command: Command) => Effect<ProcessExecutor, PlatformError, string>
+  (command: Command, encoding?: string): Effect<ProcessExecutor, PlatformError, string>
+} = internal.string
 
 /**
  * Specify the standard error stream for a command.
