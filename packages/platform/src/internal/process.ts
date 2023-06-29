@@ -37,5 +37,11 @@ export const makeExecutor = (start: Process.ProcessExecutor["start"]): Process.P
 
 const collectUint8Array: Sink.Sink<never, never, Uint8Array, never, Uint8Array> = Sink.foldLeftChunks(
   new Uint8Array(),
-  (bytes, chunk: Chunk.Chunk<Uint8Array>) => Chunk.reduce(chunk, bytes, (acc, curr) => Buffer.concat([acc, curr]))
+  (bytes, chunk: Chunk.Chunk<Uint8Array>) =>
+    Chunk.reduce(chunk, bytes, (acc, curr) => {
+      const newArray = new Uint8Array(acc.length + curr.length)
+      newArray.set(acc)
+      newArray.set(curr, acc.length)
+      return newArray
+    })
 )

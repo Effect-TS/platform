@@ -122,6 +122,9 @@ export const env: {
 
 /**
  * Feed a string to standard input (default encoding of UTF-8).
+ *
+ * @since 1.0.0
+ * @category combinators
  */
 export const feed: {
   (input: string): (self: Command) => Command
