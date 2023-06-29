@@ -2,6 +2,7 @@ import { identity, pipe } from "@effect/data/Function"
 import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
 import * as Layer from "@effect/io/Layer"
+import { handleErrnoException } from "@effect/platform-node/internal/error"
 import { effectify } from "@effect/platform/Effectify"
 import * as Error from "@effect/platform/Error"
 import * as FileSystem from "@effect/platform/FileSystem"
@@ -9,55 +10,6 @@ import * as Crypto from "node:crypto"
 import * as NFS from "node:fs"
 import * as OS from "node:os"
 import * as Path from "node:path"
-
-// == errors
-
-const handleErrnoException = (method: string) =>
-  (
-    err: NodeJS.ErrnoException,
-    [path]: [path: NFS.PathLike | number, ...args: Array<any>]
-  ) => {
-    let reason: Error.SystemErrorReason = "Unknown"
-
-    switch (err.code) {
-      case "ENOENT":
-        reason = "NotFound"
-        break
-
-      case "EACCES":
-        reason = "PermissionDenied"
-        break
-
-      case "EEXIST":
-        reason = "AlreadyExists"
-        break
-
-      case "EISDIR":
-        reason = "BadResource"
-        break
-
-      case "ENOTDIR":
-        reason = "BadResource"
-        break
-
-      case "EBUSY":
-        reason = "Busy"
-        break
-
-      case "ELOOP":
-        reason = "BadResource"
-        break
-    }
-
-    return Error.SystemError({
-      reason,
-      module: "FileSystem",
-      method,
-      pathOrDescriptor: path as string | number,
-      syscall: err.syscall,
-      message: err.message
-    })
-  }
 
 const handleBadArgument = (method: string) =>
   (err: unknown) =>

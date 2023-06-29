@@ -2,10 +2,11 @@ import { constUndefined, pipe } from "@effect/data/Function"
 import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
 import * as Layer from "@effect/io/Layer"
+import { handleErrnoException } from "@effect/platform-node/internal/error"
 import { fromWritable } from "@effect/platform-node/internal/sink"
 import { fromReadable } from "@effect/platform-node/internal/stream"
 import * as Command from "@effect/platform/Command"
-import type { PlatformError } from "@effect/platform/Error"
+import type * as Error from "@effect/platform/Error"
 import * as FileSystem from "@effect/platform/FileSystem"
 import * as Process from "@effect/platform/Process"
 import * as Sink from "@effect/stream/Sink"
@@ -15,9 +16,21 @@ import * as ChildProcess from "node:child_process"
 const toStdioOption = (stdin: Option.Option<Command.Command.Input>): "pipe" | "inherit" =>
   Option.match(stdin, () => "inherit", () => "pipe")
 
+const toError = (err: unknown): Error => err instanceof globalThis.Error ? err : new globalThis.Error(String(err))
+
+const toPlatformError = (
+  method: string,
+  error: NodeJS.ErrnoException,
+  command: Command.Command
+): Error.PlatformError => {
+  const flattened = Command.flatten(command)
+    .reduce((acc, command) => `${acc} | ${command.command} ${command.args.join(" ")}`, "")
+  return handleErrnoException(method)(error, [flattened])
+}
+
 // TODO: Handle errors properly
 const runCommand = (fileSystem: FileSystem.FileSystem) =>
-  (command: Command.Command): Effect.Effect<never, PlatformError, Process.Process> => {
+  (command: Command.Command): Effect.Effect<never, Error.PlatformError, Process.Process> => {
     switch (command._tag) {
       case "StandardCommand": {
         return pipe(
@@ -25,7 +38,7 @@ const runCommand = (fileSystem: FileSystem.FileSystem) =>
           Effect.forEachOption(command.cwd, (dir) => fileSystem.access(dir)),
           Effect.zipRight(Effect.sync(() => globalThis.process.env)),
           Effect.flatMap((env) =>
-            Effect.asyncInterrupt<never, PlatformError, Process.Process>((resume) => {
+            Effect.asyncInterrupt<never, Error.PlatformError, Process.Process>((resume) => {
               const handle = ChildProcess.spawn(command.command, command.args, {
                 stdio: [toStdioOption(command.stdin), command.stdout, command.stderr],
                 cwd: Option.getOrElse(command.cwd, constUndefined),
@@ -35,21 +48,30 @@ const runCommand = (fileSystem: FileSystem.FileSystem) =>
               // If starting the process throws an error, make sure to capture it
               handle.on("error", (err) => {
                 handle.kill("SIGKILL")
-                resume(Effect.fail(err as unknown as PlatformError))
+                resume(Effect.fail(toPlatformError("spawn", err, command)))
               })
 
               // If the process is assigned a process identifier, then we know it
               // was spawned successfully
               if (handle.pid) {
-                let stdin: Sink.Sink<never, PlatformError, unknown, never, void> = Sink.drain()
+                let stdin: Sink.Sink<never, Error.PlatformError, unknown, never, void> = Sink.drain()
 
                 if (handle.stdin !== null) {
-                  stdin = fromWritable(() => handle.stdin!, (e) => e as PlatformError)
+                  stdin = fromWritable(
+                    () => handle.stdin!,
+                    (err) => toPlatformError("toWritable", toError(err), command)
+                  )
                 }
 
                 const pid = Process.ProcessId(handle.pid)
-                const stderr = fromReadable<PlatformError, Buffer>(() => handle.stderr!, (e) => e as any)
-                const stdout = fromReadable<PlatformError, Buffer>(() => handle.stdout!, (e) => e as any)
+                const stderr = fromReadable<Error.PlatformError, Buffer>(
+                  () => handle.stderr!,
+                  (err) => toPlatformError("fromReadable(stderr)", toError(err), command)
+                )
+                const stdout = fromReadable<Error.PlatformError, Buffer>(
+                  () => handle.stdout!,
+                  (err) => toPlatformError("fromReadable(stdout)", toError(err), command)
+                )
 
                 const exitCode: Process.Process["exitCode"] = Effect.asyncInterrupt((resume) => {
                   handle.on("exit", (code, signal) => {
@@ -62,9 +84,11 @@ const runCommand = (fileSystem: FileSystem.FileSystem) =>
                       // TODO: fixme
                       resume(
                         Effect.fail(
-                          new Error(
-                            `Process interrupted due to receipt of signal: ${signal}`
-                          ) as unknown as PlatformError
+                          toPlatformError(
+                            "exitCode",
+                            new globalThis.Error(`Process interrupted due to receipt of signal: ${signal}`),
+                            command
+                          )
                         )
                       )
                     }
