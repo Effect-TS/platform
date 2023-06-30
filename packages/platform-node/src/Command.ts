@@ -63,6 +63,11 @@ export {
   pipeTo,
   /**
    * @since 1.0.0
+   * @category combinators
+   */
+  redirectStdout,
+  /**
+   * @since 1.0.0
    * @category execution
    */
   start,

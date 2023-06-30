@@ -2,9 +2,9 @@
  * @since 1.0.0
  */
 import type { Layer } from "@effect/io/Layer"
-import * as internal from "@effect/platform-node/internal/process"
+import * as internal from "@effect/platform-node/internal/commandExecutor"
+import type { CommandExecutor } from "@effect/platform/CommandExecutor"
 import type { FileSystem } from "@effect/platform/FileSystem"
-import type { ProcessExecutor } from "@effect/platform/Process"
 
 export type {
   /**
@@ -32,18 +32,18 @@ export type {
    * @category models
    */
   Signal
-} from "@effect/platform/Process"
+} from "@effect/platform/CommandExecutor"
 
 export {
   /**
    * @since 1.0.0
    * @category tag
    */
-  ProcessExecutor
-} from "@effect/platform/Process"
+  CommandExecutor
+} from "@effect/platform/CommandExecutor"
 
 /**
  * @since 1.0.0
  * @category layer
  */
-export const layer: Layer<FileSystem, never, ProcessExecutor> = internal.layer
+export const layer: Layer<FileSystem, never, CommandExecutor> = internal.layer

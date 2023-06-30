@@ -6,15 +6,18 @@ import { handleErrnoException } from "@effect/platform-node/internal/error"
 import { fromWritable } from "@effect/platform-node/internal/sink"
 import { fromReadable } from "@effect/platform-node/internal/stream"
 import * as Command from "@effect/platform/Command"
+import * as CommandExecutor from "@effect/platform/CommandExecutor"
 import type * as Error from "@effect/platform/Error"
 import * as FileSystem from "@effect/platform/FileSystem"
-import * as Process from "@effect/platform/Process"
 import * as Sink from "@effect/stream/Sink"
 import * as Stream from "@effect/stream/Stream"
 import * as ChildProcess from "node:child_process"
 
-const toStdioOption = (stdin: Option.Option<Command.Command.Input>): "pipe" | "inherit" =>
+const inputToStdioOption = (stdin: Option.Option<Command.Command.Input>): "pipe" | "inherit" =>
   Option.match(stdin, () => "inherit", () => "pipe")
+
+const outputToStdioOption = (output: Command.Command.Output): "pipe" | "inherit" =>
+  typeof output === "string" ? output : "pipe"
 
 const toError = (err: unknown): Error => err instanceof globalThis.Error ? err : new globalThis.Error(String(err))
 
@@ -30,7 +33,7 @@ const toPlatformError = (
 
 // TODO: Handle errors properly
 const runCommand = (fileSystem: FileSystem.FileSystem) =>
-  (command: Command.Command): Effect.Effect<never, Error.PlatformError, Process.Process> => {
+  (command: Command.Command): Effect.Effect<never, Error.PlatformError, CommandExecutor.Process> => {
     switch (command._tag) {
       case "StandardCommand": {
         return pipe(
@@ -38,9 +41,13 @@ const runCommand = (fileSystem: FileSystem.FileSystem) =>
           Effect.forEachOption(command.cwd, (dir) => fileSystem.access(dir)),
           Effect.zipRight(Effect.sync(() => globalThis.process.env)),
           Effect.flatMap((env) =>
-            Effect.asyncInterrupt<never, Error.PlatformError, Process.Process>((resume) => {
+            Effect.asyncInterrupt<never, Error.PlatformError, CommandExecutor.Process>((resume) => {
               const handle = ChildProcess.spawn(command.command, command.args, {
-                stdio: [toStdioOption(command.stdin), command.stdout, command.stderr],
+                stdio: [
+                  inputToStdioOption(command.stdin),
+                  outputToStdioOption(command.stdout),
+                  outputToStdioOption(command.stderr)
+                ],
                 cwd: Option.getOrElse(command.cwd, constUndefined),
                 env: { ...env, ...Object.fromEntries(command.env) }
               })
@@ -63,20 +70,10 @@ const runCommand = (fileSystem: FileSystem.FileSystem) =>
                   )
                 }
 
-                const pid = Process.ProcessId(handle.pid)
-                const stderr = fromReadable<Error.PlatformError, Buffer>(
-                  () => handle.stderr!,
-                  (err) => toPlatformError("fromReadable(stderr)", toError(err), command)
-                )
-                const stdout = fromReadable<Error.PlatformError, Buffer>(
-                  () => handle.stdout!,
-                  (err) => toPlatformError("fromReadable(stdout)", toError(err), command)
-                )
-
-                const exitCode: Process.Process["exitCode"] = Effect.asyncInterrupt((resume) => {
+                const exitCode: CommandExecutor.Process["exitCode"] = Effect.asyncInterrupt((resume) => {
                   handle.on("exit", (code, signal) => {
                     if (code !== null) {
-                      resume(Effect.succeed(Process.ExitCode(code)))
+                      resume(Effect.succeed(CommandExecutor.ExitCode(code)))
                     } else {
                       // If code is `null`, then `signal` must be defined. See the NodeJS
                       // documentation for the `"exit"` event on a `child_process`.
@@ -106,7 +103,7 @@ const runCommand = (fileSystem: FileSystem.FileSystem) =>
                   !handle.killed
                 )
 
-                const kill: Process.Process["kill"] = (signal = "SIGTERM") =>
+                const kill: CommandExecutor.Process["kill"] = (signal = "SIGTERM") =>
                   // TODO: refine or die?
                   Effect.asyncInterrupt((resume) => {
                     handle.kill(signal)
@@ -120,15 +117,33 @@ const runCommand = (fileSystem: FileSystem.FileSystem) =>
                     })
                   })
 
-                resume(Effect.succeed<Process.Process>({
-                  [Process.ProcessTypeId]: Process.ProcessTypeId,
-                  pid,
-                  exitCode,
-                  isRunning,
-                  kill,
-                  stdin,
-                  stderr,
-                  stdout
+                resume(Effect.sync<CommandExecutor.Process>(() => {
+                  const pid = CommandExecutor.ProcessId(handle.pid!)
+                  const stderr = fromReadable<Error.PlatformError, Uint8Array>(
+                    () => handle.stderr!,
+                    (err) => toPlatformError("fromReadable(stderr)", toError(err), command)
+                  )
+                  let stdout: Stream.Stream<never, Error.PlatformError, Uint8Array> = fromReadable<
+                    Error.PlatformError,
+                    Uint8Array
+                  >(
+                    () => handle.stdout!,
+                    (err) => toPlatformError("fromReadable(stdout)", toError(err), command)
+                  )
+                  // TODO: add Sink.isSink
+                  if (typeof command.stdout !== "string") {
+                    stdout = Stream.transduce(stdout, command.stdout)
+                  }
+                  return {
+                    [CommandExecutor.ProcessTypeId]: CommandExecutor.ProcessTypeId,
+                    pid,
+                    exitCode,
+                    isRunning,
+                    kill,
+                    stdin,
+                    stderr,
+                    stdout
+                  }
                 }))
               }
               return Effect.async<never, never, void>((resume) => {
@@ -177,10 +192,10 @@ const runCommand = (fileSystem: FileSystem.FileSystem) =>
   }
 
 /** @internal */
-export const layer: Layer.Layer<FileSystem.FileSystem, never, Process.ProcessExecutor> = Layer.effect(
-  Process.ProcessExecutor,
+export const layer: Layer.Layer<FileSystem.FileSystem, never, CommandExecutor.CommandExecutor> = Layer.effect(
+  CommandExecutor.ProcessExecutor,
   pipe(
     FileSystem.FileSystem,
-    Effect.map((fileSystem) => Process.makeExecutor(runCommand(fileSystem)))
+    Effect.map((fileSystem) => CommandExecutor.makeExecutor(runCommand(fileSystem)))
   )
 )

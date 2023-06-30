@@ -5,8 +5,9 @@ import * as Option from "@effect/data/Option"
 import type ReadonlyArray from "@effect/data/ReadonlyArray"
 import * as Effect from "@effect/io/Effect"
 import type * as Command from "@effect/platform/Command"
+import * as CommandExecutor from "@effect/platform/CommandExecutor"
 import type { PlatformError } from "@effect/platform/Error"
-import * as Process from "@effect/platform/Process"
+import type * as Sink from "@effect/stream/Sink"
 import * as Stream from "@effect/stream/Stream"
 
 /** @internal */
@@ -14,6 +15,24 @@ export const CommandTypeId: Command.CommandTypeId = Symbol.for("@effect/platform
 
 /** @internal */
 export const isCommand = (u: unknown): u is Command.Command => typeof u === "object" && u != null && CommandTypeId in u
+
+/** @internal */
+export const env: {
+  (environment: Record<string, string>): (self: Command.Command) => Command.Command
+  (self: Command.Command, environment: Record<string, string>): Command.Command
+} = dual<
+  (environment: Record<string, string>) => (self: Command.Command) => Command.Command,
+  (self: Command.Command, environment: Record<string, string>) => Command.Command
+>(2, (self, environment) => {
+  switch (self._tag) {
+    case "StandardCommand": {
+      return { ...self, env: HashMap.union(self.env, HashMap.fromIterable(Object.entries(environment))) }
+    }
+    case "PipedCommand": {
+      return pipeTo(env(self.left, environment), env(self.right, environment))
+    }
+  }
+})
 
 /** @internal */
 export const feed = dual<
@@ -61,24 +80,6 @@ export const make = (command: string, ...args: Array<string>): Command.Command =
 })
 
 /** @internal */
-export const env: {
-  (environment: Record<string, string>): (self: Command.Command) => Command.Command
-  (self: Command.Command, environment: Record<string, string>): Command.Command
-} = dual<
-  (environment: Record<string, string>) => (self: Command.Command) => Command.Command,
-  (self: Command.Command, environment: Record<string, string>) => Command.Command
->(2, (self, environment) => {
-  switch (self._tag) {
-    case "StandardCommand": {
-      return { ...self, env: HashMap.union(self.env, HashMap.fromIterable(Object.entries(environment))) }
-    }
-    case "PipedCommand": {
-      return pipeTo(env(self.left, environment), env(self.right, environment))
-    }
-  }
-})
-
-/** @internal */
 export const pipeTo = dual<
   (into: Command.Command) => (self: Command.Command) => Command.Command,
   (self: Command.Command, into: Command.Command) => Command.Command
@@ -88,6 +89,12 @@ export const pipeTo = dual<
   left: self,
   right: into
 }))
+
+/** @internal */
+export const redirectStdout = dual<
+  (sink: Sink.Sink<never, never, Uint8Array, never, Uint8Array>) => (self: Command.Command) => Command.Command,
+  (self: Command.Command, sink: Sink.Sink<never, never, Uint8Array, never, Uint8Array>) => Command.Command
+>(2, (self, sink) => ({ ...self, stdout: sink }))
 
 /** @internal */
 export const stderr: {
@@ -152,22 +159,25 @@ export const stdout: {
 /** @internal */
 export const start = (
   command: Command.Command
-): Effect.Effect<Process.ProcessExecutor, PlatformError, Process.Process> =>
-  Effect.flatMap(Process.ProcessExecutor, (executor) => executor.start(command))
+): Effect.Effect<CommandExecutor.CommandExecutor, PlatformError, CommandExecutor.Process> =>
+  Effect.flatMap(CommandExecutor.ProcessExecutor, (executor) => executor.start(command))
 
 /** @internal */
 export const stream = (
   command: Command.Command
-): Stream.Stream<Process.ProcessExecutor, PlatformError, Uint8Array> =>
-  Stream.flatMap(Process.ProcessExecutor, (process) => process.stream(command))
+): Stream.Stream<CommandExecutor.CommandExecutor, PlatformError, Uint8Array> =>
+  Stream.flatMap(CommandExecutor.ProcessExecutor, (process) => process.stream(command))
 
 /** @internal */
 export const string = dual<
-  (encoding?: string) => (command: Command.Command) => Effect.Effect<Process.ProcessExecutor, PlatformError, string>,
-  (command: Command.Command, encoding?: string) => Effect.Effect<Process.ProcessExecutor, PlatformError, string>
+  (
+    encoding?: string
+  ) => (command: Command.Command) => Effect.Effect<CommandExecutor.CommandExecutor, PlatformError, string>,
+  (command: Command.Command, encoding?: string) => Effect.Effect<CommandExecutor.CommandExecutor, PlatformError, string>
 >(
   (args) => isCommand(args[0]),
-  (command, encoding) => Effect.flatMap(Process.ProcessExecutor, (executor) => executor.string(command, encoding))
+  (command, encoding) =>
+    Effect.flatMap(CommandExecutor.ProcessExecutor, (executor) => executor.string(command, encoding))
 )
 
 /** @internal */

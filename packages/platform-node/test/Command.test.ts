@@ -2,17 +2,17 @@ import { pipe } from "@effect/data/Function"
 import * as Effect from "@effect/io/Effect"
 import * as Layer from "@effect/io/Layer"
 import * as Command from "@effect/platform-node/Command"
+import * as CommandExecutor from "@effect/platform-node/CommandExecutor"
 import * as FileSystem from "@effect/platform-node/FileSystem"
-import * as Process from "@effect/platform-node/Process"
 import * as Stream from "@effect/stream/Stream"
 import * as Path from "node:path"
 import { describe, expect } from "vitest"
 
 const TEST_BASH_SCRIPTS_DIRECTORY = Path.join(__dirname, "fixtures", "bash")
 
-const runPromise = <E, A>(self: Effect.Effect<FileSystem.FileSystem | Process.ProcessExecutor, E, A>) =>
+const runPromise = <E, A>(self: Effect.Effect<FileSystem.FileSystem | CommandExecutor.CommandExecutor, E, A>) =>
   Effect.runPromise(
-    Effect.provideLayer(self, Layer.provideMerge(FileSystem.layer, Process.layer))
+    Effect.provideLayer(self, Layer.provideMerge(FileSystem.layer, CommandExecutor.layer))
   )
 
 describe("Process", () => {

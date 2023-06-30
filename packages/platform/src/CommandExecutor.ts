@@ -6,7 +6,7 @@ import type { Tag } from "@effect/data/Context"
 import type { Effect } from "@effect/io/Effect"
 import type { Command } from "@effect/platform/Command"
 import type { PlatformError } from "@effect/platform/Error"
-import * as internal from "@effect/platform/internal/process"
+import * as internal from "@effect/platform/internal/commandExecutor"
 import type { Sink } from "@effect/stream/Sink"
 import type { Stream } from "@effect/stream/Stream"
 
@@ -14,7 +14,7 @@ import type { Stream } from "@effect/stream/Stream"
  * @since 1.0.0
  * @category models
  */
-export interface ProcessExecutor {
+export interface CommandExecutor {
   /**
    * Start running the command and return a handle to the running process.
    */
@@ -36,7 +36,7 @@ export interface ProcessExecutor {
  * @since 1.0.0
  * @category tags
  */
-export const ProcessExecutor: Tag<ProcessExecutor, ProcessExecutor> = internal.ProcessExecutor
+export const ProcessExecutor: Tag<CommandExecutor, CommandExecutor> = internal.ProcessExecutor
 
 /**
  * @since 1.0.0
@@ -173,4 +173,4 @@ export const ProcessId: Brand.Brand.Constructor<Process.Id> = internal.ProcessId
  */
 export const makeExecutor: (
   start: (command: Command) => Effect<never, PlatformError, Process>
-) => ProcessExecutor = internal.makeExecutor
+) => CommandExecutor = internal.makeExecutor

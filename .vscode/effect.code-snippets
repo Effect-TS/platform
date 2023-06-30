@@ -1,0 +1,16 @@
+{
+  "Effect.gen": {
+    "description": "Start an Effect.gen block",
+    "prefix": "gg",
+    "body": [
+      "Effect.gen(function*($) {",
+      "  $0",
+      "})"
+    ]
+  },
+  "Effect.gen Yield": {
+    "description": "Yield an Effect in an Effect.gen block",
+    "prefix": "yy",
+    "body": "const $1 = yield* $($0)"
+  }
+}
