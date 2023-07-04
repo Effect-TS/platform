@@ -24,7 +24,7 @@ const handleBadArgument = (method: string) =>
 const access = (() => {
   const nodeAccess = effectify(
     NFS.access,
-    handleErrnoException("access"),
+    handleErrnoException("FileSystem", "access"),
     handleBadArgument("access")
   )
   return (path: string, options?: FileSystem.AccessFileOptions) => {
@@ -44,7 +44,7 @@ const access = (() => {
 const copy = (() => {
   const nodeCp = effectify(
     NFS.cp,
-    handleErrnoException("copy"),
+    handleErrnoException("FileSystem", "copy"),
     handleBadArgument("copy")
   )
   return (fromPath: string, toPath: string, options?: FileSystem.CopyOptions) =>
@@ -60,7 +60,7 @@ const copy = (() => {
 const copyFile = (() => {
   const nodeCopyFile = effectify(
     NFS.copyFile,
-    handleErrnoException("copyFile"),
+    handleErrnoException("FileSystem", "copyFile"),
     handleBadArgument("copyFile")
   )
   return (fromPath: string, toPath: string) => nodeCopyFile(fromPath, toPath)
@@ -71,7 +71,7 @@ const copyFile = (() => {
 const chmod = (() => {
   const nodeChmod = effectify(
     NFS.chmod,
-    handleErrnoException("chmod"),
+    handleErrnoException("FileSystem", "chmod"),
     handleBadArgument("chmod")
   )
   return (path: string, mode: number) => nodeChmod(path, mode)
@@ -82,7 +82,7 @@ const chmod = (() => {
 const chown = (() => {
   const nodeChown = effectify(
     NFS.chown,
-    handleErrnoException("chown"),
+    handleErrnoException("FileSystem", "chown"),
     handleBadArgument("chown")
   )
   return (path: string, uid: number, gid: number) => nodeChown(path, uid, gid)
@@ -93,7 +93,7 @@ const chown = (() => {
 const link = (() => {
   const nodeLink = effectify(
     NFS.link,
-    handleErrnoException("link"),
+    handleErrnoException("FileSystem", "link"),
     handleBadArgument("link")
   )
   return (existingPath: string, newPath: string) => nodeLink(existingPath, newPath)
@@ -104,7 +104,7 @@ const link = (() => {
 const makeDirectory = (() => {
   const nodeMkdir = effectify(
     NFS.mkdir,
-    handleErrnoException("makeDirectory"),
+    handleErrnoException("FileSystem", "makeDirectory"),
     handleBadArgument("makeDirectory")
   )
   return (path: string, options?: FileSystem.MakeDirectoryOptions) =>
@@ -119,7 +119,7 @@ const makeDirectory = (() => {
 const makeTempDirectoryFactory = (method: string) => {
   const nodeMkdtemp = effectify(
     NFS.mkdtemp,
-    handleErrnoException(method),
+    handleErrnoException("FileSystem", method),
     handleBadArgument(method)
   )
   return (options?: FileSystem.MakeTempDirectoryOptions) =>
@@ -139,7 +139,7 @@ const makeTempDirectory = makeTempDirectoryFactory("makeTempDirectory")
 const removeFactory = (method: string) => {
   const nodeRm = effectify(
     NFS.rm,
-    handleErrnoException(method),
+    handleErrnoException("FileSystem", method),
     handleBadArgument(method)
   )
   return (path: string, options?: FileSystem.RemoveOptions) =>
@@ -169,12 +169,12 @@ const makeTempDirectoryScoped = (() => {
 const openFactory = (method: string) => {
   const nodeOpen = effectify(
     NFS.open,
-    handleErrnoException(method),
+    handleErrnoException("FileSystem", method),
     handleBadArgument(method)
   )
   const nodeClose = effectify(
     NFS.close,
-    handleErrnoException(method),
+    handleErrnoException("FileSystem", method),
     handleBadArgument(method)
   )
 
@@ -193,26 +193,26 @@ const makeFile = (() => {
   const nodeReadFactory = (method: string) =>
     effectify(
       NFS.read,
-      handleErrnoException(method),
+      handleErrnoException("FileSystem", method),
       handleBadArgument(method)
     )
   const nodeRead = nodeReadFactory("read")
   const nodeReadAlloc = nodeReadFactory("readAlloc")
   const nodeStat = effectify(
     NFS.fstat,
-    handleErrnoException("stat"),
+    handleErrnoException("FileSystem", "stat"),
     handleBadArgument("stat")
   )
   const nodeTruncate = effectify(
     NFS.ftruncate,
-    handleErrnoException("truncate"),
+    handleErrnoException("FileSystem", "truncate"),
     handleBadArgument("truncate")
   )
 
   const nodeWriteFactory = (method: string) =>
     effectify(
       NFS.write,
-      handleErrnoException(method),
+      handleErrnoException("FileSystem", method),
       handleBadArgument(method)
     )
   const nodeWrite = nodeWriteFactory("write")
@@ -334,7 +334,7 @@ const makeTempFileScoped = (() => {
 const readDirectory = (() => {
   const nodeReadDirectory = effectify(
     NFS.readdir,
-    handleErrnoException("readDirectory"),
+    handleErrnoException("FileSystem", "readDirectory"),
     handleBadArgument("readDirectory")
   )
 
@@ -351,7 +351,7 @@ const readFile = (path: string) =>
     try {
       NFS.readFile(path, { signal: controller.signal }, (err, data) => {
         if (err) {
-          resume(Effect.fail(handleErrnoException("readFile")(err, [path])))
+          resume(Effect.fail(handleErrnoException("FileSystem", "readFile")(err, [path])))
         } else {
           resume(Effect.succeed(data))
         }
@@ -368,7 +368,7 @@ const readFile = (path: string) =>
 const readLink = (() => {
   const nodeReadLink = effectify(
     NFS.readlink,
-    handleErrnoException("readLink"),
+    handleErrnoException("FileSystem", "readLink"),
     handleBadArgument("readLink")
   )
   return (path: string) => nodeReadLink(path)
@@ -379,7 +379,7 @@ const readLink = (() => {
 const realPath = (() => {
   const nodeRealPath = effectify(
     NFS.realpath,
-    handleErrnoException("realPath"),
+    handleErrnoException("FileSystem", "realPath"),
     handleBadArgument("realPath")
   )
   return (path: string) => nodeRealPath(path)
@@ -390,7 +390,7 @@ const realPath = (() => {
 const rename = (() => {
   const nodeRename = effectify(
     NFS.rename,
-    handleErrnoException("rename"),
+    handleErrnoException("FileSystem", "rename"),
     handleBadArgument("rename")
   )
   return (oldPath: string, newPath: string) => nodeRename(oldPath, newPath)
@@ -431,7 +431,7 @@ const makeFileInfo = (stat: NFS.Stats): FileSystem.File.Info => ({
 const stat = (() => {
   const nodeStat = effectify(
     NFS.stat,
-    handleErrnoException("stat"),
+    handleErrnoException("FileSystem", "stat"),
     handleBadArgument("stat")
   )
   return (path: string) => Effect.map(nodeStat(path), makeFileInfo)
@@ -442,7 +442,7 @@ const stat = (() => {
 const symlink = (() => {
   const nodeSymlink = effectify(
     NFS.symlink,
-    handleErrnoException("symlink"),
+    handleErrnoException("FileSystem", "symlink"),
     handleBadArgument("symlink")
   )
   return (target: string, path: string) => nodeSymlink(target, path)
@@ -453,7 +453,7 @@ const symlink = (() => {
 const truncate = (() => {
   const nodeTruncate = effectify(
     NFS.truncate,
-    handleErrnoException("truncate"),
+    handleErrnoException("FileSystem", "truncate"),
     handleBadArgument("truncate")
   )
   return (path: string, length?: FileSystem.Size) => nodeTruncate(path, Number(length))
@@ -464,7 +464,7 @@ const truncate = (() => {
 const utimes = (() => {
   const nodeUtimes = effectify(
     NFS.utimes,
-    handleErrnoException("utime"),
+    handleErrnoException("FileSystem", "utime"),
     handleBadArgument("utime")
   )
   return (path: string, atime: number | Date, mtime: number | Date) => nodeUtimes(path, atime, mtime)
@@ -482,7 +482,7 @@ const writeFile = (path: string, data: Uint8Array, options?: FileSystem.WriteFil
         mode: options?.mode
       }, (err) => {
         if (err) {
-          resume(Effect.fail(handleErrnoException("writeFile")(err, [path])))
+          resume(Effect.fail(handleErrnoException("FileSystem", "writeFile")(err, [path])))
         } else {
           resume(Effect.unit())
         }

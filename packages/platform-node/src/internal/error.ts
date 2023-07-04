@@ -3,7 +3,7 @@ import { SystemError } from "@effect/platform/Error"
 import type { PathLike } from "node:fs"
 
 /** @internal */
-export const handleErrnoException = (method: string) =>
+export const handleErrnoException = (module: SystemError["module"], method: string) =>
   (
     err: NodeJS.ErrnoException,
     [path]: [path: PathLike | number, ...args: Array<any>]
@@ -42,7 +42,7 @@ export const handleErrnoException = (method: string) =>
 
     return SystemError({
       reason,
-      module: "FileSystem",
+      module,
       method,
       pathOrDescriptor: path as string | number,
       syscall: err.syscall,

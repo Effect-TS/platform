@@ -1,8 +1,11 @@
+import * as Chunk from "@effect/data/Chunk"
 import { pipe } from "@effect/data/Function"
 import * as Effect from "@effect/io/Effect"
+import * as Exit from "@effect/io/Exit"
 import * as Layer from "@effect/io/Layer"
 import * as Command from "@effect/platform-node/Command"
 import * as CommandExecutor from "@effect/platform-node/CommandExecutor"
+import { SystemError } from "@effect/platform-node/Error"
 import * as FileSystem from "@effect/platform-node/FileSystem"
 import * as Stream from "@effect/stream/Stream"
 import * as Path from "node:path"
@@ -15,12 +18,53 @@ const runPromise = <E, A>(self: Effect.Effect<FileSystem.FileSystem | CommandExe
     Effect.provideLayer(self, Layer.provideMerge(FileSystem.layer, CommandExecutor.layer))
   )
 
-describe("Process", () => {
-  it("start", () =>
+describe("Command", () => {
+  it("should convert stdout to a string", () =>
     runPromise(Effect.gen(function*($) {
       const command = Command.make("echo", "-n", "test")
       const result = yield* $(Command.string(command))
       expect(result).toEqual("test")
+    })))
+
+  it("should convert stdout to a list of lines", () =>
+    runPromise(Effect.gen(function*($) {
+      const command = Command.make("echo", "-n", "1\n2\n3")
+      const result = yield* $(Command.lines(command))
+      expect(result).toEqual(["1", "2", "3"])
+    })))
+
+  it("should stream lines of output", () =>
+    runPromise(Effect.gen(function*($) {
+      const command = Command.make("echo", "-n", "1\n2\n3")
+      const result = yield* $(Stream.runCollect(Command.streamLines(command)))
+      expect(Array.from(result)).toEqual(["1", "2", "3"])
+    })))
+
+  it("should work with a Stream directly", () =>
+    runPromise(Effect.gen(function*($) {
+      const decoder = new TextDecoder("utf-8")
+      const command = Command.make("echo", "-n", "1\n2\n3")
+      const result = yield* $(
+        Command.stream(command),
+        Stream.mapChunks(Chunk.map((bytes) => decoder.decode(bytes))),
+        Stream.splitLines,
+        Stream.runCollect
+      )
+      expect(Array.from(result)).toEqual(["1", "2", "3"])
+    })))
+
+  it("should fail when trying to run a command that does not exist", () =>
+    runPromise(Effect.gen(function*($) {
+      const command = Command.make("some-invalid-command", "test")
+      const result = yield* $(Effect.exit(Command.string(command)))
+      expect(Exit.unannotate(result)).toEqual(Exit.fail(SystemError({
+        reason: "NotFound",
+        module: "Command",
+        method: "spawn",
+        pathOrDescriptor: "some-invalid-command test",
+        syscall: "spawn some-invalid-command",
+        message: "spawn some-invalid-command ENOENT"
+      })))
     })))
 
   // TODO: cleanup this test

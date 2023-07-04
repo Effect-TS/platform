@@ -145,6 +145,18 @@ export const feed: {
 export const flatten: (self: Command) => NonEmptyReadonlyArray<StandardCommand> = internal.flatten
 
 /**
+ * Runs the command returning the output as an array of lines with the specified
+ * encoding.
+ *
+ * @since 1.0.0
+ * @category execution
+ */
+export const lines: (
+  command: Command,
+  encoding?: string
+) => Effect<CommandExecutor, PlatformError, ReadonlyArray<string>> = internal.lines
+
+/**
  * Create a command with the specified process name and an optional list of
  * arguments.
  *
@@ -171,17 +183,6 @@ export const pipeTo: {
 } = internal.pipeTo
 
 /**
- * Redirect standard output to the specified sink.
- *
- * @since 1.0.0
- * @category combinators
- */
-export const redirectStdout: {
-  (sink: Sink<never, never, Uint8Array, never, Uint8Array>): (self: Command) => Command
-  (self: Command, sink: Sink<never, never, Uint8Array, never, Uint8Array>): Command
-} = internal.redirectStdout
-
-/**
  * Start running the command and return a handle to the running process.
  *
  * @since 1.0.0
@@ -196,6 +197,15 @@ export const start: (command: Command) => Effect<CommandExecutor, PlatformError,
  * @category execution
  */
 export const stream: (command: Command) => Stream<CommandExecutor, PlatformError, Uint8Array> = internal.stream
+
+/**
+ * Runs the command returning the output as an stream of lines with the
+ * specified encoding.
+ *
+ * @since 1.0.0
+ * @category execution
+ */
+export const streamLines: (command: Command) => Stream<CommandExecutor, PlatformError, string> = internal.streamLines
 
 /**
  * Runs the command returning the entire output as a string with the

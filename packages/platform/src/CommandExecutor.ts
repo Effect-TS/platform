@@ -27,16 +27,26 @@ export interface CommandExecutor {
    */
   readonly string: (command: Command, encoding?: string) => Effect<never, PlatformError, string>
   /**
-   * Start running the command and return the output as a `Stream`.
+   * Runs the command returning the entire output as an array of lines.
+   *
+   * If an encoding is not specified, the encoding will default to `utf-8`.
+   */
+  readonly lines: (command: Command, encoding?: string) => Effect<never, PlatformError, ReadonlyArray<string>>
+  /**
+   * Runs the command returning the output as a `Stream`.
    */
   readonly stream: (command: Command) => Stream<never, PlatformError, Uint8Array>
+  /**
+   * Runs the command returning the output as a `Stream` of lines.
+   */
+  readonly streamLines: (command: Command, encoding?: string) => Stream<never, PlatformError, string>
 }
 
 /**
  * @since 1.0.0
  * @category tags
  */
-export const ProcessExecutor: Tag<CommandExecutor, CommandExecutor> = internal.ProcessExecutor
+export const CommandExecutor: Tag<CommandExecutor, CommandExecutor> = internal.CommandExecutor
 
 /**
  * @since 1.0.0

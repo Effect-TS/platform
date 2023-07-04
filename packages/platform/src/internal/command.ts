@@ -7,7 +7,6 @@ import * as Effect from "@effect/io/Effect"
 import type * as Command from "@effect/platform/Command"
 import * as CommandExecutor from "@effect/platform/CommandExecutor"
 import type { PlatformError } from "@effect/platform/Error"
-import type * as Sink from "@effect/stream/Sink"
 import * as Stream from "@effect/stream/Stream"
 
 /** @internal */
@@ -62,6 +61,13 @@ const flattenLoop = (self: Command.Command): Chunk.NonEmptyChunk<Command.Standar
 }
 
 /** @internal */
+export const lines = (
+  command: Command.Command,
+  encoding = "utf-8"
+): Effect.Effect<CommandExecutor.CommandExecutor, PlatformError, ReadonlyArray<string>> =>
+  Effect.flatMap(CommandExecutor.CommandExecutor, (executor) => executor.lines(command, encoding))
+
+/** @internal */
 export const make = (command: string, ...args: Array<string>): Command.Command => ({
   [CommandTypeId]: CommandTypeId,
   _tag: "StandardCommand",
@@ -76,7 +82,6 @@ export const make = (command: string, ...args: Array<string>): Command.Command =
   stderr: "pipe",
   gid: Option.none(),
   uid: Option.none()
-  // redirectErrorStream: false
 })
 
 /** @internal */
@@ -89,12 +94,6 @@ export const pipeTo = dual<
   left: self,
   right: into
 }))
-
-/** @internal */
-export const redirectStdout = dual<
-  (sink: Sink.Sink<never, never, Uint8Array, never, Uint8Array>) => (self: Command.Command) => Command.Command,
-  (self: Command.Command, sink: Sink.Sink<never, never, Uint8Array, never, Uint8Array>) => Command.Command
->(2, (self, sink) => ({ ...self, stdout: sink }))
 
 /** @internal */
 export const stderr: {
@@ -160,13 +159,19 @@ export const stdout: {
 export const start = (
   command: Command.Command
 ): Effect.Effect<CommandExecutor.CommandExecutor, PlatformError, CommandExecutor.Process> =>
-  Effect.flatMap(CommandExecutor.ProcessExecutor, (executor) => executor.start(command))
+  Effect.flatMap(CommandExecutor.CommandExecutor, (executor) => executor.start(command))
 
 /** @internal */
 export const stream = (
   command: Command.Command
 ): Stream.Stream<CommandExecutor.CommandExecutor, PlatformError, Uint8Array> =>
-  Stream.flatMap(CommandExecutor.ProcessExecutor, (process) => process.stream(command))
+  Stream.flatMap(CommandExecutor.CommandExecutor, (process) => process.stream(command))
+
+/** @internal */
+export const streamLines = (
+  command: Command.Command
+): Stream.Stream<CommandExecutor.CommandExecutor, PlatformError, string> =>
+  Stream.flatMap(CommandExecutor.CommandExecutor, (process) => process.streamLines(command))
 
 /** @internal */
 export const string = dual<
@@ -177,7 +182,7 @@ export const string = dual<
 >(
   (args) => isCommand(args[0]),
   (command, encoding) =>
-    Effect.flatMap(CommandExecutor.ProcessExecutor, (executor) => executor.string(command, encoding))
+    Effect.flatMap(CommandExecutor.CommandExecutor, (executor) => executor.string(command, encoding))
 )
 
 /** @internal */

@@ -27,8 +27,11 @@ const toPlatformError = (
   command: Command.Command
 ): Error.PlatformError => {
   const flattened = Command.flatten(command)
-    .reduce((acc, command) => `${acc} | ${command.command} ${command.args.join(" ")}`, "")
-  return handleErrnoException(method)(error, [flattened])
+    .reduce((acc, command) =>
+      acc.length === 0
+        ? `${command.command} ${command.args.join(" ")}`
+        : `${acc} | ${command.command} ${command.args.join(" ")}`, "")
+  return handleErrnoException("Command", method)(error, [flattened])
 }
 
 // TODO: Handle errors properly
@@ -193,7 +196,7 @@ const runCommand = (fileSystem: FileSystem.FileSystem) =>
 
 /** @internal */
 export const layer: Layer.Layer<FileSystem.FileSystem, never, CommandExecutor.CommandExecutor> = Layer.effect(
-  CommandExecutor.ProcessExecutor,
+  CommandExecutor.CommandExecutor,
   pipe(
     FileSystem.FileSystem,
     Effect.map((fileSystem) => CommandExecutor.makeExecutor(runCommand(fileSystem)))

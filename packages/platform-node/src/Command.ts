@@ -53,6 +53,11 @@ export {
   isCommand,
   /**
    * @since 1.0.0
+   * @category execution
+   */
+  lines,
+  /**
+   * @since 1.0.0
    * @category constructors
    */
   make,
@@ -61,11 +66,6 @@ export {
    * @category combinators
    */
   pipeTo,
-  /**
-   * @since 1.0.0
-   * @category combinators
-   */
-  redirectStdout,
   /**
    * @since 1.0.0
    * @category execution
@@ -91,6 +91,11 @@ export {
    * @category execution
    */
   stream,
+  /**
+   * @since 1.0.0
+   * @category execution
+   */
+  streamLines,
   /**
    * @since 1.0.0
    * @category execution

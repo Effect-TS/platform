@@ -3,39 +3,64 @@ import * as Chunk from "@effect/data/Chunk"
 import { Tag } from "@effect/data/Context"
 import { pipe } from "@effect/data/Function"
 import * as Effect from "@effect/io/Effect"
-import type * as CommandExecutor from "@effect/platform/CommandExecutor"
+import type * as _CommandExecutor from "@effect/platform/CommandExecutor"
 import * as Sink from "@effect/stream/Sink"
 import * as Stream from "@effect/stream/Stream"
 
 /** @internal */
-export const ProcessTypeId: CommandExecutor.ProcessTypeId = Symbol.for(
+export const ProcessTypeId: _CommandExecutor.ProcessTypeId = Symbol.for(
   "@effect/platform/Process"
-) as CommandExecutor.ProcessTypeId
+) as _CommandExecutor.ProcessTypeId
 
 /** @internal */
-export const ExitCode = Brand.nominal<CommandExecutor.ExitCode>()
+export const ExitCode = Brand.nominal<_CommandExecutor.ExitCode>()
 
 /** @internal */
-export const ProcessId = Brand.nominal<CommandExecutor.Process.Id>()
+export const ProcessId = Brand.nominal<_CommandExecutor.Process.Id>()
 
 /** @internal */
-export const ProcessExecutor = Tag<CommandExecutor.CommandExecutor>()
+export const CommandExecutor = Tag<_CommandExecutor.CommandExecutor>()
 
 /** @internal */
-export const makeExecutor = (start: CommandExecutor.CommandExecutor["start"]): CommandExecutor.CommandExecutor => ({
-  start,
-  stream: (command) =>
-    pipe(
+export const makeExecutor = (start: _CommandExecutor.CommandExecutor["start"]): _CommandExecutor.CommandExecutor => {
+  const streamLines: _CommandExecutor.CommandExecutor["streamLines"] = (command, encoding) => {
+    const decoder = new TextDecoder(encoding)
+    return pipe(
       Stream.fromEffect(start(command)),
-      Stream.flatMap((process) => process.stdout)
-    ),
-  string: (command, encoding = "utf-8") =>
-    pipe(
-      start(command),
-      Effect.flatMap((process) => Stream.run(process.stdout, collectUint8Array)),
-      Effect.map((bytes) => new TextDecoder(encoding).decode(bytes))
+      Stream.flatMap((process) =>
+        pipe(
+          process.stdout,
+          Stream.mapChunks(Chunk.map((bytes) => decoder.decode(bytes))),
+          Stream.splitLines
+        )
+      )
     )
-})
+  }
+  return {
+    start,
+    stream: (command) =>
+      pipe(
+        Stream.fromEffect(start(command)),
+        Stream.flatMap((process) => process.stdout)
+      ),
+    string: (command, encoding = "utf-8") => {
+      const decoder = new TextDecoder(encoding)
+      return pipe(
+        start(command),
+        Effect.flatMap((process) => Stream.run(process.stdout, collectUint8Array)),
+        Effect.map((bytes) => decoder.decode(bytes))
+      )
+    },
+    lines: (command, encoding = "utf-8") => {
+      return pipe(
+        streamLines(command, encoding),
+        Stream.runCollect,
+        Effect.map(Chunk.toReadonlyArray)
+      )
+    },
+    streamLines
+  }
+}
 
 const collectUint8Array: Sink.Sink<never, never, Uint8Array, never, Uint8Array> = Sink.foldLeftChunks(
   new Uint8Array(),
