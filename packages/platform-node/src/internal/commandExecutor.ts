@@ -104,7 +104,6 @@ const runCommand = (fileSystem: FileSystem.FileSystem) =>
                 )
 
                 const kill: CommandExecutor.Process["kill"] = (signal = "SIGTERM") =>
-                  // TODO: refine or die?
                   Effect.asyncInterrupt((resume) => {
                     handle.kill(signal)
                     handle.on("exit", () => {
