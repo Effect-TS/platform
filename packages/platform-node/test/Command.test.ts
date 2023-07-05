@@ -1,5 +1,6 @@
 import * as Chunk from "@effect/data/Chunk"
 import { pipe } from "@effect/data/Function"
+import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
 import * as Exit from "@effect/io/Exit"
 import * as Fiber from "@effect/io/Fiber"
@@ -256,5 +257,80 @@ describe("Command", () => {
       expect(result).toEqual(["1", "2", "3"])
     })))
 
-  // TODO: remainder of piped command tests
+  it("should ensure that piping commands is associative", () =>
+    runPromise(Effect.gen(function*($) {
+      const command = pipe(
+        Command.make("echo", "2\n1\n3"),
+        Command.pipeTo(Command.make("cat")),
+        Command.pipeTo(Command.make("sort")),
+        Command.pipeTo(Command.make("head", "-2"))
+      )
+      const lines1 = yield* $(Command.lines(command))
+      const lines2 = yield* $(Command.lines(command))
+      expect(lines1).toEqual(["1", "2"])
+      expect(lines2).toEqual(["1", "2"])
+    })))
+
+  it("should allow stdin on a piped command", () =>
+    runPromise(Effect.gen(function*($) {
+      const encoder = new TextEncoder()
+      const command = pipe(
+        Command.make("cat"),
+        Command.pipeTo(Command.make("sort")),
+        Command.pipeTo(Command.make("head", "-2")),
+        Command.stdin(Stream.make(encoder.encode("2\n1\n3")))
+      )
+      const result = yield* $(Command.lines(command))
+      expect(result).toEqual(["1", "2"])
+    })))
+
+  it("should delegate env to all commands", () => {
+    const env = { key: "value" }
+    const command = pipe(
+      Command.make("cat"),
+      Command.pipeTo(Command.make("sort")),
+      Command.pipeTo(Command.make("head", "-2")),
+      Command.env(env)
+    )
+    const envs = Command.flatten(command).map((command) => Object.fromEntries(command.env))
+    expect(envs).toEqual([env, env, env])
+  })
+
+  it("should delegate workingDirectory to all commands", () => {
+    const workingDirectory = "working-directory"
+    const command = pipe(
+      Command.make("cat"),
+      Command.pipeTo(Command.make("sort")),
+      Command.pipeTo(Command.make("head", "-2")),
+      Command.workingDirectory(workingDirectory)
+    )
+    const directories = Command.flatten(command).map((command) => command.cwd)
+    expect(directories).toEqual([
+      Option.some(workingDirectory),
+      Option.some(workingDirectory),
+      Option.some(workingDirectory)
+    ])
+  })
+
+  it("should delegate stderr to the right-most command", () => {
+    const command = pipe(
+      Command.make("cat"),
+      Command.pipeTo(Command.make("sort")),
+      Command.pipeTo(Command.make("head", "-2")),
+      Command.stderr("inherit")
+    )
+    const stderr = Command.flatten(command).map((command) => command.stderr)
+    expect(stderr).toEqual(["pipe", "pipe", "inherit"])
+  })
+
+  it("should delegate stdout to the right-most command", () => {
+    const command = pipe(
+      Command.make("cat"),
+      Command.pipeTo(Command.make("sort")),
+      Command.pipeTo(Command.make("head", "-2")),
+      Command.stdout("inherit")
+    )
+    const stdout = Command.flatten(command).map((command) => command.stdout)
+    expect(stdout).toEqual(["pipe", "pipe", "inherit"])
+  })
 })
