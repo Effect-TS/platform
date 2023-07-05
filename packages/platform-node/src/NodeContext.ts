@@ -15,7 +15,7 @@ export type NodeContext = Console.Console | CommandExecutor.CommandExecutor | Fi
  * @since 1.0.0
  * @category layer
  */
-export const NodeContext: Layer.Layer<never, never, NodeContext> = pipe(
+export const layer: Layer.Layer<never, never, NodeContext> = pipe(
   Console.layer,
   Layer.merge(FileSystem.layer),
   Layer.merge(Path.layer),
