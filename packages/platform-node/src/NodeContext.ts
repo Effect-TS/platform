@@ -1,3 +1,6 @@
+/**
+ * @since 1.0.0
+ */
 import { pipe } from "@effect/data/Function"
 import * as Layer from "@effect/io/Layer"
 import * as CommandExecutor from "@effect/platform-node/CommandExecutor"

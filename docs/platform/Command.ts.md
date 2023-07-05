@@ -14,6 +14,7 @@ Added in v1.0.0
 
 - [combinators](#combinators)
   - [env](#env)
+  - [feed](#feed)
   - [flatten](#flatten)
   - [pipeTo](#pipeto)
   - [stderr](#stderr)
@@ -23,13 +24,20 @@ Added in v1.0.0
 - [constructors](#constructors)
   - [make](#make)
 - [execution](#execution)
-  - [run](#run)
+  - [exitCode](#exitcode)
+  - [lines](#lines)
+  - [start](#start)
+  - [stream](#stream)
+  - [streamLines](#streamlines)
+  - [string](#string)
 - [models](#models)
   - [Command (type alias)](#command-type-alias)
   - [CommandInput (type alias)](#commandinput-type-alias)
   - [CommandOutput (type alias)](#commandoutput-type-alias)
   - [PipedCommand (interface)](#pipedcommand-interface)
   - [StandardCommand (interface)](#standardcommand-interface)
+- [refinements](#refinements)
+  - [isCommand](#iscommand)
 - [utils](#utils)
   - [CommandTypeId](#commandtypeid)
   - [CommandTypeId (type alias)](#commandtypeid-type-alias)
@@ -46,9 +54,21 @@ Specify the environment variables that will be used when running this command.
 
 ```ts
 export declare const env: {
-  (environment: HashMap<string, string>): (self: Command) => Command
-  (self: Command, environment: HashMap<string, string>): Command
+  (environment: Record<string, string>): (self: Command) => Command
+  (self: Command, environment: Record<string, string>): Command
 }
+```
+
+Added in v1.0.0
+
+## feed
+
+Feed a string to standard input (default encoding of UTF-8).
+
+**Signature**
+
+```ts
+export declare const feed: { (input: string): (self: Command) => Command; (self: Command, input: string): Command }
 ```
 
 Added in v1.0.0
@@ -167,14 +187,86 @@ Added in v1.0.0
 
 # execution
 
-## run
+## exitCode
+
+Returns the exit code of the command after the process has completed
+execution.
+
+**Signature**
+
+```ts
+export declare const exitCode: (self: Command) => Effect<CommandExecutor, PlatformError, ExitCode>
+```
+
+Added in v1.0.0
+
+## lines
+
+Runs the command returning the output as an array of lines with the specified
+encoding.
+
+**Signature**
+
+```ts
+export declare const lines: (
+  command: Command,
+  encoding?: string
+) => Effect<CommandExecutor, PlatformError, ReadonlyArray<string>>
+```
+
+Added in v1.0.0
+
+## start
 
 Start running the command and return a handle to the running process.
 
 **Signature**
 
 ```ts
-export declare const run: (command: Command) => Effect<ProcessExecutor, PlatformError, Process>
+export declare const start: (command: Command) => Effect<CommandExecutor, PlatformError, Process>
+```
+
+Added in v1.0.0
+
+## stream
+
+Start running the command and return the output as a `Stream`.
+
+**Signature**
+
+```ts
+export declare const stream: (command: Command) => Stream<CommandExecutor, PlatformError, Uint8Array>
+```
+
+Added in v1.0.0
+
+## streamLines
+
+Runs the command returning the output as an stream of lines with the
+specified encoding.
+
+**Signature**
+
+```ts
+export declare const streamLines: (command: Command) => Stream<CommandExecutor, PlatformError, string>
+```
+
+Added in v1.0.0
+
+## string
+
+Runs the command returning the entire output as a string with the
+specified encoding.
+
+If an encoding is not specified, the encoding will default to `utf-8`.
+
+**Signature**
+
+```ts
+export declare const string: {
+  (encoding?: string): (command: Command) => Effect<CommandExecutor, PlatformError, string>
+  (command: Command, encoding?: string): Effect<CommandExecutor, PlatformError, string>
+}
 ```
 
 Added in v1.0.0
@@ -212,7 +304,7 @@ processes `stderr` and `stdout` streams.
 **Signature**
 
 ```ts
-export type CommandOutput = 'inherit' | 'pipe'
+export type CommandOutput = 'inherit' | 'pipe' | Sink<never, never, Uint8Array, never, Uint8Array>
 ```
 
 Added in v1.0.0
@@ -248,6 +340,21 @@ export interface StandardCommand extends Command.Proto {
   readonly gid: Option<number>
   readonly uid: Option<number>
 }
+```
+
+Added in v1.0.0
+
+# refinements
+
+## isCommand
+
+Returns `true` if the specified value is a `Command`, otherwise returns
+`false`.
+
+**Signature**
+
+```ts
+export declare const isCommand: (u: unknown) => u is Command
 ```
 
 Added in v1.0.0

@@ -14,6 +14,7 @@ Added in v1.0.0
 
 - [combinators](#combinators)
   - [env](#env)
+  - [feed](#feed)
   - [flatten](#flatten)
   - [pipeTo](#pipeto)
   - [stderr](#stderr)
@@ -23,13 +24,20 @@ Added in v1.0.0
 - [constructors](#constructors)
   - [make](#make)
 - [execution](#execution)
-  - [run](#run)
+  - [exitCode](#exitcode)
+  - [lines](#lines)
+  - [start](#start)
+  - [stream](#stream)
+  - [streamLines](#streamlines)
+  - [string](#string)
 - [model](#model)
   - [Command](#command)
   - [CommandInput](#commandinput)
   - [CommandOutput](#commandoutput)
   - [PipedCommand](#pipedcommand)
   - [StandardCommand](#standardcommand)
+- [refinements](#refinements)
+  - [isCommand](#iscommand)
 
 ---
 
@@ -41,9 +49,19 @@ Added in v1.0.0
 
 ```ts
 export declare const env: {
-  (environment: HashMap<string, string>): (self: Command) => Command
-  (self: Command, environment: HashMap<string, string>): Command
+  (environment: Record<string, string>): (self: Command) => Command
+  (self: Command, environment: Record<string, string>): Command
 }
+```
+
+Added in v1.0.0
+
+## feed
+
+**Signature**
+
+```ts
+export declare const feed: { (input: string): (self: Command) => Command; (self: Command, input: string): Command }
 ```
 
 Added in v1.0.0
@@ -134,12 +152,68 @@ Added in v1.0.0
 
 # execution
 
-## run
+## exitCode
 
 **Signature**
 
 ```ts
-export declare const run: (command: Command) => Effect<ProcessExecutor, PlatformError, Process>
+export declare const exitCode: (self: Command) => Effect<CommandExecutor, PlatformError, ExitCode>
+```
+
+Added in v1.0.0
+
+## lines
+
+**Signature**
+
+```ts
+export declare const lines: (
+  command: Command,
+  encoding?: string | undefined
+) => Effect<CommandExecutor, PlatformError, readonly string[]>
+```
+
+Added in v1.0.0
+
+## start
+
+**Signature**
+
+```ts
+export declare const start: (command: Command) => Effect<CommandExecutor, PlatformError, Process>
+```
+
+Added in v1.0.0
+
+## stream
+
+**Signature**
+
+```ts
+export declare const stream: (command: Command) => Stream<CommandExecutor, PlatformError, Uint8Array>
+```
+
+Added in v1.0.0
+
+## streamLines
+
+**Signature**
+
+```ts
+export declare const streamLines: (command: Command) => Stream<CommandExecutor, PlatformError, string>
+```
+
+Added in v1.0.0
+
+## string
+
+**Signature**
+
+```ts
+export declare const string: {
+  (encoding?: string | undefined): (command: Command) => Effect<CommandExecutor, PlatformError, string>
+  (command: Command, encoding?: string | undefined): Effect<CommandExecutor, PlatformError, string>
+}
 ```
 
 Added in v1.0.0
@@ -192,6 +266,18 @@ Added in v1.0.0
 
 ```ts
 export declare const StandardCommand: StandardCommand
+```
+
+Added in v1.0.0
+
+# refinements
+
+## isCommand
+
+**Signature**
+
+```ts
+export declare const isCommand: (u: unknown) => u is Command
 ```
 
 Added in v1.0.0
