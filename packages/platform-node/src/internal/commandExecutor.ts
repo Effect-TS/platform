@@ -26,15 +26,13 @@ const toPlatformError = (
   error: NodeJS.ErrnoException,
   command: Command.Command
 ): Error.PlatformError => {
-  const flattened = Command.flatten(command)
-    .reduce((acc, command) =>
-      acc.length === 0
-        ? `${command.command} ${command.args.join(" ")}`
-        : `${acc} | ${command.command} ${command.args.join(" ")}`, "")
+  const flattened = Command.flatten(command).reduce((acc, curr) => {
+    const command = `${curr.command} ${curr.args.join(" ")}`
+    return acc.length === 0 ? command : `${acc} | ${command}`
+  }, "")
   return handleErrnoException("Command", method)(error, [flattened])
 }
 
-// TODO: Handle errors properly
 const runCommand = (fileSystem: FileSystem.FileSystem) =>
   (command: Command.Command): Effect.Effect<never, Error.PlatformError, CommandExecutor.Process> => {
     switch (command._tag) {
@@ -81,7 +79,6 @@ const runCommand = (fileSystem: FileSystem.FileSystem) =>
                       // If code is `null`, then `signal` must be defined. See the NodeJS
                       // documentation for the `"exit"` event on a `child_process`.
                       // https://nodejs.org/api/child_process.html#child_process_event_exit
-                      // TODO: fixme
                       resume(
                         Effect.fail(
                           toPlatformError(

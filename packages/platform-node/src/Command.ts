@@ -38,6 +38,11 @@ export {
   env,
   /**
    * @since 1.0.0
+   * @category execution
+   */
+  exitCode,
+  /**
+   * @since 1.0.0
    * @category combinators
    */
   feed,

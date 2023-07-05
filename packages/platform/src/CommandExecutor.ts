@@ -16,6 +16,11 @@ import type { Stream } from "@effect/stream/Stream"
  */
 export interface CommandExecutor {
   /**
+   * Returns the exit code of the command after the process has completed
+   * execution.
+   */
+  readonly exitCode: (command: Command) => Effect<never, PlatformError, ExitCode>
+  /**
    * Start running the command and return a handle to the running process.
    */
   readonly start: (command: Command) => Effect<never, PlatformError, Process>

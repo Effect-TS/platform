@@ -5,7 +5,7 @@ import type { HashMap } from "@effect/data/HashMap"
 import type { Option } from "@effect/data/Option"
 import type { NonEmptyReadonlyArray } from "@effect/data/ReadonlyArray"
 import type { Effect } from "@effect/io/Effect"
-import type { CommandExecutor, Process } from "@effect/platform/CommandExecutor"
+import type { CommandExecutor, ExitCode, Process } from "@effect/platform/CommandExecutor"
 import type { PlatformError } from "@effect/platform/Error"
 import * as internal from "@effect/platform/internal/command"
 import type { Sink } from "@effect/stream/Sink"
@@ -120,6 +120,15 @@ export const env: {
   (environment: Record<string, string>): (self: Command) => Command
   (self: Command, environment: Record<string, string>): Command
 } = internal.env
+
+/**
+ * Returns the exit code of the command after the process has completed
+ * execution.
+ *
+ * @since 1.0.0
+ * @category execution
+ */
+export const exitCode: (self: Command) => Effect<CommandExecutor, PlatformError, ExitCode> = internal.exitCode
 
 /**
  * Feed a string to standard input (default encoding of UTF-8).

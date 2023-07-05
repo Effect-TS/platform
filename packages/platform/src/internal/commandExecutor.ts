@@ -38,6 +38,7 @@ export const makeExecutor = (start: _CommandExecutor.CommandExecutor["start"]): 
   }
   return {
     start,
+    exitCode: (command) => Effect.flatMap(start(command), (process) => process.exitCode),
     stream: (command) =>
       pipe(
         Stream.fromEffect(start(command)),

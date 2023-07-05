@@ -2,6 +2,7 @@ import * as Chunk from "@effect/data/Chunk"
 import { pipe } from "@effect/data/Function"
 import * as Effect from "@effect/io/Effect"
 import * as Exit from "@effect/io/Exit"
+import * as Fiber from "@effect/io/Fiber"
 import * as Layer from "@effect/io/Layer"
 import * as Command from "@effect/platform-node/Command"
 import * as CommandExecutor from "@effect/platform-node/CommandExecutor"
@@ -67,6 +68,97 @@ describe("Command", () => {
       })))
     })))
 
+  it("should pass environment variables", () =>
+    runPromise(Effect.gen(function*($) {
+      const command = pipe(
+        Command.make("bash", "-c", "echo -n \"var = $VAR\""),
+        Command.env({ VAR: "myValue" })
+      )
+      const result = yield* $(Command.string(command))
+      expect(result).toBe("var = myValue")
+    })))
+
+  it("should accept streaming stdin", () =>
+    runPromise(Effect.gen(function*($) {
+      const stdin = Stream.make(Buffer.from("a b c", "utf-8"))
+      const command = pipe(Command.make("cat"), Command.stdin(stdin))
+      const result = yield* $(Command.string(command))
+      expect(result).toEqual("a b c")
+    })))
+
+  it("should accept string stdin", () =>
+    runPromise(Effect.gen(function*($) {
+      const stdin = "piped in"
+      const command = pipe(Command.make("cat"), Command.feed(stdin))
+      const result = yield* $(Command.string(command))
+      expect(result).toEqual("piped in")
+    })))
+
+  it("should set the working directory", () =>
+    runPromise(Effect.gen(function*($) {
+      const command = pipe(
+        Command.make("ls"),
+        Command.workingDirectory(Path.join(__dirname, "..", "src"))
+      )
+      const result = yield* $(Command.lines(command))
+      expect(result).toContain("Command.ts")
+    })))
+
+  it("should be able to fall back to a different program", () =>
+    runPromise(Effect.gen(function*($) {
+      const command = Command.make("custom-echo", "-n", "test")
+      const result = yield* $(
+        Command.string(command),
+        Effect.catchTag("SystemError", (error) => {
+          if (error.reason === "NotFound") {
+            return Command.string(Command.make("echo", "-n", "test"))
+          }
+          return Effect.fail(error)
+        })
+      )
+      expect(result).toBe("test")
+    })))
+
+  it("should interrupt a process manually", () =>
+    runPromise(Effect.gen(function*($) {
+      const command = Command.make("sleep", "20")
+      const result = yield* $(
+        Effect.fork(Command.exitCode(command)),
+        Effect.flatMap((fiber) => Effect.fork(Fiber.interrupt(fiber))),
+        Effect.flatMap(Fiber.join)
+      )
+      expect(Exit.isInterrupted(result)).toBe(true)
+    })))
+
+  // TODO: figure out how to get access to TestClock
+  // it("should interrupt a process due to a timeout", () =>
+  // T.gen(function* (_) {
+  //   const testClock = yield* _(TestClock)
+
+  //   const command = pipe(
+  //     Command.make("sleep", "20"),
+  //     Command.exitCode,
+  //     T.timeout(5000)
+  //   )
+
+  //   const output = yield* _(
+  //     pipe(
+  //       T.do,
+  //       T.bind("fiber", () => T.fork(command)),
+  //       T.bind("adjustFiber", () => T.fork(testClock.adjust(5000))),
+  //       T.tap(() => T.sleep(5000)),
+  //       T.chain(({ adjustFiber, fiber }) =>
+  //         pipe(
+  //           F.join(adjustFiber),
+  //           T.chain(() => F.join(fiber))
+  //         )
+  //       )
+  //     )
+  //   )
+
+  //   expect(O.isNone(output)).toBeTruthy()
+  // }))
+
   // TODO: cleanup this test
   it("should capture stderr and stdout separately", () =>
     runPromise(Effect.gen(function*($) {
@@ -95,32 +187,48 @@ describe("Command", () => {
       ])
     })))
 
-  it("should accept streaming stdin", () =>
-    runPromise(Effect.gen(function*($) {
-      const stdin = Stream.make(Buffer.from("a b c", "utf-8"))
-      const command = pipe(Command.make("cat"), Command.stdin(stdin))
-      const result = yield* $(Command.string(command))
-      expect(result).toEqual("a b c")
-    })))
-
-  it("should accept string stdin", () =>
-    runPromise(Effect.gen(function*($) {
-      const stdin = "piped in"
-      const command = pipe(Command.make("cat"), Command.feed(stdin))
-      const result = yield* $(Command.string(command))
-      expect(result).toEqual("piped in")
-    })))
-
-  it("should support piping commands together", () =>
+  it("should return non-zero exit code in success channel", () =>
     runPromise(Effect.gen(function*($) {
       const command = pipe(
-        Command.make("echo", "2\n1\n3"),
-        Command.pipeTo(Command.make("cat")),
-        Command.pipeTo(Command.make("sort"))
+        Command.make("./non-zero-exit.sh"),
+        Command.workingDirectory(TEST_BASH_SCRIPTS_DIRECTORY)
       )
-      const result = yield* $(Command.string(command))
-      // TODO: command.lines
-      expect(result).toEqual("1\n2\n3\n")
+      const result = yield* $(Command.exitCode(command))
+      expect(result).toBe(1)
+    })))
+
+  it("should throw permission denied as a typed error", () =>
+    runPromise(Effect.gen(function*($) {
+      const command = pipe(
+        Command.make("./no-permissions.sh"),
+        Command.workingDirectory(TEST_BASH_SCRIPTS_DIRECTORY)
+      )
+      const result = yield* $(Effect.exit(Command.string(command)))
+      expect(Exit.unannotate(result)).toEqual(Exit.fail(SystemError({
+        reason: "PermissionDenied",
+        module: "Command",
+        method: "spawn",
+        pathOrDescriptor: "./no-permissions.sh ",
+        syscall: "spawn ./no-permissions.sh",
+        message: "spawn ./no-permissions.sh EACCES"
+      })))
+    })))
+
+  it("should throw non-existent working directory as a typed error", () =>
+    runPromise(Effect.gen(function*($) {
+      const command = pipe(
+        Command.make("ls"),
+        Command.workingDirectory("/some/bad/path")
+      )
+      const result = yield* $(Effect.exit(Command.lines(command)))
+      expect(Exit.unannotate(result)).toEqual(Exit.fail(SystemError({
+        reason: "NotFound",
+        module: "FileSystem",
+        method: "access",
+        pathOrDescriptor: "/some/bad/path",
+        syscall: "access",
+        message: "ENOENT: no such file or directory, access '/some/bad/path'"
+      })))
     })))
 
   it("should be able to kill a running process", () =>
@@ -136,4 +244,17 @@ describe("Command", () => {
       expect(isRunningBeforeKill).toBe(true)
       expect(isRunningAfterKill).toBe(false)
     })))
+
+  it("should support piping commands together", () =>
+    runPromise(Effect.gen(function*($) {
+      const command = pipe(
+        Command.make("echo", "2\n1\n3"),
+        Command.pipeTo(Command.make("cat")),
+        Command.pipeTo(Command.make("sort"))
+      )
+      const result = yield* $(Command.lines(command))
+      expect(result).toEqual(["1", "2", "3"])
+    })))
+
+  // TODO: remainder of piped command tests
 })
