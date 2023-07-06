@@ -1,6 +1,6 @@
 ---
 title: Error.ts
-nav_order: 3
+nav_order: 5
 parent: "@effect/platform-node"
 ---
 
