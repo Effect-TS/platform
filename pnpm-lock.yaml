@@ -34,7 +34,7 @@ importers:
         version: 0.2.0(@babel/core@7.22.9)
       '@effect/docgen':
         specifier: ^0.1.2
-        version: 0.1.2(@types/node@20.4.4)(typescript@5.1.6)
+        version: 0.1.2(@types/node@20.4.5)(typescript@5.1.6)
       '@effect/language-service':
         specifier: 0.0.19
         version: 0.0.19
@@ -48,8 +48,8 @@ importers:
         specifier: ^4.3.5
         version: 4.3.5
       '@types/node':
-        specifier: ^20.4.4
-        version: 20.4.4
+        specifier: ^20.4.5
+        version: 20.4.5
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.2.0
         version: 6.2.0(@typescript-eslint/parser@6.2.0)(eslint@8.45.0)(typescript@5.1.6)
@@ -100,7 +100,7 @@ importers:
         version: 5.0.1
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@types/node@20.4.4)(typescript@5.1.6)
+        version: 10.9.1(@types/node@20.4.5)(typescript@5.1.6)
       typescript:
         specifier: ^5.1.6
         version: 5.1.6
@@ -109,7 +109,7 @@ importers:
         version: 3.10.5
       vite:
         specifier: ^4.4.7
-        version: 4.4.7(@types/node@20.4.4)
+        version: 4.4.7(@types/node@20.4.5)
       vitest:
         specifier: 0.33.0
         version: 0.33.0
@@ -117,14 +117,14 @@ importers:
   packages/platform:
     dependencies:
       '@effect/data':
-        specifier: ^0.16.2
-        version: 0.16.2
+        specifier: ^0.16.3
+        version: 0.16.3
       '@effect/io':
-        specifier: ^0.35.2
-        version: 0.35.2
+        specifier: ^0.35.3
+        version: 0.35.3
       '@effect/stream':
-        specifier: ^0.30.0
-        version: 0.30.0
+        specifier: ^0.31.0
+        version: 0.31.0
       path-browserify:
         specifier: ^1.0.1
         version: 1.0.1
@@ -137,17 +137,17 @@ importers:
   packages/platform-node:
     dependencies:
       '@effect/data':
-        specifier: ^0.16.2
-        version: 0.16.2
+        specifier: ^0.16.3
+        version: 0.16.3
       '@effect/io':
-        specifier: ^0.35.2
-        version: 0.35.2
+        specifier: ^0.35.3
+        version: 0.35.3
       '@effect/platform':
         specifier: workspace:^
         version: link:../platform/dist
       '@effect/stream':
-        specifier: ^0.30.0
-        version: 0.30.0
+        specifier: ^0.31.0
+        version: 0.31.0
     publishDirectory: dist
 
 packages:
@@ -742,11 +742,11 @@ packages:
       '@babel/core': 7.22.9
     dev: true
 
-  /@effect/data@0.16.2:
-    resolution: {integrity: sha512-Q3ugteQz5gFGauskdZFdbCujA2op/sFu2PEArCjoJ8yHAQis/Fxq5Rc5dBdvqOlXCqmYHJBy57KGgudlT4+Ayw==}
+  /@effect/data@0.16.3:
+    resolution: {integrity: sha512-RxRN3Vm8YPys0GjH/yjl2Z57kGCwJGjY6omgcDbeXhLVd+SUaVWbM6hJysKvb/gD9cuN1XwhXUnJ0shVErDelg==}
     dev: false
 
-  /@effect/docgen@0.1.2(@types/node@20.4.4)(typescript@5.1.6):
+  /@effect/docgen@0.1.2(@types/node@20.4.5)(typescript@5.1.6):
     resolution: {integrity: sha512-qy1pA8SKsqla7/35Q2NuUeT/VwO/olg9hdmmY929wSrKhRVVPOmnF4cbCvFxbykikYek0/6/thupSUenYV0DvQ==}
     engines: {node: '>=16.17.1'}
     hasBin: true
@@ -761,7 +761,7 @@ packages:
       prettier: 2.8.8
       rimraf: 5.0.1
       ts-morph: 19.0.0
-      ts-node: 10.9.1(@types/node@20.4.4)(typescript@5.1.6)
+      ts-node: 10.9.1(@types/node@20.4.5)(typescript@5.1.6)
       typescript: 5.1.6
     transitivePeerDependencies:
       - '@swc/core'
@@ -769,10 +769,10 @@ packages:
       - '@types/node'
     dev: true
 
-  /@effect/io@0.35.2:
-    resolution: {integrity: sha512-+F9A5785QmjK8OOO5d5SDHcZjNwpp0D8nAf7PlGSXPBFxeex2S5qYhhlUbE1zBQeTZoDwp40UIIMtgTb8yFOTw==}
+  /@effect/io@0.35.3:
+    resolution: {integrity: sha512-f0K2XQJvQY0DP6GQC76NUZgFh2QxKIpZZzIELyI8796uJtLt4CRx3s+YsJF68htgUttKm9hxkfcbtcJAg2Rmcw==}
     dependencies:
-      '@effect/data': 0.16.2
+      '@effect/data': 0.16.3
     dev: false
 
   /@effect/language-service@0.0.19:
@@ -782,11 +782,11 @@ packages:
       '@fp-ts/data': 0.0.41
     dev: true
 
-  /@effect/stream@0.30.0:
-    resolution: {integrity: sha512-lUqrHWzOqvSQbnDerpoxZz+8yDp10Ttx66Xz72wJJNImqLpX9zVz462HrnQLaFN0waIYthx0Zc6BQImWHxF/8w==}
+  /@effect/stream@0.31.0:
+    resolution: {integrity: sha512-Jrm03LLoSg/Nfef5hqELrSWVzeN2oGw0LpVWR7RFGorgexuL07HgiZCBa/dPPkGTsRK6RLwewb4ZBVfNuGO2+g==}
     dependencies:
-      '@effect/data': 0.16.2
-      '@effect/io': 0.35.2
+      '@effect/data': 0.16.3
+      '@effect/io': 0.35.3
     dev: false
 
   /@esbuild/android-arm64@0.18.16:
@@ -1089,7 +1089,7 @@ packages:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.4
       '@types/istanbul-reports': 3.0.1
-      '@types/node': 20.4.4
+      '@types/node': 20.4.5
       '@types/yargs': 15.0.15
       chalk: 4.1.2
     dev: true
@@ -1318,8 +1318,8 @@ packages:
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
     dev: true
 
-  /@types/node@20.4.4:
-    resolution: {integrity: sha512-CukZhumInROvLq3+b5gLev+vgpsIqC2D0deQr/yS1WnxvmYLlJXZpaQrQiseMY+6xusl79E04UjWoqyr+t1/Ew==}
+  /@types/node@20.4.5:
+    resolution: {integrity: sha512-rt40Nk13II9JwQBdeYqmbn2Q6IVTA5uPhvSO+JVqdXw/6/4glI6oR9ezty/A9Hg5u7JH4OmYmuQ+XvjKm0Datg==}
     dev: true
 
   /@types/normalize-package-data@2.4.1:
@@ -1682,7 +1682,7 @@ packages:
       '@babel/plugin-transform-react-jsx-self': 7.22.5(@babel/core@7.22.9)
       '@babel/plugin-transform-react-jsx-source': 7.22.5(@babel/core@7.22.9)
       react-refresh: 0.14.0
-      vite: 4.4.7(@types/node@20.4.4)
+      vite: 4.4.7(@types/node@20.4.5)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -6746,7 +6746,7 @@ packages:
       code-block-writer: 12.0.0
     dev: true
 
-  /ts-node@10.9.1(@types/node@20.4.4)(typescript@5.1.6):
+  /ts-node@10.9.1(@types/node@20.4.5)(typescript@5.1.6):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -6765,7 +6765,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.3
-      '@types/node': 20.4.4
+      '@types/node': 20.4.5
       acorn: 8.8.0
       acorn-walk: 8.2.0
       arg: 4.1.3
@@ -7051,7 +7051,7 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vite-node@0.33.0(@types/node@20.4.4):
+  /vite-node@0.33.0(@types/node@20.4.5):
     resolution: {integrity: sha512-19FpHYbwWWxDr73ruNahC+vtEdza52kA90Qb3La98yZ0xULqV8A5JLNPUff0f5zID4984tW7l3DH2przTJUZSw==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -7061,7 +7061,7 @@ packages:
       mlly: 1.4.0
       pathe: 1.1.1
       picocolors: 1.0.0
-      vite: 4.4.7(@types/node@20.4.4)
+      vite: 4.4.7(@types/node@20.4.5)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -7073,7 +7073,7 @@ packages:
       - terser
     dev: true
 
-  /vite@4.4.7(@types/node@20.4.4):
+  /vite@4.4.7(@types/node@20.4.5):
     resolution: {integrity: sha512-6pYf9QJ1mHylfVh39HpuSfMPojPSKVxZvnclX1K1FyZ1PXDOcLBibdq5t1qxJSnL63ca8Wf4zts6mD8u8oc9Fw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -7101,7 +7101,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 20.4.4
+      '@types/node': 20.4.5
       esbuild: 0.18.16
       postcss: 8.4.27
       rollup: 3.26.3
@@ -7142,7 +7142,7 @@ packages:
     dependencies:
       '@types/chai': 4.3.5
       '@types/chai-subset': 1.3.3
-      '@types/node': 20.4.4
+      '@types/node': 20.4.5
       '@vitest/expect': 0.33.0
       '@vitest/runner': 0.33.0
       '@vitest/snapshot': 0.33.0
@@ -7161,8 +7161,8 @@ packages:
       strip-literal: 1.0.1
       tinybench: 2.5.0
       tinypool: 0.6.0
-      vite: 4.4.7(@types/node@20.4.4)
-      vite-node: 0.33.0(@types/node@20.4.4)
+      vite: 4.4.7(@types/node@20.4.5)
+      vite-node: 0.33.0(@types/node@20.4.5)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less
