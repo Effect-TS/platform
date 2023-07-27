@@ -52,6 +52,27 @@ export const make = (method: Http.Method) =>
     })
 
 /** @internal */
+export const get = make("GET")
+
+/** @internal */
+export const post = make("POST")
+
+/** @internal */
+export const put = make("PUT")
+
+/** @internal */
+export const patch = make("PATCH")
+
+/** @internal */
+export const del = make("DELETE")
+
+/** @internal */
+export const head = make("HEAD")
+
+/** @internal */
+export const options = make("OPTIONS")
+
+/** @internal */
 export const modify = dual<
   (options: {
     readonly method?: Http.Method
@@ -82,6 +103,18 @@ export const modify = dual<
   }
   if (options.headers) {
     result = setHeaders(result, options.headers)
+  }
+  if (options.urlParams) {
+    result = setUrlParams(result, options.urlParams)
+  }
+  if (options.body) {
+    result = setBody(result, options.body)
+  }
+  if (options.accept) {
+    result = accept(result, options.accept)
+  }
+  if (options.acceptJson) {
+    result = acceptJson(result)
   }
 
   return result
@@ -236,33 +269,38 @@ export const setUrlParams = dual<
 export const setBody = dual<
   (body: Body.Body) => (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest,
   (self: ClientRequest.ClientRequest, body: Body.Body) => ClientRequest.ClientRequest
->(2, (self, body) =>
-  new ClientRequestImpl(
+>(2, (self, body) => {
+  let headers = self.headers
+  if (body._tag === "Empty") {
+    headers = Headers.remove(Headers.remove(headers, "Content-Type"), "Content-length")
+  } else {
+    const contentType = body.contentType
+    if (contentType) {
+      headers = Headers.set(headers, "content-type", contentType)
+    }
+
+    const contentLength = body.contentLength
+    if (contentLength) {
+      headers = Headers.set(headers, "content-length", contentLength.toString())
+    }
+  }
+  return new ClientRequestImpl(
     self.method,
     self.url,
     self.urlParams,
-    self.headers,
+    headers,
     body
-  ))
+  )
+})
 
 /** @internal */
 export const binaryBody = dual<
   (body: Uint8Array, contentType?: string) => (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest,
   (self: ClientRequest.ClientRequest, body: Uint8Array, contentType?: string) => ClientRequest.ClientRequest
->((args) => isClientRequest(args[0]), (self, body, contentType = "application/octet-stream") => {
-  const body_ = internalBody.bytes(body)
-  return new ClientRequestImpl(
-    self.method,
-    self.url,
-    self.urlParams,
-    Headers.set(
-      Headers.set(self.headers, "content-type", contentType),
-      "content-length",
-      body_.body.length.toString()
-    ),
-    body_
-  )
-})
+>(
+  (args) => isClientRequest(args[0]),
+  (self, body, contentType = "application/octet-stream") => setBody(self, internalBody.bytes(body, contentType))
+)
 
 /** @internal */
 export const textBody = dual<
@@ -270,52 +308,33 @@ export const textBody = dual<
   (self: ClientRequest.ClientRequest, body: string, contentType?: string) => ClientRequest.ClientRequest
 >(
   (args) => isClientRequest(args[0]),
-  (self, body, contentType = "text/plain") =>
-    binaryBody(
-      self,
-      new TextEncoder().encode(body),
-      contentType
-    )
+  (self, body, contentType = "text/plain") => setBody(self, internalBody.text(body, contentType))
 )
 
 /** @internal */
 export const jsonBody = dual<
   (body: unknown) => (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest,
   (self: ClientRequest.ClientRequest, body: string) => ClientRequest.ClientRequest
->(2, (self, body) =>
-  acceptJson(
-    new ClientRequestImpl(
-      self.method,
-      self.url,
-      self.urlParams,
-      Headers.set(self.headers, "content-type", "application/json"),
-      internalBody.json(body)
-    )
-  ))
+>(2, (self, body) => setBody(self, internalBody.json(body)))
 
 /** @internal */
 export const urlParamsBody = dual<
   (input: UrlParams.Input) => (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest,
   (self: ClientRequest.ClientRequest, input: UrlParams.Input) => ClientRequest.ClientRequest
 >(2, (self, body) =>
-  textBody(
+  setBody(
     self,
-    UrlParams.toString(UrlParams.fromInput(body)),
-    "application/x-www-form-urlencoded"
+    internalBody.text(
+      UrlParams.toString(UrlParams.fromInput(body)),
+      "application/x-www-form-urlencoded"
+    )
   ))
 
 /** @internal */
 export const formDataBody = dual<
   (body: FormData) => (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest,
   (self: ClientRequest.ClientRequest, body: FormData) => ClientRequest.ClientRequest
->(2, (self, body) =>
-  new ClientRequestImpl(
-    self.method,
-    self.url,
-    self.urlParams,
-    self.headers,
-    internalBody.formData(body)
-  ))
+>(2, (self, body) => setBody(self, internalBody.formData(body)))
 
 /** @internal */
 export const streamBody = dual<
@@ -336,17 +355,6 @@ export const streamBody = dual<
   ) => ClientRequest.ClientRequest
 >(
   (args) => isClientRequest(args[0]),
-  (self, body, { contentLength, contentType = "application/octet-stream" } = {}) => {
-    let headers = Headers.set(self.headers, "content-type", contentType)
-    if (contentLength !== undefined) {
-      headers = Headers.set(headers, "content-length", contentLength.toString())
-    }
-    return new ClientRequestImpl(
-      self.method,
-      self.url,
-      self.urlParams,
-      headers,
-      internalBody.stream(body)
-    )
-  }
+  (self, body, { contentLength, contentType = "application/octet-stream" } = {}) =>
+    setBody(self, internalBody.stream(body, contentType, contentLength))
 )

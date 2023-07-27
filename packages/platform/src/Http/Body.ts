@@ -32,6 +32,8 @@ export namespace Body {
   export interface Proto {
     readonly [TypeId]: TypeId
     readonly _tag: string
+    readonly contentType?: string
+    readonly contentLength?: number
   }
 }
 
@@ -78,6 +80,12 @@ export interface Bytes extends Body.Proto {
  * @category constructors
  */
 export const bytes: (body: Uint8Array) => Bytes = internal.bytes
+
+/**
+ * @since 1.0.0
+ * @category constructors
+ */
+export const text: (body: string, contentType?: string) => Bytes = internal.text
 
 /**
  * @since 1.0.0

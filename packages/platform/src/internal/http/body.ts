@@ -20,47 +20,64 @@ class RawImpl implements Body.Raw {
   readonly [TypeId]: Body.TypeId = TypeId
   readonly _tag = "Raw"
   constructor(
-    readonly body: unknown
+    readonly body: unknown,
+    readonly contentType?: string,
+    readonly contentLength?: number
   ) {}
 }
 
 /** @internal */
-export const raw = (body: unknown): Body.Raw => new RawImpl(body)
+export const raw = (body: unknown, contentType?: string, contentLength?: number): Body.Raw =>
+  new RawImpl(body, contentType, contentLength)
 
 class BytesImpl implements Body.Bytes {
   readonly [TypeId]: Body.TypeId = TypeId
   readonly _tag = "Bytes"
   constructor(
-    readonly body: Uint8Array
+    readonly body: Uint8Array,
+    readonly contentType?: string
   ) {}
+  get contentLength(): number {
+    return this.body.length
+  }
 }
 
 /** @internal */
-export const bytes = (body: Uint8Array): Body.Bytes => new BytesImpl(body)
+export const bytes = (body: Uint8Array, contentType?: string): Body.Bytes => new BytesImpl(body, contentType)
+
+/** @internal */
+export const text = (body: string, contentType?: string): Body.Bytes =>
+  bytes(new TextEncoder().encode(body), contentType)
 
 class BytesEffectImpl implements Body.BytesEffect {
   readonly [TypeId]: Body.TypeId = TypeId
   readonly _tag = "BytesEffect"
   constructor(
-    readonly body: Effect.Effect<never, Error.TransportError, Uint8Array>
+    readonly body: Effect.Effect<never, Error.TransportError, Uint8Array>,
+    readonly contentType?: string
   ) {}
 }
 
 /** @internal */
-export const bytesEffect = (body: Effect.Effect<never, Error.TransportError, Uint8Array>): Body.BytesEffect =>
-  new BytesEffectImpl(body)
+export const bytesEffect = (
+  body: Effect.Effect<never, Error.TransportError, Uint8Array>,
+  contentType?: string
+): Body.BytesEffect => new BytesEffectImpl(body, contentType)
 
 /** @internal */
 export const json = (body: unknown): Body.BytesEffect =>
-  bytesEffect(Effect.try({
-    try: () => new TextEncoder().encode(JSON.stringify(body)),
-    catch: (error) =>
-      Error.TransportError({
-        method: "Body.json",
-        reason: "Encode",
-        error
-      })
-  }))
+  bytesEffect(
+    Effect.try({
+      try: () => new TextEncoder().encode(JSON.stringify(body)),
+      catch: (error) =>
+        Error.TransportError({
+          method: "Body.json",
+          reason: "Encode",
+          error
+        })
+    }),
+    "application/json"
+  )
 
 class FormDataImpl implements Body.FormData {
   readonly [TypeId]: Body.TypeId = TypeId
@@ -77,10 +94,15 @@ class StreamImpl implements Body.Stream {
   readonly [TypeId]: Body.TypeId = TypeId
   readonly _tag = "Stream"
   constructor(
-    readonly stream: Stream_.Stream<never, Error.TransportError, Uint8Array>
+    readonly stream: Stream_.Stream<never, Error.TransportError, Uint8Array>,
+    readonly contentType?: string,
+    readonly contentLength?: number
   ) {}
 }
 
 /** @internal */
-export const stream = (body: Stream_.Stream<never, Error.TransportError, Uint8Array>): Body.Stream =>
-  new StreamImpl(body)
+export const stream = (
+  body: Stream_.Stream<never, Error.TransportError, Uint8Array>,
+  contentType?: string,
+  contentLength?: number
+): Body.Stream => new StreamImpl(body, contentType, contentLength)

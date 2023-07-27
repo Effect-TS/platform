@@ -55,3 +55,12 @@ export const setAll = dual<
     self,
     fromInput(headers)
   ))
+
+/**
+ * @since 1.0.0
+ * @category combinators
+ */
+export const remove = dual<
+  (key: string) => (self: Headers) => Headers,
+  (self: Headers, key: string) => Headers
+>(2, (self, key) => HashMap.remove(self, key.toLowerCase()))
