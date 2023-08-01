@@ -116,4 +116,38 @@ describe("FileSystem", () => {
         Effect.scoped
       )
     })))
+
+  it("should correctly track the cursor position when writing", () =>
+    runPromise(Effect.gen(function*(_) {
+      const fs = yield* _(Fs.FileSystem)
+
+      yield* _(
+        Effect.gen(function*(_) {
+          let text: string
+
+          const path = yield* _(fs.makeTempFileScoped())
+          const file = yield* _(fs.open(path, { flag: "w" }))
+
+          yield* _(file.write(new TextEncoder().encode("lorem ipsum")))
+          yield* _(file.write(new TextEncoder().encode(" ")))
+          yield* _(file.write(new TextEncoder().encode("dolor sit amet")))
+
+          text = yield* _(fs.readFile(path), Effect.map((_) => new TextDecoder().decode(_)))
+          expect(text).toBe("lorem ipsum dolor sit amet")
+
+          yield* _(file.seek(Fs.Size(-4)))
+          yield* _(file.write(new TextEncoder().encode("hello world")))
+
+          text = yield* _(fs.readFile(path), Effect.map((_) => new TextDecoder().decode(_)))
+          expect(text).toBe("lorem ipsum dolor sit hello world")
+
+          yield* _(file.seek(Fs.Size(6), 0))
+          yield* _(file.write(new TextEncoder().encode("blabl")))
+
+          text = yield* _(fs.readFile(path), Effect.map((_) => new TextDecoder().decode(_)))
+          expect(text).toBe("lorem blabl dolor sit hello world")
+        }),
+        Effect.scoped
+      )
+    })))
 })
