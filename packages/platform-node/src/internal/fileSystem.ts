@@ -229,37 +229,43 @@ const makeFile = (() => {
     ) {}
 
     get stat() {
-      return this.semaphore.withPermits(1)(Effect.map(nodeStat(this.fd), makeFileInfo))
+      return this.semaphore.withPermits(1)(Effect.suspend(() => Effect.map(nodeStat(this.fd), makeFileInfo)))
     }
 
     seek(offset: FileSystem.Size, whence: FileSystem.SeekMode = 1) {
-      return this.semaphore.withPermits(1)(Effect.flatten(Effect.sync(() => {
-        if (whence === 0) {
-          // Start
-          this.position = offset
-        } else if (whence === 1) {
-          // Current
-          this.position = FileSystem.Size(this.position + offset)
-        } else if (whence === 2) {
-          // End (not supported atm.)
-        }
+      return this.semaphore.withPermits(1)(
+        Effect.sync(() => {
+          if (whence === 0) {
+            // Start
+            this.position = offset
+          } else if (whence === 1) {
+            // Current
+            this.position = FileSystem.Size(this.position + offset)
+          } else if (whence === 2) {
+            // End (not supported atm.)
+          }
 
-        return Effect.succeed(this.position)
-      })))
+          return this.position
+        })
+      )
     }
 
     read(buffer: Uint8Array) {
-      return this.semaphore.withPermits(1)(Effect.map(
-        nodeRead(this.fd, {
-          buffer,
-          position: this.position
-        }),
-        (bytesRead) => {
-          const sizeRead = FileSystem.Size(bytesRead)
-          this.position = FileSystem.Size(this.position + sizeRead)
-          return sizeRead
-        }
-      ))
+      return this.semaphore.withPermits(1)(
+        Effect.suspend(() =>
+          Effect.map(
+            nodeRead(this.fd, {
+              buffer,
+              position: this.position
+            }),
+            (bytesRead) => {
+              const sizeRead = FileSystem.Size(bytesRead)
+              this.position = FileSystem.Size(this.position + sizeRead)
+              return sizeRead
+            }
+          )
+        )
+      )
     }
 
     readAlloc(size: FileSystem.Size) {
@@ -271,7 +277,7 @@ const makeFile = (() => {
               buffer,
               position: this.position
             }),
-            (bytesRead) => {
+            (bytesRead): Option.Option<Buffer> => {
               if (bytesRead === 0) {
                 return Option.none()
               }
@@ -291,24 +297,28 @@ const makeFile = (() => {
 
     truncate(length?: FileSystem.Size) {
       return this.semaphore.withPermits(1)(
-        Effect.map(nodeTruncate(this.fd, length ? Number(length) : undefined), () => {
-          this.position = length ?? FileSystem.Size(0)
-        })
+        Effect.suspend(() =>
+          Effect.map(nodeTruncate(this.fd, length ? Number(length) : undefined), () => {
+            this.position = length ?? FileSystem.Size(0)
+          })
+        )
       )
     }
 
     write(buffer: Uint8Array) {
       return this.semaphore.withPermits(1)(
-        Effect.map(
-          // TODO: This conversion is unsafe.
-          // Do we fail here if `position` is a bigint in excess of `Number.MAX_SAFE_INTEGER`?
-          // The same is true for a number of other places around here (`length`, `offset`, etc.) ...
-          nodeWrite(this.fd, buffer, undefined, undefined, Number(this.position)),
-          (bytesWritten) => {
-            const sizeWritten = FileSystem.Size(bytesWritten)
-            this.position = FileSystem.Size(this.position + sizeWritten)
-            return sizeWritten
-          }
+        Effect.suspend(() =>
+          Effect.map(
+            // TODO: This conversion is unsafe.
+            // Do we fail here if `position` is a bigint in excess of `Number.MAX_SAFE_INTEGER`?
+            // The same is true for a number of other places around here (`length`, `offset`, etc.) ...
+            nodeWrite(this.fd, buffer, undefined, undefined, Number(this.position)),
+            (bytesWritten) => {
+              const sizeWritten = FileSystem.Size(bytesWritten)
+              this.position = FileSystem.Size(this.position + sizeWritten)
+              return sizeWritten
+            }
+          )
         )
       )
     }
@@ -337,7 +347,7 @@ const makeFile = (() => {
           }
         )
 
-      return this.semaphore.withPermits(1)(loop(buffer))
+      return this.semaphore.withPermits(1)(Effect.suspend(() => loop(buffer)))
     }
   }
 
