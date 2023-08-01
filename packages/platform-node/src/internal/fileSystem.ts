@@ -221,7 +221,7 @@ const makeFile = (() => {
   class FileImpl implements FileSystem.File {
     readonly [FileSystem.FileTypeId] = identity
 
-    private semaphore = Effect.unsafeMakeSemaphore(1)
+    private readonly semaphore = Effect.unsafeMakeSemaphore(1)
     private position: FileSystem.Size = FileSystem.Size(0)
 
     constructor(
@@ -233,19 +233,19 @@ const makeFile = (() => {
     }
 
     seek(offset: FileSystem.Size, whence: FileSystem.SeekMode = 1) {
-      return this.semaphore.withPermits(1)(Effect.sync(() => {
+      return this.semaphore.withPermits(1)(Effect.flatten(Effect.sync(() => {
         if (whence === 0) {
           // Start
           this.position = offset
         } else if (whence === 1) {
           // Current
-          this.position = FileSystem.Size(BigInt(this.position) + BigInt(offset))
+          this.position = FileSystem.Size(this.position + offset)
         } else if (whence === 2) {
           // End (not supported atm.)
         }
 
-        return this.position
-      }))
+        return Effect.succeed(this.position)
+      })))
     }
 
     read(buffer: Uint8Array) {
@@ -255,8 +255,9 @@ const makeFile = (() => {
           position: this.position
         }),
         (bytesRead) => {
-          this.position = FileSystem.Size(BigInt(this.position) + BigInt(bytesRead))
-          return FileSystem.Size(bytesRead)
+          const sizeRead = FileSystem.Size(bytesRead)
+          this.position = FileSystem.Size(this.position + sizeRead)
+          return sizeRead
         }
       ))
     }
@@ -275,7 +276,7 @@ const makeFile = (() => {
                 return Option.none()
               }
 
-              this.position = FileSystem.Size(BigInt(this.position) + BigInt(bytesRead))
+              this.position = FileSystem.Size(this.position + FileSystem.Size(bytesRead))
               if (bytesRead === Number(size)) {
                 return Option.some(buffer)
               }
@@ -304,14 +305,15 @@ const makeFile = (() => {
           // The same is true for a number of other places around here (`length`, `offset`, etc.) ...
           nodeWrite(this.fd, buffer, undefined, undefined, Number(this.position)),
           (bytesWritten) => {
-            this.position = FileSystem.Size(BigInt(this.position) + BigInt(bytesWritten))
-            return FileSystem.Size(bytesWritten)
+            const sizeWritten = FileSystem.Size(bytesWritten)
+            this.position = FileSystem.Size(this.position + sizeWritten)
+            return sizeWritten
           }
         )
       )
     }
 
-    writeAll(buffer: Uint8Array): Effect.Effect<never, Error.PlatformError, void> {
+    writeAll(buffer: Uint8Array) {
       // TODO: Is there an idiomatic approach to handle recursion with semaphore?
       const loop = (buffer: Uint8Array): Effect.Effect<never, Error.PlatformError, void> =>
         Effect.flatMap(
@@ -320,8 +322,6 @@ const makeFile = (() => {
           // The same is true for a number of other places around here (`length`, `offset`, etc.) ...
           nodeWriteAll(this.fd, buffer, undefined, undefined, Number(this.position)),
           (bytesWritten) => {
-            this.position = FileSystem.Size(BigInt(this.position) + BigInt(bytesWritten))
-
             if (bytesWritten === 0) {
               return Effect.fail(Error.SystemError({
                 module: "FileSystem",
@@ -330,10 +330,10 @@ const makeFile = (() => {
                 pathOrDescriptor: this.fd,
                 message: "write returned 0 bytes written"
               }))
-            } else if (bytesWritten < buffer.length) {
-              return loop(buffer.subarray(bytesWritten))
             }
-            return Effect.unit
+
+            this.position = FileSystem.Size(this.position + FileSystem.Size(bytesWritten))
+            return bytesWritten < buffer.length ? loop(buffer.subarray(bytesWritten)) : Effect.unit
           }
         )
 
