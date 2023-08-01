@@ -229,7 +229,7 @@ const makeFile = (() => {
     ) {}
 
     get stat() {
-      return this.semaphore.withPermits(1)(Effect.suspend(() => Effect.map(nodeStat(this.fd), makeFileInfo)))
+      return Effect.map(nodeStat(this.fd), makeFileInfo)
     }
 
     seek(offset: FileSystem.Size, whence: FileSystem.SeekMode) {
