@@ -107,6 +107,11 @@ describe("FileSystem", () => {
           // Read the following 8 bytes.
           text = yield* _(Effect.some(file.readAlloc(Fs.Size(8))), Effect.map((_) => new TextDecoder().decode(_)))
           expect(text).toBe("sit amet")
+
+          // Jump back to the start.
+          yield* _(file.seek(Fs.Size(0), 0))
+          text = yield* _(Effect.some(file.readAlloc(Fs.Size(11))), Effect.map((_) => new TextDecoder().decode(_)))
+          expect(text).toBe("lorem ipsum")
         }),
         Effect.scoped
       )

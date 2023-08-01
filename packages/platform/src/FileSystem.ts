@@ -407,7 +407,7 @@ export interface File {
   readonly [FileTypeId]: (_: never) => unknown
   readonly fd: File.Descriptor
   readonly stat: Effect.Effect<never, PlatformError, File.Info>
-  readonly seek: (offset: Size) => Effect.Effect<never, never, void>
+  readonly seek: (offset: Size, whence?: SeekMode) => Effect.Effect<never, never, void>
   readonly read: (
     buffer: Uint8Array
   ) => Effect.Effect<never, PlatformError, Size>
