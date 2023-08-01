@@ -3,7 +3,7 @@ import { pipe } from "@effect/data/Function"
 import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
 import * as Error from "@effect/platform/Error"
-import type { File, FileSystem, Size as Size_, StreamOptions } from "@effect/platform/FileSystem"
+import type { File, FileSystem, SeekMode, Size as Size_, StreamOptions } from "@effect/platform/FileSystem"
 import * as Sink from "@effect/stream/Sink"
 import * as Stream from "@effect/stream/Stream"
 
@@ -55,7 +55,7 @@ const stream = (file: File, {
   chunkSize = Size(64 * 1024),
   offset = Size(0)
 }: StreamOptions = {}) =>
-  Effect.map(file.seek(offset), () =>
+  Effect.map(file.seek(offset, 0 as SeekMode), () =>
     Stream.bufferChunks(
       Stream.unfoldEffect(Size(0), (position) => {
         if (bytesToRead !== undefined && bytesToRead <= position - offset) {

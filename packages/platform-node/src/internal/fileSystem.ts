@@ -232,17 +232,15 @@ const makeFile = (() => {
       return this.semaphore.withPermits(1)(Effect.suspend(() => Effect.map(nodeStat(this.fd), makeFileInfo)))
     }
 
-    seek(offset: FileSystem.Size, whence: FileSystem.SeekMode = 1) {
+    seek(offset: FileSystem.Size, whence: FileSystem.SeekMode) {
       return this.semaphore.withPermits(1)(
         Effect.sync(() => {
-          if (whence === 0) {
+          if (whence === FileSystem.SeekMode.Start) {
             // Start
             this.position = offset
-          } else if (whence === 1) {
+          } else if (whence === FileSystem.SeekMode.Current) {
             // Current
             this.position = FileSystem.Size(this.position + offset)
-          } else if (whence === 2) {
-            // End (not supported atm.)
           }
 
           return this.position

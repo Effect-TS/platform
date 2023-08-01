@@ -81,7 +81,7 @@ describe("FileSystem", () => {
       expect(after).toEqual("")
     })))
 
-  it("seek", () =>
+  it("should track the cursor position when reading", () =>
     runPromise(Effect.gen(function*(_) {
       const fs = yield* _(Fs.FileSystem)
 
@@ -95,21 +95,21 @@ describe("FileSystem", () => {
           expect(text).toBe("lorem")
 
           // Jump to the 12th byte (5 + 7).
-          yield* _(file.seek(Fs.Size(7)))
+          yield* _(file.seek(Fs.Size(7), Fs.SeekMode.Current))
 
           // Read the following 5 bytes.
           text = yield* _(Effect.some(file.readAlloc(Fs.Size(5))), Effect.map((_) => new TextDecoder().decode(_)))
           expect(text).toBe("dolar")
 
           // Jump past the whitespace (+1).
-          yield* _(file.seek(Fs.Size(1)))
+          yield* _(file.seek(Fs.Size(1), Fs.SeekMode.Current))
 
           // Read the following 8 bytes.
           text = yield* _(Effect.some(file.readAlloc(Fs.Size(8))), Effect.map((_) => new TextDecoder().decode(_)))
           expect(text).toBe("sit amet")
 
           // Jump back to the start.
-          yield* _(file.seek(Fs.Size(0), 0))
+          yield* _(file.seek(Fs.Size(0), Fs.SeekMode.Start))
           text = yield* _(Effect.some(file.readAlloc(Fs.Size(11))), Effect.map((_) => new TextDecoder().decode(_)))
           expect(text).toBe("lorem ipsum")
         }),
@@ -117,7 +117,7 @@ describe("FileSystem", () => {
       )
     })))
 
-  it("should correctly track the cursor position when writing", () =>
+  it("should track the cursor position when writing", () =>
     runPromise(Effect.gen(function*(_) {
       const fs = yield* _(Fs.FileSystem)
 
@@ -126,7 +126,7 @@ describe("FileSystem", () => {
           let text: string
 
           const path = yield* _(fs.makeTempFileScoped())
-          const file = yield* _(fs.open(path, { flag: "w" }))
+          const file = yield* _(fs.open(path, { flag: "w+" }))
 
           yield* _(file.write(new TextEncoder().encode("lorem ipsum")))
           yield* _(file.write(new TextEncoder().encode(" ")))
@@ -135,13 +135,13 @@ describe("FileSystem", () => {
           text = yield* _(fs.readFile(path), Effect.map((_) => new TextDecoder().decode(_)))
           expect(text).toBe("lorem ipsum dolor sit amet")
 
-          yield* _(file.seek(Fs.Size(-4)))
+          yield* _(file.seek(Fs.Size(-4), Fs.SeekMode.Current))
           yield* _(file.write(new TextEncoder().encode("hello world")))
 
           text = yield* _(fs.readFile(path), Effect.map((_) => new TextDecoder().decode(_)))
           expect(text).toBe("lorem ipsum dolor sit hello world")
 
-          yield* _(file.seek(Fs.Size(6), 0))
+          yield* _(file.seek(Fs.Size(6), Fs.SeekMode.Start))
           yield* _(file.write(new TextEncoder().encode("blabl")))
 
           text = yield* _(fs.readFile(path), Effect.map((_) => new TextDecoder().decode(_)))
