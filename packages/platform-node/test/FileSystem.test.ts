@@ -63,4 +63,52 @@ describe("FileSystem", () => {
       const after = yield* _(fs.readFile(file), Effect.map((_) => new TextDecoder().decode(_)))
       expect(after).toEqual("")
     })))
+
+  it("truncate", () =>
+    runPromise(Effect.gen(function*(_) {
+      const fs = yield* _(Fs.FileSystem)
+      const file = yield* _(fs.makeTempFile())
+
+      const text = "hello world"
+      yield* _(fs.writeFile(file, new TextEncoder().encode(text)))
+
+      const before = yield* _(fs.readFile(file), Effect.map((_) => new TextDecoder().decode(_)))
+      expect(before).toEqual(text)
+
+      yield* _(fs.truncate(file))
+
+      const after = yield* _(fs.readFile(file), Effect.map((_) => new TextDecoder().decode(_)))
+      expect(after).toEqual("")
+    })))
+
+  it("seek", () =>
+    runPromise(Effect.gen(function*(_) {
+      const fs = yield* _(Fs.FileSystem)
+
+      yield* _(
+        Effect.gen(function*(_) {
+          let text: string
+          const file = yield* _(fs.open(`${__dirname}/fixtures/text.txt`))
+
+          // Read the first 5 bytes ("lorem").
+          text = yield* _(Effect.some(file.readAlloc(Fs.Size(5))), Effect.map((_) => new TextDecoder().decode(_)))
+          expect(text).toBe("lorem")
+
+          // Jump to the 12th byte (5 + 7).
+          yield* _(file.seek(Fs.Size(7)))
+
+          // Read the following 5 bytes.
+          text = yield* _(Effect.some(file.readAlloc(Fs.Size(5))), Effect.map((_) => new TextDecoder().decode(_)))
+          expect(text).toBe("dolar")
+
+          // Jump past the whitespace (+1).
+          yield* _(file.seek(Fs.Size(1)))
+
+          // Read the following 8 bytes.
+          text = yield* _(Effect.some(file.readAlloc(Fs.Size(8))), Effect.map((_) => new TextDecoder().decode(_)))
+          expect(text).toBe("sit amet")
+        }),
+        Effect.scoped
+      )
+    })))
 })

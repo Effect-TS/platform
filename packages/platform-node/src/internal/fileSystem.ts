@@ -221,43 +221,61 @@ const makeFile = (() => {
   class FileImpl implements FileSystem.File {
     readonly [FileSystem.FileTypeId] = identity
 
+    private semaphore = Effect.unsafeMakeSemaphore(1)
+    private position: FileSystem.Size = FileSystem.Size(0)
+
     constructor(
       readonly fd: FileSystem.File.Descriptor
     ) {}
 
     get stat() {
-      return Effect.map(nodeStat(this.fd), makeFileInfo)
+      return this.semaphore.withPermits(1)(Effect.map(nodeStat(this.fd), makeFileInfo))
     }
 
-    read(
-      buffer: Uint8Array,
-      options?: FileSystem.FileReadOptions
-    ) {
-      return Effect.map(
+    seek(offset: FileSystem.Size, whence: FileSystem.SeekMode = 1) {
+      return this.semaphore.withPermits(1)(Effect.sync(() => {
+        if (whence === 0) {
+          // Start
+          this.position = offset
+        } else if (whence === 1) {
+          // Current
+          this.position = FileSystem.Size(BigInt(this.position) + BigInt(offset))
+        } else if (whence === 2) {
+          // End (not supported atm.)
+        }
+
+        return this.position
+      }))
+    }
+
+    read(buffer: Uint8Array) {
+      return this.semaphore.withPermits(1)(Effect.map(
         nodeRead(this.fd, {
           buffer,
-          length: options?.length ? Number(options.length) : undefined,
-          position: options?.offset
+          position: this.position
         }),
-        FileSystem.Size
-      )
+        (bytesRead) => {
+          this.position = FileSystem.Size(BigInt(this.position) + BigInt(bytesRead))
+          return FileSystem.Size(bytesRead)
+        }
+      ))
     }
 
-    readAlloc(size: FileSystem.Size, options?: FileSystem.FileReadOptions | undefined) {
-      return Effect.flatMap(
+    readAlloc(size: FileSystem.Size) {
+      return this.semaphore.withPermits(1)(Effect.flatMap(
         Effect.sync(() => Buffer.allocUnsafeSlow(Number(size))),
         (buffer) =>
           Effect.map(
             nodeReadAlloc(this.fd, {
               buffer,
-              length: options?.length ? Number(options.length) : undefined,
-              position: options?.offset
+              position: this.position
             }),
             (bytesRead) => {
               if (bytesRead === 0) {
                 return Option.none()
               }
 
+              this.position = FileSystem.Size(BigInt(this.position) + BigInt(bytesRead))
               if (bytesRead === Number(size)) {
                 return Option.some(buffer)
               }
@@ -267,35 +285,59 @@ const makeFile = (() => {
               return Option.some(dst)
             }
           )
-      )
+      ))
     }
 
     truncate(length?: FileSystem.Size) {
-      return nodeTruncate(this.fd, length ? Number(length) : undefined)
+      return this.semaphore.withPermits(1)(
+        Effect.map(nodeTruncate(this.fd, length ? Number(length) : undefined), () => {
+          this.position = length ?? FileSystem.Size(0)
+        })
+      )
     }
 
     write(buffer: Uint8Array) {
-      return Effect.map(nodeWrite(this.fd, buffer), FileSystem.Size)
+      return this.semaphore.withPermits(1)(
+        Effect.map(
+          // TODO: This conversion is unsafe.
+          // Do we fail here if `position` is a bigint in excess of `Number.MAX_SAFE_INTEGER`?
+          // The same is true for a number of other places around here (`length`, `offset`, etc.) ...
+          nodeWrite(this.fd, buffer, undefined, undefined, Number(this.position)),
+          (bytesWritten) => {
+            this.position = FileSystem.Size(BigInt(this.position) + BigInt(bytesWritten))
+            return FileSystem.Size(bytesWritten)
+          }
+        )
+      )
     }
 
     writeAll(buffer: Uint8Array): Effect.Effect<never, Error.PlatformError, void> {
-      return Effect.flatMap(
-        nodeWriteAll(this.fd, buffer),
-        (bytesWritten) => {
-          if (bytesWritten === 0) {
-            return Effect.fail(Error.SystemError({
-              module: "FileSystem",
-              method: "writeAll",
-              reason: "WriteZero",
-              pathOrDescriptor: this.fd,
-              message: "write returned 0 bytes written"
-            }))
-          } else if (bytesWritten < buffer.length) {
-            return this.writeAll(buffer.subarray(bytesWritten))
+      // TODO: Is there an idiomatic approach to handle recursion with semaphore?
+      const loop = (buffer: Uint8Array): Effect.Effect<never, Error.PlatformError, void> =>
+        Effect.flatMap(
+          // TODO: This conversion is unsafe.
+          // Do we fail here if `position` is a bigint in excess of `Number.MAX_SAFE_INTEGER`?
+          // The same is true for a number of other places around here (`length`, `offset`, etc.) ...
+          nodeWriteAll(this.fd, buffer, undefined, undefined, Number(this.position)),
+          (bytesWritten) => {
+            this.position = FileSystem.Size(BigInt(this.position) + BigInt(bytesWritten))
+
+            if (bytesWritten === 0) {
+              return Effect.fail(Error.SystemError({
+                module: "FileSystem",
+                method: "writeAll",
+                reason: "WriteZero",
+                pathOrDescriptor: this.fd,
+                message: "write returned 0 bytes written"
+              }))
+            } else if (bytesWritten < buffer.length) {
+              return loop(buffer.subarray(bytesWritten))
+            }
+            return Effect.unit
           }
-          return Effect.unit
-        }
-      )
+        )
+
+      return this.semaphore.withPermits(1)(loop(buffer))
     }
   }
 

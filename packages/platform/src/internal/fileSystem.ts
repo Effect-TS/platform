@@ -36,7 +36,7 @@ export const make = (impl: Omit<FileSystem, "exists" | "readFileString" | "strea
     stream: (path, options) =>
       pipe(
         impl.open(path, { flag: "r" }),
-        Effect.map((file) => stream(file, options)),
+        Effect.flatMap((file) => stream(file, options)),
         Stream.unwrapScoped
       ),
     sink: (path, options) =>
@@ -55,22 +55,23 @@ const stream = (file: File, {
   chunkSize = Size(64 * 1024),
   offset = Size(0)
 }: StreamOptions = {}) =>
-  Stream.bufferChunks(
-    Stream.unfoldEffect(offset, (position) => {
-      if (bytesToRead !== undefined && bytesToRead <= position - offset) {
-        return Effect.succeed(Option.none())
-      }
+  Effect.map(file.seek(offset), () =>
+    Stream.bufferChunks(
+      Stream.unfoldEffect(Size(0), (position) => {
+        if (bytesToRead !== undefined && bytesToRead <= position - offset) {
+          return Effect.succeed(Option.none())
+        }
 
-      const toRead = bytesToRead !== undefined && bytesToRead - (position - offset) < chunkSize
-        ? bytesToRead - (position - offset)
-        : chunkSize
+        const toRead = bytesToRead !== undefined && bytesToRead - (position - offset) < chunkSize
+          ? bytesToRead - (position - offset)
+          : chunkSize
 
-      return pipe(
-        file.readAlloc(toRead as Size_, { offset: position }),
-        Effect.map(
-          Option.map((buf) => [buf, Size(position + BigInt(buf.length))] as const)
+        return pipe(
+          file.readAlloc(toRead as Size_),
+          Effect.map(
+            Option.map((buf) => [buf, Size(position + BigInt(buf.length))] as const)
+          )
         )
-      )
-    }),
-    { capacity: bufferSize }
-  )
+      }),
+      { capacity: bufferSize }
+    ))
