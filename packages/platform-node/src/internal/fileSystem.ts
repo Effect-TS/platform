@@ -310,7 +310,7 @@ const makeFile = (() => {
       return this.semaphore.withPermits(1)(
         Effect.suspend(() =>
           Effect.map(
-            nodeWrite(this.fd, buffer, undefined, undefined, Number(this.position)),
+            nodeWrite(this.fd, buffer, undefined, undefined, this.append ? undefined : Number(this.position)),
             (bytesWritten) => {
               const sizeWritten = FileSystem.Size(bytesWritten)
               if (!this.append) {
@@ -326,7 +326,7 @@ const makeFile = (() => {
 
     private writeAllChunk(buffer: Uint8Array): Effect.Effect<never, Error.PlatformError, void> {
       return Effect.flatMap(
-        nodeWriteAll(this.fd, buffer, undefined, undefined, Number(this.position)),
+        nodeWriteAll(this.fd, buffer, undefined, undefined, this.append ? undefined : Number(this.position)),
         (bytesWritten) => {
           if (bytesWritten === 0) {
             return Effect.fail(Error.SystemError({
