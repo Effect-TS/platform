@@ -65,23 +65,6 @@ describe("FileSystem", () => {
       expect(after).toEqual("")
     })))
 
-  it("truncate", () =>
-    runPromise(Effect.gen(function*(_) {
-      const fs = yield* _(Fs.FileSystem)
-      const file = yield* _(fs.makeTempFile())
-
-      const text = "hello world"
-      yield* _(fs.writeFile(file, new TextEncoder().encode(text)))
-
-      const before = yield* _(fs.readFile(file), Effect.map((_) => new TextDecoder().decode(_)))
-      expect(before).toEqual(text)
-
-      yield* _(fs.truncate(file))
-
-      const after = yield* _(fs.readFile(file), Effect.map((_) => new TextDecoder().decode(_)))
-      expect(after).toEqual("")
-    })))
-
   it("should track the cursor position when reading", () =>
     runPromise(Effect.gen(function*(_) {
       const fs = yield* _(Fs.FileSystem)
