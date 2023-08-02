@@ -184,7 +184,7 @@ const openFactory = (method: string) => {
         nodeOpen(path, options?.flag ?? "r", options?.mode),
         (fd) => Effect.orDie(nodeClose(fd))
       ),
-      Effect.map((fd) => makeFile(FileSystem.FileDescriptor(fd)))
+      Effect.map((fd) => makeFile(FileSystem.FileDescriptor(fd), options?.flag?.startsWith("a") ?? false))
     )
 }
 const open = openFactory("open")
@@ -222,10 +222,11 @@ const makeFile = (() => {
     readonly [FileSystem.FileTypeId] = identity
 
     private readonly semaphore = Effect.unsafeMakeSemaphore(1)
-    private position: FileSystem.Size = FileSystem.Size(0)
+    private position: bigint = 0n
 
     constructor(
-      readonly fd: FileSystem.File.Descriptor
+      readonly fd: FileSystem.File.Descriptor,
+      readonly append: boolean
     ) {}
 
     get stat() {
@@ -240,7 +241,7 @@ const makeFile = (() => {
             this.position = offset
           } else if (from === FileSystem.SeekMode.Current) {
             // Current
-            this.position = FileSystem.Size(this.position + offset)
+            this.position = this.position + offset
           }
 
           return this.position
@@ -258,7 +259,7 @@ const makeFile = (() => {
             }),
             (bytesRead) => {
               const sizeRead = FileSystem.Size(bytesRead)
-              this.position = FileSystem.Size(this.position + sizeRead)
+              this.position = this.position + sizeRead
               return sizeRead
             }
           )
@@ -280,7 +281,7 @@ const makeFile = (() => {
                 return Option.none()
               }
 
-              this.position = FileSystem.Size(this.position + FileSystem.Size(bytesRead))
+              this.position = this.position + BigInt(bytesRead)
               if (bytesRead === Number(size)) {
                 return Option.some(buffer)
               }
@@ -297,7 +298,9 @@ const makeFile = (() => {
       return this.semaphore.withPermits(1)(
         Effect.suspend(() =>
           Effect.map(nodeTruncate(this.fd, length ? Number(length) : undefined), () => {
-            this.position = length ?? FileSystem.Size(0)
+            if (!this.append) {
+              this.position = length ?? 0n
+            }
           })
         )
       )
@@ -310,7 +313,10 @@ const makeFile = (() => {
             nodeWrite(this.fd, buffer, undefined, undefined, Number(this.position)),
             (bytesWritten) => {
               const sizeWritten = FileSystem.Size(bytesWritten)
-              this.position = FileSystem.Size(this.position + sizeWritten)
+              if (!this.append) {
+                this.position = this.position + sizeWritten
+              }
+
               return sizeWritten
             }
           )
@@ -332,7 +338,10 @@ const makeFile = (() => {
             }))
           }
 
-          this.position = FileSystem.Size(this.position + FileSystem.Size(bytesWritten))
+          if (!this.append) {
+            this.position = this.position + BigInt(bytesWritten)
+          }
+
           return bytesWritten < buffer.length ? this.writeAllChunk(buffer.subarray(bytesWritten)) : Effect.unit
         }
       )
@@ -343,7 +352,7 @@ const makeFile = (() => {
     }
   }
 
-  return (fd: FileSystem.File.Descriptor): FileSystem.File => new FileImpl(fd)
+  return (fd: FileSystem.File.Descriptor, append: boolean): FileSystem.File => new FileImpl(fd, append)
 })()
 
 // == makeTempFile
