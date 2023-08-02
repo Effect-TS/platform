@@ -1,6 +1,7 @@
-import * as Option from "@effect/data/Option"
+import * as Chunk from "@effect/data/Chunk"
 import * as Effect from "@effect/io/Effect"
 import * as Fs from "@effect/platform-node/FileSystem"
+import * as Stream from "@effect/stream/Stream"
 
 const runPromise = <E, A>(self: Effect.Effect<Fs.FileSystem, E, A>) =>
   Effect.runPromise(
@@ -88,6 +89,14 @@ describe("FileSystem", () => {
           yield* _(file.seek(Fs.Size(0), "start"))
           text = yield* _(Effect.some(file.readAlloc(Fs.Size(11))), Effect.map((_) => new TextDecoder().decode(_)))
           expect(text).toBe("lorem ipsum")
+
+          text = yield* _(
+            fs.stream(`${__dirname}/fixtures/text.txt`, { offset: Fs.Size(6), bytesToRead: Fs.Size(5) }),
+            Stream.map((_) => new TextDecoder().decode(_)),
+            Stream.runCollect,
+            Effect.map(Chunk.join(""))
+          )
+          expect(text).toBe("ipsum")
         }),
         Effect.scoped
       )
