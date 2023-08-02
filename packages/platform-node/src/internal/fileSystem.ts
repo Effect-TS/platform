@@ -251,18 +251,18 @@ const makeFile = (() => {
 
     read(buffer: Uint8Array) {
       return this.semaphore.withPermits(1)(
-        Effect.suspend(() =>
-          Effect.map(
+        Effect.map(
+          Effect.suspend(() =>
             nodeRead(this.fd, {
               buffer,
               position: this.position
-            }),
-            (bytesRead) => {
-              const sizeRead = FileSystem.Size(bytesRead)
-              this.position = this.position + sizeRead
-              return sizeRead
-            }
-          )
+            })
+          ),
+          (bytesRead) => {
+            const sizeRead = FileSystem.Size(bytesRead)
+            this.position = this.position + sizeRead
+            return sizeRead
+          }
         )
       )
     }
@@ -296,56 +296,54 @@ const makeFile = (() => {
 
     truncate(length?: FileSystem.Size) {
       return this.semaphore.withPermits(1)(
-        Effect.suspend(() =>
-          Effect.map(nodeTruncate(this.fd, length ? Number(length) : undefined), () => {
-            if (!this.append) {
-              this.position = length ?? 0n
-            }
-          })
-        )
+        Effect.map(Effect.suspend(() => nodeTruncate(this.fd, length ? Number(length) : undefined)), () => {
+          if (!this.append) {
+            this.position = length ?? 0n
+          }
+        })
       )
     }
 
     write(buffer: Uint8Array) {
       return this.semaphore.withPermits(1)(
-        Effect.suspend(() =>
-          Effect.map(
-            nodeWrite(this.fd, buffer, undefined, undefined, this.append ? undefined : Number(this.position)),
-            (bytesWritten) => {
-              const sizeWritten = FileSystem.Size(bytesWritten)
-              if (!this.append) {
-                this.position = this.position + sizeWritten
-              }
-
-              return sizeWritten
+        Effect.map(
+          Effect.suspend(() =>
+            nodeWrite(this.fd, buffer, undefined, undefined, this.append ? undefined : Number(this.position))
+          ),
+          (bytesWritten) => {
+            const sizeWritten = FileSystem.Size(bytesWritten)
+            if (!this.append) {
+              this.position = this.position + sizeWritten
             }
-          )
+
+            return sizeWritten
+          }
         )
       )
     }
 
     private writeAllChunk(buffer: Uint8Array): Effect.Effect<never, Error.PlatformError, void> {
-      return Effect.suspend(() =>
-        Effect.flatMap(
-          nodeWriteAll(this.fd, buffer, undefined, undefined, this.append ? undefined : Number(this.position)),
-          (bytesWritten) => {
-            if (bytesWritten === 0) {
-              return Effect.fail(Error.SystemError({
-                module: "FileSystem",
-                method: "writeAll",
-                reason: "WriteZero",
-                pathOrDescriptor: this.fd,
-                message: "write returned 0 bytes written"
-              }))
-            }
-
-            if (!this.append) {
-              this.position = this.position + BigInt(bytesWritten)
-            }
-
-            return bytesWritten < buffer.length ? this.writeAllChunk(buffer.subarray(bytesWritten)) : Effect.unit
+      return Effect.flatMap(
+        Effect.suspend(() =>
+          nodeWriteAll(this.fd, buffer, undefined, undefined, this.append ? undefined : Number(this.position))
+        ),
+        (bytesWritten) => {
+          if (bytesWritten === 0) {
+            return Effect.fail(Error.SystemError({
+              module: "FileSystem",
+              method: "writeAll",
+              reason: "WriteZero",
+              pathOrDescriptor: this.fd,
+              message: "write returned 0 bytes written"
+            }))
           }
-        )
+
+          if (!this.append) {
+            this.position = this.position + BigInt(bytesWritten)
+          }
+
+          return bytesWritten < buffer.length ? this.writeAllChunk(buffer.subarray(bytesWritten)) : Effect.unit
+        }
       )
     }
 
