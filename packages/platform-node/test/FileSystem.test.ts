@@ -138,4 +138,35 @@ describe("FileSystem", () => {
         Effect.scoped
       )
     })))
+
+  it("should maintain a read cursor in append mode", () =>
+    runPromise(Effect.gen(function*(_) {
+      const fs = yield* _(Fs.FileSystem)
+
+      yield* _(
+        Effect.gen(function*(_) {
+          let text: string
+          const path = yield* _(fs.makeTempFileScoped())
+          const file = yield* _(fs.open(path, { flag: "a+" }))
+
+          yield* _(file.write(new TextEncoder().encode("foo")))
+          yield* _(file.seek(Fs.Size(0), "start"))
+
+          yield* _(file.write(new TextEncoder().encode("bar")))
+          text = yield* _(fs.readFile(path), Effect.map((_) => new TextDecoder().decode(_)))
+          expect(text).toBe("foobar")
+
+          text = yield* _(Effect.some(file.readAlloc(Fs.Size(3))), Effect.map((_) => new TextDecoder().decode(_)))
+          expect(text).toBe("foo")
+
+          yield* _(file.write(new TextEncoder().encode("baz")))
+          text = yield* _(fs.readFile(path), Effect.map((_) => new TextDecoder().decode(_)))
+          expect(text).toBe("foobarbaz")
+
+          text = yield* _(Effect.some(file.readAlloc(Fs.Size(6))), Effect.map((_) => new TextDecoder().decode(_)))
+          expect(text).toBe("barbaz")
+        }),
+        Effect.scoped
+      )
+    })))
 })
