@@ -325,30 +325,32 @@ const makeFile = (() => {
     }
 
     private writeAllChunk(buffer: Uint8Array): Effect.Effect<never, Error.PlatformError, void> {
-      return Effect.flatMap(
-        nodeWriteAll(this.fd, buffer, undefined, undefined, this.append ? undefined : Number(this.position)),
-        (bytesWritten) => {
-          if (bytesWritten === 0) {
-            return Effect.fail(Error.SystemError({
-              module: "FileSystem",
-              method: "writeAll",
-              reason: "WriteZero",
-              pathOrDescriptor: this.fd,
-              message: "write returned 0 bytes written"
-            }))
-          }
+      return Effect.suspend(() =>
+        Effect.flatMap(
+          nodeWriteAll(this.fd, buffer, undefined, undefined, this.append ? undefined : Number(this.position)),
+          (bytesWritten) => {
+            if (bytesWritten === 0) {
+              return Effect.fail(Error.SystemError({
+                module: "FileSystem",
+                method: "writeAll",
+                reason: "WriteZero",
+                pathOrDescriptor: this.fd,
+                message: "write returned 0 bytes written"
+              }))
+            }
 
-          if (!this.append) {
-            this.position = this.position + BigInt(bytesWritten)
-          }
+            if (!this.append) {
+              this.position = this.position + BigInt(bytesWritten)
+            }
 
-          return bytesWritten < buffer.length ? this.writeAllChunk(buffer.subarray(bytesWritten)) : Effect.unit
-        }
+            return bytesWritten < buffer.length ? this.writeAllChunk(buffer.subarray(bytesWritten)) : Effect.unit
+          }
+        )
       )
     }
 
     writeAll(buffer: Uint8Array) {
-      return this.semaphore.withPermits(1)(Effect.suspend(() => this.writeAllChunk(buffer)))
+      return this.semaphore.withPermits(1)(this.writeAllChunk(buffer))
     }
   }
 
