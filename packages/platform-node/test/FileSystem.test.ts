@@ -1,3 +1,4 @@
+import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
 import * as Fs from "@effect/platform-node/FileSystem"
 
@@ -165,6 +166,45 @@ describe("FileSystem", () => {
 
           text = yield* _(Effect.some(file.readAlloc(Fs.Size(6))), Effect.map((_) => new TextDecoder().decode(_)))
           expect(text).toBe("barbaz")
+        }),
+        Effect.scoped
+      )
+    })))
+
+  it("should keep the current cursor if truncating doesn't affect it", () =>
+    runPromise(Effect.gen(function*(_) {
+      const fs = yield* _(Fs.FileSystem)
+
+      yield* _(
+        Effect.gen(function*(_) {
+          const path = yield* _(fs.makeTempFileScoped())
+          const file = yield* _(fs.open(path, { flag: "w+" }))
+
+          yield* _(file.write(new TextEncoder().encode("lorem ipsum dolor sit amet")))
+          yield* _(file.seek(Fs.Size(6), "start"))
+          yield* _(file.truncate(Fs.Size(11)))
+
+          const cursor = yield* _(file.seek(Fs.Size(0), "current"))
+          expect(cursor).toBe(Fs.Size(6))
+        }),
+        Effect.scoped
+      )
+    })))
+
+  it("should update the current cursor if truncating affects it", () =>
+    runPromise(Effect.gen(function*(_) {
+      const fs = yield* _(Fs.FileSystem)
+
+      yield* _(
+        Effect.gen(function*(_) {
+          const path = yield* _(fs.makeTempFileScoped())
+          const file = yield* _(fs.open(path, { flag: "w+" }))
+
+          yield* _(file.write(new TextEncoder().encode("lorem ipsum dolor sit amet")))
+          yield* _(file.truncate(Fs.Size(11)))
+
+          const cursor = yield* _(file.seek(Fs.Size(0), "current"))
+          expect(cursor).toBe(Fs.Size(11))
         }),
         Effect.scoped
       )
