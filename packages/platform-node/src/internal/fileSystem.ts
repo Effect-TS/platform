@@ -296,7 +296,7 @@ const makeFile = (() => {
 
     truncate(length?: FileSystem.Size) {
       return this.semaphore.withPermits(1)(
-        Effect.map(Effect.suspend(() => nodeTruncate(this.fd, length ? Number(length) : undefined)), () => {
+        Effect.map(nodeTruncate(this.fd, length ? Number(length) : undefined), () => {
           if (!this.append) {
             this.position = length ?? 0n
           }
