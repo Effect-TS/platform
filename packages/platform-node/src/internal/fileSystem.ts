@@ -226,7 +226,7 @@ const makeFile = (() => {
 
     constructor(
       readonly fd: FileSystem.File.Descriptor,
-      readonly append: boolean
+      private readonly append: boolean
     ) {}
 
     get stat() {
