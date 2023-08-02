@@ -296,7 +296,10 @@ const makeFile = (() => {
       return this.semaphore.withPermits(1)(
         Effect.map(nodeTruncate(this.fd, length ? Number(length) : undefined), () => {
           if (!this.append) {
-            this.position = length ?? 0n
+            const len = BigInt(length ?? 0)
+            if (this.position > len) {
+              this.position = len
+            }
           }
         })
       )
