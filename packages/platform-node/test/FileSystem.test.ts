@@ -93,15 +93,15 @@ describe("FileSystem", () => {
           text = yield* _(Effect.some(file.readAlloc(Fs.Size(5))), Effect.map((_) => new TextDecoder().decode(_)))
           expect(text).toBe("lorem")
 
-          yield* _(file.seek(Fs.Size(7), Fs.SeekMode.Current))
+          yield* _(file.seek(Fs.Size(7), "current"))
           text = yield* _(Effect.some(file.readAlloc(Fs.Size(5))), Effect.map((_) => new TextDecoder().decode(_)))
           expect(text).toBe("dolar")
 
-          yield* _(file.seek(Fs.Size(1), Fs.SeekMode.Current))
+          yield* _(file.seek(Fs.Size(1), "current"))
           text = yield* _(Effect.some(file.readAlloc(Fs.Size(8))), Effect.map((_) => new TextDecoder().decode(_)))
           expect(text).toBe("sit amet")
 
-          yield* _(file.seek(Fs.Size(0), Fs.SeekMode.Start))
+          yield* _(file.seek(Fs.Size(0), "start"))
           text = yield* _(Effect.some(file.readAlloc(Fs.Size(11))), Effect.map((_) => new TextDecoder().decode(_)))
           expect(text).toBe("lorem ipsum")
         }),
@@ -125,12 +125,12 @@ describe("FileSystem", () => {
           text = yield* _(fs.readFile(path), Effect.map((_) => new TextDecoder().decode(_)))
           expect(text).toBe("lorem ipsum dolor sit amet")
 
-          yield* _(file.seek(Fs.Size(-4), Fs.SeekMode.Current))
+          yield* _(file.seek(Fs.Size(-4), "current"))
           yield* _(file.write(new TextEncoder().encode("hello world")))
           text = yield* _(fs.readFile(path), Effect.map((_) => new TextDecoder().decode(_)))
           expect(text).toBe("lorem ipsum dolor sit hello world")
 
-          yield* _(file.seek(Fs.Size(6), Fs.SeekMode.Start))
+          yield* _(file.seek(Fs.Size(6), "start"))
           yield* _(file.write(new TextEncoder().encode("blabl")))
           text = yield* _(fs.readFile(path), Effect.map((_) => new TextDecoder().decode(_)))
           expect(text).toBe("lorem blabl dolor sit hello world")

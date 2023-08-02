@@ -485,13 +485,3 @@ export const FileDescriptor = Brand.nominal<File.Descriptor>()
  * @category model
  */
 export type SeekMode = "start" | "current"
-
-/**
- * @since 1.0.0
- * @category model
- */
-export const SeekMode = {
-  Start: "start",
-  Current: "current"
-  // End: 2 as const
-} as const

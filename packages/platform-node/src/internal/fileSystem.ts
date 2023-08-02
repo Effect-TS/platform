@@ -236,11 +236,9 @@ const makeFile = (() => {
     seek(offset: FileSystem.Size, from: FileSystem.SeekMode) {
       return this.semaphore.withPermits(1)(
         Effect.sync(() => {
-          if (from === FileSystem.SeekMode.Start) {
-            // Start
+          if (from === "start") {
             this.position = offset
-          } else if (from === FileSystem.SeekMode.Current) {
-            // Current
+          } else if (from === "current") {
             this.position = this.position + offset
           }
 
