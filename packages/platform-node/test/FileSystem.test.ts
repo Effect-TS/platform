@@ -122,17 +122,17 @@ describe("FileSystem", () => {
           yield* _(file.write(new TextEncoder().encode("lorem ipsum")))
           yield* _(file.write(new TextEncoder().encode(" ")))
           yield* _(file.write(new TextEncoder().encode("dolor sit amet")))
-          text = yield* _(fs.readFile(path), Effect.map((_) => new TextDecoder().decode(_)))
+          text = yield* _(fs.readFileString(path))
           expect(text).toBe("lorem ipsum dolor sit amet")
 
           yield* _(file.seek(Fs.Size(-4), "current"))
           yield* _(file.write(new TextEncoder().encode("hello world")))
-          text = yield* _(fs.readFile(path), Effect.map((_) => new TextDecoder().decode(_)))
+          text = yield* _(fs.readFileString(path))
           expect(text).toBe("lorem ipsum dolor sit hello world")
 
           yield* _(file.seek(Fs.Size(6), "start"))
           yield* _(file.write(new TextEncoder().encode("blabl")))
-          text = yield* _(fs.readFile(path), Effect.map((_) => new TextDecoder().decode(_)))
+          text = yield* _(fs.readFileString(path))
           expect(text).toBe("lorem blabl dolor sit hello world")
         }),
         Effect.scoped
@@ -153,14 +153,14 @@ describe("FileSystem", () => {
           yield* _(file.seek(Fs.Size(0), "start"))
 
           yield* _(file.write(new TextEncoder().encode("bar")))
-          text = yield* _(fs.readFile(path), Effect.map((_) => new TextDecoder().decode(_)))
+          text = yield* _(fs.readFileString(path))
           expect(text).toBe("foobar")
 
           text = yield* _(Effect.some(file.readAlloc(Fs.Size(3))), Effect.map((_) => new TextDecoder().decode(_)))
           expect(text).toBe("foo")
 
           yield* _(file.write(new TextEncoder().encode("baz")))
-          text = yield* _(fs.readFile(path), Effect.map((_) => new TextDecoder().decode(_)))
+          text = yield* _(fs.readFileString(path))
           expect(text).toBe("foobarbaz")
 
           text = yield* _(Effect.some(file.readAlloc(Fs.Size(6))), Effect.map((_) => new TextDecoder().decode(_)))
