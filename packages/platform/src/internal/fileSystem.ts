@@ -3,7 +3,7 @@ import { pipe } from "@effect/data/Function"
 import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
 import * as Error from "@effect/platform/Error"
-import type { File, FileSystem, SeekMode, Size as Size_, StreamOptions } from "@effect/platform/FileSystem"
+import type { File, FileSystem, Size as Size_, StreamOptions } from "@effect/platform/FileSystem"
 import * as Sink from "@effect/stream/Sink"
 import * as Stream from "@effect/stream/Stream"
 
@@ -36,7 +36,7 @@ export const make = (impl: Omit<FileSystem, "exists" | "readFileString" | "strea
     stream: (path, options) =>
       pipe(
         impl.open(path, { flag: "r" }),
-        Effect.flatMap((file) => stream(file, options)),
+        Effect.map((file) => stream(file, options)),
         Stream.unwrapScoped
       ),
     sink: (path, options) =>
@@ -55,23 +55,21 @@ const stream = (file: File, {
   chunkSize = Size(64 * 1024),
   offset = Size(0)
 }: StreamOptions = {}) =>
-  Effect.map(file.seek(offset, 0 as SeekMode), () =>
-    Stream.bufferChunks(
-      Stream.unfoldEffect(Size(0), (position) => {
-        if (bytesToRead !== undefined && bytesToRead <= position - offset) {
-          return Effect.succeed(Option.none())
-        }
+  Stream.bufferChunks(
+    Stream.unfoldEffect(offset, (position) => {
+      if (bytesToRead !== undefined && bytesToRead <= position - offset) {
+        return Effect.succeed(Option.none())
+      }
 
-        const toRead = bytesToRead !== undefined && bytesToRead - (position - offset) < chunkSize
-          ? bytesToRead - (position - offset)
-          : chunkSize
+      const toRead = bytesToRead !== undefined && bytesToRead - (position - offset) < chunkSize
+        ? bytesToRead - (position - offset)
+        : chunkSize
 
-        return pipe(
+      return Effect.flatMap(file.seek(position, "start"), () =>
+        pipe(
           file.readAlloc(toRead as Size_),
-          Effect.map(
-            Option.map((buf) => [buf, Size(position + BigInt(buf.length))] as const)
-          )
-        )
-      }),
-      { capacity: bufferSize }
-    ))
+          Effect.map(Option.map((buf) => [buf, Size(position + BigInt(buf.length))] as const))
+        ))
+    }),
+    { capacity: bufferSize }
+  )

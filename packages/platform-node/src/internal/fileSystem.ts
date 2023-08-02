@@ -232,13 +232,13 @@ const makeFile = (() => {
       return Effect.map(nodeStat(this.fd), makeFileInfo)
     }
 
-    seek(offset: FileSystem.Size, whence: FileSystem.SeekMode) {
+    seek(offset: FileSystem.Size, from: FileSystem.SeekMode) {
       return this.semaphore.withPermits(1)(
         Effect.sync(() => {
-          if (whence === FileSystem.SeekMode.Start) {
+          if (from === FileSystem.SeekMode.Start) {
             // Start
             this.position = offset
-          } else if (whence === FileSystem.SeekMode.Current) {
+          } else if (from === FileSystem.SeekMode.Current) {
             // Current
             this.position = FileSystem.Size(this.position + offset)
           }
@@ -307,9 +307,6 @@ const makeFile = (() => {
       return this.semaphore.withPermits(1)(
         Effect.suspend(() =>
           Effect.map(
-            // TODO: This conversion is unsafe.
-            // Do we fail here if `position` is a bigint in excess of `Number.MAX_SAFE_INTEGER`?
-            // The same is true for a number of other places around here (`length`, `offset`, etc.) ...
             nodeWrite(this.fd, buffer, undefined, undefined, Number(this.position)),
             (bytesWritten) => {
               const sizeWritten = FileSystem.Size(bytesWritten)
@@ -321,31 +318,28 @@ const makeFile = (() => {
       )
     }
 
-    writeAll(buffer: Uint8Array) {
-      // TODO: Is there an idiomatic approach to handle recursion with semaphore?
-      const loop = (buffer: Uint8Array): Effect.Effect<never, Error.PlatformError, void> =>
-        Effect.flatMap(
-          // TODO: This conversion is unsafe.
-          // Do we fail here if `position` is a bigint in excess of `Number.MAX_SAFE_INTEGER`?
-          // The same is true for a number of other places around here (`length`, `offset`, etc.) ...
-          nodeWriteAll(this.fd, buffer, undefined, undefined, Number(this.position)),
-          (bytesWritten) => {
-            if (bytesWritten === 0) {
-              return Effect.fail(Error.SystemError({
-                module: "FileSystem",
-                method: "writeAll",
-                reason: "WriteZero",
-                pathOrDescriptor: this.fd,
-                message: "write returned 0 bytes written"
-              }))
-            }
-
-            this.position = FileSystem.Size(this.position + FileSystem.Size(bytesWritten))
-            return bytesWritten < buffer.length ? loop(buffer.subarray(bytesWritten)) : Effect.unit
+    private writeAllChunk(buffer: Uint8Array): Effect.Effect<never, Error.PlatformError, void> {
+      return Effect.flatMap(
+        nodeWriteAll(this.fd, buffer, undefined, undefined, Number(this.position)),
+        (bytesWritten) => {
+          if (bytesWritten === 0) {
+            return Effect.fail(Error.SystemError({
+              module: "FileSystem",
+              method: "writeAll",
+              reason: "WriteZero",
+              pathOrDescriptor: this.fd,
+              message: "write returned 0 bytes written"
+            }))
           }
-        )
 
-      return this.semaphore.withPermits(1)(Effect.suspend(() => loop(buffer)))
+          this.position = FileSystem.Size(this.position + FileSystem.Size(bytesWritten))
+          return bytesWritten < buffer.length ? this.writeAllChunk(buffer.subarray(bytesWritten)) : Effect.unit
+        }
+      )
+    }
+
+    writeAll(buffer: Uint8Array) {
+      return this.semaphore.withPermits(1)(Effect.suspend(() => this.writeAllChunk(buffer)))
     }
   }
 

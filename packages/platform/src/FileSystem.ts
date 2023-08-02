@@ -409,7 +409,7 @@ export interface File {
   readonly stat: Effect.Effect<never, PlatformError, File.Info>
   readonly seek: (
     offset: Size,
-    whence: SeekMode
+    from: SeekMode
   ) => Effect.Effect<never, never, void>
   readonly read: (
     buffer: Uint8Array
@@ -484,14 +484,14 @@ export const FileDescriptor = Brand.nominal<File.Descriptor>()
  * @since 1.0.0
  * @category model
  */
-export type SeekMode = Brand.Branded<0 | 1, "SeekMode">
+export type SeekMode = "start" | "current"
 
 /**
  * @since 1.0.0
  * @category model
  */
 export const SeekMode = {
-  Start: 0 as SeekMode,
-  Current: 1 as SeekMode
+  Start: "start",
+  Current: "current"
   // End: 2 as const
 } as const
