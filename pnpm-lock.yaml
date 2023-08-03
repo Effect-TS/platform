@@ -116,6 +116,10 @@ importers:
 
   packages/platform:
     dependencies:
+      path-browserify:
+        specifier: ^1.0.1
+        version: 1.0.1
+    devDependencies:
       '@effect/data':
         specifier: ^0.17.1
         version: 0.17.1
@@ -125,17 +129,13 @@ importers:
       '@effect/stream':
         specifier: ^0.33.0
         version: 0.33.0
-      path-browserify:
-        specifier: ^1.0.1
-        version: 1.0.1
-    devDependencies:
       '@types/path-browserify':
         specifier: ^1.0.0
         version: 1.0.0
     publishDirectory: dist
 
   packages/platform-node:
-    dependencies:
+    devDependencies:
       '@effect/data':
         specifier: ^0.17.1
         version: 0.17.1
@@ -744,7 +744,7 @@ packages:
 
   /@effect/data@0.17.1:
     resolution: {integrity: sha512-QCYkLE5Y5Dm5Yax5R3GmW4ZIgTx7W+kSZ7yq5eqQ/mFWa8i4yxbLuu8cudqzdeZtRtTGZKlhDxfFfgVtMywXJg==}
-    dev: false
+    dev: true
 
   /@effect/docgen@0.1.2(@types/node@20.4.5)(typescript@5.1.6):
     resolution: {integrity: sha512-qy1pA8SKsqla7/35Q2NuUeT/VwO/olg9hdmmY929wSrKhRVVPOmnF4cbCvFxbykikYek0/6/thupSUenYV0DvQ==}
@@ -773,7 +773,7 @@ packages:
     resolution: {integrity: sha512-Y45STkhyBmv/oep/+6kGEces9Btp/cfWkSX5Qqi4ar5MRK13DJrexWF8+jAuixGhXWwWQHHasE9z6w6lFgQWJQ==}
     dependencies:
       '@effect/data': 0.17.1
-    dev: false
+    dev: true
 
   /@effect/language-service@0.0.19:
     resolution: {integrity: sha512-sKNVo031dkwLfe1jHZzdTiF1UXgLq1lAYd2JG7q416dlmMoxRcMXrZWyw6a/SxIDM0hyIJAEmrz5iUkQPcPdBQ==}
@@ -787,7 +787,7 @@ packages:
     dependencies:
       '@effect/data': 0.17.1
       '@effect/io': 0.37.0
-    dev: false
+    dev: true
 
   /@esbuild/android-arm64@0.18.16:
     resolution: {integrity: sha512-wsCqSPqLz+6Ov+OM4EthU43DyYVVyfn15S4j1bJzylDpc1r1jZFFfJQNfDuT8SlgwuqpmpJXK4uPlHGw6ve7eA==}
