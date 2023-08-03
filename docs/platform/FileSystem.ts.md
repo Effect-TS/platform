@@ -20,9 +20,9 @@ Added in v1.0.0
   - [isFile](#isfile)
 - [model](#model)
   - [File (interface)](#file-interface)
-  - [FileReadOptions (interface)](#filereadoptions-interface)
   - [FileSystem (interface)](#filesystem-interface)
   - [OpenFlag (type alias)](#openflag-type-alias)
+  - [SeekMode (type alias)](#seekmode-type-alias)
   - [Size (type alias)](#size-type-alias)
 - [options](#options)
   - [AccessFileOptions (interface)](#accessfileoptions-interface)
@@ -36,6 +36,7 @@ Added in v1.0.0
   - [SinkOptions (interface)](#sinkoptions-interface)
   - [StreamOptions (interface)](#streamoptions-interface)
   - [WriteFileOptions (interface)](#writefileoptions-interface)
+  - [WriteFileStringOptions (interface)](#writefilestringoptions-interface)
 - [tag](#tag)
   - [FileSystem](#filesystem)
 - [type id](#type-id)
@@ -71,7 +72,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: (impl: Omit<FileSystem, 'stream' | 'sink'>) => FileSystem
+export declare const make: (
+  impl: Omit<FileSystem, 'exists' | 'readFileString' | 'stream' | 'sink' | 'writeFileString'>
+) => FileSystem
 ```
 
 Added in v1.0.0
@@ -99,24 +102,12 @@ export interface File {
   readonly [FileTypeId]: (_: never) => unknown
   readonly fd: File.Descriptor
   readonly stat: Effect.Effect<never, PlatformError, File.Info>
-  readonly read: (buffer: Uint8Array, options?: FileReadOptions) => Effect.Effect<never, PlatformError, Size>
-  readonly readAlloc: (size: Size, options?: FileReadOptions) => Effect.Effect<never, PlatformError, Option<Uint8Array>>
+  readonly seek: (offset: Size, from: SeekMode) => Effect.Effect<never, never, void>
+  readonly read: (buffer: Uint8Array) => Effect.Effect<never, PlatformError, Size>
+  readonly readAlloc: (size: Size) => Effect.Effect<never, PlatformError, Option<Uint8Array>>
   readonly truncate: (length?: Size) => Effect.Effect<never, PlatformError, void>
   readonly write: (buffer: Uint8Array) => Effect.Effect<never, PlatformError, Size>
   readonly writeAll: (buffer: Uint8Array) => Effect.Effect<never, PlatformError, void>
-}
-```
-
-Added in v1.0.0
-
-## FileReadOptions (interface)
-
-**Signature**
-
-```ts
-export interface FileReadOptions {
-  readonly offset?: Size
-  readonly length?: Size
 }
 ```
 
@@ -151,6 +142,10 @@ export interface FileSystem {
    * Change the owner and group of a file.
    */
   readonly chown: (path: string, uid: number, gid: number) => Effect.Effect<never, PlatformError, void>
+  /**
+   * Check if a path exists.
+   */
+  readonly exists: (path: string) => Effect.Effect<never, PlatformError, boolean>
   /**
    * Create a hard link from `fromPath` to `toPath`.
    */
@@ -211,6 +206,10 @@ export interface FileSystem {
    * Read the contents of a file.
    */
   readonly readFile: (path: string) => Effect.Effect<never, PlatformError, Uint8Array>
+  /**
+   * Read the contents of a file.
+   */
+  readonly readFileString: (path: string, encoding?: string) => Effect.Effect<never, PlatformError, string>
   /**
    * Read the destination of a symbolic link.
    */
@@ -276,6 +275,14 @@ export interface FileSystem {
     data: Uint8Array,
     options?: WriteFileOptions
   ) => Effect.Effect<never, PlatformError, void>
+  /**
+   * Write a string to a file at `path`.
+   */
+  readonly writeFileString: (
+    path: string,
+    data: string,
+    options?: WriteFileStringOptions
+  ) => Effect.Effect<never, PlatformError, void>
 }
 ```
 
@@ -287,6 +294,16 @@ Added in v1.0.0
 
 ```ts
 export type OpenFlag = 'r' | 'r+' | 'w' | 'wx' | 'w+' | 'wx+' | 'a' | 'ax' | 'a+' | 'ax+'
+```
+
+Added in v1.0.0
+
+## SeekMode (type alias)
+
+**Signature**
+
+```ts
+export type SeekMode = 'start' | 'current'
 ```
 
 Added in v1.0.0
@@ -439,6 +456,19 @@ Added in v1.0.0
 
 ```ts
 export interface WriteFileOptions {
+  readonly flag?: OpenFlag
+  readonly mode?: number
+}
+```
+
+Added in v1.0.0
+
+## WriteFileStringOptions (interface)
+
+**Signature**
+
+```ts
+export interface WriteFileStringOptions {
   readonly flag?: OpenFlag
   readonly mode?: number
 }
