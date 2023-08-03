@@ -23,6 +23,7 @@ Added in v1.0.0
   - [OpenFileOptions](#openfileoptions)
   - [ReadDirectoryOptions](#readdirectoryoptions)
   - [RemoveOptions](#removeoptions)
+  - [SeekMode](#seekmode)
   - [SinkOptions](#sinkoptions)
   - [StreamOptions](#streamoptions)
   - [WriteFileOptions](#writefileoptions)
@@ -113,6 +114,16 @@ Added in v1.0.0
 
 ```ts
 export declare const RemoveOptions: RemoveOptions
+```
+
+Added in v1.0.0
+
+## SeekMode
+
+**Signature**
+
+```ts
+export declare const SeekMode: any
 ```
 
 Added in v1.0.0
