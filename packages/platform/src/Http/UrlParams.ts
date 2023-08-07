@@ -1,3 +1,6 @@
+/**
+ * @since 1.0.0
+ */
 import * as Chunk from "@effect/data/Chunk"
 import { dual } from "@effect/data/Function"
 

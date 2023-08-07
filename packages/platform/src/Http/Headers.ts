@@ -1,3 +1,6 @@
+/**
+ * @since 1.0.0
+ */
 import { dual } from "@effect/data/Function"
 import * as HashMap from "@effect/data/HashMap"
 

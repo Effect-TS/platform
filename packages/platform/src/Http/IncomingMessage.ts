@@ -1,7 +1,10 @@
-import type * as Chunk from "@effect/data/Chunk"
+/**
+ * @since 1.0.0
+ */
 import type * as Effect from "@effect/io/Effect"
 import type * as Error from "@effect/platform/Http/Error"
 import type * as FormData from "@effect/platform/Http/FormData"
+import type * as Headers from "@effect/platform/Http/Headers"
 import type * as Stream from "@effect/stream/Stream"
 
 /**
@@ -22,7 +25,7 @@ export type TypeId = typeof TypeId
  */
 export interface IncomingMessage {
   readonly [TypeId]: TypeId
-  readonly headers: Chunk.Chunk<readonly [string, string]>
+  readonly headers: Headers.Headers
   readonly json: Effect.Effect<never, Error.TransportError, unknown>
   readonly text: Effect.Effect<never, Error.TransportError, string>
   readonly blob: Effect.Effect<never, Error.TransportError, Blob>

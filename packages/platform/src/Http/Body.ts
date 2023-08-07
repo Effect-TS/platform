@@ -1,3 +1,6 @@
+/**
+ * @since 1.0.0
+ */
 import type * as Effect from "@effect/io/Effect"
 import type * as Error from "@effect/platform/Http/Error"
 import * as internal from "@effect/platform/internal/http/body"

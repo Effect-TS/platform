@@ -2,6 +2,8 @@
  * @since 1.0.0
  */
 import type * as Data from "@effect/data/Data"
+import type * as ClientRequest from "@effect/platform/Http/ClientRequest"
+import type * as ClientResponse from "@effect/platform/Http/ClientResponse"
 import * as internal from "@effect/platform/internal/http/error"
 
 /**
@@ -63,7 +65,9 @@ export const StatusError: (props: Omit<StatusError, HttpError.ProvidedFields>) =
 export interface TransportError extends HttpError.Proto {
   readonly _tag: "TransportError"
   readonly method: string
-  readonly reason: "Timeout" | "Aborted" | "Decode" | "Encode"
+  readonly request?: ClientRequest.ClientRequest
+  readonly response?: ClientResponse.ClientResponse
+  readonly reason: "RequestError" | "Aborted" | "Decode" | "Encode" | "EmptyBody" | "Unknown"
   readonly error: unknown
 }
 

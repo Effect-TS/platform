@@ -1,3 +1,6 @@
+/**
+ * @since 1.0.0
+ */
 import type * as Error from "@effect/platform/Http/Error"
 import type * as Stream from "@effect/stream/Stream"
 

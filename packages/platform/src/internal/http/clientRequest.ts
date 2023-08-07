@@ -1,9 +1,10 @@
+import * as Context from "@effect/data/Context"
 import { dual } from "@effect/data/Function"
-import type * as Http from "@effect/platform/Http"
 import type * as Body from "@effect/platform/Http/Body"
 import type * as ClientRequest from "@effect/platform/Http/ClientRequest"
 import type * as Error from "@effect/platform/Http/Error"
 import * as Headers from "@effect/platform/Http/Headers"
+import type { Method } from "@effect/platform/Http/Method"
 import * as UrlParams from "@effect/platform/Http/UrlParams"
 import * as internalBody from "@effect/platform/internal/http/body"
 import type * as Stream from "@effect/stream/Stream"
@@ -11,10 +12,13 @@ import type * as Stream from "@effect/stream/Stream"
 /** @internal */
 export const TypeId: ClientRequest.TypeId = Symbol.for("@effect/platform/Http/ClientRequest") as ClientRequest.TypeId
 
+/** @internal */
+export const tag = Context.Tag<ClientRequest.ClientRequest>("@effect/platform/Http/ClientRequest")
+
 class ClientRequestImpl implements ClientRequest.ClientRequest {
   readonly [TypeId]: ClientRequest.TypeId = TypeId
   constructor(
-    readonly method: Http.Method,
+    readonly method: Method,
     readonly url: string,
     readonly urlParams: UrlParams.UrlParams,
     readonly headers: Headers.Headers,
@@ -36,20 +40,20 @@ export const empty: ClientRequest.ClientRequest = new ClientRequestImpl(
 )
 
 /** @internal */
-export const make = (method: Http.Method) =>
-  (url: string, options?: {
-    readonly url?: string
-    readonly urlParams?: UrlParams.Input
-    readonly headers?: Headers.Input
-    readonly body?: Body.Body
-    readonly accept?: string
-    readonly acceptJson?: boolean
-  }) =>
-    modify(empty, {
-      method,
-      url,
-      ...(options ?? {})
-    })
+export const make = (method: Method) =>
+(url: string, options?: {
+  readonly url?: string
+  readonly urlParams?: UrlParams.Input
+  readonly headers?: Headers.Input
+  readonly body?: Body.Body
+  readonly accept?: string
+  readonly acceptJson?: boolean
+}) =>
+  modify(empty, {
+    method,
+    url,
+    ...(options ?? {})
+  })
 
 /** @internal */
 export const get = make("GET")
@@ -75,7 +79,7 @@ export const options = make("OPTIONS")
 /** @internal */
 export const modify = dual<
   (options: {
-    readonly method?: Http.Method
+    readonly method?: Method
     readonly url?: string
     readonly urlParams?: UrlParams.Input
     readonly headers?: Headers.Input
@@ -84,7 +88,7 @@ export const modify = dual<
     readonly acceptJson?: boolean
   }) => (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest,
   (self: ClientRequest.ClientRequest, options: {
-    readonly method?: Http.Method
+    readonly method?: Method
     readonly url?: string
     readonly urlParams?: UrlParams.Input
     readonly headers?: Headers.Input
@@ -163,8 +167,8 @@ export const acceptJson = accept("application/json")
 
 /** @internal */
 export const setMethod = dual<
-  (method: Http.Method) => (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest,
-  (self: ClientRequest.ClientRequest, method: Http.Method) => ClientRequest.ClientRequest
+  (method: Method) => (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest,
+  (self: ClientRequest.ClientRequest, method: Method) => ClientRequest.ClientRequest
 >(2, (self, method) =>
   new ClientRequestImpl(
     method,

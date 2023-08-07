@@ -1,7 +1,11 @@
-import type * as Http from "@effect/platform/Http"
+/**
+ * @since 1.0.0
+ */
+import type * as Context from "@effect/data/Context"
 import type * as Body from "@effect/platform/Http/Body"
 import type * as Error from "@effect/platform/Http/Error"
 import type * as Headers from "@effect/platform/Http/Headers"
+import type { Method } from "@effect/platform/Http/Method"
 import type * as UrlParams from "@effect/platform/Http/UrlParams"
 import * as internal from "@effect/platform/internal/http/clientRequest"
 import type * as Stream from "@effect/stream/Stream"
@@ -24,7 +28,7 @@ export type TypeId = typeof TypeId
  */
 export interface ClientRequest {
   readonly [TypeId]: TypeId
-  readonly method: Http.Method
+  readonly method: Method
   readonly url: string
   readonly urlParams: UrlParams.UrlParams
   readonly headers: Headers.Headers
@@ -33,10 +37,16 @@ export interface ClientRequest {
 
 /**
  * @since 1.0.0
+ * @category tags
+ */
+export const ClientRequest: Context.Tag<ClientRequest, ClientRequest> = internal.tag
+
+/**
+ * @since 1.0.0
  * @category constructors
  */
 export const make: (
-  method: Http.Method
+  method: Method
 ) => (
   url: string,
   options?: {
@@ -148,7 +158,7 @@ export const options: (
 export const modify: {
   (
     options: {
-      readonly method?: Http.Method
+      readonly method?: Method
       readonly url?: string
       readonly urlParams?: UrlParams.Input
       readonly headers?: Headers.Input
@@ -160,7 +170,7 @@ export const modify: {
   (
     self: ClientRequest,
     options: {
-      readonly method?: Http.Method
+      readonly method?: Method
       readonly url?: string
       readonly urlParams?: UrlParams.Input
       readonly headers?: Headers.Input
@@ -176,8 +186,8 @@ export const modify: {
  * @category combinators
  */
 export const setMethod: {
-  (method: Http.Method): (self: ClientRequest) => ClientRequest
-  (self: ClientRequest, method: Http.Method): ClientRequest
+  (method: Method): (self: ClientRequest) => ClientRequest
+  (self: ClientRequest, method: Method): ClientRequest
 } = internal.setMethod
 
 /**

@@ -1,6 +1,7 @@
 import * as Effect from "@effect/io/Effect"
 import type * as Body from "@effect/platform/Http/Body"
-import * as Error from "@effect/platform/Http/Error"
+import type * as Error from "@effect/platform/Http/Error"
+import * as internalError from "@effect/platform/internal/http/error"
 import type * as Stream_ from "@effect/stream/Stream"
 
 /** @internal */
@@ -70,7 +71,7 @@ export const json = (body: unknown): Body.BytesEffect =>
     Effect.try({
       try: () => new TextEncoder().encode(JSON.stringify(body)),
       catch: (error) =>
-        Error.TransportError({
+        internalError.transportError({
           method: "Body.json",
           reason: "Encode",
           error
