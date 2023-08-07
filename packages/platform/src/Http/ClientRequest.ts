@@ -1,6 +1,7 @@
 /**
  * @since 1.0.0
  */
+import type { Pipeable } from "@effect/data/Pipeable"
 import type * as Body from "@effect/platform/Http/Body"
 import type * as Error from "@effect/platform/Http/ClientError"
 import type * as Headers from "@effect/platform/Http/Headers"
@@ -25,7 +26,7 @@ export type TypeId = typeof TypeId
  * @since 1.0.0
  * @category models
  */
-export interface ClientRequest {
+export interface ClientRequest extends Pipeable {
   readonly [TypeId]: TypeId
   readonly method: Method
   readonly url: string
@@ -98,6 +99,22 @@ export const patch: (
     readonly acceptJson?: boolean
   }
 ) => ClientRequest = internal.patch
+
+/**
+ * @since 1.0.0
+ * @category constructors
+ */
+export const put: (
+  url: string,
+  options?: {
+    readonly url?: string
+    readonly urlParams?: UrlParams.Input
+    readonly headers?: Headers.Input
+    readonly body?: Body.Body
+    readonly accept?: string
+    readonly acceptJson?: boolean
+  }
+) => ClientRequest = internal.put
 
 /**
  * @since 1.0.0
@@ -233,6 +250,15 @@ export const setUrl: {
   (url: string): (self: ClientRequest) => ClientRequest
   (self: ClientRequest, url: string): ClientRequest
 } = internal.setUrl
+
+/**
+ * @since 1.0.0
+ * @category combinators
+ */
+export const prependUrl: {
+  (path: string): (self: ClientRequest) => ClientRequest
+  (self: ClientRequest, path: string): ClientRequest
+} = internal.prependUrl
 
 /**
  * @since 1.0.0

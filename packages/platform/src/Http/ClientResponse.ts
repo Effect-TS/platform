@@ -5,6 +5,14 @@ import type * as ClientRequest from "@effect/platform/Http/ClientRequest"
 import type * as IncomingMessage from "@effect/platform/Http/IncomingMessage"
 import * as internal from "@effect/platform/internal/http/clientResponse"
 
+export {
+  /**
+   * @since 1.0.0
+   * @category schema
+   */
+  parse
+} from "@effect/platform/Http/IncomingMessage"
+
 /**
  * @since 1.0.0
  * @category type ids

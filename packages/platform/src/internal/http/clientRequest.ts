@@ -1,4 +1,5 @@
 import { dual } from "@effect/data/Function"
+import { pipeArguments } from "@effect/data/Pipeable"
 import type * as Body from "@effect/platform/Http/Body"
 import type * as Error from "@effect/platform/Http/ClientError"
 import type * as ClientRequest from "@effect/platform/Http/ClientRequest"
@@ -20,6 +21,9 @@ class ClientRequestImpl implements ClientRequest.ClientRequest {
     readonly headers: Headers.Headers,
     readonly body: Body.Body
   ) {}
+  pipe() {
+    return pipeArguments(this, arguments)
+  }
 }
 
 /** @internal */
@@ -195,6 +199,19 @@ export const appendUrl = dual<
   new ClientRequestImpl(
     self.method,
     self.url + url,
+    self.urlParams,
+    self.headers,
+    self.body
+  ))
+
+/** @internal */
+export const prependUrl = dual<
+  (path: string) => (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest,
+  (self: ClientRequest.ClientRequest, path: string) => ClientRequest.ClientRequest
+>(2, (self, url) =>
+  new ClientRequestImpl(
+    self.method,
+    url + self.url,
     self.urlParams,
     self.headers,
     self.body
