@@ -1,9 +1,8 @@
 /**
  * @since 1.0.0
  */
-import type * as Context from "@effect/data/Context"
 import type * as Body from "@effect/platform/Http/Body"
-import type * as Error from "@effect/platform/Http/Error"
+import type * as Error from "@effect/platform/Http/ClientError"
 import type * as Headers from "@effect/platform/Http/Headers"
 import type { Method } from "@effect/platform/Http/Method"
 import type * as UrlParams from "@effect/platform/Http/UrlParams"
@@ -34,12 +33,6 @@ export interface ClientRequest {
   readonly headers: Headers.Headers
   readonly body: Body.Body
 }
-
-/**
- * @since 1.0.0
- * @category tags
- */
-export const ClientRequest: Context.Tag<ClientRequest, ClientRequest> = internal.tag
 
 /**
  * @since 1.0.0

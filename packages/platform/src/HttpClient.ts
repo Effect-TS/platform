@@ -21,7 +21,7 @@ export * as response from "@effect/platform/Http/ClientResponse"
 /**
  * @since 1.0.0
  */
-export * as error from "@effect/platform/Http/Error"
+export * as error from "@effect/platform/Http/ClientError"
 /**
  * @since 1.0.0
  */

@@ -2,7 +2,7 @@
  * @since 1.0.0
  */
 import type * as Effect from "@effect/io/Effect"
-import type * as Error from "@effect/platform/Http/Error"
+import type * as Error from "@effect/platform/Http/ClientError"
 import type * as FormData from "@effect/platform/Http/FormData"
 import type * as Headers from "@effect/platform/Http/Headers"
 import type * as Stream from "@effect/stream/Stream"

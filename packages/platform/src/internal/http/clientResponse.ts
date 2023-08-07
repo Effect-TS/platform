@@ -1,7 +1,7 @@
 import * as Effect from "@effect/io/Effect"
+import type * as Error from "@effect/platform/Http/ClientError"
 import type * as ClientRequest from "@effect/platform/Http/ClientRequest"
 import type * as ClientResponse from "@effect/platform/Http/ClientResponse"
-import type * as Error from "@effect/platform/Http/Error"
 import type * as FormData from "@effect/platform/Http/FormData"
 import * as Headers from "@effect/platform/Http/Headers"
 import * as IncomingMessage from "@effect/platform/Http/IncomingMessage"

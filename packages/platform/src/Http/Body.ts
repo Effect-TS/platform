@@ -2,7 +2,7 @@
  * @since 1.0.0
  */
 import type * as Effect from "@effect/io/Effect"
-import type * as Error from "@effect/platform/Http/Error"
+import type * as Error from "@effect/platform/Http/ClientError"
 import * as internal from "@effect/platform/internal/http/body"
 import type * as Stream_ from "@effect/stream/Stream"
 
@@ -96,7 +96,7 @@ export const text: (body: string, contentType?: string) => Bytes = internal.text
  */
 export interface BytesEffect extends Body.Proto {
   readonly _tag: "BytesEffect"
-  readonly body: Effect.Effect<never, Error.TransportError, Uint8Array>
+  readonly body: Effect.Effect<never, unknown, Uint8Array>
 }
 
 /**

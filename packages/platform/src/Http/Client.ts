@@ -4,18 +4,18 @@
 import type * as Context from "@effect/data/Context"
 import type * as Effect from "@effect/io/Effect"
 import type * as Layer from "@effect/io/Layer"
+import type * as Error from "@effect/platform/Http/ClientError"
 import type * as ClientRequest from "@effect/platform/Http/ClientRequest"
 import type * as ClientResponse from "@effect/platform/Http/ClientResponse"
-import type * as Error from "@effect/platform/Http/Error"
 import * as internal from "@effect/platform/internal/http/client"
 
 /**
  * @since 1.0.0
  * @category models
  */
-export interface Client<R, E, A>
-  extends Effect.Effect<ClientRequest.ClientRequest | Exclude<R, ClientRequest.ClientRequest>, E, A>
-{}
+export interface Client<R, E, A> {
+  (request: ClientRequest.ClientRequest): Effect.Effect<R, E, A>
+}
 
 /**
  * @since 1.0.0
@@ -31,7 +31,7 @@ export namespace Client {
    * @since 1.0.0
    * @category models
    */
-  export type Default = WithResponse<never, Error.HttpError>
+  export type Default = WithResponse<never, Error.HttpClientError>
 }
 
 /**

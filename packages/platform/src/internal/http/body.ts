@@ -1,7 +1,6 @@
 import * as Effect from "@effect/io/Effect"
 import type * as Body from "@effect/platform/Http/Body"
-import type * as Error from "@effect/platform/Http/Error"
-import * as internalError from "@effect/platform/internal/http/error"
+import type * as Error from "@effect/platform/Http/ClientError"
 import type * as Stream_ from "@effect/stream/Stream"
 
 /** @internal */
@@ -54,29 +53,21 @@ class BytesEffectImpl implements Body.BytesEffect {
   readonly [TypeId]: Body.TypeId = TypeId
   readonly _tag = "BytesEffect"
   constructor(
-    readonly body: Effect.Effect<never, Error.TransportError, Uint8Array>,
+    readonly body: Effect.Effect<never, unknown, Uint8Array>,
     readonly contentType?: string
   ) {}
 }
 
 /** @internal */
 export const bytesEffect = (
-  body: Effect.Effect<never, Error.TransportError, Uint8Array>,
+  body: Effect.Effect<never, unknown, Uint8Array>,
   contentType?: string
 ): Body.BytesEffect => new BytesEffectImpl(body, contentType)
 
 /** @internal */
 export const json = (body: unknown): Body.BytesEffect =>
   bytesEffect(
-    Effect.try({
-      try: () => new TextEncoder().encode(JSON.stringify(body)),
-      catch: (error) =>
-        internalError.transportError({
-          method: "Body.json",
-          reason: "Encode",
-          error
-        })
-    }),
+    Effect.try(() => new TextEncoder().encode(JSON.stringify(body))),
     "application/json"
   )
 

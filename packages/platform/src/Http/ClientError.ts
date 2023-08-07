@@ -22,7 +22,7 @@ export type TypeId = typeof TypeId
  * @since 1.0.0
  * @category error
  */
-export type HttpError = StatusError | TransportError
+export type HttpClientError = StatusError | TransportError
 
 /**
  * @since 1.0.0
@@ -65,7 +65,7 @@ export const StatusError: (props: Omit<StatusError, HttpError.ProvidedFields>) =
 export interface TransportError extends HttpError.Proto {
   readonly _tag: "TransportError"
   readonly method: string
-  readonly request?: ClientRequest.ClientRequest
+  readonly request: ClientRequest.ClientRequest
   readonly response?: ClientResponse.ClientResponse
   readonly reason: "RequestError" | "Aborted" | "Decode" | "Encode" | "EmptyBody" | "Unknown"
   readonly error: unknown

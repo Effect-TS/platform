@@ -1,8 +1,7 @@
-import * as Context from "@effect/data/Context"
 import { dual } from "@effect/data/Function"
 import type * as Body from "@effect/platform/Http/Body"
+import type * as Error from "@effect/platform/Http/ClientError"
 import type * as ClientRequest from "@effect/platform/Http/ClientRequest"
-import type * as Error from "@effect/platform/Http/Error"
 import * as Headers from "@effect/platform/Http/Headers"
 import type { Method } from "@effect/platform/Http/Method"
 import * as UrlParams from "@effect/platform/Http/UrlParams"
@@ -11,9 +10,6 @@ import type * as Stream from "@effect/stream/Stream"
 
 /** @internal */
 export const TypeId: ClientRequest.TypeId = Symbol.for("@effect/platform/Http/ClientRequest") as ClientRequest.TypeId
-
-/** @internal */
-export const tag = Context.Tag<ClientRequest.ClientRequest>("@effect/platform/Http/ClientRequest")
 
 class ClientRequestImpl implements ClientRequest.ClientRequest {
   readonly [TypeId]: ClientRequest.TypeId = TypeId
