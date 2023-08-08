@@ -47,6 +47,7 @@ Added in v1.0.0
   - [put](#put)
 - [models](#models)
   - [ClientRequest (interface)](#clientrequest-interface)
+  - [Options (interface)](#options-interface)
 - [type ids](#type-ids)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
@@ -171,27 +172,8 @@ Added in v1.0.0
 
 ```ts
 export declare const modify: {
-  (options: {
-    readonly method?: Method
-    readonly url?: string
-    readonly urlParams?: UrlParams.Input
-    readonly headers?: Headers.Input
-    readonly body?: Body.Body
-    readonly accept?: string
-    readonly acceptJson?: boolean
-  }): (self: ClientRequest) => ClientRequest
-  (
-    self: ClientRequest,
-    options: {
-      readonly method?: Method
-      readonly url?: string
-      readonly urlParams?: UrlParams.Input
-      readonly headers?: Headers.Input
-      readonly body?: Body.Body
-      readonly accept?: string
-      readonly acceptJson?: boolean
-    }
-  ): ClientRequest
+  (options: Options): (self: ClientRequest) => ClientRequest
+  (self: ClientRequest, options: Options): ClientRequest
 }
 ```
 
@@ -375,16 +357,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const del: (
-  url: string,
-  options?: {
-    readonly url?: string
-    readonly urlParams?: UrlParams.Input
-    readonly headers?: Headers.Input
-    readonly accept?: string
-    readonly acceptJson?: boolean
-  }
-) => ClientRequest
+export declare const del: (url: string, options?: Options.NoUrl) => ClientRequest
 ```
 
 Added in v1.0.0
@@ -394,16 +367,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const get: (
-  url: string,
-  options?: {
-    readonly url?: string
-    readonly urlParams?: UrlParams.Input
-    readonly headers?: Headers.Input
-    readonly accept?: string
-    readonly acceptJson?: boolean
-  }
-) => ClientRequest
+export declare const get: (url: string, options?: Options.NoBody) => ClientRequest
 ```
 
 Added in v1.0.0
@@ -413,16 +377,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const head: (
-  url: string,
-  options?: {
-    readonly url?: string
-    readonly urlParams?: UrlParams.Input
-    readonly headers?: Headers.Input
-    readonly accept?: string
-    readonly acceptJson?: boolean
-  }
-) => ClientRequest
+export declare const head: (url: string, options?: Options.NoBody) => ClientRequest
 ```
 
 Added in v1.0.0
@@ -432,21 +387,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: (
-  method: Method
-) => (
-  url: string,
-  options?:
-    | {
-        readonly url?: string | undefined
-        readonly urlParams?: UrlParams.Input | undefined
-        readonly headers?: Headers.Input | undefined
-        readonly body?: Body.Body | undefined
-        readonly accept?: string | undefined
-        readonly acceptJson?: boolean | undefined
-      }
-    | undefined
-) => ClientRequest
+export declare const make: {
+  (method: 'GET' | 'HEAD'): (url: string, options?: Options.NoBody) => ClientRequest
+  (method: Exclude<Method, 'GET' | 'HEAD'>): (url: string, options?: Options.NoUrl) => ClientRequest
+}
 ```
 
 Added in v1.0.0
@@ -456,16 +400,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const options: (
-  url: string,
-  options?: {
-    readonly url?: string
-    readonly urlParams?: UrlParams.Input
-    readonly headers?: Headers.Input
-    readonly accept?: string
-    readonly acceptJson?: boolean
-  }
-) => ClientRequest
+export declare const options: (url: string, options?: Options.NoUrl) => ClientRequest
 ```
 
 Added in v1.0.0
@@ -475,17 +410,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const patch: (
-  url: string,
-  options?: {
-    readonly url?: string
-    readonly urlParams?: UrlParams.Input
-    readonly headers?: Headers.Input
-    readonly body?: Body.Body
-    readonly accept?: string
-    readonly acceptJson?: boolean
-  }
-) => ClientRequest
+export declare const patch: (url: string, options?: Options.NoUrl) => ClientRequest
 ```
 
 Added in v1.0.0
@@ -495,17 +420,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const post: (
-  url: string,
-  options?: {
-    readonly url?: string
-    readonly urlParams?: UrlParams.Input
-    readonly headers?: Headers.Input
-    readonly body?: Body.Body
-    readonly accept?: string
-    readonly acceptJson?: boolean
-  }
-) => ClientRequest
+export declare const post: (url: string, options?: Options.NoUrl) => ClientRequest
 ```
 
 Added in v1.0.0
@@ -515,17 +430,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const put: (
-  url: string,
-  options?: {
-    readonly url?: string
-    readonly urlParams?: UrlParams.Input
-    readonly headers?: Headers.Input
-    readonly body?: Body.Body
-    readonly accept?: string
-    readonly acceptJson?: boolean
-  }
-) => ClientRequest
+export declare const put: (url: string, options?: Options.NoUrl) => ClientRequest
 ```
 
 Added in v1.0.0
@@ -544,6 +449,24 @@ export interface ClientRequest extends Pipeable {
   readonly urlParams: UrlParams.UrlParams
   readonly headers: Headers.Headers
   readonly body: Body.Body
+}
+```
+
+Added in v1.0.0
+
+## Options (interface)
+
+**Signature**
+
+```ts
+export interface Options {
+  readonly method?: Method
+  readonly url?: string
+  readonly urlParams?: UrlParams.Input
+  readonly headers?: Headers.Input
+  readonly body?: Body.Body
+  readonly accept?: string
+  readonly acceptJson?: boolean
 }
 ```
 
