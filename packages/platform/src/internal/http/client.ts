@@ -9,6 +9,7 @@ import type * as Body from "@effect/platform/Http/Body"
 import type * as Client from "@effect/platform/Http/Client"
 import type * as Error from "@effect/platform/Http/ClientError"
 import type * as ClientRequest from "@effect/platform/Http/ClientRequest"
+import * as Method from "@effect/platform/Http/Method"
 import * as internalBody from "@effect/platform/internal/http/body"
 import * as internalError from "@effect/platform/internal/http/clientError"
 import * as internalRequest from "@effect/platform/internal/http/clientRequest"
@@ -70,18 +71,20 @@ export const fetch = (
             }),
             (_) => internalResponse.fromWeb(request, _)
           )
-
-        return request.body._tag === "BytesEffect" ?
-          Effect.flatMap(
-            Effect.mapError(request.body.body, (error) =>
-              internalError.requestError({
-                reason: "Encode",
-                request,
-                error
-              })),
-            (body) => send(body)
-          ) :
-          send(convertBody(request.body))
+        if (Method.hasBody(request.method)) {
+          return request.body._tag === "BytesEffect" ?
+            Effect.flatMap(
+              Effect.mapError(request.body.body, (error) =>
+                internalError.requestError({
+                  reason: "Encode",
+                  request,
+                  error
+                })),
+              (body) => send(body)
+            ) :
+            send(convertBody(request.body))
+        }
+        return send(undefined)
       })
   )
 
