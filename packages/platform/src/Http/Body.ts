@@ -3,6 +3,7 @@
  */
 import type * as Effect from "@effect/io/Effect"
 import * as internal from "@effect/platform/internal/http/body"
+import type * as Schema from "@effect/schema/Schema"
 import type * as Stream_ from "@effect/stream/Stream"
 
 /**
@@ -109,6 +110,12 @@ export const bytesEffect: (body: Effect.Effect<never, unknown, Uint8Array>) => B
  * @category constructors
  */
 export const json: (body: unknown) => BytesEffect = internal.json
+
+/**
+ * @since 1.0.0
+ * @category constructors
+ */
+export const jsonSchema: <I, A>(schema: Schema.Schema<I, A>) => (body: A) => BytesEffect = internal.jsonSchema
 
 /**
  * @since 1.0.0

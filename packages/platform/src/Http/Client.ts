@@ -10,6 +10,8 @@ import type * as Error from "@effect/platform/Http/ClientError"
 import type * as ClientRequest from "@effect/platform/Http/ClientRequest"
 import type * as ClientResponse from "@effect/platform/Http/ClientResponse"
 import * as internal from "@effect/platform/internal/http/client"
+import type * as ParseResult from "@effect/schema/ParseResult"
+import type * as Schema from "@effect/schema/Schema"
 
 /**
  * @since 1.0.0
@@ -233,6 +235,26 @@ export const retry: {
   <R1, E extends E0, E0, B>(policy: Schedule.Schedule<R1, E0, B>): <R, A>(self: Client<R, E, A>) => Client<R1 | R, E, A>
   <R, E extends E0, E0, A, R1, B>(self: Client<R, E, A>, policy: Schedule.Schedule<R1, E0, B>): Client<R | R1, E, A>
 } = internal.retry
+
+/**
+ * @since 1.0.0
+ * @category schema
+ */
+export const schemaFunction: {
+  <SI, SA>(
+    schema: Schema.Schema<SI, SA>
+  ): <R, E, A>(
+    self: Client<R, E, A>
+  ) => (
+    request: ClientRequest.ClientRequest
+  ) => (a: SA) => Effect.Effect<R, Error.RequestError | E | ParseResult.ParseError, A>
+  <R, E, A, SI, SA>(
+    self: Client<R, E, A>,
+    schema: Schema.Schema<SI, SA>
+  ): (
+    request: ClientRequest.ClientRequest
+  ) => (a: SA) => Effect.Effect<R, Error.RequestError | ParseResult.ParseError | E, A>
+} = internal.schemaFunction
 
 /**
  * @since 1.0.0

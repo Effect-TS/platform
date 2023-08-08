@@ -7,6 +7,7 @@ import * as Headers from "@effect/platform/Http/Headers"
 import type { Method } from "@effect/platform/Http/Method"
 import * as UrlParams from "@effect/platform/Http/UrlParams"
 import * as internalBody from "@effect/platform/internal/http/body"
+import type * as Schema from "@effect/schema/Schema"
 import type * as Stream from "@effect/stream/Stream"
 
 /** @internal */
@@ -333,6 +334,18 @@ export const jsonBody = dual<
   (body: unknown) => (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest,
   (self: ClientRequest.ClientRequest, body: string) => ClientRequest.ClientRequest
 >(2, (self, body) => setBody(self, internalBody.json(body)))
+
+/** @internal */
+export const schemaBody = <I, A>(schema: Schema.Schema<I, A>): {
+  (body: A): (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest
+  (self: ClientRequest.ClientRequest, body: A): ClientRequest.ClientRequest
+} => {
+  const encode = internalBody.jsonSchema(schema)
+  return dual<
+    (body: A) => (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest,
+    (self: ClientRequest.ClientRequest, body: A) => ClientRequest.ClientRequest
+  >(2, (self, body) => setBody(self, encode(body)))
+}
 
 /** @internal */
 export const urlParamsBody = dual<

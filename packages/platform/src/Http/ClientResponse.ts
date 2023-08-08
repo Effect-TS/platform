@@ -11,7 +11,7 @@ export {
    * @since 1.0.0
    * @category schema
    */
-  parse
+  parseSchema
 } from "@effect/platform/Http/IncomingMessage"
 
 /**

@@ -9,8 +9,12 @@ import type * as Body from "@effect/platform/Http/Body"
 import type * as Client from "@effect/platform/Http/Client"
 import type * as Error from "@effect/platform/Http/ClientError"
 import type * as ClientRequest from "@effect/platform/Http/ClientRequest"
+import * as internalBody from "@effect/platform/internal/http/body"
 import * as internalError from "@effect/platform/internal/http/clientError"
+import * as internalRequest from "@effect/platform/internal/http/clientRequest"
 import * as internalResponse from "@effect/platform/internal/http/clientResponse"
+import type * as ParseResult from "@effect/schema/ParseResult"
+import * as Schema from "@effect/schema/Schema"
 import * as Stream from "@effect/stream/Stream"
 
 /** @internal */
@@ -45,6 +49,7 @@ export const fetch = (
               try: (signal) =>
                 globalThis.fetch(url, {
                   ...options,
+                  method: request.method,
                   headers,
                   body,
                   signal
@@ -362,6 +367,42 @@ export const retry: {
   ): Client.Client<R | R1, E, A> =>
   (request) => Effect.retry(self(request), policy)
 )
+
+/** @internal */
+export const schemaFunction = dual<
+  <SI, SA>(
+    schema: Schema.Schema<SI, SA>
+  ) => <R, E, A>(
+    self: Client.Client<R, E, A>
+  ) => (
+    request: ClientRequest.ClientRequest
+  ) => (a: SA) => Effect.Effect<R, E | ParseResult.ParseError | Error.RequestError, A>,
+  <R, E, A, SI, SA>(
+    self: Client.Client<R, E, A>,
+    schema: Schema.Schema<SI, SA>
+  ) => (
+    request: ClientRequest.ClientRequest
+  ) => (a: SA) => Effect.Effect<R, E | ParseResult.ParseError | Error.RequestError, A>
+>(2, (self, schema) => {
+  const encode = Schema.encode(schema)
+  return (request) => (a) =>
+    Effect.flatMap(
+      Effect.tryMap(encode(a), {
+        try: (body) => new TextEncoder().encode(JSON.stringify(body)),
+        catch: (error) =>
+          internalError.requestError({
+            request,
+            reason: "Encode",
+            error
+          })
+      }),
+      (body) =>
+        self(internalRequest.setBody(
+          request,
+          internalBody.bytes(body, "application/json")
+        ))
+    )
+})
 
 /** @internal */
 export const tap = dual<

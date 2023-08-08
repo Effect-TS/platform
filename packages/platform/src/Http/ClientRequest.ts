@@ -8,6 +8,7 @@ import type * as Headers from "@effect/platform/Http/Headers"
 import type { Method } from "@effect/platform/Http/Method"
 import type * as UrlParams from "@effect/platform/Http/UrlParams"
 import * as internal from "@effect/platform/internal/http/clientRequest"
+import type * as Schema from "@effect/schema/Schema"
 import type * as Stream from "@effect/stream/Stream"
 
 /**
@@ -337,6 +338,15 @@ export const jsonBody: {
   (body: unknown): (self: ClientRequest) => ClientRequest
   (self: ClientRequest, body: string): ClientRequest
 } = internal.jsonBody
+
+/**
+ * @since 1.0.0
+ * @category combinators
+ */
+export const schemaBody: <I, A>(schema: Schema.Schema<I, A>) => {
+  (body: A): (self: ClientRequest) => ClientRequest
+  (self: ClientRequest, body: A): ClientRequest
+} = internal.schemaBody
 
 /**
  * @since 1.0.0

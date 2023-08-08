@@ -1,5 +1,6 @@
 import * as Effect from "@effect/io/Effect"
 import type * as Body from "@effect/platform/Http/Body"
+import * as Schema from "@effect/schema/Schema"
 import type * as Stream_ from "@effect/stream/Stream"
 
 /** @internal */
@@ -69,6 +70,19 @@ export const json = (body: unknown): Body.BytesEffect =>
     Effect.try(() => new TextEncoder().encode(JSON.stringify(body))),
     "application/json"
   )
+
+/** @internal */
+export const jsonSchema = <I, A>(schema: Schema.Schema<I, A>) => {
+  const encode = Schema.encode(schema)
+  return (body: A): Body.BytesEffect =>
+    bytesEffect(
+      Effect.flatMap(
+        encode(body),
+        (json) => Effect.try(() => new TextEncoder().encode(JSON.stringify(json)))
+      ),
+      "application/json"
+    )
+}
 
 class FormDataImpl implements Body.FormData {
   readonly [TypeId]: Body.TypeId = TypeId
