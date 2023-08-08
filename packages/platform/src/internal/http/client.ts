@@ -20,6 +20,13 @@ import * as Stream from "@effect/stream/Stream"
 /** @internal */
 export const tag = Context.Tag<Client.Client.Default>("@effect/platform/Http/Client")
 
+const baseUrl = (): string | undefined => {
+  if ("location" in globalThis) {
+    return location.origin + location.pathname
+  }
+  return undefined
+}
+
 /** @internal */
 export const fetch = (
   options: RequestInit = {}
@@ -27,7 +34,7 @@ export const fetch = (
 (request) =>
   Effect.flatMap(
     Effect.try({
-      try: () => new URL(request.url),
+      try: () => new URL(request.url, baseUrl()),
       catch: (_) =>
         internalError.requestError({
           request,
