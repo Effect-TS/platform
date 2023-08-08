@@ -1,6 +1,6 @@
 ---
 title: Runtime.ts
-nav_order: 8
+nav_order: 19
 parent: "@effect/platform"
 ---
 

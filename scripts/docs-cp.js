@@ -17,23 +17,28 @@ function copyFiles(pkg) {
   const name = pkgName(pkg);
   const docs = Path.join("packages", pkg, "docs/modules");
   const dest = Path.join("docs", pkg);
-  const files = Fs.readdirSync(docs, { recursive: true });
+  const files = Fs.readdirSync(docs, { withFileTypes: true });
 
-  for (const file of files) {
-    const path = Path.join(docs, file);
-    const stat = Fs.statSync(path);
+  function handleFiles(root, files) {
+    for (const file of files) {
+      const path = Path.join(docs, root, file.name);
+      const destPath = Path.join(dest, root, file.name);
 
-    if (stat.isDirectory()) {
-      Fs.mkdirSync(Path.join(dest, file), { recursive: true });
-      continue;
+      if (file.isDirectory()) {
+        Fs.mkdirSync(destPath, { recursive: true });
+        handleFiles(file.name, Fs.readdirSync(path, { withFileTypes: true }));
+        continue;
+      }
+
+      const content = Fs.readFileSync(path, "utf8").replace(
+        /^parent: Modules$/m,
+        `parent: "${name}"`
+      );
+      Fs.writeFileSync(destPath, content);
     }
-
-    const content = Fs.readFileSync(path, "utf8").replace(
-      /^parent: Modules$/m,
-      `parent: "${name}"`
-    );
-    Fs.writeFileSync(Path.join(dest, file), content);
   }
+
+  handleFiles("", files);
 }
 
 function generateIndex(pkg, order) {
