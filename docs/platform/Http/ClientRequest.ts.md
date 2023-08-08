@@ -160,7 +160,7 @@ Added in v1.0.0
 ```ts
 export declare const jsonBody: {
   (body: unknown): (self: ClientRequest) => ClientRequest
-  (self: ClientRequest, body: string): ClientRequest
+  (self: ClientRequest, body: unknown): ClientRequest
 }
 ```
 
