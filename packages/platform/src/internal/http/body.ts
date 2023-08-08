@@ -1,6 +1,5 @@
 import * as Effect from "@effect/io/Effect"
 import type * as Body from "@effect/platform/Http/Body"
-import type * as Error from "@effect/platform/Http/ClientError"
 import type * as Stream_ from "@effect/stream/Stream"
 
 /** @internal */
@@ -86,7 +85,7 @@ class StreamImpl implements Body.Stream {
   readonly [TypeId]: Body.TypeId = TypeId
   readonly _tag = "Stream"
   constructor(
-    readonly stream: Stream_.Stream<never, Error.TransportError, Uint8Array>,
+    readonly stream: Stream_.Stream<never, unknown, Uint8Array>,
     readonly contentType?: string,
     readonly contentLength?: number
   ) {}
@@ -94,7 +93,7 @@ class StreamImpl implements Body.Stream {
 
 /** @internal */
 export const stream = (
-  body: Stream_.Stream<never, Error.TransportError, Uint8Array>,
+  body: Stream_.Stream<never, unknown, Uint8Array>,
   contentType?: string,
   contentLength?: number
 ): Body.Stream => new StreamImpl(body, contentType, contentLength)

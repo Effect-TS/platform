@@ -5,7 +5,7 @@ import type * as ClientResponse from "@effect/platform/Http/ClientResponse"
 import type * as FormData from "@effect/platform/Http/FormData"
 import * as Headers from "@effect/platform/Http/Headers"
 import * as IncomingMessage from "@effect/platform/Http/IncomingMessage"
-import * as internalError from "@effect/platform/internal/http/error"
+import * as internalError from "@effect/platform/internal/http/clientError"
 import * as Stream from "@effect/stream/Stream"
 
 /** @internal */
@@ -34,18 +34,16 @@ class ClientResponseImpl implements ClientResponse.ClientResponse {
     return Headers.fromInput(this.source.headers)
   }
 
-  get stream(): Stream.Stream<never, Error.TransportError, Uint8Array> {
+  get stream(): Stream.Stream<never, Error.ResponseError, Uint8Array> {
     return this.source.body
       ? Stream.fromReadableStream(() => this.source.body!, (_) =>
-        internalError.transportError({
-          method: "ClientResponse.stream",
+        internalError.responseError({
           request: this.request,
           response: this,
-          reason: "Unknown",
+          reason: "Decode",
           error: _
         }))
-      : Stream.fail(internalError.transportError({
-        method: "ClientResponse.stream",
+      : Stream.fail(internalError.responseError({
         request: this.request,
         response: this,
         reason: "EmptyBody",
@@ -53,12 +51,11 @@ class ClientResponseImpl implements ClientResponse.ClientResponse {
       }))
   }
 
-  get json(): Effect.Effect<never, Error.TransportError, unknown> {
+  get json(): Effect.Effect<never, Error.ResponseError, unknown> {
     return Effect.tryPromise({
       try: () => this.source.json(),
       catch: (_) =>
-        internalError.transportError({
-          method: "ClientResponse.json",
+        internalError.responseError({
           request: this.request,
           response: this,
           reason: "Decode",
@@ -67,12 +64,11 @@ class ClientResponseImpl implements ClientResponse.ClientResponse {
     })
   }
 
-  get text(): Effect.Effect<never, Error.TransportError, string> {
+  get text(): Effect.Effect<never, Error.ResponseError, string> {
     return Effect.tryPromise({
       try: () => this.source.text(),
       catch: (_) =>
-        internalError.transportError({
-          method: "ClientResponse.text",
+        internalError.responseError({
           request: this.request,
           response: this,
           reason: "Decode",
@@ -81,12 +77,11 @@ class ClientResponseImpl implements ClientResponse.ClientResponse {
     })
   }
 
-  get formData(): Effect.Effect<never, Error.TransportError, FormData> {
+  get formData(): Effect.Effect<never, Error.ResponseError, FormData> {
     return Effect.tryPromise({
       try: () => this.source.formData(),
       catch: (_) =>
-        internalError.transportError({
-          method: "ClientResponse.formData",
+        internalError.responseError({
           request: this.request,
           response: this,
           reason: "Decode",
@@ -95,22 +90,20 @@ class ClientResponseImpl implements ClientResponse.ClientResponse {
     })
   }
 
-  get formDataStream(): Stream.Stream<never, Error.TransportError, FormData.Part> {
-    return Stream.fail(internalError.transportError({
-      method: "ClientResponse.formDataStream",
+  get formDataStream(): Stream.Stream<never, Error.ResponseError, FormData.Part> {
+    return Stream.fail(internalError.responseError({
       request: this.request,
       response: this,
-      reason: "Unknown",
+      reason: "Decode",
       error: "not implemented"
     }))
   }
 
-  get blob(): Effect.Effect<never, Error.TransportError, Blob> {
+  get blob(): Effect.Effect<never, Error.ResponseError, Blob> {
     return Effect.tryPromise({
       try: () => this.source.blob(),
       catch: (_) =>
-        internalError.transportError({
-          method: "ClientResponse.blob",
+        internalError.responseError({
           request: this.request,
           response: this,
           reason: "Decode",

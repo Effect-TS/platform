@@ -56,6 +56,6 @@ export interface File extends Part.Proto {
   readonly key: string
   readonly name: string
   readonly contentType: string
-  readonly content: Stream.Stream<never, Error.TransportError, Uint8Array>
+  readonly content: Stream.Stream<never, Error.RequestError, Uint8Array>
   readonly source?: unknown
 }

@@ -14,7 +14,7 @@ const make = <A extends Error.HttpClientError>(tag: A["_tag"]) => (props: Omit<A
   } as A)
 
 /** @internal */
-export const statusError = make<Error.StatusError>("StatusError")
+export const requestError = make<Error.RequestError>("RequestError")
 
 /** @internal */
-export const transportError = make<Error.TransportError>("TransportError")
+export const responseError = make<Error.ResponseError>("ResponseError")

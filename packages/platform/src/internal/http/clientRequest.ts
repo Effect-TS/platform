@@ -356,7 +356,7 @@ export const formDataBody = dual<
 /** @internal */
 export const streamBody = dual<
   (
-    body: Stream.Stream<never, Error.TransportError, Uint8Array>,
+    body: Stream.Stream<never, Error.RequestError, Uint8Array>,
     options?: {
       readonly contentType?: string
       readonly contentLength?: number
@@ -364,7 +364,7 @@ export const streamBody = dual<
   ) => (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest,
   (
     self: ClientRequest.ClientRequest,
-    body: Stream.Stream<never, Error.TransportError, Uint8Array>,
+    body: Stream.Stream<never, Error.RequestError, Uint8Array>,
     options?: {
       readonly contentType?: string
       readonly contentLength?: number

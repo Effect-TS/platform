@@ -167,16 +167,20 @@ export const filterOrFail: {
 export const filterStatus: {
   (
     f: (status: number) => boolean
-  ): <R, E>(self: Client.WithResponse<R, E>) => Client.WithResponse<R, Error.StatusError | E>
-  <R, E>(self: Client.WithResponse<R, E>, f: (status: number) => boolean): Client.WithResponse<R, Error.StatusError | E>
+  ): <R, E>(self: Client.WithResponse<R, E>) => Client.WithResponse<R, E | Error.ResponseError>
+  <R, E>(
+    self: Client.WithResponse<R, E>,
+    f: (status: number) => boolean
+  ): Client.WithResponse<R, Error.ResponseError | E>
 } = internal.filterStatus
 
 /**
  * @since 1.0.0
  * @category filters
  */
-export const filterStatusOk: <R, E>(self: Client.WithResponse<R, E>) => Client.WithResponse<R, Error.StatusError | E> =
-  internal.filterStatusOk
+export const filterStatusOk: <R, E>(
+  self: Client.WithResponse<R, E>
+) => Client.WithResponse<R, Error.ResponseError | E> = internal.filterStatusOk
 
 /**
  * @since 1.0.0

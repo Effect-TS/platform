@@ -2,7 +2,6 @@
  * @since 1.0.0
  */
 import type * as Effect from "@effect/io/Effect"
-import type * as Error from "@effect/platform/Http/ClientError"
 import * as internal from "@effect/platform/internal/http/body"
 import type * as Stream_ from "@effect/stream/Stream"
 
@@ -103,8 +102,7 @@ export interface BytesEffect extends Body.Proto {
  * @since 1.0.0
  * @category constructors
  */
-export const bytesEffect: (body: Effect.Effect<never, Error.TransportError, Uint8Array>) => BytesEffect =
-  internal.bytesEffect
+export const bytesEffect: (body: Effect.Effect<never, unknown, Uint8Array>) => BytesEffect = internal.bytesEffect
 
 /**
  * @since 1.0.0
@@ -133,11 +131,11 @@ export const formData: (body: globalThis.FormData) => FormData = internal.formDa
  */
 export interface Stream extends Body.Proto {
   readonly _tag: "Stream"
-  readonly stream: Stream_.Stream<never, Error.TransportError, Uint8Array>
+  readonly stream: Stream_.Stream<never, unknown, Uint8Array>
 }
 
 /**
  * @since 1.0.0
  * @category constructors
  */
-export const stream: (body: Stream_.Stream<never, Error.TransportError, Uint8Array>) => Stream = internal.stream
+export const stream: (body: Stream_.Stream<never, unknown, Uint8Array>) => Stream = internal.stream

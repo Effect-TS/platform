@@ -1,6 +1,7 @@
 /**
  * @since 1.0.0
  */
+import type * as Error from "@effect/platform/Http/ClientError"
 import type * as ClientRequest from "@effect/platform/Http/ClientRequest"
 import type * as IncomingMessage from "@effect/platform/Http/IncomingMessage"
 import * as internal from "@effect/platform/internal/http/clientResponse"
@@ -29,7 +30,7 @@ export type TypeId = typeof TypeId
  * @since 1.0.0
  * @category models
  */
-export interface ClientResponse extends IncomingMessage.IncomingMessage {
+export interface ClientResponse extends IncomingMessage.IncomingMessage<Error.ResponseError> {
   readonly [TypeId]: TypeId
   readonly status: number
 }

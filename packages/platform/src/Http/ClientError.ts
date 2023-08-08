@@ -4,7 +4,7 @@
 import type * as Data from "@effect/data/Data"
 import type * as ClientRequest from "@effect/platform/Http/ClientRequest"
 import type * as ClientResponse from "@effect/platform/Http/ClientResponse"
-import * as internal from "@effect/platform/internal/http/error"
+import * as internal from "@effect/platform/internal/http/clientError"
 
 /**
  * @since 1.0.0
@@ -22,7 +22,7 @@ export type TypeId = typeof TypeId
  * @since 1.0.0
  * @category error
  */
-export type HttpClientError = StatusError | TransportError
+export type HttpClientError = RequestError | ResponseError
 
 /**
  * @since 1.0.0
@@ -47,27 +47,10 @@ export namespace HttpError {
  * @since 1.0.0
  * @category error
  */
-export interface StatusError extends HttpError.Proto {
-  readonly _tag: "StatusError"
-  readonly status: number
-}
-
-/**
- * @since 1.0.0
- * @category error
- */
-export const StatusError: (props: Omit<StatusError, HttpError.ProvidedFields>) => StatusError = internal.statusError
-
-/**
- * @since 1.0.0
- * @category error
- */
-export interface TransportError extends HttpError.Proto {
-  readonly _tag: "TransportError"
-  readonly method: string
+export interface RequestError extends HttpError.Proto {
+  readonly _tag: "RequestError"
   readonly request: ClientRequest.ClientRequest
-  readonly response?: ClientResponse.ClientResponse
-  readonly reason: "RequestError" | "Aborted" | "Decode" | "Encode" | "EmptyBody" | "Unknown"
+  readonly reason: "Transport" | "Encode"
   readonly error: unknown
 }
 
@@ -75,5 +58,23 @@ export interface TransportError extends HttpError.Proto {
  * @since 1.0.0
  * @category error
  */
-export const TransportError: (props: Omit<TransportError, HttpError.ProvidedFields>) => TransportError =
-  internal.transportError
+export const RequestError: (props: Omit<RequestError, HttpError.ProvidedFields>) => RequestError = internal.requestError
+
+/**
+ * @since 1.0.0
+ * @category error
+ */
+export interface ResponseError extends HttpError.Proto {
+  readonly _tag: "ResponseError"
+  readonly request: ClientRequest.ClientRequest
+  readonly response: ClientResponse.ClientResponse
+  readonly reason: "StatusCode" | "Decode" | "EmptyBody"
+  readonly error: unknown
+}
+
+/**
+ * @since 1.0.0
+ * @category error
+ */
+export const ResponseError: (props: Omit<ResponseError, HttpError.ProvidedFields>) => ResponseError =
+  internal.responseError

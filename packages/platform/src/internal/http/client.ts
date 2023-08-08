@@ -9,8 +9,8 @@ import type * as Body from "@effect/platform/Http/Body"
 import type * as Client from "@effect/platform/Http/Client"
 import type * as Error from "@effect/platform/Http/ClientError"
 import type * as ClientRequest from "@effect/platform/Http/ClientRequest"
+import * as internalError from "@effect/platform/internal/http/clientError"
 import * as internalResponse from "@effect/platform/internal/http/clientResponse"
-import * as internalError from "@effect/platform/internal/http/error"
 import * as Stream from "@effect/stream/Stream"
 
 /** @internal */
@@ -25,8 +25,7 @@ export const fetch = (
     Effect.try({
       try: () => new URL(request.url),
       catch: (_) =>
-        internalError.transportError({
-          method: "fetch",
+        internalError.requestError({
           request,
           reason: "Encode",
           error: _
@@ -46,16 +45,14 @@ export const fetch = (
               try: (signal) =>
                 globalThis.fetch(url, {
                   ...options,
-                  method: request.method,
                   headers,
                   body,
                   signal
                 }),
               catch: (_) =>
-                internalError.transportError({
-                  method: "fetch",
+                internalError.requestError({
                   request,
-                  reason: "RequestError",
+                  reason: "Transport",
                   error: _
                 })
             }),
@@ -65,8 +62,7 @@ export const fetch = (
         return request.body._tag === "BytesEffect" ?
           Effect.flatMap(
             Effect.mapError(request.body.body, (error) =>
-              internalError.transportError({
-                method: "fetch",
+              internalError.requestError({
                 reason: "Encode",
                 request,
                 error
@@ -279,25 +275,31 @@ export const filterOrFail = dual<
 export const filterStatus = dual<
   (f: (status: number) => boolean) => <R, E>(
     self: Client.Client.WithResponse<R, E>
-  ) => Client.Client.WithResponse<R, E | Error.StatusError>,
+  ) => Client.Client.WithResponse<R, E | Error.ResponseError>,
   <R, E>(
     self: Client.Client.WithResponse<R, E>,
     f: (status: number) => boolean
-  ) => Client.Client.WithResponse<R, E | Error.StatusError>
+  ) => Client.Client.WithResponse<R, E | Error.ResponseError>
 >(
   2,
   (self, f) => (request) =>
     Effect.filterOrFail(
       self(request),
       (response) => f(response.status),
-      () => internalError.statusError({ status: 404 })
+      (response) =>
+        internalError.responseError({
+          request,
+          response,
+          reason: "StatusCode",
+          error: "non 2xx status code"
+        })
     )
 )
 
 /** @internal */
 export const filterStatusOk: <R, E>(
   self: Client.Client.WithResponse<R, E>
-) => Client.Client.WithResponse<R, E | Error.StatusError> = filterStatus((status) => status >= 200 && status < 300)
+) => Client.Client.WithResponse<R, E | Error.ResponseError> = filterStatus((status) => status >= 200 && status < 300)
 
 /** @internal */
 export const map = dual<
