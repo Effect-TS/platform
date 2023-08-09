@@ -30,7 +30,7 @@ export const fetch = (
     UrlParams.makeUrl(request.url, request.urlParams, (_) =>
       internalError.requestError({
         request,
-        reason: "Encode",
+        reason: "InvalidUrl",
         error: _
       })),
     (url) =>

@@ -22,7 +22,7 @@ import { pipeline } from "node:stream/promises"
 
 /** @internal */
 export const HttpAgentTypeId: NodeClient.HttpAgentTypeId = Symbol.for(
-  "@effect/platform-node/Http/NodeClient/NodeHttpAgent"
+  "@effect/platform-node/Http/NodeClient/HttpAgent"
 ) as NodeClient.HttpAgentTypeId
 
 /** @internal */
@@ -56,7 +56,7 @@ const fromAgent = (agent: NodeClient.HttpAgent): Client.Client.Default => (reque
     UrlParams.makeUrl(request.url, request.urlParams, (_) =>
       Error.RequestError({
         request,
-        reason: "Encode",
+        reason: "InvalidUrl",
         error: _
       })),
     (url) =>
@@ -223,7 +223,12 @@ class ClientResponseImpl implements ClientResponse.ClientResponse {
 
   get formData(): Effect.Effect<never, Error.ResponseError, FormData> {
     return Effect.tryPromise({
-      try: () => new Response(Readable.toWeb(this.source) as any).formData(),
+      try: () =>
+        new Response(Readable.toWeb(this.source) as any, {
+          headers: new globalThis.Headers(this.source.headers as any),
+          status: this.source.statusCode,
+          statusText: this.source.statusMessage
+        }).formData(),
       catch: (_) =>
         Error.ResponseError({
           request: this.request,
