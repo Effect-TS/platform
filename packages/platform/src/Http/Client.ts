@@ -189,8 +189,11 @@ export const filterStatusOk: <R, E>(
  * @since 1.0.0
  * @category constructors
  */
-export const make: <R, E, A>(f: (request: ClientRequest.ClientRequest) => Effect.Effect<R, E, A>) => Client<R, E, A> =
-  internal.make
+export const make: (
+  f: (
+    request: ClientRequest.ClientRequest.NonEffectBody
+  ) => Effect.Effect<never, Error.HttpClientError, ClientResponse.ClientResponse>
+) => Client.Default = internal.make
 
 /**
  * @since 1.0.0

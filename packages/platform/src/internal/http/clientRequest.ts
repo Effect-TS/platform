@@ -1,5 +1,8 @@
 import { dual } from "@effect/data/Function"
 import { pipeArguments } from "@effect/data/Pipeable"
+import * as Effect from "@effect/io/Effect"
+import type * as PlatformError from "@effect/platform/Error"
+import type * as FileSystem from "@effect/platform/FileSystem"
 import type * as Body from "@effect/platform/Http/Body"
 import type * as Error from "@effect/platform/Http/ClientError"
 import type * as ClientRequest from "@effect/platform/Http/ClientRequest"
@@ -7,6 +10,7 @@ import * as Headers from "@effect/platform/Http/Headers"
 import type { Method } from "@effect/platform/Http/Method"
 import * as UrlParams from "@effect/platform/Http/UrlParams"
 import * as internalBody from "@effect/platform/internal/http/body"
+import * as internalError from "@effect/platform/internal/http/clientError"
 import type * as Schema from "@effect/schema/Schema"
 import type * as Stream from "@effect/stream/Stream"
 
@@ -293,12 +297,26 @@ export const setBody = dual<
 })
 
 /** @internal */
-export const binaryBody = dual<
+export const uint8ArrayBody = dual<
   (body: Uint8Array, contentType?: string) => (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest,
   (self: ClientRequest.ClientRequest, body: Uint8Array, contentType?: string) => ClientRequest.ClientRequest
 >(
   (args) => isClientRequest(args[0]),
-  (self, body, contentType = "application/octet-stream") => setBody(self, internalBody.bytes(body, contentType))
+  (self, body, contentType = "application/octet-stream") => setBody(self, internalBody.uint8Array(body, contentType))
+)
+
+/** @internal */
+export const effectBody = dual<
+  (
+    body: Effect.Effect<never, unknown, Body.NonEffect>
+  ) => (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest,
+  (
+    self: ClientRequest.ClientRequest,
+    body: Effect.Effect<never, unknown, Body.NonEffect>
+  ) => ClientRequest.ClientRequest
+>(
+  2,
+  (self, body) => setBody(self, internalBody.effect(body))
 )
 
 /** @internal */
@@ -315,6 +333,30 @@ export const jsonBody = dual<
   (body: unknown) => (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest,
   (self: ClientRequest.ClientRequest, body: unknown) => ClientRequest.ClientRequest
 >(2, (self, body) => setBody(self, internalBody.json(body)))
+
+/** @internal */
+export const unsafeJsonBody = dual<
+  (body: unknown) => (self: ClientRequest.ClientRequest) => ClientRequest.ClientRequest,
+  (self: ClientRequest.ClientRequest, body: unknown) => ClientRequest.ClientRequest
+>(2, (self, body) => setBody(self, internalBody.unsafeJson(body)))
+
+/** @internal */
+export const fileBody = dual<
+  (
+    path: string,
+    contentType?: string
+  ) => (
+    self: ClientRequest.ClientRequest
+  ) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, ClientRequest.ClientRequest>,
+  (
+    self: ClientRequest.ClientRequest,
+    path: string,
+    contentType?: string
+  ) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, ClientRequest.ClientRequest>
+>(
+  (args) => isClientRequest(args[0]),
+  (self, path) => Effect.map(internalBody.file(path), (body) => setBody(self, body))
+)
 
 /** @internal */
 export const schemaBody = <I, A>(schema: Schema.Schema<I, A>): {
@@ -369,3 +411,19 @@ export const streamBody = dual<
   (self, body, { contentLength, contentType = "application/octet-stream" } = {}) =>
     setBody(self, internalBody.stream(body, contentType, contentLength))
 )
+
+/** @internal */
+export const resolveBody = (
+  self: ClientRequest.ClientRequest
+): Effect.Effect<never, Error.RequestError, ClientRequest.ClientRequest.NonEffectBody> =>
+  self.body._tag === "Effect"
+    ? Effect.map(
+      Effect.mapError(self.body.effect, (error) =>
+        internalError.requestError({
+          reason: "Encode",
+          request: self,
+          error
+        })),
+      (body) => setBody(self, body) as ClientRequest.ClientRequest.NonEffectBody
+    )
+    : Effect.succeed(self as ClientRequest.ClientRequest.NonEffectBody)

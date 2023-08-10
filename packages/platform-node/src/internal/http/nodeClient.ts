@@ -90,7 +90,7 @@ const fromAgent = (agent: NodeClient.HttpAgent): Client.Client.Default =>
 const sendBody = (
   nodeRequest: Http.ClientRequest,
   request: ClientRequest.ClientRequest,
-  body: Body.Body
+  body: Body.NonEffect
 ): Effect.Effect<never, Error.RequestError, void> =>
   Effect.suspend((): Effect.Effect<never, Error.RequestError, void> => {
     switch (body._tag) {
@@ -98,7 +98,7 @@ const sendBody = (
         nodeRequest.end()
         return waitForFinish(nodeRequest, request)
       }
-      case "Bytes":
+      case "Uint8Array":
       case "Raw": {
         nodeRequest.end(body.body)
         return waitForFinish(nodeRequest, request)
@@ -119,20 +119,6 @@ const sendBody = (
               error: _
             })
         })
-      }
-      case "BytesEffect": {
-        return Effect.flatMap(
-          Effect.mapError(body.body, (_) =>
-            Error.RequestError({
-              request,
-              reason: "Encode",
-              error: _
-            })),
-          (bytes) => {
-            nodeRequest.end(bytes)
-            return waitForFinish(nodeRequest, request)
-          }
-        )
       }
       case "Stream": {
         return Stream.run(
