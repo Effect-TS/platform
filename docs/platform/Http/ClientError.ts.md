@@ -54,7 +54,7 @@ Added in v1.0.0
 export interface RequestError extends HttpError.Proto {
   readonly _tag: 'RequestError'
   readonly request: ClientRequest.ClientRequest
-  readonly reason: 'Transport' | 'Encode'
+  readonly reason: 'Transport' | 'Encode' | 'InvalidUrl'
   readonly error: unknown
 }
 ```

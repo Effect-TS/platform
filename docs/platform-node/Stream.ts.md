@@ -1,6 +1,6 @@
 ---
 title: Stream.ts
-nav_order: 12
+nav_order: 13
 parent: "@effect/platform-node"
 ---
 
@@ -12,14 +12,17 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [constructor](#constructor)
+- [constructors](#constructors)
   - [fromReadable](#fromreadable)
-- [model](#model)
+- [conversions](#conversions)
+  - [toString](#tostring)
+  - [toUint8Array](#touint8array)
+- [models](#models)
   - [FromReadableOptions (interface)](#fromreadableoptions-interface)
 
 ---
 
-# constructor
+# constructors
 
 ## fromReadable
 
@@ -35,7 +38,36 @@ export declare const fromReadable: <E, A>(
 
 Added in v1.0.0
 
-# model
+# conversions
+
+## toString
+
+**Signature**
+
+```ts
+export declare const toString: <E>(
+  evaluate: LazyArg<Readable>,
+  onError: (error: unknown) => E,
+  encoding?: BufferEncoding
+) => Effect<never, E, string>
+```
+
+Added in v1.0.0
+
+## toUint8Array
+
+**Signature**
+
+```ts
+export declare const toUint8Array: <E>(
+  evaluate: LazyArg<Readable>,
+  onError: (error: unknown) => E
+) => Effect<never, E, Uint8Array>
+```
+
+Added in v1.0.0
+
+# models
 
 ## FromReadableOptions (interface)
 
