@@ -22,6 +22,7 @@ Added in v1.0.0
 - [constructors](#constructors)
   - [empty](#empty)
   - [fromInput](#frominput)
+  - [makeUrl](#makeurl)
 - [models](#models)
   - [Input (type alias)](#input-type-alias)
   - [UrlParams (interface)](#urlparams-interface)
@@ -113,6 +114,20 @@ Added in v1.0.0
 
 ```ts
 export declare const fromInput: (input: Input) => UrlParams
+```
+
+Added in v1.0.0
+
+## makeUrl
+
+**Signature**
+
+```ts
+export declare const makeUrl: <E>(
+  url: string,
+  params: UrlParams,
+  onError: (e: unknown) => E
+) => Effect.Effect<never, E, URL>
 ```
 
 Added in v1.0.0

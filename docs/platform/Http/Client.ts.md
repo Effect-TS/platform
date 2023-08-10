@@ -15,6 +15,7 @@ Added in v1.0.0
 - [constructors](#constructors)
   - [fetch](#fetch)
   - [fetchOk](#fetchok)
+  - [make](#make)
 - [error handling](#error-handling)
   - [catchAll](#catchall)
   - [catchTag](#catchtag)
@@ -61,6 +62,18 @@ Added in v1.0.0
 
 ```ts
 export declare const fetchOk: (options?: any) => Client.Default
+```
+
+Added in v1.0.0
+
+## make
+
+**Signature**
+
+```ts
+export declare const make: <R, E, A>(
+  f: (request: ClientRequest.ClientRequest) => Effect.Effect<R, E, A>
+) => Client<R, E, A>
 ```
 
 Added in v1.0.0
@@ -343,7 +356,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface Client<R, E, A> {
+export interface Client<R, E, A> extends Pipeable {
   (request: ClientRequest.ClientRequest): Effect.Effect<R, E, A>
 }
 ```
