@@ -1,6 +1,6 @@
 ---
 title: HttpClient.ts
-nav_order: 17
+nav_order: 21
 parent: "@effect/platform"
 ---
 

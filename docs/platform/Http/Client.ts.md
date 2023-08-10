@@ -1,6 +1,6 @@
 ---
 title: Http/Client.ts
-nav_order: 8
+nav_order: 9
 parent: "@effect/platform"
 ---
 
@@ -71,9 +71,11 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: <R, E, A>(
-  f: (request: ClientRequest.ClientRequest) => Effect.Effect<R, E, A>
-) => Client<R, E, A>
+export declare const make: (
+  f: (
+    request: ClientRequest.ClientRequest.NonEffectBody
+  ) => Effect.Effect<never, Error.HttpClientError, ClientResponse.ClientResponse>
+) => Client.Default
 ```
 
 Added in v1.0.0

@@ -1,6 +1,6 @@
 ---
 title: Http/UrlParams.ts
-nav_order: 16
+nav_order: 20
 parent: "@effect/platform"
 ---
 

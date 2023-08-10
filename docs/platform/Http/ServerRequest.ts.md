@@ -1,10 +1,10 @@
 ---
-title: Http/ClientResponse.ts
-nav_order: 12
+title: Http/ServerRequest.ts
+nav_order: 18
 parent: "@effect/platform"
 ---
 
-## ClientResponse overview
+## ServerRequest overview
 
 Added in v1.0.0
 
@@ -12,10 +12,8 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [constructors](#constructors)
-  - [fromWeb](#fromweb)
 - [models](#models)
-  - [ClientResponse (interface)](#clientresponse-interface)
+  - [ServerRequest (interface)](#serverrequest-interface)
 - [schema](#schema)
   - [parseSchema](#parseschema)
 - [type ids](#type-ids)
@@ -24,28 +22,17 @@ Added in v1.0.0
 
 ---
 
-# constructors
-
-## fromWeb
-
-**Signature**
-
-```ts
-export declare const fromWeb: (request: ClientRequest.ClientRequest, source: Response) => ClientResponse
-```
-
-Added in v1.0.0
-
 # models
 
-## ClientResponse (interface)
+## ServerRequest (interface)
 
 **Signature**
 
 ```ts
-export interface ClientResponse extends IncomingMessage.IncomingMessage<Error.ResponseError> {
+export interface ServerRequest extends IncomingMessage.IncomingMessage<Error.RequestError> {
   readonly [TypeId]: TypeId
-  readonly status: number
+  readonly url: string
+  readonly method: Method
 }
 ```
 

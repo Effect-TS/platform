@@ -1,6 +1,6 @@
 ---
 title: Http/ClientRequest.ts
-nav_order: 10
+nav_order: 11
 parent: "@effect/platform"
 ---
 
@@ -19,7 +19,8 @@ Added in v1.0.0
   - [appendUrlParam](#appendurlparam)
   - [appendUrlParams](#appendurlparams)
   - [basicAuth](#basicauth)
-  - [binaryBody](#binarybody)
+  - [effectBody](#effectbody)
+  - [fileBody](#filebody)
   - [formDataBody](#formdatabody)
   - [jsonBody](#jsonbody)
   - [modify](#modify)
@@ -34,6 +35,8 @@ Added in v1.0.0
   - [setUrlParams](#seturlparams)
   - [streamBody](#streambody)
   - [textBody](#textbody)
+  - [uint8ArrayBody](#uint8arraybody)
+  - [unsafeJsonBody](#unsafejsonbody)
   - [updateUrl](#updateurl)
   - [urlParamsBody](#urlparamsbody)
 - [constructors](#constructors)
@@ -127,14 +130,33 @@ export declare const basicAuth: {
 
 Added in v1.0.0
 
-## binaryBody
+## effectBody
 
 **Signature**
 
 ```ts
-export declare const binaryBody: {
-  (body: Uint8Array, contentType?: string): (self: ClientRequest) => ClientRequest
-  (self: ClientRequest, body: Uint8Array, contentType?: string): ClientRequest
+export declare const effectBody: {
+  (body: Effect.Effect<never, unknown, Body.NonEffect>): (self: ClientRequest) => ClientRequest
+  (self: ClientRequest, body: Effect.Effect<never, unknown, Body.NonEffect>): ClientRequest
+}
+```
+
+Added in v1.0.0
+
+## fileBody
+
+**Signature**
+
+```ts
+export declare const fileBody: {
+  (path: string, contentType?: string): (
+    self: ClientRequest
+  ) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, ClientRequest>
+  (self: ClientRequest, path: string, contentType?: string): Effect.Effect<
+    FileSystem.FileSystem,
+    PlatformError.PlatformError,
+    ClientRequest
+  >
 }
 ```
 
@@ -319,6 +341,32 @@ Added in v1.0.0
 export declare const textBody: {
   (body: string, contentType?: string): (self: ClientRequest) => ClientRequest
   (self: ClientRequest, body: string, contentType?: string): ClientRequest
+}
+```
+
+Added in v1.0.0
+
+## uint8ArrayBody
+
+**Signature**
+
+```ts
+export declare const uint8ArrayBody: {
+  (body: Uint8Array, contentType?: string): (self: ClientRequest) => ClientRequest
+  (self: ClientRequest, body: Uint8Array, contentType?: string): ClientRequest
+}
+```
+
+Added in v1.0.0
+
+## unsafeJsonBody
+
+**Signature**
+
+```ts
+export declare const unsafeJsonBody: {
+  (body: unknown): (self: ClientRequest) => ClientRequest
+  (self: ClientRequest, body: unknown): ClientRequest
 }
 ```
 

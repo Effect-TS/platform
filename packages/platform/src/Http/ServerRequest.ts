@@ -6,7 +6,13 @@ import type { Method } from "@effect/platform/Http/Method"
 import type * as Error from "@effect/platform/Http/ServerError"
 import * as internal from "@effect/platform/internal/http/serverRequest"
 
-export { parseSchema } from "@effect/platform/Http/IncomingMessage"
+export {
+  /**
+   * @since 1.0.0
+   * @category schema
+   */
+  parseSchema
+} from "@effect/platform/Http/IncomingMessage"
 
 /**
  * @since 1.0.0

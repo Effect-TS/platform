@@ -1,6 +1,6 @@
 ---
 title: Http/Body.ts
-nav_order: 7
+nav_order: 8
 parent: "@effect/platform"
 ---
 
@@ -13,8 +13,7 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructors](#constructors)
-  - [bytes](#bytes)
-  - [bytesEffect](#byteseffect)
+  - [effect](#effect)
   - [empty](#empty)
   - [formData](#formdata)
   - [json](#json)
@@ -22,14 +21,17 @@ Added in v1.0.0
   - [raw](#raw)
   - [stream](#stream)
   - [text](#text)
+  - [uint8Array](#uint8array)
+  - [unsafeJson](#unsafejson)
 - [models](#models)
   - [Body (type alias)](#body-type-alias)
-  - [Bytes (interface)](#bytes-interface)
-  - [BytesEffect (interface)](#byteseffect-interface)
+  - [EffectBody (interface)](#effectbody-interface)
   - [Empty (interface)](#empty-interface)
   - [FormData (interface)](#formdata-interface)
+  - [NonEffect (type alias)](#noneffect-type-alias)
   - [Raw (interface)](#raw-interface)
   - [Stream (interface)](#stream-interface)
+  - [Uint8Array (interface)](#uint8array-interface)
 - [type ids](#type-ids)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
@@ -38,22 +40,12 @@ Added in v1.0.0
 
 # constructors
 
-## bytes
+## effect
 
 **Signature**
 
 ```ts
-export declare const bytes: (body: Uint8Array) => Bytes
-```
-
-Added in v1.0.0
-
-## bytesEffect
-
-**Signature**
-
-```ts
-export declare const bytesEffect: (body: Effect.Effect<never, unknown, Uint8Array>) => BytesEffect
+export declare const effect: (body: Effect.Effect<never, unknown, NonEffect>) => EffectBody
 ```
 
 Added in v1.0.0
@@ -83,7 +75,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const json: (body: unknown) => BytesEffect
+export declare const json: (body: unknown) => EffectBody
 ```
 
 Added in v1.0.0
@@ -93,7 +85,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const jsonSchema: <I, A>(schema: Schema.Schema<I, A>) => (body: A) => BytesEffect
+export declare const jsonSchema: <I, A>(schema: Schema.Schema<I, A>) => (body: A) => EffectBody
 ```
 
 Added in v1.0.0
@@ -113,7 +105,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const stream: (body: Stream_.Stream<never, unknown, Uint8Array>) => Stream
+export declare const stream: (body: Stream_.Stream<never, unknown, globalThis.Uint8Array>) => Stream
 ```
 
 Added in v1.0.0
@@ -123,7 +115,27 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const text: (body: string, contentType?: string) => Bytes
+export declare const text: (body: string, contentType?: string) => Uint8Array
+```
+
+Added in v1.0.0
+
+## uint8Array
+
+**Signature**
+
+```ts
+export declare const uint8Array: (body: globalThis.Uint8Array) => Uint8Array
+```
+
+Added in v1.0.0
+
+## unsafeJson
+
+**Signature**
+
+```ts
+export declare const unsafeJson: (body: unknown) => Uint8Array
 ```
 
 Added in v1.0.0
@@ -135,32 +147,19 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type Body = Empty | Raw | Bytes | BytesEffect | FormData | Stream
+export type Body = Empty | Raw | Uint8Array | EffectBody | FormData | Stream
 ```
 
 Added in v1.0.0
 
-## Bytes (interface)
+## EffectBody (interface)
 
 **Signature**
 
 ```ts
-export interface Bytes extends Body.Proto {
-  readonly _tag: 'Bytes'
-  readonly body: Uint8Array
-}
-```
-
-Added in v1.0.0
-
-## BytesEffect (interface)
-
-**Signature**
-
-```ts
-export interface BytesEffect extends Body.Proto {
-  readonly _tag: 'BytesEffect'
-  readonly body: Effect.Effect<never, unknown, Uint8Array>
+export interface EffectBody extends Body.Proto {
+  readonly _tag: 'Effect'
+  readonly effect: Effect.Effect<never, unknown, NonEffect>
 }
 ```
 
@@ -191,6 +190,16 @@ export interface FormData extends Body.Proto {
 
 Added in v1.0.0
 
+## NonEffect (type alias)
+
+**Signature**
+
+```ts
+export type NonEffect = Exclude<Body, EffectBody>
+```
+
+Added in v1.0.0
+
 ## Raw (interface)
 
 **Signature**
@@ -211,7 +220,20 @@ Added in v1.0.0
 ```ts
 export interface Stream extends Body.Proto {
   readonly _tag: 'Stream'
-  readonly stream: Stream_.Stream<never, unknown, Uint8Array>
+  readonly stream: Stream_.Stream<never, unknown, globalThis.Uint8Array>
+}
+```
+
+Added in v1.0.0
+
+## Uint8Array (interface)
+
+**Signature**
+
+```ts
+export interface Uint8Array extends Body.Proto {
+  readonly _tag: 'Uint8Array'
+  readonly body: globalThis.Uint8Array
 }
 ```
 

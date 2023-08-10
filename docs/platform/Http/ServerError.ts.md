@@ -1,10 +1,10 @@
 ---
-title: Http/ClientError.ts
-nav_order: 10
+title: Http/ServerError.ts
+nav_order: 17
 parent: "@effect/platform"
 ---
 
-## ClientError overview
+## ServerError overview
 
 Added in v1.0.0
 
@@ -13,7 +13,7 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [error](#error)
-  - [HttpClientError (type alias)](#httpclienterror-type-alias)
+  - [HttpServerError (type alias)](#httpservererror-type-alias)
   - [RequestError](#requesterror)
   - [RequestError (interface)](#requesterror-interface)
   - [ResponseError](#responseerror)
@@ -26,12 +26,12 @@ Added in v1.0.0
 
 # error
 
-## HttpClientError (type alias)
+## HttpServerError (type alias)
 
 **Signature**
 
 ```ts
-export type HttpClientError = RequestError | ResponseError
+export type HttpServerError = RequestError | ResponseError
 ```
 
 Added in v1.0.0
@@ -53,8 +53,8 @@ Added in v1.0.0
 ```ts
 export interface RequestError extends HttpError.Proto {
   readonly _tag: 'RequestError'
-  readonly request: ClientRequest.ClientRequest
-  readonly reason: 'Transport' | 'Encode' | 'InvalidUrl'
+  readonly request: ServerRequest.ServerRequest
+  readonly reason: 'Transport' | 'Decode'
   readonly error: unknown
 }
 ```
@@ -78,9 +78,9 @@ Added in v1.0.0
 ```ts
 export interface ResponseError extends HttpError.Proto {
   readonly _tag: 'ResponseError'
-  readonly request: ClientRequest.ClientRequest
-  readonly response: ClientResponse.ClientResponse
-  readonly reason: 'StatusCode' | 'Decode' | 'EmptyBody'
+  readonly request: ServerRequest.ServerRequest
+  readonly response: ServerResponse.ServerResponse
+  readonly reason: 'Decode'
   readonly error: unknown
 }
 ```
