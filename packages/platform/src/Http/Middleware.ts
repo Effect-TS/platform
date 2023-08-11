@@ -40,6 +40,12 @@ export const tracer: Middleware<never, unknown, unknown> = internal.tracer
 
 /**
  * @since 1.0.0
+ * @category constructors
+ */
+export const loggerTracer: Middleware<never, unknown, unknown> = internal.loggerTracer
+
+/**
+ * @since 1.0.0
  * @category combinators
  */
 export const apply: {
