@@ -1,10 +1,10 @@
 ---
-title: HttpClient.ts
-nav_order: 9
+title: HttpServer.ts
+nav_order: 10
 parent: "@effect/platform-node"
 ---
 
-## HttpClient overview
+## HttpServer overview
 
 Added in v1.0.0
 

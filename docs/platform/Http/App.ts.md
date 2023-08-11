@@ -15,12 +15,27 @@ Added in v1.0.0
 - [combinators](#combinators)
   - [compose](#compose)
   - [composeInput](#composeinput)
+  - [map](#map)
+  - [mapEffect](#mapeffect)
+  - [mapRequest](#maprequest)
+  - [mapRequestEffect](#maprequesteffect)
+  - [tap](#tap)
+  - [tapRequest](#taprequest)
+- [constructors](#constructors)
+  - [make](#make)
+  - [makeDefault](#makedefault)
 - [error handling](#error-handling)
   - [catchAll](#catchall)
   - [catchTag](#catchtag)
   - [catchTags](#catchtags)
 - [models](#models)
+  - [Default (type alias)](#default-type-alias)
   - [HttpApp (interface)](#httpapp-interface)
+- [refinements](#refinements)
+  - [isHttpApp](#ishttpapp)
+- [type ids](#type-ids)
+  - [TypeId](#typeid)
+  - [TypeId (type alias)](#typeid-type-alias)
 
 ---
 
@@ -58,6 +73,136 @@ export declare const composeInput: {
     that: HttpApp<R2, E2, In2, Out2>
   ): HttpApp<R | R2, E | E2, In2, Out>
 }
+```
+
+Added in v1.0.0
+
+## map
+
+**Signature**
+
+```ts
+export declare const map: {
+  <A, In, B>(f: (a: A, request: In) => B): <R, E>(self: HttpApp<R, E, In, A>) => HttpApp<R, E, In, B>
+  <R, E, In, A, B>(self: HttpApp<R, E, In, A>, f: (a: A, request: In) => B): HttpApp<R, E, In, B>
+}
+```
+
+Added in v1.0.0
+
+## mapEffect
+
+**Signature**
+
+```ts
+export declare const mapEffect: {
+  <A, In, R2, E1, B>(f: (a: A, request: In) => Effect.Effect<R2, E1, B>): <R, E>(
+    self: HttpApp<R, E, In, A>
+  ) => HttpApp<R2 | R, E1 | E, In, B>
+  <R, E, In, A, R2, E1, B>(self: HttpApp<R, E, In, A>, f: (a: A, request: In) => Effect.Effect<R2, E1, B>): HttpApp<
+    R | R2,
+    E | E1,
+    In,
+    B
+  >
+}
+```
+
+Added in v1.0.0
+
+## mapRequest
+
+**Signature**
+
+```ts
+export declare const mapRequest: {
+  <In, In2>(f: (request: In2) => In): <R, E, A>(self: HttpApp<R, E, In, A>) => HttpApp<R, E, In2, A>
+  <R, E, In, A, In2>(self: HttpApp<R, E, In, A>, f: (request: In2) => In): HttpApp<R, E, In2, A>
+}
+```
+
+Added in v1.0.0
+
+## mapRequestEffect
+
+**Signature**
+
+```ts
+export declare const mapRequestEffect: {
+  <In2, R2, E1, In>(f: (request: In2) => Effect.Effect<R2, E1, In>): <R, E, A>(
+    self: HttpApp<R, E, In, A>
+  ) => HttpApp<R2 | R, E1 | E, In2, A>
+  <R, E, In, A, In2, R2, E1>(self: HttpApp<R, E, In, A>, f: (request: In2) => Effect.Effect<R2, E1, In>): HttpApp<
+    R | R2,
+    E | E1,
+    In2,
+    A
+  >
+}
+```
+
+Added in v1.0.0
+
+## tap
+
+**Signature**
+
+```ts
+export declare const tap: {
+  <A, In, R2, E1, _>(f: (a: A, request: In) => Effect.Effect<R2, E1, _>): <R, E>(
+    self: HttpApp<R, E, In, A>
+  ) => HttpApp<R2 | R, E1 | E, In, A>
+  <R, E, In, A, R2, E1, _>(self: HttpApp<R, E, In, A>, f: (a: A, request: In) => Effect.Effect<R2, E1, _>): HttpApp<
+    R | R2,
+    E | E1,
+    In,
+    A
+  >
+}
+```
+
+Added in v1.0.0
+
+## tapRequest
+
+**Signature**
+
+```ts
+export declare const tapRequest: {
+  <In, R2, E1, _>(f: (request: In) => Effect.Effect<R2, E1, _>): <R, E, A>(
+    self: HttpApp<R, E, In, A>
+  ) => HttpApp<R2 | R, E1 | E, In, A>
+  <R, E, In, A, R2, E1, _>(self: HttpApp<R, E, In, A>, f: (request: In) => Effect.Effect<R2, E1, _>): HttpApp<
+    R | R2,
+    E | E1,
+    In,
+    A
+  >
+}
+```
+
+Added in v1.0.0
+
+# constructors
+
+## make
+
+**Signature**
+
+```ts
+export declare const make: <R, E, In, Out>(f: (req: In) => Effect.Effect<R, E, Out>) => HttpApp<R, E, In, Out>
+```
+
+Added in v1.0.0
+
+## makeDefault
+
+**Signature**
+
+```ts
+export declare const makeDefault: <R, E>(
+  f: (request: ServerRequest.ServerRequest) => Effect.Effect<R, E, ServerResponse.ServerResponse>
+) => Default<R, E>
 ```
 
 Added in v1.0.0
@@ -161,14 +306,59 @@ Added in v1.0.0
 
 # models
 
+## Default (type alias)
+
+**Signature**
+
+```ts
+export type Default<R, E> = HttpApp<R, E, ServerRequest.ServerRequest, ServerResponse.ServerResponse>
+```
+
+Added in v1.0.0
+
 ## HttpApp (interface)
 
 **Signature**
 
 ```ts
 export interface HttpApp<R, E, In, Out> extends Pipeable {
+  readonly [TypeId]: TypeId
   (request: In): Effect.Effect<R, E, Out>
 }
+```
+
+Added in v1.0.0
+
+# refinements
+
+## isHttpApp
+
+**Signature**
+
+```ts
+export declare const isHttpApp: (u: unknown) => u is HttpApp<unknown, unknown, unknown, unknown>
+```
+
+Added in v1.0.0
+
+# type ids
+
+## TypeId
+
+**Signature**
+
+```ts
+export declare const TypeId: typeof TypeId
+```
+
+Added in v1.0.0
+
+## TypeId (type alias)
+
+**Signature**
+
+```ts
+export type TypeId = typeof TypeId
 ```
 
 Added in v1.0.0

@@ -1,6 +1,6 @@
 ---
 title: Http/ServerResponse.ts
-nav_order: 19
+nav_order: 21
 parent: "@effect/platform"
 ---
 

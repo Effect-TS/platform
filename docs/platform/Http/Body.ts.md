@@ -221,6 +221,8 @@ Added in v1.0.0
 export interface Stream extends Body.Proto {
   readonly _tag: 'Stream'
   readonly stream: Stream_.Stream<never, unknown, globalThis.Uint8Array>
+  readonly contentType: string
+  readonly contentLength?: number
 }
 ```
 
@@ -234,6 +236,8 @@ Added in v1.0.0
 export interface Uint8Array extends Body.Proto {
   readonly _tag: 'Uint8Array'
   readonly body: globalThis.Uint8Array
+  readonly contentType: string
+  readonly contentLength: number
 }
 ```
 

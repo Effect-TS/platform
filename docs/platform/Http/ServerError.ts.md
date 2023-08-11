@@ -1,6 +1,6 @@
 ---
 title: Http/ServerError.ts
-nav_order: 17
+nav_order: 19
 parent: "@effect/platform"
 ---
 
@@ -18,6 +18,8 @@ Added in v1.0.0
   - [RequestError (interface)](#requesterror-interface)
   - [ResponseError](#responseerror)
   - [ResponseError (interface)](#responseerror-interface)
+  - [ServeError](#serveerror)
+  - [ServeError (interface)](#serveerror-interface)
 - [type id](#type-id)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
@@ -54,7 +56,7 @@ Added in v1.0.0
 export interface RequestError extends HttpError.Proto {
   readonly _tag: 'RequestError'
   readonly request: ServerRequest.ServerRequest
-  readonly reason: 'Transport' | 'Decode'
+  readonly reason: 'Transport' | 'Decode' | 'NotFound'
   readonly error: unknown
 }
 ```
@@ -81,6 +83,29 @@ export interface ResponseError extends HttpError.Proto {
   readonly request: ServerRequest.ServerRequest
   readonly response: ServerResponse.ServerResponse
   readonly reason: 'Decode'
+  readonly error: unknown
+}
+```
+
+Added in v1.0.0
+
+## ServeError
+
+**Signature**
+
+```ts
+export declare const ServeError: (props: Omit<ServeError, HttpError.ProvidedFields>) => ServeError
+```
+
+Added in v1.0.0
+
+## ServeError (interface)
+
+**Signature**
+
+```ts
+export interface ServeError extends HttpError.Proto {
+  readonly _tag: 'ServeError'
   readonly error: unknown
 }
 ```

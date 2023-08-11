@@ -1,6 +1,6 @@
 ---
 title: Stream.ts
-nav_order: 13
+nav_order: 15
 parent: "@effect/platform-node"
 ---
 
