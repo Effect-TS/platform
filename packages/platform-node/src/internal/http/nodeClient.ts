@@ -4,15 +4,13 @@ import * as Effect from "@effect/io/Effect"
 import * as Layer from "@effect/io/Layer"
 import type * as Scope from "@effect/io/Scope"
 import type * as NodeClient from "@effect/platform-node/Http/NodeClient"
+import { IncomingMessageImpl } from "@effect/platform-node/internal/http/incomingMessage"
 import * as NodeSink from "@effect/platform-node/Sink"
-import * as NodeStream from "@effect/platform-node/Stream"
 import type * as Body from "@effect/platform/Http/Body"
 import * as Client from "@effect/platform/Http/Client"
 import * as Error from "@effect/platform/Http/ClientError"
 import type * as ClientRequest from "@effect/platform/Http/ClientRequest"
 import * as ClientResponse from "@effect/platform/Http/ClientResponse"
-import * as Headers from "@effect/platform/Http/Headers"
-import * as IncomingMessage from "@effect/platform/Http/IncomingMessage"
 import * as UrlParams from "@effect/platform/Http/UrlParams"
 import * as Stream from "@effect/stream/Stream"
 import * as Http from "node:http"
@@ -169,85 +167,24 @@ const waitForFinish = (nodeRequest: Http.ClientRequest, request: ClientRequest.C
     })
   })
 
-class ClientResponseImpl implements ClientResponse.ClientResponse {
-  readonly [IncomingMessage.TypeId]: IncomingMessage.TypeId = IncomingMessage.TypeId
+class ClientResponseImpl extends IncomingMessageImpl<Error.ResponseError> implements ClientResponse.ClientResponse {
   readonly [ClientResponse.TypeId]: ClientResponse.TypeId = ClientResponse.TypeId
 
   constructor(
     readonly request: ClientRequest.ClientRequest,
-    readonly source: Http.IncomingMessage
-  ) {}
+    source: Http.IncomingMessage
+  ) {
+    super(source, (_) =>
+      Error.ResponseError({
+        request,
+        response: this,
+        reason: "Decode",
+        error: _
+      }))
+  }
 
   get status() {
     return this.source.statusCode!
-  }
-
-  get headers() {
-    return Headers.fromInput(this.source.headers as any)
-  }
-
-  get text(): Effect.Effect<never, Error.ResponseError, string> {
-    return NodeStream.toString(() => this.source, (_) =>
-      Error.ResponseError({
-        request: this.request,
-        response: this,
-        reason: "Decode",
-        error: _
-      }))
-  }
-
-  get json(): Effect.Effect<never, Error.ResponseError, unknown> {
-    return Effect.tryMap(this.text, {
-      try: (_) => JSON.parse(_) as unknown,
-      catch: (_) =>
-        Error.ResponseError({
-          request: this.request,
-          response: this,
-          reason: "Decode",
-          error: _
-        })
-    })
-  }
-
-  get formData(): Effect.Effect<never, Error.ResponseError, FormData> {
-    return Effect.tryPromise({
-      try: () =>
-        new Response(Readable.toWeb(this.source) as any, {
-          headers: new globalThis.Headers(this.source.headers as any),
-          status: this.source.statusCode,
-          statusText: this.source.statusMessage
-        }).formData(),
-      catch: (_) =>
-        Error.ResponseError({
-          request: this.request,
-          response: this,
-          reason: "Decode",
-          error: _
-        })
-    })
-  }
-
-  get stream(): Stream.Stream<never, Error.ResponseError, Uint8Array> {
-    return NodeStream.fromReadable<Error.ResponseError, Uint8Array>(
-      () => this.source,
-      (_) =>
-        Error.ResponseError({
-          request: this.request,
-          response: this,
-          reason: "Decode",
-          error: _
-        })
-    )
-  }
-
-  get arrayBuffer(): Effect.Effect<never, Error.ResponseError, ArrayBuffer> {
-    return NodeStream.toUint8Array(() => this.source, (_) =>
-      Error.ResponseError({
-        request: this.request,
-        response: this,
-        reason: "Decode",
-        error: _
-      }))
   }
 }
 

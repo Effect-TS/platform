@@ -9,40 +9,50 @@ import * as internal from "@effect/platform/internal/http/app"
 
 /**
  * @since 1.0.0
+ * @category type ids
+ */
+export const TypeId: unique symbol = internal.TypeId
+
+/**
+ * @since 1.0.0
+ * @category type ids
+ */
+export type TypeId = typeof TypeId
+
+/**
+ * @since 1.0.0
  * @category models
  */
 export interface HttpApp<R, E, In, Out> extends Pipeable {
+  readonly [TypeId]: TypeId
   (request: In): Effect.Effect<R, E, Out>
 }
 
 /**
  * @since 1.0.0
+ * @category models
  */
-export namespace HttpApp {
-  /**
-   * @since 1.0.0
-   * @category models
-   */
-  export type Default<R> = HttpApp<R, never, ServerRequest.ServerRequest, ServerResponse.ServerResponse>
+export type Default<R, E> = HttpApp<R, E, ServerRequest.ServerRequest, ServerResponse.ServerResponse>
 
-  /**
-   * @since 1.0.0
-   * @category models
-   */
-  export type Middleware<R, E> = HttpApp<R, E, ServerRequest.ServerRequest, ServerResponse.ServerResponse>
+/**
+ * @since 1.0.0
+ * @category refinements
+ */
+export const isHttpApp: (u: unknown) => u is HttpApp<unknown, unknown, unknown, unknown> = internal.isHttpApp
 
-  /**
-   * @since 1.0.0
-   * @category models
-   */
-  export type RequestMiddleware<R, E> = HttpApp<R, E, ServerRequest.ServerRequest, ServerRequest.ServerRequest>
+/**
+ * @since 1.0.0
+ * @category constructors
+ */
+export const make: <R, E, In, Out>(f: (req: In) => Effect.Effect<R, E, Out>) => HttpApp<R, E, In, Out> = internal.make
 
-  /**
-   * @since 1.0.0
-   * @category models
-   */
-  export type ResponseMiddleware<R, E> = HttpApp<R, E, ServerResponse.ServerResponse, ServerResponse.ServerResponse>
-}
+/**
+ * @since 1.0.0
+ * @category constructors
+ */
+export const makeDefault: <R, E>(
+  f: (request: ServerRequest.ServerRequest) => Effect.Effect<R, E, ServerResponse.ServerResponse>
+) => Default<R, E> = internal.makeDefault
 
 /**
  * @since 1.0.0
@@ -159,3 +169,77 @@ export const composeInput: {
     that: HttpApp<R2, E2, In2, Out2>
   ): HttpApp<R | R2, E | E2, In2, Out>
 } = internal.composeInput
+
+/**
+ * @since 1.0.0
+ * @category combinators
+ */
+export const map: {
+  <A, In, B>(f: (a: A, request: In) => B): <R, E>(self: HttpApp<R, E, In, A>) => HttpApp<R, E, In, B>
+  <R, E, In, A, B>(self: HttpApp<R, E, In, A>, f: (a: A, request: In) => B): HttpApp<R, E, In, B>
+} = internal.map
+
+/**
+ * @since 1.0.0
+ * @category combinators
+ */
+export const mapEffect: {
+  <A, In, R2, E1, B>(
+    f: (a: A, request: In) => Effect.Effect<R2, E1, B>
+  ): <R, E>(self: HttpApp<R, E, In, A>) => HttpApp<R2 | R, E1 | E, In, B>
+  <R, E, In, A, R2, E1, B>(
+    self: HttpApp<R, E, In, A>,
+    f: (a: A, request: In) => Effect.Effect<R2, E1, B>
+  ): HttpApp<R | R2, E | E1, In, B>
+} = internal.mapEffect
+
+/**
+ * @since 1.0.0
+ * @category combinators
+ */
+export const mapRequest: {
+  <In, In2>(f: (request: In2) => In): <R, E, A>(self: HttpApp<R, E, In, A>) => HttpApp<R, E, In2, A>
+  <R, E, In, A, In2>(self: HttpApp<R, E, In, A>, f: (request: In2) => In): HttpApp<R, E, In2, A>
+} = internal.mapRequest
+
+/**
+ * @since 1.0.0
+ * @category combinators
+ */
+export const mapRequestEffect: {
+  <In2, R2, E1, In>(
+    f: (request: In2) => Effect.Effect<R2, E1, In>
+  ): <R, E, A>(self: HttpApp<R, E, In, A>) => HttpApp<R2 | R, E1 | E, In2, A>
+  <R, E, In, A, In2, R2, E1>(
+    self: HttpApp<R, E, In, A>,
+    f: (request: In2) => Effect.Effect<R2, E1, In>
+  ): HttpApp<R | R2, E | E1, In2, A>
+} = internal.mapRequestEffect
+
+/**
+ * @since 1.0.0
+ * @category combinators
+ */
+export const tap: {
+  <A, In, R2, E1, _>(
+    f: (a: A, request: In) => Effect.Effect<R2, E1, _>
+  ): <R, E>(self: HttpApp<R, E, In, A>) => HttpApp<R2 | R, E1 | E, In, A>
+  <R, E, In, A, R2, E1, _>(
+    self: HttpApp<R, E, In, A>,
+    f: (a: A, request: In) => Effect.Effect<R2, E1, _>
+  ): HttpApp<R | R2, E | E1, In, A>
+} = internal.tap
+
+/**
+ * @since 1.0.0
+ * @category combinators
+ */
+export const tapRequest: {
+  <In, R2, E1, _>(
+    f: (request: In) => Effect.Effect<R2, E1, _>
+  ): <R, E, A>(self: HttpApp<R, E, In, A>) => HttpApp<R2 | R, E1 | E, In, A>
+  <R, E, In, A, R2, E1, _>(
+    self: HttpApp<R, E, In, A>,
+    f: (request: In) => Effect.Effect<R2, E1, _>
+  ): HttpApp<R | R2, E | E1, In, A>
+} = internal.tapRequest

@@ -37,7 +37,7 @@ class Uint8ArrayImpl implements Body.Uint8Array {
   readonly _tag = "Uint8Array"
   constructor(
     readonly body: Uint8Array,
-    readonly contentType?: string
+    readonly contentType: string
   ) {}
   get contentLength(): number {
     return this.body.length
@@ -46,7 +46,7 @@ class Uint8ArrayImpl implements Body.Uint8Array {
 
 /** @internal */
 export const uint8Array = (body: Uint8Array, contentType?: string): Body.Uint8Array =>
-  new Uint8ArrayImpl(body, contentType)
+  new Uint8ArrayImpl(body, contentType ?? "application/octet-stream")
 
 /** @internal */
 export const text = (body: string, contentType?: string): Body.Uint8Array =>
@@ -113,7 +113,7 @@ class StreamImpl implements Body.Stream {
   readonly _tag = "Stream"
   constructor(
     readonly stream: Stream_.Stream<never, unknown, Uint8Array>,
-    readonly contentType?: string,
+    readonly contentType: string,
     readonly contentLength?: number
   ) {}
 }
@@ -123,4 +123,4 @@ export const stream = (
   body: Stream_.Stream<never, unknown, Uint8Array>,
   contentType?: string,
   contentLength?: number
-): Body.Stream => new StreamImpl(body, contentType, contentLength)
+): Body.Stream => new StreamImpl(body, contentType ?? "application/octet-stream", contentLength)

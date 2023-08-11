@@ -82,6 +82,8 @@ export const raw: (body: unknown) => Raw = internal.raw
 export interface Uint8Array extends Body.Proto {
   readonly _tag: "Uint8Array"
   readonly body: globalThis.Uint8Array
+  readonly contentType: string
+  readonly contentLength: number
 }
 
 /**
@@ -151,6 +153,8 @@ export const formData: (body: globalThis.FormData) => FormData = internal.formDa
 export interface Stream extends Body.Proto {
   readonly _tag: "Stream"
   readonly stream: Stream_.Stream<never, unknown, globalThis.Uint8Array>
+  readonly contentType: string
+  readonly contentLength?: number
 }
 
 /**

@@ -50,7 +50,7 @@ export namespace HttpError {
 export interface RequestError extends HttpError.Proto {
   readonly _tag: "RequestError"
   readonly request: ServerRequest.ServerRequest
-  readonly reason: "Transport" | "Decode"
+  readonly reason: "Transport" | "Decode" | "NotFound"
   readonly error: unknown
 }
 
@@ -78,3 +78,18 @@ export interface ResponseError extends HttpError.Proto {
  */
 export const ResponseError: (props: Omit<ResponseError, HttpError.ProvidedFields>) => ResponseError =
   internal.responseError
+
+/**
+ * @since 1.0.0
+ * @category error
+ */
+export interface ServeError extends HttpError.Proto {
+  readonly _tag: "ServeError"
+  readonly error: unknown
+}
+
+/**
+ * @since 1.0.0
+ * @category error
+ */
+export const ServeError: (props: Omit<ServeError, HttpError.ProvidedFields>) => ServeError = internal.serveError
