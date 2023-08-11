@@ -6,8 +6,7 @@ const ServerLive = Http.server.layer(() => createServer(), { port: 3000 })
 const response = Http.response.text("hello world")
 
 Http.app.makeDefault((_req) => Effect.as(Effect.log("request"), response)).pipe(
-  Http.middleware.apply(Http.middleware.loggerTracer),
-  Http.server.serveJoin(),
+  Http.server.serveJoin(Http.middleware.loggerTracer),
   Effect.provideLayer(ServerLive),
   Effect.runPromise
 )

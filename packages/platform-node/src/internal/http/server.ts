@@ -6,6 +6,7 @@ import * as Runtime from "@effect/io/Runtime"
 import type * as Scope from "@effect/io/Scope"
 import { IncomingMessageImpl } from "@effect/platform-node/internal/http/incomingMessage"
 import * as NodeSink from "@effect/platform-node/Sink"
+import * as App from "@effect/platform/Http/App"
 import * as Headers from "@effect/platform/Http/Headers"
 import type { Method } from "@effect/platform/Http/Method"
 import * as Server from "@effect/platform/Http/Server"
@@ -57,26 +58,30 @@ export const make = (
       })
     }))
 
-    return Server.make((httpApp, _middleware) =>
-      Effect.forkIn(
+    return Server.make((httpApp, middleware) => {
+      const nonEffectApp = App.mapEffect(httpApp, ServerResponse.toNonEffectBody)
+      function handler(nodeRequest: Http.IncomingMessage, nodeResponse: Http.ServerResponse) {
+        const handledApp = middleware ?
+          middleware(
+            App.tap(
+              nonEffectApp,
+              (response, request) => handleResponse(request, response, nodeResponse)
+            ) as any
+          ) :
+          App.tap(
+            nonEffectApp,
+            (response, request) => handleResponse(request, response, nodeResponse)
+          )
+        runFork(
+          Effect.catchAllCause(
+            handledApp(new ServerRequestImpl(nodeRequest)),
+            (_) => Effect.logError("unhandled error in http app", _)
+          )
+        )
+      }
+      return Effect.forkIn(
         Effect.all([
           Effect.async<never, never, never>(() => {
-            // TODO: handle errors and middleware
-            function handler(nodeRequest: Http.IncomingMessage, nodeResponse: Http.ServerResponse) {
-              const request = new ServerRequestImpl(nodeRequest)
-              runFork(
-                Effect.catchAllCause(
-                  Effect.tap(
-                    Effect.flatMap(
-                      httpApp(request),
-                      (_) => ServerResponse.toNonEffectBody(_, request)
-                    ),
-                    (response) => handleResponse(request, response, nodeResponse)
-                  ),
-                  Effect.logError
-                )
-              )
-            }
             server.on("request", handler)
             return Effect.sync(() => server.off("request", handler))
           }),
@@ -84,7 +89,7 @@ export const make = (
         ], { discard: true, concurrency: "unbounded" }) as Effect.Effect<never, Error.ServeError, never>,
         scope
       )
-    )
+    })
   })
 
 class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implements ServerRequest.ServerRequest {
