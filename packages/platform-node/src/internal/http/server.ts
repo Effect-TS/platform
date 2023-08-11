@@ -60,21 +60,15 @@ export const make = (
 
     return Server.make((httpApp, middleware) => {
       const nonEffectApp = App.mapEffect(httpApp, ServerResponse.toNonEffectBody)
+      const handledApp = middleware ?
+        middleware(
+          App.tap(nonEffectApp, handleResponse) as any
+        ) :
+        App.tap(nonEffectApp, handleResponse)
       function handler(nodeRequest: Http.IncomingMessage, nodeResponse: Http.ServerResponse) {
-        const handledApp = middleware ?
-          middleware(
-            App.tap(
-              nonEffectApp,
-              (response, request) => handleResponse(request, response, nodeResponse)
-            ) as any
-          ) :
-          App.tap(
-            nonEffectApp,
-            (response, request) => handleResponse(request, response, nodeResponse)
-          )
         runFork(
           Effect.catchAllCause(
-            handledApp(new ServerRequestImpl(nodeRequest)),
+            handledApp(new ServerRequestImpl(nodeRequest, nodeResponse)),
             (_) => Effect.logError("unhandled error in http app", _)
           )
         )
@@ -96,7 +90,8 @@ class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implemen
   readonly [ServerRequest.TypeId]: ServerRequest.TypeId = ServerRequest.TypeId
 
   constructor(
-    readonly source: Http.IncomingMessage
+    readonly source: Http.IncomingMessage,
+    readonly response: Http.ServerResponse
   ) {
     super(source, (_) =>
       Error.RequestError({
@@ -122,11 +117,11 @@ export const layer = (
 ) => Layer.scoped(Server.HttpServer, make(evaluate, options))
 
 const handleResponse = (
-  request: ServerRequest.ServerRequest,
   response: ServerResponse.ServerResponse.NonEffectBody,
-  nodeResponse: Http.ServerResponse
+  request: ServerRequest.ServerRequest
 ) =>
   Effect.suspend(() => {
+    const nodeResponse = (request as ServerRequestImpl).response
     switch (response.body._tag) {
       case "Empty": {
         nodeResponse.writeHead(
