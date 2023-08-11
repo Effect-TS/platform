@@ -66,15 +66,4 @@ export const compose = dual<
 >(2, (self, that) => (inApp) => that(self(inApp) as any))
 
 /** @internal */
-export const composeInput = dual<
-  <R2, EIn, EIn2, EOut2 extends EIn>(that: Middleware.Middleware<R2, EIn2, EOut2>) => <R, EOut>(
-    self: Middleware.Middleware<R, EIn, EOut>
-  ) => Middleware.Middleware<R | R2, EIn2, EOut>,
-  <R, EIn, EOut, R2, EIn2, EOut2 extends EIn>(
-    self: Middleware.Middleware<R, EIn, EOut>,
-    that: Middleware.Middleware<R2, EIn2, EOut2>
-  ) => Middleware.Middleware<R | R2, EIn2, EOut>
->(2, (self, that) => (inApp) => self(that(inApp) as any))
-
-/** @internal */
 export const loggerTracer = compose(tracer, logger)

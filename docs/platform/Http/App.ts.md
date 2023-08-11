@@ -14,7 +14,6 @@ Added in v1.0.0
 
 - [combinators](#combinators)
   - [compose](#compose)
-  - [composeInput](#composeinput)
   - [map](#map)
   - [mapEffect](#mapeffect)
   - [mapRequest](#maprequest)
@@ -54,24 +53,6 @@ export declare const compose: {
     self: HttpApp<R, E, In, Out>,
     that: HttpApp<R2, E2, InX, Out2>
   ): HttpApp<R | R2, E | E2, In, Out2>
-}
-```
-
-Added in v1.0.0
-
-## composeInput
-
-**Signature**
-
-```ts
-export declare const composeInput: {
-  <R2, E2, In2, In extends In2, Out2>(that: HttpApp<R2, E2, In2, Out2>): <R, E, Out>(
-    self: HttpApp<R, E, In, Out>
-  ) => HttpApp<R2 | R, E2 | E, In2, Out>
-  <R, E, In2, In extends In2, Out, R2, E2, Out2>(
-    self: HttpApp<R, E, In, Out>,
-    that: HttpApp<R2, E2, In2, Out2>
-  ): HttpApp<R | R2, E | E2, In2, Out>
 }
 ```
 

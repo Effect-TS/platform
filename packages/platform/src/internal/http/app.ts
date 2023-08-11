@@ -206,23 +206,6 @@ export const compose = dual<
   ))
 
 /** @internal */
-export const composeInput = dual<
-  <R2, E2, In2, In extends In2, Out2>(that: App.HttpApp<R2, E2, In2, Out2>) => <R, E, Out>(
-    self: App.HttpApp<R, E, In, Out>
-  ) => App.HttpApp<R | R2, E | E2, In2, Out>,
-  <R, E, In2, In extends In2, Out, R2, E2, Out2>(
-    self: App.HttpApp<R, E, In, Out>,
-    that: App.HttpApp<R2, E2, In2, Out2>
-  ) => App.HttpApp<R | R2, E | E2, In2, Out>
->(2, (self, that) =>
-  make((req) =>
-    Effect.flatMap(
-      that(req),
-      (out) => self(out as any)
-    )
-  ))
-
-/** @internal */
 export const map = dual<
   <A, In, B>(f: (a: A, request: In) => B) => <R, E>(
     self: App.HttpApp<R, E, In, A>

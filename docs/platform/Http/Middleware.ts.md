@@ -15,7 +15,6 @@ Added in v1.0.0
 - [combinators](#combinators)
   - [apply](#apply)
   - [compose](#compose)
-  - [composeInput](#composeinput)
 - [constructors](#constructors)
   - [fromEffect](#fromeffect)
   - [logger](#logger)
@@ -59,24 +58,6 @@ export declare const compose: {
     self: Middleware<R, EIn, EOut>,
     that: Middleware<R2, EIn2, EOut2>
   ): Middleware<R | R2, EIn, EOut2>
-}
-```
-
-Added in v1.0.0
-
-## composeInput
-
-**Signature**
-
-```ts
-export declare const composeInput: {
-  <R2, EIn, EIn2, EOut2 extends EIn>(that: Middleware<R2, EIn2, EOut2>): <R, EOut>(
-    self: Middleware<R, EIn, EOut>
-  ) => Middleware<R2 | R, EIn2, EOut>
-  <R, EIn, EOut, R2, EIn2, EOut2 extends EIn>(
-    self: Middleware<R, EIn, EOut>,
-    that: Middleware<R2, EIn2, EOut2>
-  ): Middleware<R | R2, EIn2, EOut>
 }
 ```
 
