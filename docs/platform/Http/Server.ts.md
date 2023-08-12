@@ -14,7 +14,6 @@ Added in v1.0.0
 
 - [accessors](#accessors)
   - [serve](#serve)
-  - [serveJoin](#servejoin)
 - [constructors](#constructors)
   - [HttpServer](#httpserver)
   - [make](#make)
@@ -33,39 +32,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const serve: {
-  (): <R, E>(
-    httpApp: App.Default<R, E>
-  ) => Effect.Effect<HttpServer | R, never, Fiber.RuntimeFiber<Error.ServeError, never>>
-  <R, E, App extends App.Default<any, any>>(middleware: Middleware.Middleware.Applied<R, E, App>): (
-    httpApp: App.Default<R, E>
-  ) => Effect.Effect<HttpServer | App.HttpApp.Context<App>, never, Fiber.RuntimeFiber<Error.ServeError, never>>
-  <R, E>(httpApp: App.Default<R, E>): Effect.Effect<HttpServer | R, never, Fiber.RuntimeFiber<Error.ServeError, never>>
-  <R, E, App extends App.Default<any, any>>(
-    httpApp: App.Default<R, E>,
-    middleware: Middleware.Middleware.Applied<R, E, App>
-  ): Effect.Effect<HttpServer | App.HttpApp.Context<App>, never, Fiber.RuntimeFiber<Error.ServeError, never>>
-}
-```
-
-Added in v1.0.0
-
-## serveJoin
-
-**Signature**
-
-```ts
-export declare const serveJoin: {
-  (): <R, E>(httpApp: App.Default<R, E>) => Effect.Effect<HttpServer | R, Error.ServeError, never>
-  <R, E, App extends App.Default<any, any>>(middleware: Middleware.Middleware.Applied<R, E, App>): (
-    httpApp: App.Default<R, E>
-  ) => Effect.Effect<HttpServer | App.HttpApp.Context<App>, Error.ServeError, never>
-  <R, E>(httpApp: App.Default<R, E>): Effect.Effect<HttpServer | R, Error.ServeError, never>
-  <R, E, App extends App.Default<any, any>>(
-    httpApp: App.Default<R, E>,
-    middleware: Middleware.Middleware.Applied<R, E, App>
-  ): Effect.Effect<HttpServer | App.HttpApp.Context<App>, Error.ServeError, never>
-}
+export declare const serve: <R, E>(httpApp: App.Default<R, E>) => Effect.Effect<HttpServer | R, Error.ServeError, never>
 ```
 
 Added in v1.0.0
@@ -88,10 +55,7 @@ Added in v1.0.0
 
 ```ts
 export declare const make: (
-  serve: (
-    httpApp: App.Default<unknown, unknown>,
-    middleware?: Middleware.Middleware
-  ) => Effect.Effect<never, never, Fiber.RuntimeFiber<Error.ServeError, never>>
+  serve: (httpApp: App.Default<unknown, unknown>) => Effect.Effect<never, Error.ServeError, never>
 ) => HttpServer
 ```
 
@@ -106,13 +70,7 @@ Added in v1.0.0
 ```ts
 export interface HttpServer {
   readonly [TypeId]: TypeId
-  readonly serve: {
-    <R, E>(httpApp: App.Default<R, E>): Effect.Effect<R, never, Fiber.RuntimeFiber<Error.ServeError, never>>
-    <R, E, App extends App.Default<any, any>>(
-      httpApp: App.Default<R, E>,
-      middleware: Middleware.Middleware.Applied<R, E, App>
-    ): Effect.Effect<App.HttpApp.Context<App>, never, Fiber.RuntimeFiber<Error.ServeError, never>>
-  }
+  readonly serve: <R, E>(httpApp: App.Default<R, E>) => Effect.Effect<R, Error.ServeError, never>
 }
 ```
 

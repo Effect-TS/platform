@@ -6,9 +6,10 @@ import { createServer } from "node:http"
 const ServerLive = Http.server.layer(() => createServer(), { port: 3000 })
 const response = Http.response.text("hello world")
 
-Http.app.makeDefault((_req) => Effect.succeed(response)).pipe(
-  Http.server.serveJoin(Http.middleware.loggerTracer),
-  // Http.server.serveJoin(),
+Http.app.makeDefault(() => Effect.succeed(response)).pipe(
+  Http.server.respond,
+  Http.middleware.logger,
+  Http.server.serve,
   Effect.provideLayer(ServerLive),
   Effect.tapErrorCause(Effect.logError),
   runMain

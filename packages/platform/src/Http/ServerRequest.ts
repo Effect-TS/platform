@@ -36,5 +36,7 @@ export interface ServerRequest extends IncomingMessage.IncomingMessage<Error.Req
   readonly url: string
   readonly originalUrl: string
   readonly method: Method
+
+  readonly setUrl: (url: string) => ServerRequest
   readonly replaceHeaders: (headers: Headers.Headers) => ServerRequest
 }

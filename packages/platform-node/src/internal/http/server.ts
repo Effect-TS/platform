@@ -1,4 +1,4 @@
-import type { LazyArg } from "@effect/data/Function"
+import { flow, type LazyArg } from "@effect/data/Function"
 import * as Effect from "@effect/io/Effect"
 import * as Fiber from "@effect/io/Fiber"
 import * as Layer from "@effect/io/Layer"
@@ -9,6 +9,7 @@ import * as NodeSink from "@effect/platform-node/Sink"
 import * as App from "@effect/platform/Http/App"
 import * as Headers from "@effect/platform/Http/Headers"
 import type { Method } from "@effect/platform/Http/Method"
+import * as Middleware from "@effect/platform/Http/Middleware"
 import * as Server from "@effect/platform/Http/Server"
 import * as Error from "@effect/platform/Http/ServerError"
 import * as ServerRequest from "@effect/platform/Http/ServerRequest"
@@ -24,14 +25,13 @@ export const make = (
   options: Net.ListenOptions
 ): Effect.Effect<Scope.Scope, never, Server.HttpServer> =>
   Effect.gen(function*(_) {
-    const scope = yield* _(Effect.scope)
     const server = evaluate()
     const runtime = (yield* _(Effect.runtime<never>())) as Runtime.Runtime<unknown>
     const runFork = Runtime.runFork(runtime)
 
     const serverFiber = yield* _(
-      Effect.gen(function*(_) {
-        yield* _(Effect.addFinalizer(() =>
+      Effect.zipRight(
+        Effect.addFinalizer(() =>
           Effect.async<never, never, void>((resume) => {
             server.close((error) => {
               if (error) {
@@ -41,15 +41,15 @@ export const make = (
               }
             })
           })
-        ))
-        yield* _(Effect.async<never, Error.ServeError, never>((resume) => {
+        ),
+        Effect.async<never, Error.ServeError, never>((resume) => {
           server.on("error", (error) => {
             resume(Effect.fail(Error.ServeError({ error })))
           })
-        }))
-      }),
+        })
+      ),
       Effect.scoped,
-      Effect.forkIn(scope)
+      Effect.forkScoped
     )
 
     yield* _(Effect.async<never, never, void>((resume) => {
@@ -58,33 +58,40 @@ export const make = (
       })
     }))
 
-    return Server.make((httpApp, middleware) => {
-      const nonEffectApp = App.mapEffect(httpApp, ServerResponse.toNonEffectBody)
-      const handledApp = middleware ?
-        middleware(
-          App.tap(nonEffectApp, handleResponse) as any
-        ) :
-        App.tap(nonEffectApp, handleResponse)
+    return Server.make((httpApp) => {
+      const handledApp = App.catchAllCause(httpApp, (cause, request) => {
+        const nodeResponse = (request as ServerRequestImpl).response
+        if (!nodeResponse.headersSent) {
+          nodeResponse.writeHead(500)
+        }
+        if (!nodeResponse.closed) {
+          nodeResponse.end()
+        }
+        return Effect.logError("unhandled error in http app", cause)
+      })
       function handler(nodeRequest: Http.IncomingMessage, nodeResponse: Http.ServerResponse) {
-        runFork(
-          Effect.catchAllCause(
-            handledApp(new ServerRequestImpl(nodeRequest, nodeResponse)),
-            (_) => Effect.logError("unhandled error in http app", _)
-          )
-        )
+        runFork(handledApp(new ServerRequestImpl(nodeRequest, nodeResponse)))
       }
-      return Effect.forkIn(
-        Effect.all([
-          Effect.async<never, never, never>(() => {
-            server.on("request", handler)
-            return Effect.sync(() => server.off("request", handler))
-          }),
-          Fiber.join(serverFiber)
-        ], { discard: true, concurrency: "unbounded" }) as Effect.Effect<never, Error.ServeError, never>,
-        scope
-      )
+      return Effect.all([
+        Effect.async<never, never, never>(() => {
+          server.on("request", handler)
+          return Effect.sync(() => server.off("request", handler))
+        }),
+        Fiber.join(serverFiber)
+      ], { discard: true, concurrency: "unbounded" }) as Effect.Effect<never, Error.ServeError, never>
     })
   })
+
+/** @internal */
+export const respond = Middleware.make(<R, E>(httpApp: App.Default<R, E>) =>
+  App.tap(
+    App.mapEffect(httpApp, ServerResponse.toNonEffectBody),
+    handleResponse
+  )
+)
+
+/** @internal */
+export const respondServe = flow(respond, Server.serve)
 
 class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implements ServerRequest.ServerRequest {
   readonly [ServerRequest.TypeId]: ServerRequest.TypeId = ServerRequest.TypeId
@@ -116,6 +123,15 @@ class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implemen
     return this.headersOverride
   }
 
+  setUrl(url: string): ServerRequest.ServerRequest {
+    return new ServerRequestImpl(
+      this.source,
+      this.response,
+      url,
+      this.headersOverride
+    )
+  }
+
   replaceHeaders(headers: Headers.Headers): ServerRequest.ServerRequest {
     return new ServerRequestImpl(
       this.source,
@@ -136,7 +152,7 @@ const handleResponse = (
   response: ServerResponse.ServerResponse.NonEffectBody,
   request: ServerRequest.ServerRequest
 ) =>
-  Effect.suspend(() => {
+  Effect.suspend((): Effect.Effect<never, Error.ResponseError, void> => {
     const nodeResponse = (request as ServerRequestImpl).response
     switch (response.body._tag) {
       case "Empty": {
@@ -199,7 +215,16 @@ const handleResponse = (
         }
         nodeResponse.writeHead(response.status, headers)
         return Stream.run(
-          response.body.stream,
+          Stream.mapError(
+            response.body.stream,
+            (error) =>
+              Error.ResponseError({
+                request,
+                response,
+                reason: "Decode",
+                error
+              })
+          ),
           NodeSink.fromWritable(() => nodeResponse, (error) =>
             Error.ResponseError({
               request,
