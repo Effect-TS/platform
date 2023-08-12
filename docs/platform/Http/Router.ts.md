@@ -25,7 +25,14 @@ Added in v1.0.0
   - [Route (interface)](#route-interface)
   - [RouteContext (interface)](#routecontext-interface)
   - [Router (interface)](#router-interface)
+- [route context](#route-context)
+  - [RouteContext](#routecontext)
+  - [params](#params)
+  - [request](#request)
+  - [schemaParams](#schemaparams)
+  - [searchParams](#searchparams)
 - [routing](#routing)
+  - [all](#all)
   - [del](#del)
   - [get](#get)
   - [head](#head)
@@ -36,8 +43,6 @@ Added in v1.0.0
   - [post](#post)
   - [put](#put)
   - [route](#route)
-- [tags](#tags)
-  - [RouteContext](#routecontext)
 - [type ids](#type-ids)
   - [RouteContextTypeId](#routecontexttypeid)
   - [RouteContextTypeId (type alias)](#routecontexttypeid-type-alias)
@@ -131,7 +136,7 @@ Added in v1.0.0
 ```ts
 export interface Route<R, E> {
   readonly [RouteTypeId]: RouteTypeId
-  readonly method: Method.Method
+  readonly method: Method.Method | '*'
   readonly path: string
   readonly handler: Route.Handler<R, E>
 }
@@ -168,7 +173,79 @@ export interface Router<R, E> extends Pipeable {
 
 Added in v1.0.0
 
+# route context
+
+## RouteContext
+
+**Signature**
+
+```ts
+export declare const RouteContext: Context.Tag<RouteContext, RouteContext>
+```
+
+Added in v1.0.0
+
+## params
+
+**Signature**
+
+```ts
+export declare const params: Effect.Effect<RouteContext, never, Readonly<Record<string, string | undefined>>>
+```
+
+Added in v1.0.0
+
+## request
+
+**Signature**
+
+```ts
+export declare const request: Effect.Effect<RouteContext, never, ServerRequest.ServerRequest>
+```
+
+Added in v1.0.0
+
+## schemaParams
+
+**Signature**
+
+```ts
+export declare const schemaParams: <I extends Readonly<Record<string, string>>, A>(
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<RouteContext, ParseResult.ParseError, A>
+```
+
+Added in v1.0.0
+
+## searchParams
+
+**Signature**
+
+```ts
+export declare const searchParams: Effect.Effect<RouteContext, never, Readonly<Record<string, string>>>
+```
+
+Added in v1.0.0
+
 # routing
+
+## all
+
+**Signature**
+
+```ts
+export declare const all: {
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
+    R | Exclude<R1, RouteContext>,
+    E | E1
+  >
+}
+```
+
+Added in v1.0.0
 
 ## del
 
@@ -336,18 +413,6 @@ export declare const route: (method: Method.Method) => {
     E | E1
   >
 }
-```
-
-Added in v1.0.0
-
-# tags
-
-## RouteContext
-
-**Signature**
-
-```ts
-export declare const RouteContext: Context.Tag<RouteContext, RouteContext>
 ```
 
 Added in v1.0.0

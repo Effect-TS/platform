@@ -11,6 +11,8 @@ import type * as Error from "@effect/platform/Http/ServerError"
 import type * as ServerRequest from "@effect/platform/Http/ServerRequest"
 import type * as ServerResponse from "@effect/platform/Http/ServerResponse"
 import * as internal from "@effect/platform/internal/http/router"
+import type * as ParseResult from "@effect/schema/ParseResult"
+import type * as Schema from "@effect/schema/Schema"
 
 /**
  * @since 1.0.0
@@ -52,7 +54,7 @@ export type RouteTypeId = typeof RouteTypeId
  */
 export interface Route<R, E> {
   readonly [RouteTypeId]: RouteTypeId
-  readonly method: Method.Method
+  readonly method: Method.Method | "*"
   readonly path: string
   readonly handler: Route.Handler<R, E>
 }
@@ -89,11 +91,38 @@ export interface RouteContext {
   readonly params: Readonly<Record<string, string | undefined>>
   readonly searchParams: Readonly<Record<string, string>>
 }
+
 /**
  * @since 1.0.0
- * @category tags
+ * @category route context
  */
 export const RouteContext: Context.Tag<RouteContext, RouteContext> = internal.RouteContext
+
+/**
+ * @since 1.0.0
+ * @category route context
+ */
+export const request: Effect.Effect<RouteContext, never, ServerRequest.ServerRequest> = internal.request
+
+/**
+ * @since 1.0.0
+ * @category route context
+ */
+export const params: Effect.Effect<RouteContext, never, Readonly<Record<string, string | undefined>>> = internal.params
+
+/**
+ * @since 1.0.0
+ * @category route context
+ */
+export const searchParams: Effect.Effect<RouteContext, never, Readonly<Record<string, string>>> = internal.searchParams
+
+/**
+ * @since 1.0.0
+ * @category route context
+ */
+export const schemaParams: <I extends Readonly<Record<string, string>>, A>(
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<RouteContext, ParseResult.ParseError, A> = internal.schemaParams
 
 /**
  * @since 1.0.0
@@ -167,6 +196,22 @@ export const route: (
     handler: Route.Handler<R1, E1>
   ): Router<R | Exclude<R1, RouteContext>, E | E1>
 } = internal.route
+
+/**
+ * @since 1.0.0
+ * @category routing
+ */
+export const all: {
+  <R1, E1>(
+    path: string,
+    handler: Route.Handler<R1, E1>
+  ): <R, E>(self: Router<R, E>) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R, E, R1, E1>(
+    self: Router<R, E>,
+    path: string,
+    handler: Route.Handler<R1, E1>
+  ): Router<R | Exclude<R1, RouteContext>, E | E1>
+} = internal.all
 
 /**
  * @since 1.0.0

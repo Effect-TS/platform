@@ -9,6 +9,7 @@ import type * as Router from "@effect/platform/Http/Router"
 import * as Error from "@effect/platform/Http/ServerError"
 import type * as ServerRequest from "@effect/platform/Http/ServerRequest"
 import type * as ServerResponse from "@effect/platform/Http/ServerResponse"
+import * as Schema from "@effect/schema/Schema"
 import type { HTTPMethod } from "find-my-way"
 import FindMyWay from "find-my-way"
 
@@ -26,6 +27,28 @@ export const RouteContextTypeId: Router.RouteContextTypeId = Symbol.for(
 /** @internal */
 export const RouteContext = Context.Tag<Router.RouteContext>("@effect/platform/Http/Router/RouteContext")
 
+/** @internal */
+export const request = Effect.map(RouteContext, (_) => _.request)
+
+/** @internal */
+export const params = Effect.map(RouteContext, (_) => _.params)
+
+/** @internal */
+export const searchParams = Effect.map(RouteContext, (_) => _.searchParams)
+
+/** @internal */
+export const schemaParams = <I extends Readonly<Record<string, string>>, A>(schema: Schema.Schema<I, A>) => {
+  const parse = Schema.parse(schema)
+  return Effect.flatMap(
+    RouteContext,
+    (_) =>
+      parse({
+        ..._.searchParams,
+        ..._.params
+      })
+  )
+}
+
 class RouterImpl<R, E> implements Router.Router<R, E> {
   readonly [TypeId]: Router.TypeId = TypeId
   constructor(
@@ -40,7 +63,7 @@ class RouterImpl<R, E> implements Router.Router<R, E> {
 class RouteImpl<R, E> implements Router.Route<R, E> {
   readonly [RouteTypeId]: Router.RouteTypeId = RouteTypeId
   constructor(
-    readonly method: Method.Method,
+    readonly method: Method.Method | "*",
     readonly path: string,
     readonly handler: Router.Route.Handler<R, E>
   ) {}
@@ -124,7 +147,7 @@ export const mountApp = dual<
 >(3, (self, path, that) => new RouterImpl(self.routes, Chunk.append(self.mounts, [path, that]) as any))
 
 /** @internal */
-export const route = (method: Method.Method): {
+export const route = (method: Method.Method | "*"): {
   <R1, E1>(
     path: string,
     handler: Router.Route.Handler<R1, E1>
@@ -150,6 +173,9 @@ export const route = (method: Method.Method): {
       Chunk.append(self.routes, new RouteImpl(method, path, handler)) as any,
       self.mounts
     ))
+
+/** @internal */
+export const all = route("*")
 
 /** @internal */
 export const get = route("GET")
@@ -185,7 +211,11 @@ export const toHttpApp = <R, E>(
     router.all(path + "/*", () => app)
   })
   Chunk.forEach(self.routes, (route) => {
-    router.on(route.method, route.path, () => route.handler)
+    if (route.method === "*") {
+      router.all(route.path, () => route.handler)
+    } else {
+      router.on(route.method, route.path, () => route.handler)
+    }
   })
   return App.makeDefault(
     (
