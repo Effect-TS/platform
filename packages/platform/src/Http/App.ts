@@ -30,6 +30,21 @@ export interface HttpApp<R, E, In, Out> extends Pipeable {
 
 /**
  * @since 1.0.0
+ */
+export namespace HttpApp {
+  /**
+   * @since 1.0.0
+   */
+  export type Context<A> = A extends HttpApp<infer R, infer _E, infer _In, infer _Out> ? R : never
+
+  /**
+   * @since 1.0.0
+   */
+  export type Error<A> = A extends HttpApp<infer _R, infer E, infer _In, infer _Out> ? E : never
+}
+
+/**
+ * @since 1.0.0
  * @category models
  */
 export type Default<R, E> = HttpApp<R, E, ServerRequest.ServerRequest, ServerResponse.ServerResponse>

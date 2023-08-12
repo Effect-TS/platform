@@ -29,10 +29,10 @@ export interface HttpServer {
   readonly [TypeId]: TypeId
   readonly serve: {
     <R, E>(httpApp: App.Default<R, E>): Effect.Effect<R, never, Fiber.RuntimeFiber<Error.ServeError, never>>
-    <R, E, RM, EX extends E, EM>(
+    <R, E, App extends App.Default<any, any>>(
       httpApp: App.Default<R, E>,
-      middleware: Middleware.Middleware<RM, EX, EM>
-    ): Effect.Effect<RM, never, Fiber.RuntimeFiber<Error.ServeError, never>>
+      middleware: Middleware.Middleware.Applied<R, E, App>
+    ): Effect.Effect<App.HttpApp.Context<App>, never, Fiber.RuntimeFiber<Error.ServeError, never>>
   }
 }
 
@@ -49,7 +49,7 @@ export const HttpServer: Context.Tag<HttpServer, HttpServer> = internal.httpServ
 export const make: (
   serve: (
     httpApp: App.Default<unknown, unknown>,
-    middleware?: Middleware.Middleware<unknown, unknown, unknown> | undefined
+    middleware?: Middleware.Middleware
   ) => Effect.Effect<never, never, Fiber.RuntimeFiber<Error.ServeError, never>>
 ) => HttpServer = internal.make
 
@@ -61,16 +61,16 @@ export const serve: {
   (): <R, E>(
     httpApp: App.Default<R, E>
   ) => Effect.Effect<HttpServer | R, never, Fiber.RuntimeFiber<Error.ServeError, never>>
-  <R, E, EX extends E, RM, EM>(
-    middleware: Middleware.Middleware<RM, EX, EM>
+  <R, E, App extends App.Default<any, any>>(
+    middleware: Middleware.Middleware.Applied<R, E, App>
   ): (
     httpApp: App.Default<R, E>
-  ) => Effect.Effect<HttpServer | R | RM, never, Fiber.RuntimeFiber<Error.ServeError, never>>
+  ) => Effect.Effect<HttpServer | App.HttpApp.Context<App>, never, Fiber.RuntimeFiber<Error.ServeError, never>>
   <R, E>(httpApp: App.Default<R, E>): Effect.Effect<HttpServer | R, never, Fiber.RuntimeFiber<Error.ServeError, never>>
-  <R, E, EX extends E, RM, EM>(
+  <R, E, App extends App.Default<any, any>>(
     httpApp: App.Default<R, E>,
-    middleware: Middleware.Middleware<RM, EX, EM>
-  ): Effect.Effect<HttpServer | R | RM, never, Fiber.RuntimeFiber<Error.ServeError, never>>
+    middleware: Middleware.Middleware.Applied<R, E, App>
+  ): Effect.Effect<HttpServer | App.HttpApp.Context<App>, never, Fiber.RuntimeFiber<Error.ServeError, never>>
 } = internal.serve
 
 /**
@@ -79,12 +79,12 @@ export const serve: {
  */
 export const serveJoin: {
   (): <R, E>(httpApp: App.Default<R, E>) => Effect.Effect<HttpServer | R, Error.ServeError, never>
-  <R, E, EX extends E, RM, EM>(
-    middleware: Middleware.Middleware<RM, EX, EM>
-  ): (httpApp: App.Default<R, E>) => Effect.Effect<HttpServer | R | RM, Error.ServeError, never>
+  <R, E, App extends App.Default<any, any>>(
+    middleware: Middleware.Middleware.Applied<R, E, App>
+  ): (httpApp: App.Default<R, E>) => Effect.Effect<HttpServer | App.HttpApp.Context<App>, Error.ServeError, never>
   <R, E>(httpApp: App.Default<R, E>): Effect.Effect<HttpServer | R, Error.ServeError, never>
-  <R, E, EX extends E, RM, EM>(
+  <R, E, App extends App.Default<any, any>>(
     httpApp: App.Default<R, E>,
-    middleware: Middleware.Middleware<RM, EX, EM>
-  ): Effect.Effect<HttpServer | R | RM, Error.ServeError, never>
+    middleware: Middleware.Middleware.Applied<R, E, App>
+  ): Effect.Effect<HttpServer | App.HttpApp.Context<App>, Error.ServeError, never>
 } = internal.serveJoin

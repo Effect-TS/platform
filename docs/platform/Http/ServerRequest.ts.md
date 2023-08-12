@@ -32,7 +32,9 @@ Added in v1.0.0
 export interface ServerRequest extends IncomingMessage.IncomingMessage<Error.RequestError> {
   readonly [TypeId]: TypeId
   readonly url: string
+  readonly originalUrl: string
   readonly method: Method
+  readonly replaceHeaders: (headers: Headers.Headers) => ServerRequest
 }
 ```
 
