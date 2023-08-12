@@ -37,4 +37,8 @@ export * as headers from "@effect/platform/Http/Headers"
 /**
  * @since 1.0.0
  */
+export * as router from "@effect/platform/Http/Router"
+/**
+ * @since 1.0.0
+ */
 export * as urlParams from "@effect/platform/Http/UrlParams"

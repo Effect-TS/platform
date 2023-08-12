@@ -22,7 +22,7 @@ export type TypeId = typeof TypeId
  * @since 1.0.0
  * @category error
  */
-export type HttpServerError = RequestError | ResponseError
+export type HttpServerError = RequestError | ResponseError | RouteNotFound | ServeError
 
 /**
  * @since 1.0.0
@@ -50,7 +50,7 @@ export namespace HttpError {
 export interface RequestError extends HttpError.Proto {
   readonly _tag: "RequestError"
   readonly request: ServerRequest.ServerRequest
-  readonly reason: "Transport" | "Decode" | "NotFound"
+  readonly reason: "Transport" | "Decode"
   readonly error: unknown
 }
 
@@ -59,6 +59,22 @@ export interface RequestError extends HttpError.Proto {
  * @category error
  */
 export const RequestError: (props: Omit<RequestError, HttpError.ProvidedFields>) => RequestError = internal.requestError
+
+/**
+ * @since 1.0.0
+ * @category error
+ */
+export interface RouteNotFound extends HttpError.Proto {
+  readonly _tag: "RouteNotFound"
+  readonly request: ServerRequest.ServerRequest
+}
+
+/**
+ * @since 1.0.0
+ * @category error
+ */
+export const RouteNotFound: (props: Omit<RouteNotFound, HttpError.ProvidedFields>) => RouteNotFound =
+  internal.routeNotFound
 
 /**
  * @since 1.0.0

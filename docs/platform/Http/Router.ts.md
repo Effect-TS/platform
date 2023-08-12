@@ -12,19 +12,404 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [combinators](#combinators)
+  - [concat](#concat)
+  - [prefixAll](#prefixall)
+- [constructors](#constructors)
+  - [empty](#empty)
+  - [fromIterable](#fromiterable)
+  - [makeRoute](#makeroute)
+- [conversions](#conversions)
+  - [toHttpApp](#tohttpapp)
 - [models](#models)
+  - [Route (interface)](#route-interface)
+  - [RouteContext (interface)](#routecontext-interface)
   - [Router (interface)](#router-interface)
+- [routing](#routing)
+  - [del](#del)
+  - [get](#get)
+  - [head](#head)
+  - [mount](#mount)
+  - [mountApp](#mountapp)
+  - [options](#options)
+  - [patch](#patch)
+  - [post](#post)
+  - [put](#put)
+  - [route](#route)
+- [tags](#tags)
+  - [RouteContext](#routecontext)
+- [type ids](#type-ids)
+  - [RouteContextTypeId](#routecontexttypeid)
+  - [RouteContextTypeId (type alias)](#routecontexttypeid-type-alias)
+  - [RouteTypeId](#routetypeid)
+  - [RouteTypeId (type alias)](#routetypeid-type-alias)
+  - [TypeId](#typeid)
+  - [TypeId (type alias)](#typeid-type-alias)
 
 ---
 
+# combinators
+
+## concat
+
+**Signature**
+
+```ts
+export declare const concat: {
+  <R1, E1>(that: Router<R1, E1>): <R, E>(self: Router<R, E>) => Router<R1 | R, E1 | E>
+  <R, E, R1, E1>(self: Router<R, E>, that: Router<R1, E1>): Router<R | R1, E | E1>
+}
+```
+
+Added in v1.0.0
+
+## prefixAll
+
+**Signature**
+
+```ts
+export declare const prefixAll: {
+  (prefix: string): <R, E>(self: Router<R, E>) => Router<R, E>
+  <R, E>(self: Router<R, E>, prefix: string): Router<R, E>
+}
+```
+
+Added in v1.0.0
+
+# constructors
+
+## empty
+
+**Signature**
+
+```ts
+export declare const empty: Router<never, never>
+```
+
+Added in v1.0.0
+
+## fromIterable
+
+**Signature**
+
+```ts
+export declare const fromIterable: <R, E>(routes: Iterable<Route<R, E>>) => Router<R, E>
+```
+
+Added in v1.0.0
+
+## makeRoute
+
+**Signature**
+
+```ts
+export declare const makeRoute: <R, E>(method: Method.Method, path: string, handler: Route.Handler<R, E>) => Route<R, E>
+```
+
+Added in v1.0.0
+
+# conversions
+
+## toHttpApp
+
+**Signature**
+
+```ts
+export declare const toHttpApp: <R, E>(
+  self: Router<R, E>
+) => App.Default<Exclude<R, RouteContext>, Error.RouteNotFound | E>
+```
+
+Added in v1.0.0
+
 # models
+
+## Route (interface)
+
+**Signature**
+
+```ts
+export interface Route<R, E> {
+  readonly [RouteTypeId]: RouteTypeId
+  readonly method: Method.Method
+  readonly path: string
+  readonly handler: Route.Handler<R, E>
+}
+```
+
+Added in v1.0.0
+
+## RouteContext (interface)
+
+**Signature**
+
+```ts
+export interface RouteContext {
+  readonly [RouteContextTypeId]: RouteContextTypeId
+  readonly request: ServerRequest.ServerRequest
+  readonly params: Readonly<Record<string, string | undefined>>
+  readonly searchParams: Readonly<Record<string, string>>
+}
+```
+
+Added in v1.0.0
 
 ## Router (interface)
 
 **Signature**
 
 ```ts
-export interface Router {}
+export interface Router<R, E> extends Pipeable {
+  readonly [TypeId]: TypeId
+  readonly routes: Chunk.Chunk<Route<R, E>>
+  readonly mounts: Chunk.Chunk<readonly [string, App.Default<R, E>]>
+}
+```
+
+Added in v1.0.0
+
+# routing
+
+## del
+
+**Signature**
+
+```ts
+export declare const del: {
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
+    R | Exclude<R1, RouteContext>,
+    E | E1
+  >
+}
+```
+
+Added in v1.0.0
+
+## get
+
+**Signature**
+
+```ts
+export declare const get: {
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
+    R | Exclude<R1, RouteContext>,
+    E | E1
+  >
+}
+```
+
+Added in v1.0.0
+
+## head
+
+**Signature**
+
+```ts
+export declare const head: {
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
+    R | Exclude<R1, RouteContext>,
+    E | E1
+  >
+}
+```
+
+Added in v1.0.0
+
+## mount
+
+**Signature**
+
+```ts
+export declare const mount: {
+  <R1, E1>(path: string, that: Router<R1, E1>): <R, E>(self: Router<R, E>) => Router<R1 | R, E1 | E>
+  <R, E, R1, E1>(self: Router<R, E>, path: string, that: Router<R1, E1>): Router<R | R1, E | E1>
+}
+```
+
+Added in v1.0.0
+
+## mountApp
+
+**Signature**
+
+```ts
+export declare const mountApp: {
+  <R1, E1>(path: string, that: App.Default<R1, E1>): <R, E>(self: Router<R, E>) => Router<R1 | R, E1 | E>
+  <R, E, R1, E1>(self: Router<R, E>, path: string, that: App.Default<R1, E1>): Router<R | R1, E | E1>
+}
+```
+
+Added in v1.0.0
+
+## options
+
+**Signature**
+
+```ts
+export declare const options: {
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
+    R | Exclude<R1, RouteContext>,
+    E | E1
+  >
+}
+```
+
+Added in v1.0.0
+
+## patch
+
+**Signature**
+
+```ts
+export declare const patch: {
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
+    R | Exclude<R1, RouteContext>,
+    E | E1
+  >
+}
+```
+
+Added in v1.0.0
+
+## post
+
+**Signature**
+
+```ts
+export declare const post: {
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
+    R | Exclude<R1, RouteContext>,
+    E | E1
+  >
+}
+```
+
+Added in v1.0.0
+
+## put
+
+**Signature**
+
+```ts
+export declare const put: {
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
+    R | Exclude<R1, RouteContext>,
+    E | E1
+  >
+}
+```
+
+Added in v1.0.0
+
+## route
+
+**Signature**
+
+```ts
+export declare const route: (method: Method.Method) => {
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
+    R | Exclude<R1, RouteContext>,
+    E | E1
+  >
+}
+```
+
+Added in v1.0.0
+
+# tags
+
+## RouteContext
+
+**Signature**
+
+```ts
+export declare const RouteContext: Context.Tag<RouteContext, RouteContext>
+```
+
+Added in v1.0.0
+
+# type ids
+
+## RouteContextTypeId
+
+**Signature**
+
+```ts
+export declare const RouteContextTypeId: typeof RouteContextTypeId
+```
+
+Added in v1.0.0
+
+## RouteContextTypeId (type alias)
+
+**Signature**
+
+```ts
+export type RouteContextTypeId = typeof RouteContextTypeId
+```
+
+Added in v1.0.0
+
+## RouteTypeId
+
+**Signature**
+
+```ts
+export declare const RouteTypeId: typeof RouteTypeId
+```
+
+Added in v1.0.0
+
+## RouteTypeId (type alias)
+
+**Signature**
+
+```ts
+export type RouteTypeId = typeof RouteTypeId
+```
+
+Added in v1.0.0
+
+## TypeId
+
+**Signature**
+
+```ts
+export declare const TypeId: typeof TypeId
+```
+
+Added in v1.0.0
+
+## TypeId (type alias)
+
+**Signature**
+
+```ts
+export type TypeId = typeof TypeId
 ```
 
 Added in v1.0.0

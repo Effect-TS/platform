@@ -64,7 +64,7 @@ export const make = (
         if (!nodeResponse.headersSent) {
           nodeResponse.writeHead(500)
         }
-        if (!nodeResponse.closed) {
+        if (!nodeResponse.writableEnded) {
           nodeResponse.end()
         }
         return Effect.logError("unhandled error in http app", cause)
@@ -139,6 +139,20 @@ class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implemen
       this.url,
       headers
     )
+  }
+
+  toString(): string {
+    return `ServerRequest(${this.method} ${this.url})`
+  }
+
+  toJSON(): unknown {
+    return {
+      _tag: "ServerRequest",
+      method: this.method,
+      url: this.url,
+      originalUrl: this.originalUrl,
+      headers: this.headers
+    }
   }
 }
 

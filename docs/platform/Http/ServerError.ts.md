@@ -18,6 +18,8 @@ Added in v1.0.0
   - [RequestError (interface)](#requesterror-interface)
   - [ResponseError](#responseerror)
   - [ResponseError (interface)](#responseerror-interface)
+  - [RouteNotFound](#routenotfound)
+  - [RouteNotFound (interface)](#routenotfound-interface)
   - [ServeError](#serveerror)
   - [ServeError (interface)](#serveerror-interface)
 - [type id](#type-id)
@@ -33,7 +35,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type HttpServerError = RequestError | ResponseError
+export type HttpServerError = RequestError | ResponseError | RouteNotFound | ServeError
 ```
 
 Added in v1.0.0
@@ -56,7 +58,7 @@ Added in v1.0.0
 export interface RequestError extends HttpError.Proto {
   readonly _tag: 'RequestError'
   readonly request: ServerRequest.ServerRequest
-  readonly reason: 'Transport' | 'Decode' | 'NotFound'
+  readonly reason: 'Transport' | 'Decode'
   readonly error: unknown
 }
 ```
@@ -84,6 +86,29 @@ export interface ResponseError extends HttpError.Proto {
   readonly response: ServerResponse.ServerResponse
   readonly reason: 'Decode'
   readonly error: unknown
+}
+```
+
+Added in v1.0.0
+
+## RouteNotFound
+
+**Signature**
+
+```ts
+export declare const RouteNotFound: (props: Omit<RouteNotFound, HttpError.ProvidedFields>) => RouteNotFound
+```
+
+Added in v1.0.0
+
+## RouteNotFound (interface)
+
+**Signature**
+
+```ts
+export interface RouteNotFound extends HttpError.Proto {
+  readonly _tag: 'RouteNotFound'
+  readonly request: ServerRequest.ServerRequest
 }
 ```
 

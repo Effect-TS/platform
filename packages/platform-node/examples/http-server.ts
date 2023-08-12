@@ -6,7 +6,10 @@ import { createServer } from "node:http"
 const ServerLive = Http.server.layer(() => createServer(), { port: 3000 })
 const response = Http.response.text("hello world")
 
-Http.app.makeDefault(() => Effect.succeed(response)).pipe(
+Http.router.empty.pipe(
+  Http.router.get("/", Effect.succeed(response)),
+  Http.router.mountApp("/app", Http.app.makeDefault(() => Effect.succeed(response))),
+  Http.router.toHttpApp,
   Http.server.respond,
   // Http.middleware.logger,
   Http.server.serve,
