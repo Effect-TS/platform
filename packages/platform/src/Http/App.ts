@@ -2,6 +2,7 @@
  * @since 1.0.0
  */
 import type { Pipeable } from "@effect/data/Pipeable"
+import type * as Cause from "@effect/io/Cause"
 import type * as Effect from "@effect/io/Effect"
 import type * as ServerRequest from "@effect/platform/Http/ServerRequest"
 import type * as ServerResponse from "@effect/platform/Http/ServerResponse"
@@ -156,6 +157,20 @@ export const catchAll: {
     f: (e: E, request: InX) => Effect.Effect<R2, E2, A2>
   ): HttpApp<R | R2, E2, In, A | A2>
 } = internal.catchAll
+
+/**
+ * @since 1.0.0
+ * @category error handling
+ */
+export const catchAllCause: {
+  <E, In, InX extends In, R2, E2, A2>(
+    f: (e: Cause.Cause<E>, request: InX) => Effect.Effect<R2, E2, A2>
+  ): <R, In, A>(self: HttpApp<R, E, In, A>) => HttpApp<R2 | R, E2, In, A2 | A>
+  <R, E, In, A, InX extends In, R2, E2, A2>(
+    self: HttpApp<R, E, In, A>,
+    f: (e: Cause.Cause<E>, request: InX) => Effect.Effect<R2, E2, A2>
+  ): HttpApp<R | R2, E2, In, A | A2>
+} = internal.catchAllCause
 
 /**
  * @since 1.0.0

@@ -25,6 +25,7 @@ Added in v1.0.0
   - [makeDefault](#makedefault)
 - [error handling](#error-handling)
   - [catchAll](#catchall)
+  - [catchAllCause](#catchallcause)
   - [catchTag](#catchtag)
   - [catchTags](#catchtags)
 - [models](#models)
@@ -202,6 +203,24 @@ export declare const catchAll: {
   <R, E, In, A, InX extends In, R2, E2, A2>(
     self: HttpApp<R, E, In, A>,
     f: (e: E, request: InX) => Effect.Effect<R2, E2, A2>
+  ): HttpApp<R | R2, E2, In, A | A2>
+}
+```
+
+Added in v1.0.0
+
+## catchAllCause
+
+**Signature**
+
+```ts
+export declare const catchAllCause: {
+  <E, In, InX extends In, R2, E2, A2>(f: (e: Cause.Cause<E>, request: InX) => Effect.Effect<R2, E2, A2>): <R, In, A>(
+    self: HttpApp<R, E, In, A>
+  ) => HttpApp<R2 | R, E2, In, A2 | A>
+  <R, E, In, A, InX extends In, R2, E2, A2>(
+    self: HttpApp<R, E, In, A>,
+    f: (e: Cause.Cause<E>, request: InX) => Effect.Effect<R2, E2, A2>
   ): HttpApp<R | R2, E2, In, A | A2>
 }
 ```
