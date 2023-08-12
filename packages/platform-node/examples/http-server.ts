@@ -8,7 +8,7 @@ const response = Http.response.text("hello world")
 
 Http.app.makeDefault(() => Effect.succeed(response)).pipe(
   Http.server.respond,
-  Http.middleware.logger,
+  // Http.middleware.logger,
   Http.server.serve,
   Effect.provideLayer(ServerLive),
   Effect.tapErrorCause(Effect.logError),

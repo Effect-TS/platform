@@ -1,3 +1,4 @@
+import type * as Context from "@effect/data/Context"
 import { dual } from "@effect/data/Function"
 import { pipeArguments } from "@effect/data/Pipeable"
 import type * as Cause from "@effect/io/Cause"
@@ -304,6 +305,36 @@ export const mapRequestEffect = dual<
     f: (request: In2) => Effect.Effect<R2, E1, In>
   ) => App.HttpApp<R | R2, E | E1, In2, A>
 >(2, (self, f) => make((req) => Effect.flatMap(f(req), self)))
+
+/** @internal */
+export const provideService = dual<
+  <T extends Context.Tag<any, any>>(
+    tag: T,
+    service: Context.Tag.Service<T>
+  ) => <R, E, In, Out>(
+    self: App.HttpApp<R, E, In, Out>
+  ) => App.HttpApp<Exclude<R, Context.Tag.Identifier<T>>, E, In, Out>,
+  <R, E, In, Out, T extends Context.Tag<any, any>>(
+    self: App.HttpApp<R, E, In, Out>,
+    tag: T,
+    service: Context.Tag.Service<T>
+  ) => App.HttpApp<Exclude<R, Context.Tag.Identifier<T>>, E, In, Out>
+>(3, (self, tag, service) => make((req) => Effect.provideService(self(req), tag, service)))
+
+/** @internal */
+export const provideServiceEffect = dual<
+  <T extends Context.Tag<any, any>, R1, E1>(
+    tag: T,
+    service: Effect.Effect<R1, E1, Context.Tag.Service<T>>
+  ) => <R, E, In, Out>(
+    self: App.HttpApp<R, E, In, Out>
+  ) => App.HttpApp<R1 | Exclude<R, Context.Tag.Identifier<T>>, E | E1, In, Out>,
+  <R, E, In, Out, T extends Context.Tag<any, any>, R1, E1>(
+    self: App.HttpApp<R, E, In, Out>,
+    tag: T,
+    service: Effect.Effect<R1, E1, Context.Tag.Service<T>>
+  ) => App.HttpApp<R1 | Exclude<R, Context.Tag.Identifier<T>>, E | E1, In, Out>
+>(3, (self, tag, service) => make((req) => Effect.provideServiceEffect(self(req), tag, service)))
 
 /** @internal */
 export const tap = dual<

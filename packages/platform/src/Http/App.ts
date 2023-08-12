@@ -1,6 +1,7 @@
 /**
  * @since 1.0.0
  */
+import type * as Context from "@effect/data/Context"
 import type { Pipeable } from "@effect/data/Pipeable"
 import type * as Cause from "@effect/io/Cause"
 import type * as Effect from "@effect/io/Effect"
@@ -231,6 +232,40 @@ export const mapRequestEffect: {
     f: (request: In2) => Effect.Effect<R2, E1, In>
   ): HttpApp<R | R2, E | E1, In2, A>
 } = internal.mapRequestEffect
+
+/**
+ * @since 1.0.0
+ * @category context
+ */
+export const provideService: {
+  <T extends Context.Tag<any, any>>(
+    tag: T,
+    service: Context.Tag.Service<T>
+  ): <R, E, In, Out>(self: HttpApp<R, E, In, Out>) => HttpApp<Exclude<R, Context.Tag.Identifier<T>>, E, In, Out>
+  <R, E, In, Out, T extends Context.Tag<any, any>>(
+    self: HttpApp<R, E, In, Out>,
+    tag: T,
+    service: Context.Tag.Service<T>
+  ): HttpApp<Exclude<R, Context.Tag.Identifier<T>>, E, In, Out>
+} = internal.provideService
+
+/**
+ * @since 1.0.0
+ * @category context
+ */
+export const provideServiceEffect: {
+  <T extends Context.Tag<any, any>, R1, E1>(
+    tag: T,
+    service: Effect.Effect<R1, E1, Context.Tag.Service<T>>
+  ): <R, E, In, Out>(
+    self: HttpApp<R, E, In, Out>
+  ) => HttpApp<R1 | Exclude<R, Context.Tag.Identifier<T>>, E1 | E, In, Out>
+  <R, E, In, Out, T extends Context.Tag<any, any>, R1, E1>(
+    self: HttpApp<R, E, In, Out>,
+    tag: T,
+    service: Effect.Effect<R1, E1, Context.Tag.Service<T>>
+  ): HttpApp<R1 | Exclude<R, Context.Tag.Identifier<T>>, E | E1, In, Out>
+} = internal.provideServiceEffect
 
 /**
  * @since 1.0.0

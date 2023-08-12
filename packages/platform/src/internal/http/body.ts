@@ -50,7 +50,7 @@ export const uint8Array = (body: Uint8Array, contentType?: string): Body.Uint8Ar
 
 /** @internal */
 export const text = (body: string, contentType?: string): Body.Uint8Array =>
-  uint8Array(new TextEncoder().encode(body), contentType)
+  uint8Array(new TextEncoder().encode(body), contentType ?? "text/plain")
 
 class EffectBodyImpl implements Body.EffectBody {
   readonly [TypeId]: Body.TypeId = TypeId
