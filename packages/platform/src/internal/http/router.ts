@@ -8,7 +8,7 @@ import * as App from "@effect/platform/Http/App"
 import type * as Method from "@effect/platform/Http/Method"
 import type * as Router from "@effect/platform/Http/Router"
 import * as Error from "@effect/platform/Http/ServerError"
-import type * as ServerRequest from "@effect/platform/Http/ServerRequest"
+import * as ServerRequest from "@effect/platform/Http/ServerRequest"
 import type * as ServerResponse from "@effect/platform/Http/ServerResponse"
 import * as Schema from "@effect/schema/Schema"
 import type { HTTPMethod } from "find-my-way"
@@ -47,6 +47,24 @@ export const schemaParams = <I extends Readonly<Record<string, string>>, A>(sche
         ..._.searchParams,
         ..._.params
       })
+  )
+}
+
+/** @internal */
+export const schemaHeaders = <I extends Readonly<Record<string, string>>, A>(schema: Schema.Schema<I, A>) => {
+  const parse = ServerRequest.schemaHeaders(schema)
+  return Effect.flatMap(
+    RouteContext,
+    (_) => parse(_.request)
+  )
+}
+
+/** @internal */
+export const schemaBody = <I extends Readonly<Record<string, string>>, A>(schema: Schema.Schema<I, A>) => {
+  const parse = ServerRequest.schemaBody(schema)
+  return Effect.flatMap(
+    RouteContext,
+    (_) => parse(_.request)
   )
 }
 

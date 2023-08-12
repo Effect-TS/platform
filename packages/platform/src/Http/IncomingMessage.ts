@@ -38,8 +38,18 @@ export interface IncomingMessage<E> {
  * @since 1.0.0
  * @category schema
  */
-export const parseSchema = <I, A>(schema: Schema.Schema<I, A>) => {
+export const schemaBody = <I, A>(schema: Schema.Schema<I, A>) => {
   const parse = Schema.parse(schema)
   return <E>(self: IncomingMessage<E>): Effect.Effect<never, E | ParseResult.ParseError, A> =>
     Effect.flatMap(self.json, parse)
+}
+
+/**
+ * @since 1.0.0
+ * @category schema
+ */
+export const schemaHeaders = <I, A>(schema: Schema.Schema<I, A>) => {
+  const parse = Schema.parse(schema)
+  return <E>(self: IncomingMessage<E>): Effect.Effect<never, E | ParseResult.ParseError, A> =>
+    parse(Object.fromEntries(self.headers))
 }

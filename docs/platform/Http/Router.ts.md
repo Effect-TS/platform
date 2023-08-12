@@ -29,6 +29,7 @@ Added in v1.0.0
   - [RouteContext](#routecontext)
   - [params](#params)
   - [request](#request)
+  - [schemaBody](#schemabody)
   - [schemaParams](#schemaparams)
   - [searchParams](#searchparams)
 - [routing](#routing)
@@ -202,6 +203,18 @@ Added in v1.0.0
 
 ```ts
 export declare const request: Effect.Effect<RouteContext, never, ServerRequest.ServerRequest>
+```
+
+Added in v1.0.0
+
+## schemaBody
+
+**Signature**
+
+```ts
+export declare const schemaBody: <I extends Readonly<Record<string, string>>, A>(
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<RouteContext, ParseResult.ParseError | Error.RequestError, A>
 ```
 
 Added in v1.0.0

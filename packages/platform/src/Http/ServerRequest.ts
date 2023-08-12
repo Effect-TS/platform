@@ -12,7 +12,12 @@ export {
    * @since 1.0.0
    * @category schema
    */
-  parseSchema
+  schemaBody,
+  /**
+   * @since 1.0.0
+   * @category schema
+   */
+  schemaHeaders
 } from "@effect/platform/Http/IncomingMessage"
 
 /**

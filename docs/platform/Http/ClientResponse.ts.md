@@ -17,7 +17,8 @@ Added in v1.0.0
 - [models](#models)
   - [ClientResponse (interface)](#clientresponse-interface)
 - [schema](#schema)
-  - [parseSchema](#parseschema)
+  - [schemaBody](#schemabody)
+  - [schemaHeaders](#schemaheaders)
 - [type ids](#type-ids)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
@@ -53,14 +54,26 @@ Added in v1.0.0
 
 # schema
 
-## parseSchema
+## schemaBody
 
 **Signature**
 
 ```ts
-export declare const parseSchema: <I, A>(
+export declare const schemaBody: <I, A>(
   schema: Schema<I, A>
 ) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect<never, E | ParseError, A>
+```
+
+Added in v1.0.0
+
+## schemaHeaders
+
+**Signature**
+
+```ts
+export declare const schemaHeaders: <I, A>(
+  schema: Schema<I, A>
+) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect<never, ParseError | E, A>
 ```
 
 Added in v1.0.0
