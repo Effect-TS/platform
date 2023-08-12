@@ -91,7 +91,9 @@ class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implemen
 
   constructor(
     readonly source: Http.IncomingMessage,
-    readonly response: Http.ServerResponse
+    readonly response: Http.ServerResponse,
+    readonly url = source.url!,
+    private headersOverride?: Headers.Headers
   ) {
     super(source, (_) =>
       Error.RequestError({
@@ -101,12 +103,26 @@ class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implemen
       }))
   }
 
-  get url(): string {
+  get originalUrl(): string {
     return this.source.url!
   }
 
   get method(): Method {
     return this.source.method as Method
+  }
+
+  get headers(): Headers.Headers {
+    this.headersOverride ??= Headers.fromInput(this.source.headers as any)
+    return this.headersOverride
+  }
+
+  replaceHeaders(headers: Headers.Headers): ServerRequest.ServerRequest {
+    return new ServerRequestImpl(
+      this.source,
+      this.response,
+      this.url,
+      headers
+    )
   }
 }
 
