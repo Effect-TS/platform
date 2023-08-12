@@ -1,6 +1,7 @@
 import * as Chunk from "@effect/data/Chunk"
 import * as Context from "@effect/data/Context"
 import { dual } from "@effect/data/Function"
+import * as Option from "@effect/data/Option"
 import { pipeArguments } from "@effect/data/Pipeable"
 import * as Effect from "@effect/io/Effect"
 import * as App from "@effect/platform/Http/App"
@@ -65,7 +66,8 @@ class RouteImpl<R, E> implements Router.Route<R, E> {
   constructor(
     readonly method: Method.Method | "*",
     readonly path: string,
-    readonly handler: Router.Route.Handler<R, E>
+    readonly handler: Router.Route.Handler<R, E>,
+    readonly prefix = Option.none<string>()
   ) {}
 }
 
@@ -90,8 +92,9 @@ export const fromIterable = <R, E>(
 export const makeRoute = <R, E>(
   method: Method.Method,
   path: string,
-  handler: Router.Route.Handler<R, E>
-): Router.Route<R, E> => new RouteImpl(method, path, handler)
+  handler: Router.Route.Handler<R, E>,
+  prefix: Option.Option<string> = Option.none()
+): Router.Route<R, E> => new RouteImpl(method, path, handler, prefix)
 
 /** @internal */
 export const concat = dual<
@@ -111,7 +114,11 @@ export const prefixAll = dual<
         new RouteImpl(
           route.method,
           route.path === "/" ? prefix : prefix + route.path,
-          route.handler
+          route.handler,
+          Option.orElse(
+            Option.map(route.prefix, (_) => prefix + _),
+            () => Option.some(prefix)
+          )
         )),
       Chunk.map(self.mounts, ([path, app]) => [path === "/" ? prefix : prefix + path, app])
     )
@@ -212,9 +219,9 @@ export const toHttpApp = <R, E>(
   })
   Chunk.forEach(self.routes, (route) => {
     if (route.method === "*") {
-      router.all(route.path, () => route.handler)
+      router.all(route.path, () => route)
     } else {
-      router.on(route.method, route.path, () => route.handler)
+      router.on(route.method, route.path, () => route)
     }
   })
   return App.makeDefault(
@@ -229,8 +236,12 @@ export const toHttpApp = <R, E>(
       if (App.TypeId in handler) {
         return (handler as App.Default<Exclude<R, Router.RouteContext>, E>)(request)
       }
+      const route = handler as Router.Route<R, E>
+      if (route.prefix._tag === "Some") {
+        request = request.setUrl(request.url.slice(route.prefix.value.length))
+      }
       return Effect.provideService(
-        handler as Router.Route.Handler<R, E>,
+        route.handler,
         RouteContext,
         new RouteContextImpl(request, result.params, result.searchParams)
       )

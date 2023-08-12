@@ -139,6 +139,7 @@ export interface Route<R, E> {
   readonly method: Method.Method | '*'
   readonly path: string
   readonly handler: Route.Handler<R, E>
+  readonly prefix: Option.Option<string>
 }
 ```
 

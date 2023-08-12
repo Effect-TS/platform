@@ -3,6 +3,7 @@
  */
 import type * as Chunk from "@effect/data/Chunk"
 import type * as Context from "@effect/data/Context"
+import type * as Option from "@effect/data/Option"
 import type { Pipeable } from "@effect/data/Pipeable"
 import type * as Effect from "@effect/io/Effect"
 import type * as App from "@effect/platform/Http/App"
@@ -57,6 +58,7 @@ export interface Route<R, E> {
   readonly method: Method.Method | "*"
   readonly path: string
   readonly handler: Route.Handler<R, E>
+  readonly prefix: Option.Option<string>
 }
 
 /**
@@ -66,7 +68,11 @@ export namespace Route {
   /**
    * @since 1.0.0
    */
-  export type Handler<R, E> = Effect.Effect<R, E, ServerResponse.ServerResponse>
+  export type Handler<R, E> = Effect.Effect<
+    R,
+    E,
+    ServerResponse.ServerResponse
+  >
 }
 
 /**
@@ -102,19 +108,31 @@ export const RouteContext: Context.Tag<RouteContext, RouteContext> = internal.Ro
  * @since 1.0.0
  * @category route context
  */
-export const request: Effect.Effect<RouteContext, never, ServerRequest.ServerRequest> = internal.request
+export const request: Effect.Effect<
+  RouteContext,
+  never,
+  ServerRequest.ServerRequest
+> = internal.request
 
 /**
  * @since 1.0.0
  * @category route context
  */
-export const params: Effect.Effect<RouteContext, never, Readonly<Record<string, string | undefined>>> = internal.params
+export const params: Effect.Effect<
+  RouteContext,
+  never,
+  Readonly<Record<string, string | undefined>>
+> = internal.params
 
 /**
  * @since 1.0.0
  * @category route context
  */
-export const searchParams: Effect.Effect<RouteContext, never, Readonly<Record<string, string>>> = internal.searchParams
+export const searchParams: Effect.Effect<
+  RouteContext,
+  never,
+  Readonly<Record<string, string>>
+> = internal.searchParams
 
 /**
  * @since 1.0.0
@@ -134,14 +152,19 @@ export const empty: Router<never, never> = internal.empty
  * @since 1.0.0
  * @category constructors
  */
-export const fromIterable: <R, E>(routes: Iterable<Route<R, E>>) => Router<R, E> = internal.fromIterable
+export const fromIterable: <R, E>(
+  routes: Iterable<Route<R, E>>
+) => Router<R, E> = internal.fromIterable
 
 /**
  * @since 1.0.0
  * @category constructors
  */
-export const makeRoute: <R, E>(method: Method.Method, path: string, handler: Route.Handler<R, E>) => Route<R, E> =
-  internal.makeRoute
+export const makeRoute: <R, E>(
+  method: Method.Method,
+  path: string,
+  handler: Route.Handler<R, E>
+) => Route<R, E> = internal.makeRoute
 
 /**
  * @since 1.0.0
@@ -157,8 +180,13 @@ export const prefixAll: {
  * @category combinators
  */
 export const concat: {
-  <R1, E1>(that: Router<R1, E1>): <R, E>(self: Router<R, E>) => Router<R1 | R, E1 | E>
-  <R, E, R1, E1>(self: Router<R, E>, that: Router<R1, E1>): Router<R | R1, E | E1>
+  <R1, E1>(that: Router<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R1 | R, E1 | E>
+  <R, E, R1, E1>(self: Router<R, E>, that: Router<R1, E1>): Router<
+    R | R1,
+    E | E1
+  >
 } = internal.concat
 
 /**
@@ -166,8 +194,14 @@ export const concat: {
  * @category routing
  */
 export const mount: {
-  <R1, E1>(path: string, that: Router<R1, E1>): <R, E>(self: Router<R, E>) => Router<R1 | R, E1 | E>
-  <R, E, R1, E1>(self: Router<R, E>, path: string, that: Router<R1, E1>): Router<R | R1, E | E1>
+  <R1, E1>(path: string, that: Router<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R1 | R, E1 | E>
+  <R, E, R1, E1>(
+    self: Router<R, E>,
+    path: string,
+    that: Router<R1, E1>
+  ): Router<R | R1, E | E1>
 } = internal.mount
 
 /**
@@ -175,21 +209,24 @@ export const mount: {
  * @category routing
  */
 export const mountApp: {
-  <R1, E1>(path: string, that: App.Default<R1, E1>): <R, E>(self: Router<R, E>) => Router<R1 | R, E1 | E>
-  <R, E, R1, E1>(self: Router<R, E>, path: string, that: App.Default<R1, E1>): Router<R | R1, E | E1>
+  <R1, E1>(path: string, that: App.Default<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R1 | R, E1 | E>
+  <R, E, R1, E1>(
+    self: Router<R, E>,
+    path: string,
+    that: App.Default<R1, E1>
+  ): Router<R | R1, E | E1>
 } = internal.mountApp
 
 /**
  * @since 1.0.0
  * @category routing
  */
-export const route: (
-  method: Method.Method
-) => {
-  <R1, E1>(
-    path: string,
-    handler: Route.Handler<R1, E1>
-  ): <R, E>(self: Router<R, E>) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+export const route: (method: Method.Method) => {
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
   <R, E, R1, E1>(
     self: Router<R, E>,
     path: string,
@@ -202,10 +239,9 @@ export const route: (
  * @category routing
  */
 export const all: {
-  <R1, E1>(
-    path: string,
-    handler: Route.Handler<R1, E1>
-  ): <R, E>(self: Router<R, E>) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
   <R, E, R1, E1>(
     self: Router<R, E>,
     path: string,
@@ -218,10 +254,9 @@ export const all: {
  * @category routing
  */
 export const get: {
-  <R1, E1>(
-    path: string,
-    handler: Route.Handler<R1, E1>
-  ): <R, E>(self: Router<R, E>) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
   <R, E, R1, E1>(
     self: Router<R, E>,
     path: string,
@@ -234,10 +269,9 @@ export const get: {
  * @category routing
  */
 export const post: {
-  <R1, E1>(
-    path: string,
-    handler: Route.Handler<R1, E1>
-  ): <R, E>(self: Router<R, E>) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
   <R, E, R1, E1>(
     self: Router<R, E>,
     path: string,
@@ -250,10 +284,9 @@ export const post: {
  * @category routing
  */
 export const patch: {
-  <R1, E1>(
-    path: string,
-    handler: Route.Handler<R1, E1>
-  ): <R, E>(self: Router<R, E>) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
   <R, E, R1, E1>(
     self: Router<R, E>,
     path: string,
@@ -266,10 +299,9 @@ export const patch: {
  * @category routing
  */
 export const put: {
-  <R1, E1>(
-    path: string,
-    handler: Route.Handler<R1, E1>
-  ): <R, E>(self: Router<R, E>) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
   <R, E, R1, E1>(
     self: Router<R, E>,
     path: string,
@@ -282,10 +314,9 @@ export const put: {
  * @category routing
  */
 export const del: {
-  <R1, E1>(
-    path: string,
-    handler: Route.Handler<R1, E1>
-  ): <R, E>(self: Router<R, E>) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
   <R, E, R1, E1>(
     self: Router<R, E>,
     path: string,
@@ -298,10 +329,9 @@ export const del: {
  * @category routing
  */
 export const head: {
-  <R1, E1>(
-    path: string,
-    handler: Route.Handler<R1, E1>
-  ): <R, E>(self: Router<R, E>) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
   <R, E, R1, E1>(
     self: Router<R, E>,
     path: string,
@@ -314,10 +344,9 @@ export const head: {
  * @category routing
  */
 export const options: {
-  <R1, E1>(
-    path: string,
-    handler: Route.Handler<R1, E1>
-  ): <R, E>(self: Router<R, E>) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
   <R, E, R1, E1>(
     self: Router<R, E>,
     path: string,
@@ -329,5 +358,6 @@ export const options: {
  * @since 1.0.0
  * @category conversions
  */
-export const toHttpApp: <R, E>(self: Router<R, E>) => App.Default<Exclude<R, RouteContext>, E | Error.RouteNotFound> =
-  internal.toHttpApp
+export const toHttpApp: <R, E>(
+  self: Router<R, E>
+) => App.Default<Exclude<R, RouteContext>, E | Error.RouteNotFound> = internal.toHttpApp
