@@ -19,7 +19,7 @@ const makeJsonPlaceholder = Effect.gen(function*(_) {
     Http.client.mapRequest(Http.request.prependUrl("https://jsonplaceholder.typicode.com"))
   )
   const todoClient = client.pipe(
-    Http.client.mapEffect(Http.response.parseSchema(Todo))
+    Http.client.mapEffect(Http.response.schemaBody(Todo))
   )
   const createTodo = Http.client.schemaFunction(
     todoClient,
