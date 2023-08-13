@@ -200,13 +200,13 @@ Added in v1.0.0
 
 ```ts
 export declare const provideService: {
-  <T extends Context.Tag<any, any>>(tag: T, service: Context.Tag.Service<T>): <R, E, In, Out>(
+  <T extends Context.Tag<any, any>, In>(tag: T, service: (request: In) => Context.Tag.Service<T>): <R, E, Out>(
     self: HttpApp<R, E, In, Out>
   ) => HttpApp<Exclude<R, Context.Tag.Identifier<T>>, E, In, Out>
   <R, E, In, Out, T extends Context.Tag<any, any>>(
     self: HttpApp<R, E, In, Out>,
     tag: T,
-    service: Context.Tag.Service<T>
+    service: (request: In) => Context.Tag.Service<T>
   ): HttpApp<Exclude<R, Context.Tag.Identifier<T>>, E, In, Out>
 }
 ```
@@ -219,18 +219,16 @@ Added in v1.0.0
 
 ```ts
 export declare const provideServiceEffect: {
-  <T extends Context.Tag<any, any>, R1, E1>(tag: T, service: Effect.Effect<R1, E1, Context.Tag.Service<T>>): <
-    R,
-    E,
-    In,
-    Out
-  >(
+  <T extends Context.Tag<any, any>, In, R1, E1>(
+    tag: T,
+    service: (request: In) => Effect.Effect<R1, E1, Context.Tag.Service<T>>
+  ): <R, E, In, Out>(
     self: HttpApp<R, E, In, Out>
   ) => HttpApp<R1 | Exclude<R, Context.Tag.Identifier<T>>, E1 | E, In, Out>
   <R, E, In, Out, T extends Context.Tag<any, any>, R1, E1>(
     self: HttpApp<R, E, In, Out>,
     tag: T,
-    service: Effect.Effect<R1, E1, Context.Tag.Service<T>>
+    service: (request: In) => Effect.Effect<R1, E1, Context.Tag.Service<T>>
   ): HttpApp<R1 | Exclude<R, Context.Tag.Identifier<T>>, E | E1, In, Out>
 }
 ```

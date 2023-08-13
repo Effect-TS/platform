@@ -308,33 +308,33 @@ export const mapRequestEffect = dual<
 
 /** @internal */
 export const provideService = dual<
-  <T extends Context.Tag<any, any>>(
+  <T extends Context.Tag<any, any>, In>(
     tag: T,
-    service: Context.Tag.Service<T>
-  ) => <R, E, In, Out>(
+    service: (request: In) => Context.Tag.Service<T>
+  ) => <R, E, Out>(
     self: App.HttpApp<R, E, In, Out>
   ) => App.HttpApp<Exclude<R, Context.Tag.Identifier<T>>, E, In, Out>,
   <R, E, In, Out, T extends Context.Tag<any, any>>(
     self: App.HttpApp<R, E, In, Out>,
     tag: T,
-    service: Context.Tag.Service<T>
+    service: (request: In) => Context.Tag.Service<T>
   ) => App.HttpApp<Exclude<R, Context.Tag.Identifier<T>>, E, In, Out>
->(3, (self, tag, service) => make((req) => Effect.provideService(self(req), tag, service)))
+>(3, (self, tag, service) => make((req) => Effect.provideService(self(req), tag, service(req))))
 
 /** @internal */
 export const provideServiceEffect = dual<
-  <T extends Context.Tag<any, any>, R1, E1>(
+  <T extends Context.Tag<any, any>, In, R1, E1>(
     tag: T,
-    service: Effect.Effect<R1, E1, Context.Tag.Service<T>>
+    service: (request: In) => Effect.Effect<R1, E1, Context.Tag.Service<T>>
   ) => <R, E, In, Out>(
     self: App.HttpApp<R, E, In, Out>
   ) => App.HttpApp<R1 | Exclude<R, Context.Tag.Identifier<T>>, E | E1, In, Out>,
   <R, E, In, Out, T extends Context.Tag<any, any>, R1, E1>(
     self: App.HttpApp<R, E, In, Out>,
     tag: T,
-    service: Effect.Effect<R1, E1, Context.Tag.Service<T>>
+    service: (request: In) => Effect.Effect<R1, E1, Context.Tag.Service<T>>
   ) => App.HttpApp<R1 | Exclude<R, Context.Tag.Identifier<T>>, E | E1, In, Out>
->(3, (self, tag, service) => make((req) => Effect.provideServiceEffect(self(req), tag, service)))
+>(3, (self, tag, service) => make((req) => Effect.provideServiceEffect(self(req), tag, service(req))))
 
 /** @internal */
 export const tap = dual<
