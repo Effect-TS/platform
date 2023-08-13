@@ -120,14 +120,17 @@ export const concat = dual<
   <R, E, R1, E1>(self: Router.Router<R, E>, that: Router.Router<R1, E1>) => Router.Router<R | R1, E | E1>
 >(2, (self, that) => new RouterImpl(Chunk.appendAll(self.routes, that.routes) as any, self.mounts))
 
+const removeTrailingSlash = (path: string) => (path.endsWith("/") ? path.slice(0, -1) : path)
+
 /** @internal */
 export const prefixAll = dual<
   (prefix: string) => <R, E>(self: Router.Router<R, E>) => Router.Router<R, E>,
   <R, E>(self: Router.Router<R, E>, prefix: string) => Router.Router<R, E>
 >(
   2,
-  (self, prefix) =>
-    new RouterImpl(
+  (self, prefix) => {
+    prefix = removeTrailingSlash(prefix)
+    return new RouterImpl(
       Chunk.map(self.routes, (route) =>
         new RouteImpl(
           route.method,
@@ -140,6 +143,7 @@ export const prefixAll = dual<
         )),
       Chunk.map(self.mounts, ([path, app]) => [path === "/" ? prefix : prefix + path, app])
     )
+  }
 )
 
 /** @internal */
@@ -169,7 +173,10 @@ export const mountApp = dual<
     path: string,
     that: App.Default<R1, E1>
   ) => Router.Router<R | R1, E | E1>
->(3, (self, path, that) => new RouterImpl(self.routes, Chunk.append(self.mounts, [path, that]) as any))
+>(
+  3,
+  (self, path, that) => new RouterImpl(self.routes, Chunk.append(self.mounts, [removeTrailingSlash(path), that]) as any)
+)
 
 /** @internal */
 export const route = (method: Method.Method | "*"): {
@@ -229,7 +236,6 @@ export const toHttpApp = <R, E>(
 ): App.Default<Exclude<R, Router.RouteContext>, E | Error.RouteNotFound> => {
   const router = FindMyWay()
   Chunk.forEach(self.mounts, ([path, app]) => {
-    path = path.endsWith("/") ? path.slice(0, -1) : path
     const pathLen = path.length
     app = App.mapRequest(app, (request) => request.setUrl(request.url.slice(pathLen)))
     router.all(path, () => app)
