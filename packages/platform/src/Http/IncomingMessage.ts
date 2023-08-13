@@ -1,7 +1,11 @@
 /**
  * @since 1.0.0
  */
+import * as Global from "@effect/data/Global"
+import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
+import * as FiberRef from "@effect/io/FiberRef"
+import type * as FileSystem from "@effect/platform/FileSystem"
 import type * as Headers from "@effect/platform/Http/Headers"
 import type * as ParseResult from "@effect/schema/ParseResult"
 import * as Schema from "@effect/schema/Schema"
@@ -53,3 +57,12 @@ export const schemaHeaders = <I, A>(schema: Schema.Schema<I, A>) => {
   return <E>(self: IncomingMessage<E>): Effect.Effect<never, ParseResult.ParseError, A> =>
     parse(Object.fromEntries(self.headers))
 }
+
+/**
+ * @since 1.0.0
+ * @category fiber refs
+ */
+export const maxBodySize: FiberRef.FiberRef<Option.Option<FileSystem.Size>> = Global.globalValue(
+  "@effect/platform/Http/ImcomingMessage/maxBodySize",
+  () => FiberRef.unsafeMake(Option.none<FileSystem.Size>())
+)

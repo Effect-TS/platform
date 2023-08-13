@@ -33,9 +33,12 @@ export const fromReadable: <E, A>(
  * @category conversions
  */
 export const toString: <E>(
-  evaluate: LazyArg<Readable>,
-  onError: (error: unknown) => E,
-  encoding?: BufferEncoding
+  options: {
+    readable: LazyArg<Readable>
+    onFailure: (error: unknown) => E
+    encoding?: BufferEncoding | undefined
+    maxBytes?: Size | undefined
+  }
 ) => Effect<never, E, string> = internal.toString
 
 /**
@@ -43,6 +46,5 @@ export const toString: <E>(
  * @category conversions
  */
 export const toUint8Array: <E>(
-  evaluate: LazyArg<Readable>,
-  onError: (error: unknown) => E
+  options: { readable: LazyArg<Readable>; onFailure: (error: unknown) => E; maxBytes?: Size | undefined }
 ) => Effect<never, E, Uint8Array> = internal.toUint8Array

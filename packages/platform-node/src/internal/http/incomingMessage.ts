@@ -1,4 +1,6 @@
+import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
+import * as FiberRef from "@effect/io/FiberRef"
 import * as NodeStream from "@effect/platform-node/Stream"
 import * as Headers from "@effect/platform/Http/Headers"
 import * as IncomingMessage from "@effect/platform/Http/IncomingMessage"
@@ -20,7 +22,15 @@ export class IncomingMessageImpl<E> implements IncomingMessage.IncomingMessage<E
   }
 
   get text(): Effect.Effect<never, E, string> {
-    return NodeStream.toString(() => this.source, this.onError)
+    return Effect.flatMap(
+      FiberRef.get(IncomingMessage.maxBodySize),
+      (maxBodySize) =>
+        NodeStream.toString({
+          readable: () => this.source,
+          onFailure: this.onError,
+          maxBytes: Option.getOrUndefined(maxBodySize)
+        })
+    )
   }
 
   get json(): Effect.Effect<never, E, unknown> {
@@ -50,6 +60,14 @@ export class IncomingMessageImpl<E> implements IncomingMessage.IncomingMessage<E
   }
 
   get arrayBuffer(): Effect.Effect<never, E, ArrayBuffer> {
-    return NodeStream.toUint8Array(() => this.source, this.onError)
+    return Effect.flatMap(
+      FiberRef.get(IncomingMessage.maxBodySize),
+      (maxBodySize) =>
+        NodeStream.toUint8Array({
+          readable: () => this.source,
+          onFailure: this.onError,
+          maxBytes: Option.getOrUndefined(maxBodySize)
+        })
+    )
   }
 }

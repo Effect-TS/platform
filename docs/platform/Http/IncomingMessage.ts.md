@@ -12,6 +12,8 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [fiber refs](#fiber-refs)
+  - [maxBodySize](#maxbodysize)
 - [models](#models)
   - [IncomingMessage (interface)](#incomingmessage-interface)
 - [schema](#schema)
@@ -22,6 +24,18 @@ Added in v1.0.0
   - [TypeId (type alias)](#typeid-type-alias)
 
 ---
+
+# fiber refs
+
+## maxBodySize
+
+**Signature**
+
+```ts
+export declare const maxBodySize: FiberRef.FiberRef<Option.Option<FileSystem.Size>>
+```
+
+Added in v1.0.0
 
 # models
 

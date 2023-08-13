@@ -19,6 +19,7 @@ Added in v1.0.0
   - [mapRequest](#maprequest)
   - [mapRequestEffect](#maprequesteffect)
   - [tap](#tap)
+  - [tapErrorCause](#taperrorcause)
   - [tapRequest](#taprequest)
 - [constructors](#constructors)
   - [make](#make)
@@ -143,6 +144,24 @@ export declare const tap: {
     In,
     A
   >
+}
+```
+
+Added in v1.0.0
+
+## tapErrorCause
+
+**Signature**
+
+```ts
+export declare const tapErrorCause: {
+  <E, In, InX extends In, R2, E2, _>(f: (e: Cause.Cause<E>, request: InX) => Effect.Effect<R2, E2, _>): <R, In, A>(
+    self: HttpApp<R, E, In, A>
+  ) => HttpApp<R2 | R, E | E2, In, A>
+  <R, E, In, A, InX extends In, R2, E2, _>(
+    self: HttpApp<R, E, In, A>,
+    f: (e: Cause.Cause<E>, request: InX) => Effect.Effect<R2, E2, _>
+  ): HttpApp<R | R2, E | E2, In, A>
 }
 ```
 

@@ -45,11 +45,12 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const toString: <E>(
-  evaluate: LazyArg<Readable>,
-  onError: (error: unknown) => E,
-  encoding?: BufferEncoding
-) => Effect<never, E, string>
+export declare const toString: <E>(options: {
+  readable: LazyArg<Readable>
+  onFailure: (error: unknown) => E
+  encoding?: BufferEncoding | undefined
+  maxBytes?: Size | undefined
+}) => Effect<never, E, string>
 ```
 
 Added in v1.0.0
@@ -59,10 +60,11 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const toUint8Array: <E>(
-  evaluate: LazyArg<Readable>,
-  onError: (error: unknown) => E
-) => Effect<never, E, Uint8Array>
+export declare const toUint8Array: <E>(options: {
+  readable: LazyArg<Readable>
+  onFailure: (error: unknown) => E
+  maxBytes?: Size | undefined
+}) => Effect<never, E, Uint8Array>
 ```
 
 Added in v1.0.0

@@ -1,4 +1,5 @@
 import { flow, type LazyArg } from "@effect/data/Function"
+import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
 import * as Fiber from "@effect/io/Fiber"
 import * as Layer from "@effect/io/Layer"
@@ -6,8 +7,10 @@ import * as Runtime from "@effect/io/Runtime"
 import type * as Scope from "@effect/io/Scope"
 import { IncomingMessageImpl } from "@effect/platform-node/internal/http/incomingMessage"
 import * as NodeSink from "@effect/platform-node/Sink"
+import * as FileSystem from "@effect/platform/FileSystem"
 import * as App from "@effect/platform/Http/App"
 import * as Headers from "@effect/platform/Http/Headers"
+import * as IncomingMessage from "@effect/platform/Http/IncomingMessage"
 import type { Method } from "@effect/platform/Http/Method"
 import * as Middleware from "@effect/platform/Http/Middleware"
 import * as Server from "@effect/platform/Http/Server"
@@ -22,7 +25,9 @@ import { Readable } from "node:stream"
 /** @internal */
 export const make = (
   evaluate: LazyArg<Http.Server>,
-  options: Net.ListenOptions
+  options: Net.ListenOptions & {
+    readonly maxBodySize?: FileSystem.Size
+  }
 ): Effect.Effect<Scope.Scope, never, Server.HttpServer> =>
   Effect.gen(function*(_) {
     const server = evaluate()
@@ -80,7 +85,12 @@ export const make = (
         Fiber.join(serverFiber)
       ], { discard: true, concurrency: "unbounded" }) as Effect.Effect<never, Error.ServeError, never>
     })
-  })
+  }).pipe(
+    Effect.locally(
+      IncomingMessage.maxBodySize,
+      Option.some(options.maxBodySize ?? FileSystem.Size(1024 * 1024 * 10))
+    )
+  )
 
 /** @internal */
 export const respond = Middleware.make(<R, E>(httpApp: App.Default<R, E>) =>
