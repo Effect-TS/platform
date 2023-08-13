@@ -64,7 +64,7 @@ Added in v1.0.0
 ```ts
 export declare const schemaHeaders: <I, A>(
   schema: Schema<I, A>
-) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect<never, ParseError | E, A>
+) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect<never, ParseError, A>
 ```
 
 Added in v1.0.0

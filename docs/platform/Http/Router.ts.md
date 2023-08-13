@@ -30,6 +30,7 @@ Added in v1.0.0
   - [params](#params)
   - [request](#request)
   - [schemaBody](#schemabody)
+  - [schemaHeaders](#schemaheaders)
   - [schemaParams](#schemaparams)
   - [searchParams](#searchparams)
 - [routing](#routing)
@@ -215,6 +216,18 @@ Added in v1.0.0
 export declare const schemaBody: <I extends Readonly<Record<string, string>>, A>(
   schema: Schema.Schema<I, A>
 ) => Effect.Effect<RouteContext, ParseResult.ParseError | Error.RequestError, A>
+```
+
+Added in v1.0.0
+
+## schemaHeaders
+
+**Signature**
+
+```ts
+export declare const schemaHeaders: <I extends Readonly<Record<string, string>>, A>(
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<RouteContext, ParseResult.ParseError, A>
 ```
 
 Added in v1.0.0

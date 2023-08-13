@@ -146,6 +146,14 @@ export const schemaParams: <I extends Readonly<Record<string, string>>, A>(
  * @since 1.0.0
  * @category route context
  */
+export const schemaHeaders: <I extends Readonly<Record<string, string>>, A>(
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<RouteContext, ParseResult.ParseError, A> = internal.schemaHeaders
+
+/**
+ * @since 1.0.0
+ * @category route context
+ */
 export const schemaBody: <I extends Readonly<Record<string, string>>, A>(
   schema: Schema.Schema<I, A>
 ) => Effect.Effect<RouteContext, Error.RequestError | ParseResult.ParseError, A> = internal.schemaBody
