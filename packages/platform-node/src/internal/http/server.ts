@@ -59,16 +59,16 @@ export const make = (
     }))
 
     return Server.make((httpApp) => {
-      const handledApp = App.catchAllCause(httpApp, (cause, request) => {
-        const nodeResponse = (request as ServerRequestImpl).response
-        if (!nodeResponse.headersSent) {
-          nodeResponse.writeHead(500)
-        }
-        if (!nodeResponse.writableEnded) {
-          nodeResponse.end()
-        }
-        return Effect.logError("unhandled error in http app", cause)
-      })
+      const handledApp = App.tapErrorCause(httpApp, (_cause, request) =>
+        Effect.sync(() => {
+          const nodeResponse = (request as ServerRequestImpl).response
+          if (!nodeResponse.headersSent) {
+            nodeResponse.writeHead(500)
+          }
+          if (!nodeResponse.writableEnded) {
+            nodeResponse.end()
+          }
+        }))
       function handler(nodeRequest: Http.IncomingMessage, nodeResponse: Http.ServerResponse) {
         runFork(handledApp(new ServerRequestImpl(nodeRequest, nodeResponse)))
       }

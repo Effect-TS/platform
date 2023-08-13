@@ -350,6 +350,26 @@ export const tap = dual<
 >(2, (self, f) => make((req) => Effect.tap(self(req), (a) => f(a, req))))
 
 /** @internal */
+export const tapErrorCause: {
+  <E, In, InX extends In, R2, E2, _>(
+    f: (e: Cause.Cause<E>, request: InX) => Effect.Effect<R2, E2, _>
+  ): <R, In, A>(
+    self: App.HttpApp<R, E, In, A>
+  ) => App.HttpApp<R | R2, E | E2, In, A>
+  <R, E, In, A, InX extends In, R2, E2, _>(
+    self: App.HttpApp<R, E, In, A>,
+    f: (e: Cause.Cause<E>, request: InX) => Effect.Effect<R2, E2, _>
+  ): App.HttpApp<R | R2, E | E2, In, A>
+} = dual(
+  2,
+  <R, E, In, A, InX extends In, R2, E2, _>(
+    self: App.HttpApp<R, E, In, A>,
+    f: (e: Cause.Cause<E>, request: InX) => Effect.Effect<R2, E2, _>
+  ): App.HttpApp<R | R2, E | E2, In, A> =>
+    make((request) => Effect.tapErrorCause(self(request), (e) => f(e, request as InX)))
+)
+
+/** @internal */
 export const tapRequest = dual<
   <In, R2, E1, _>(
     f: (request: In) => Effect.Effect<R2, E1, _>

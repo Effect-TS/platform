@@ -11,13 +11,13 @@ export const make = <M extends Middleware.Middleware>(middleware: M): M => middl
 export const logger = make(<R, E>(httpApp: App.Default<R, E>) =>
   internalApp.makeDefault((request) =>
     Effect.withLogSpan(
-      Effect.tap(
+      Effect.onExit(
         httpApp(request),
-        (response) =>
-          Effect.annotateLogs(Effect.log(""), {
+        (exit) =>
+          Effect.annotateLogs(Effect.log("", exit._tag === "Failure" ? exit.cause : undefined), {
             "http.method": request.method,
             "http.url": request.url,
-            "http.status": response.status
+            "http.status": exit._tag === "Success" ? exit.value.status : 500
           })
       ),
       "http.span"

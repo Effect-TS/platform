@@ -285,6 +285,20 @@ export const tap: {
  * @since 1.0.0
  * @category combinators
  */
+export const tapErrorCause: {
+  <E, In, InX extends In, R2, E2, _>(
+    f: (e: Cause.Cause<E>, request: InX) => Effect.Effect<R2, E2, _>
+  ): <R, In, A>(self: HttpApp<R, E, In, A>) => HttpApp<R2 | R, E | E2, In, A>
+  <R, E, In, A, InX extends In, R2, E2, _>(
+    self: HttpApp<R, E, In, A>,
+    f: (e: Cause.Cause<E>, request: InX) => Effect.Effect<R2, E2, _>
+  ): HttpApp<R | R2, E | E2, In, A>
+} = internal.tapErrorCause
+
+/**
+ * @since 1.0.0
+ * @category combinators
+ */
 export const tapRequest: {
   <In, R2, E1, _>(
     f: (request: In) => Effect.Effect<R2, E1, _>
