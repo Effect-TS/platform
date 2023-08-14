@@ -1,6 +1,7 @@
 import { dual } from "@effect/data/Function"
 import * as Effect from "@effect/io/Effect"
 import type * as App from "@effect/platform/Http/App"
+import * as Headers from "@effect/platform/Http/Headers"
 import type * as Middleware from "@effect/platform/Http/Middleware"
 import * as internalApp from "@effect/platform/internal/http/app"
 
@@ -37,6 +38,16 @@ export const tracer = make(<R, E>(httpApp: App.Default<R, E>) =>
       { attributes: { "http.method": request.method, "http.url": request.url } }
     )
   )
+)
+
+/** @internal */
+export const xForwardedHeaders = make((httpApp) =>
+  internalApp.makeDefault((request) => {
+    const forwardedHost = Headers.get(request.headers, "x-forwarded-host")
+    return forwardedHost._tag === "Some"
+      ? httpApp(request.replaceHeaders(Headers.set(request.headers, "host", forwardedHost.value)))
+      : httpApp(request)
+  })
 )
 
 /** @internal */

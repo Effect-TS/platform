@@ -19,6 +19,7 @@ Added in v1.0.0
   - [loggerTracer](#loggertracer)
   - [make](#make)
   - [tracer](#tracer)
+  - [xForwardedHeaders](#xforwardedheaders)
 - [models](#models)
   - [Middleware (interface)](#middleware-interface)
 
@@ -84,6 +85,16 @@ Added in v1.0.0
 
 ```ts
 export declare const tracer: <R, E>(httpApp: App.Default<R, E>) => App.Default<R, E>
+```
+
+Added in v1.0.0
+
+## xForwardedHeaders
+
+**Signature**
+
+```ts
+export declare const xForwardedHeaders: <R, E>(httpApp: App.Default<R, E>) => App.Default<R, E>
 ```
 
 Added in v1.0.0

@@ -61,3 +61,9 @@ export const tracer: <R, E>(httpApp: App.Default<R, E>) => App.Default<R, E> = i
  * @category constructors
  */
 export const loggerTracer: <R, E>(httpApp: App.Default<R, E>) => App.Default<R, E> = internal.loggerTracer
+
+/**
+ * @since 1.0.0
+ * @category constructors
+ */
+export const xForwardedHeaders: <R, E>(httpApp: App.Default<R, E>) => App.Default<R, E> = internal.xForwardedHeaders

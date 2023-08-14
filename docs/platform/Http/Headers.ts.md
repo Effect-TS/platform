@@ -13,6 +13,8 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [combinators](#combinators)
+  - [get](#get)
+  - [has](#has)
   - [remove](#remove)
   - [set](#set)
   - [setAll](#setall)
@@ -26,6 +28,27 @@ Added in v1.0.0
 ---
 
 # combinators
+
+## get
+
+**Signature**
+
+```ts
+export declare const get: ((key: string) => (self: Headers) => Option.Option<string>) &
+  ((self: Headers, key: string) => Option.Option<string>)
+```
+
+Added in v1.0.0
+
+## has
+
+**Signature**
+
+```ts
+export declare const has: ((key: string) => (self: Headers) => boolean) & ((self: Headers, key: string) => boolean)
+```
+
+Added in v1.0.0
 
 ## remove
 

@@ -3,6 +3,7 @@
  */
 import { dual } from "@effect/data/Function"
 import * as HashMap from "@effect/data/HashMap"
+import type * as Option from "@effect/data/Option"
 
 /**
  * @since 1.0.0
@@ -36,6 +37,24 @@ export const fromInput: (input?: Input) => Headers = (input) => {
   }
   return HashMap.fromIterable(Object.entries(input).map(([k, v]) => [k.toLowerCase(), v]))
 }
+
+/**
+ * @since 1.0.0
+ * @category combinators
+ */
+export const has = dual<
+  (key: string) => (self: Headers) => boolean,
+  (self: Headers, key: string) => boolean
+>(2, (self, key) => HashMap.has(self, key.toLowerCase()))
+
+/**
+ * @since 1.0.0
+ * @category combinators
+ */
+export const get = dual<
+  (key: string) => (self: Headers) => Option.Option<string>,
+  (self: Headers, key: string) => Option.Option<string>
+>(2, (self, key) => HashMap.get(self, key.toLowerCase()))
 
 /**
  * @since 1.0.0
