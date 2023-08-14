@@ -246,7 +246,10 @@ export const toHttpApp = <R, E>(
   const router = FindMyWay()
   Chunk.forEach(self.mounts, ([path, app]) => {
     const pathLen = path.length
-    app = App.mapRequest(app, (request) => request.setUrl(request.url.slice(pathLen)))
+    app = App.mapRequest(
+      app,
+      (request) => request.setUrl(request.url.length <= pathLen ? "/" : request.url.slice(pathLen))
+    )
     router.all(path, () => app)
     router.all(path + "/*", () => app)
   })
