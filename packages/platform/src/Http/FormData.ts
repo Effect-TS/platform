@@ -1,7 +1,11 @@
 /**
  * @since 1.0.0
  */
-import type * as Error from "@effect/platform/Http/ClientError"
+import * as Chunk from "@effect/data/Chunk"
+import { globalValue } from "@effect/data/Global"
+import * as Option from "@effect/data/Option"
+import * as FiberRef from "@effect/io/FiberRef"
+import * as FileSystem from "@effect/platform/FileSystem"
 import type * as Stream from "@effect/stream/Stream"
 
 /**
@@ -41,7 +45,7 @@ export namespace Part {
  * @category models
  */
 export interface Field extends Part.Proto {
-  readonly _tag: "FormDataField"
+  readonly _tag: "Field"
   readonly key: string
   readonly contentType: string
   readonly value: string
@@ -56,6 +60,32 @@ export interface File extends Part.Proto {
   readonly key: string
   readonly name: string
   readonly contentType: string
-  readonly content: Stream.Stream<never, Error.RequestError, Uint8Array>
-  readonly source?: unknown
+  readonly content: Stream.Stream<never, unknown, Uint8Array>
 }
+
+/**
+ * @since 1.0.0
+ * @category fiber refs
+ */
+export const maxFieldSize: FiberRef.FiberRef<FileSystem.Size> = globalValue(
+  "@effect/platform/Http/FormData/maxFieldSize",
+  () => FiberRef.unsafeMake(FileSystem.Size(100))
+)
+
+/**
+ * @since 1.0.0
+ * @category fiber refs
+ */
+export const maxFileSize: FiberRef.FiberRef<Option.Option<FileSystem.Size>> = globalValue(
+  "@effect/platform/Http/FormData/maxFileSize",
+  () => FiberRef.unsafeMake(Option.none<FileSystem.Size>())
+)
+
+/**
+ * @since 1.0.0
+ * @category fiber refs
+ */
+export const fieldMimeTypes: FiberRef.FiberRef<Chunk.Chunk<string>> = globalValue(
+  "@effect/platform/Http/FormData/fieldMimeTypes",
+  () => FiberRef.unsafeMake(Chunk.make("application/json"))
+)

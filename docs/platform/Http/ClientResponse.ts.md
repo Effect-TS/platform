@@ -47,6 +47,7 @@ Added in v1.0.0
 export interface ClientResponse extends IncomingMessage.IncomingMessage<Error.ResponseError> {
   readonly [TypeId]: TypeId
   readonly status: number
+  readonly formData: Effect.Effect<never, Error.ResponseError, FormData>
 }
 ```
 
@@ -61,7 +62,7 @@ Added in v1.0.0
 ```ts
 export declare const schemaBody: <I, A>(
   schema: Schema<I, A>
-) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect<never, E | ParseError, A>
+) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, E | ParseError, A>
 ```
 
 Added in v1.0.0
@@ -73,7 +74,7 @@ Added in v1.0.0
 ```ts
 export declare const schemaHeaders: <I, A>(
   schema: Schema<I, A>
-) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect<never, ParseError, A>
+) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, ParseError, A>
 ```
 
 Added in v1.0.0

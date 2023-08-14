@@ -12,6 +12,10 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [fiber refs](#fiber-refs)
+  - [fieldMimeTypes](#fieldmimetypes)
+  - [maxFieldSize](#maxfieldsize)
+  - [maxFileSize](#maxfilesize)
 - [models](#models)
   - [Field (interface)](#field-interface)
   - [File (interface)](#file-interface)
@@ -22,6 +26,38 @@ Added in v1.0.0
 
 ---
 
+# fiber refs
+
+## fieldMimeTypes
+
+**Signature**
+
+```ts
+export declare const fieldMimeTypes: FiberRef.FiberRef<Chunk.Chunk<string>>
+```
+
+Added in v1.0.0
+
+## maxFieldSize
+
+**Signature**
+
+```ts
+export declare const maxFieldSize: FiberRef.FiberRef<FileSystem.Size>
+```
+
+Added in v1.0.0
+
+## maxFileSize
+
+**Signature**
+
+```ts
+export declare const maxFileSize: FiberRef.FiberRef<Option.Option<FileSystem.Size>>
+```
+
+Added in v1.0.0
+
 # models
 
 ## Field (interface)
@@ -30,7 +66,7 @@ Added in v1.0.0
 
 ```ts
 export interface Field extends Part.Proto {
-  readonly _tag: 'FormDataField'
+  readonly _tag: 'Field'
   readonly key: string
   readonly contentType: string
   readonly value: string
@@ -49,8 +85,7 @@ export interface File extends Part.Proto {
   readonly key: string
   readonly name: string
   readonly contentType: string
-  readonly content: Stream.Stream<never, Error.RequestError, Uint8Array>
-  readonly source?: unknown
+  readonly content: Stream.Stream<never, unknown, Uint8Array>
 }
 ```
 

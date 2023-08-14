@@ -5,10 +5,12 @@ import * as Fiber from "@effect/io/Fiber"
 import * as Layer from "@effect/io/Layer"
 import * as Runtime from "@effect/io/Runtime"
 import type * as Scope from "@effect/io/Scope"
+import * as internalFormData from "@effect/platform-node/internal/http/formData"
 import { IncomingMessageImpl } from "@effect/platform-node/internal/http/incomingMessage"
 import * as NodeSink from "@effect/platform-node/Sink"
 import * as FileSystem from "@effect/platform/FileSystem"
 import * as App from "@effect/platform/Http/App"
+import type * as FormData from "@effect/platform/Http/FormData"
 import * as Headers from "@effect/platform/Http/Headers"
 import * as IncomingMessage from "@effect/platform/Http/IncomingMessage"
 import type { Method } from "@effect/platform/Http/Method"
@@ -17,6 +19,7 @@ import * as Server from "@effect/platform/Http/Server"
 import * as Error from "@effect/platform/Http/ServerError"
 import * as ServerRequest from "@effect/platform/Http/ServerRequest"
 import * as ServerResponse from "@effect/platform/Http/ServerResponse"
+import type * as Path from "@effect/platform/Path"
 import * as Stream from "@effect/stream/Stream"
 import type * as Http from "node:http"
 import type * as Net from "node:net"
@@ -25,9 +28,7 @@ import { Readable } from "node:stream"
 /** @internal */
 export const make = (
   evaluate: LazyArg<Http.Server>,
-  options: Net.ListenOptions & {
-    readonly maxBodySize?: FileSystem.Size
-  }
+  options: Net.ListenOptions
 ): Effect.Effect<Scope.Scope, never, Server.HttpServer> =>
   Effect.gen(function*(_) {
     const server = evaluate()
@@ -88,7 +89,7 @@ export const make = (
   }).pipe(
     Effect.locally(
       IncomingMessage.maxBodySize,
-      Option.some(options.maxBodySize ?? FileSystem.Size(1024 * 1024 * 10))
+      Option.some(FileSystem.Size(1024 * 1024 * 10))
     )
   )
 
@@ -131,6 +132,34 @@ class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implemen
   get headers(): Headers.Headers {
     this.headersOverride ??= Headers.fromInput(this.source.headers as any)
     return this.headersOverride
+  }
+
+  get formData(): Effect.Effect<
+    Scope.Scope | FileSystem.FileSystem | Path.Path,
+    Error.RequestError,
+    globalThis.FormData
+  > {
+    return Effect.mapError(
+      internalFormData.formData(this.source),
+      (error) =>
+        Error.RequestError({
+          request: this,
+          reason: "Decode",
+          error
+        })
+    )
+  }
+
+  get formDataStream(): Stream.Stream<never, Error.RequestError, FormData.Part> {
+    return Stream.mapError(
+      internalFormData.fromRequest(this.source),
+      (error) =>
+        Error.RequestError({
+          request: this,
+          reason: "Decode",
+          error
+        })
+    )
   }
 
   setUrl(url: string): ServerRequest.ServerRequest {

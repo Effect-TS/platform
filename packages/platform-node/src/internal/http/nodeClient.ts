@@ -186,6 +186,18 @@ class ClientResponseImpl extends IncomingMessageImpl<Error.ResponseError> implem
   get status() {
     return this.source.statusCode!
   }
+
+  get formData(): Effect.Effect<never, Error.ResponseError, FormData> {
+    return Effect.tryPromise({
+      try: () =>
+        new Response(Readable.toWeb(this.source) as any, {
+          headers: new globalThis.Headers(this.source.headers as any),
+          status: this.source.statusCode,
+          statusText: this.source.statusMessage
+        }).formData(),
+      catch: this.onError
+    })
+  }
 }
 
 /** @internal */

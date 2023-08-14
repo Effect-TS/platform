@@ -45,6 +45,7 @@
     "@effect/platform": "workspace:^",
     "@effect/schema": "^0.33.0",
     "@effect/stream": "^0.34.0",
+    "@types/busboy": "^1.5.0",
     "@types/express": "^4.17.17",
     "express": "^4.18.2"
   },
@@ -53,5 +54,8 @@
     "@effect/io": "^0.38.0",
     "@effect/platform": "workspace:^",
     "@effect/stream": "^0.34.0"
+  },
+  "dependencies": {
+    "busboy": "^1.6.0"
   }
 }
