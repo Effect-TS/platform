@@ -8,23 +8,26 @@ import type * as Error from "@effect/platform/Http/ServerError"
 export const TypeId: Server.TypeId = Symbol.for("@effect/platform/Http/Server") as Server.TypeId
 
 /** @internal */
-export const httpServerTag = Context.Tag<Server.HttpServer>("@effect/platform/Http/Server")
+export const serverTag = Context.Tag<Server.Server>("@effect/platform/Http/Server")
 
-const httpServerProto = {
+const serverProto = {
   [TypeId]: TypeId
 }
 
 /** @internal */
-export const isHttpServer = (u: unknown): u is Server.HttpServer => typeof u === "object" && u !== null && TypeId in u
+export const isServer = (u: unknown): u is Server.Server => typeof u === "object" && u !== null && TypeId in u
 
 /** @internal */
 export const make = (
-  serve: (httpApp: App.Default<unknown, unknown>) => Effect.Effect<never, Error.ServeError, never>
-): Server.HttpServer => Object.assign(Object.create(httpServerProto), { serve })
+  options: {
+    readonly serve: (httpApp: App.Default<unknown, unknown>) => Effect.Effect<never, Error.ServeError, never>
+    readonly address: Server.Address
+  }
+): Server.Server => Object.assign(Object.create(serverProto), options)
 
 /** @internal */
 export const serve = <R, E>(httpApp: App.Default<R, E>) =>
   Effect.flatMap(
-    httpServerTag,
+    serverTag,
     (server) => server.serve(httpApp)
   )

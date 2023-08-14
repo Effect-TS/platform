@@ -29,11 +29,9 @@ import { Readable } from "node:stream"
 export const make = (
   evaluate: LazyArg<Http.Server>,
   options: Net.ListenOptions
-): Effect.Effect<Scope.Scope, never, Server.HttpServer> =>
+): Effect.Effect<Scope.Scope, never, Server.Server> =>
   Effect.gen(function*(_) {
     const server = evaluate()
-    const runtime = (yield* _(Effect.runtime<never>())) as Runtime.Runtime<unknown>
-    const runFork = Runtime.runFork(runtime)
 
     const serverFiber = yield* _(
       Effect.zipRight(
@@ -64,27 +62,44 @@ export const make = (
       })
     }))
 
-    return Server.make((httpApp) => {
-      const handledApp = App.tapErrorCause(httpApp, (_cause, request) =>
-        Effect.sync(() => {
-          const nodeResponse = (request as ServerRequestImpl).response
-          if (!nodeResponse.headersSent) {
-            nodeResponse.writeHead(500)
-          }
-          if (!nodeResponse.writableEnded) {
-            nodeResponse.end()
-          }
-        }))
-      function handler(nodeRequest: Http.IncomingMessage, nodeResponse: Http.ServerResponse) {
-        runFork(handledApp(new ServerRequestImpl(nodeRequest, nodeResponse)))
-      }
-      return Effect.all([
-        Effect.async<never, never, never>(() => {
-          server.on("request", handler)
-          return Effect.sync(() => server.off("request", handler))
-        }),
-        Fiber.join(serverFiber)
-      ], { discard: true, concurrency: "unbounded" }) as Effect.Effect<never, Error.ServeError, never>
+    const address = server.address()!
+
+    return Server.make({
+      address: typeof address === "string" ?
+        {
+          _tag: "UnixAddress",
+          path: address
+        } :
+        {
+          _tag: "TcpAddress",
+          hostname: address.address,
+          port: address.port
+        },
+      serve: (httpApp) =>
+        Effect.flatMap(Effect.runtime(), (runtime) =>
+          Effect.suspend(() => {
+            const runFork = Runtime.runFork(runtime as Runtime.Runtime<unknown>)
+            const handledApp = App.tapErrorCause(httpApp, (_cause, request) =>
+              Effect.sync(() => {
+                const nodeResponse = (request as ServerRequestImpl).response
+                if (!nodeResponse.headersSent) {
+                  nodeResponse.writeHead(500)
+                }
+                if (!nodeResponse.writableEnded) {
+                  nodeResponse.end()
+                }
+              }))
+            function handler(nodeRequest: Http.IncomingMessage, nodeResponse: Http.ServerResponse) {
+              runFork(handledApp(new ServerRequestImpl(nodeRequest, nodeResponse)))
+            }
+            return Effect.all([
+              Effect.async<never, never, never>(() => {
+                server.on("request", handler)
+                return Effect.sync(() => server.off("request", handler))
+              }),
+              Fiber.join(serverFiber)
+            ], { discard: true, concurrency: "unbounded" }) as Effect.Effect<never, Error.ServeError, never>
+          }))
     })
   }).pipe(
     Effect.locally(
@@ -190,7 +205,7 @@ class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implemen
       method: this.method,
       url: this.url,
       originalUrl: this.originalUrl,
-      headers: this.headers
+      headers: Object.fromEntries(this.headers)
     }
   }
 }
@@ -199,7 +214,7 @@ class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implemen
 export const layer = (
   evaluate: LazyArg<Http.Server>,
   options: Net.ListenOptions
-) => Layer.scoped(Server.HttpServer, make(evaluate, options))
+) => Layer.scoped(Server.Server, make(evaluate, options))
 
 const handleResponse = (
   response: ServerResponse.ServerResponse.NonEffectBody,

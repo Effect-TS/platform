@@ -19,10 +19,12 @@ Added in v1.0.0
   - [HttpAgentTypeId (type alias)](#httpagenttypeid-type-alias)
   - [agentLayer](#agentlayer)
   - [makeAgent](#makeagent)
+  - [makeAgentLayer](#makeagentlayer)
 - [constructors](#constructors)
   - [make](#make)
 - [layers](#layers)
   - [layer](#layer)
+  - [layerWithoutAgent](#layerwithoutagent)
 
 ---
 
@@ -92,6 +94,16 @@ export declare const makeAgent: (options?: Https.AgentOptions) => Effect.Effect<
 
 Added in v1.0.0
 
+## makeAgentLayer
+
+**Signature**
+
+```ts
+export declare const makeAgentLayer: (options?: Https.AgentOptions) => Layer.Layer<never, never, HttpAgent>
+```
+
+Added in v1.0.0
+
 # constructors
 
 ## make
@@ -112,6 +124,16 @@ Added in v1.0.0
 
 ```ts
 export declare const layer: Layer.Layer<never, never, Client.Client.Default>
+```
+
+Added in v1.0.0
+
+## layerWithoutAgent
+
+**Signature**
+
+```ts
+export declare const layerWithoutAgent: Layer.Layer<HttpAgent, never, Client.Client.Default>
 ```
 
 Added in v1.0.0

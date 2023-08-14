@@ -23,28 +23,57 @@ export type TypeId = typeof TypeId
  * @since 1.0.0
  * @category models
  */
-export interface HttpServer {
+export interface Server {
   readonly [TypeId]: TypeId
   readonly serve: <R, E>(httpApp: App.Default<R, E>) => Effect.Effect<R, Error.ServeError, never>
+  readonly address: Address
+}
+
+/**
+ * @since 1.0.0
+ * @category models
+ */
+export type Address = UnixAddress | TcpAddress
+
+/**
+ * @since 1.0.0
+ * @category models
+ */
+export interface TcpAddress {
+  readonly _tag: "TcpAddress"
+  readonly hostname: string
+  readonly port: number
+}
+
+/**
+ * @since 1.0.0
+ * @category models
+ */
+export interface UnixAddress {
+  readonly _tag: "UnixAddress"
+  readonly path: string
 }
 
 /**
  * @since 1.0.0
  * @category constructors
  */
-export const HttpServer: Context.Tag<HttpServer, HttpServer> = internal.httpServerTag
+export const Server: Context.Tag<Server, Server> = internal.serverTag
 
 /**
  * @since 1.0.0
  * @category constructors
  */
 export const make: (
-  serve: (httpApp: App.Default<unknown, unknown>) => Effect.Effect<never, Error.ServeError, never>
-) => HttpServer = internal.make
+  options: {
+    readonly serve: (httpApp: App.Default<unknown, unknown>) => Effect.Effect<never, Error.ServeError, never>
+    readonly address: Address
+  }
+) => Server = internal.make
 
 /**
  * @since 1.0.0
  * @category accessors
  */
-export const serve: <R, E>(httpApp: App.Default<R, E>) => Effect.Effect<HttpServer | R, Error.ServeError, never> =
+export const serve: <R, E>(httpApp: App.Default<R, E>) => Effect.Effect<Server | R, Error.ServeError, never> =
   internal.serve

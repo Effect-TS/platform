@@ -32,7 +32,7 @@ Added in v1.0.0
 ```ts
 export declare const respondServe: <R, E>(
   httpApp: App.Default<R, E>
-) => Effect.Effect<Server.HttpServer | R, Error.ServeError, never>
+) => Effect.Effect<Server.Server | R, Error.ServeError, never>
 ```
 
 Added in v1.0.0
@@ -47,7 +47,7 @@ Added in v1.0.0
 export declare const make: (
   evaluate: LazyArg<Http.Server<typeof Http.IncomingMessage, typeof Http.ServerResponse>>,
   options: Net.ListenOptions
-) => Effect.Effect<Scope.Scope, never, Server.HttpServer>
+) => Effect.Effect<Scope.Scope, never, Server.Server>
 ```
 
 Added in v1.0.0
@@ -62,7 +62,7 @@ Added in v1.0.0
 export declare const layer: (
   evaluate: LazyArg<Http.Server<typeof Http.IncomingMessage, typeof Http.ServerResponse>>,
   options: Net.ListenOptions
-) => Layer.Layer<never, never, Server.HttpServer>
+) => Layer.Layer<never, never, Server.Server>
 ```
 
 Added in v1.0.0

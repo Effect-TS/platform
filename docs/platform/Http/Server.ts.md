@@ -15,10 +15,13 @@ Added in v1.0.0
 - [accessors](#accessors)
   - [serve](#serve)
 - [constructors](#constructors)
-  - [HttpServer](#httpserver)
+  - [Server](#server)
   - [make](#make)
 - [models](#models)
-  - [HttpServer (interface)](#httpserver-interface)
+  - [Address (type alias)](#address-type-alias)
+  - [Server (interface)](#server-interface)
+  - [TcpAddress (interface)](#tcpaddress-interface)
+  - [UnixAddress (interface)](#unixaddress-interface)
 - [type ids](#type-ids)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
@@ -32,19 +35,19 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const serve: <R, E>(httpApp: App.Default<R, E>) => Effect.Effect<HttpServer | R, Error.ServeError, never>
+export declare const serve: <R, E>(httpApp: App.Default<R, E>) => Effect.Effect<Server | R, Error.ServeError, never>
 ```
 
 Added in v1.0.0
 
 # constructors
 
-## HttpServer
+## Server
 
 **Signature**
 
 ```ts
-export declare const HttpServer: Context.Tag<HttpServer, HttpServer>
+export declare const Server: Context.Tag<Server, Server>
 ```
 
 Added in v1.0.0
@@ -54,23 +57,62 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: (
-  serve: (httpApp: App.Default<unknown, unknown>) => Effect.Effect<never, Error.ServeError, never>
-) => HttpServer
+export declare const make: (options: {
+  readonly serve: (httpApp: App.Default<unknown, unknown>) => Effect.Effect<never, Error.ServeError, never>
+  readonly address: Address
+}) => Server
 ```
 
 Added in v1.0.0
 
 # models
 
-## HttpServer (interface)
+## Address (type alias)
 
 **Signature**
 
 ```ts
-export interface HttpServer {
+export type Address = UnixAddress | TcpAddress
+```
+
+Added in v1.0.0
+
+## Server (interface)
+
+**Signature**
+
+```ts
+export interface Server {
   readonly [TypeId]: TypeId
   readonly serve: <R, E>(httpApp: App.Default<R, E>) => Effect.Effect<R, Error.ServeError, never>
+  readonly address: Address
+}
+```
+
+Added in v1.0.0
+
+## TcpAddress (interface)
+
+**Signature**
+
+```ts
+export interface TcpAddress {
+  readonly _tag: 'TcpAddress'
+  readonly hostname: string
+  readonly port: number
+}
+```
+
+Added in v1.0.0
+
+## UnixAddress (interface)
+
+**Signature**
+
+```ts
+export interface UnixAddress {
+  readonly _tag: 'UnixAddress'
+  readonly path: string
 }
 ```
 

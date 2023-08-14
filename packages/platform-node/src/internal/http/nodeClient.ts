@@ -47,7 +47,11 @@ export const makeAgent = (options?: Https.AgentOptions): Effect.Effect<Scope.Sco
   )
 
 /** @internal */
-export const agentLayer = Layer.scoped(HttpAgent, makeAgent())
+export const makeAgentLayer = (options?: Https.AgentOptions): Layer.Layer<never, never, NodeClient.HttpAgent> =>
+  Layer.scoped(HttpAgent, makeAgent(options))
+
+/** @internal */
+export const agentLayer = makeAgentLayer()
 
 const fromAgent = (agent: NodeClient.HttpAgent): Client.Client.Default =>
   Client.make((request) =>
@@ -198,13 +202,25 @@ class ClientResponseImpl extends IncomingMessageImpl<Error.ResponseError> implem
       catch: this.onError
     })
   }
+
+  toString(): string {
+    return `ClientResponse(${this.status})`
+  }
+
+  toJSON(): unknown {
+    return {
+      _tag: "ClientResponse",
+      status: this.status,
+      headers: Object.fromEntries(this.headers)
+    }
+  }
 }
 
 /** @internal */
 export const make = Effect.map(HttpAgent, fromAgent)
 
 /** @internal */
-export const layer = Layer.provide(
-  agentLayer,
-  Layer.effect(Client.Client, make)
-)
+export const layerWithoutAgent = Layer.effect(Client.Client, make)
+
+/** @internal */
+export const layer = Layer.provide(agentLayer, layerWithoutAgent)
