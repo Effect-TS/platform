@@ -9,7 +9,7 @@ import * as internalFormData from "@effect/platform-node/internal/http/formData"
 import { IncomingMessageImpl } from "@effect/platform-node/internal/http/incomingMessage"
 import * as NodeSink from "@effect/platform-node/Sink"
 import * as FileSystem from "@effect/platform/FileSystem"
-import * as App from "@effect/platform/Http/App"
+import type * as App from "@effect/platform/Http/App"
 import type * as FormData from "@effect/platform/Http/FormData"
 import * as Headers from "@effect/platform/Http/Headers"
 import * as IncomingMessage from "@effect/platform/Http/IncomingMessage"
@@ -75,11 +75,11 @@ export const make = (
           hostname: address.address,
           port: address.port
         },
-      serve: (httpApp) =>
-        Effect.flatMap(Effect.runtime(), (runtime) =>
-          Effect.suspend(() => {
-            const runFork = Runtime.runFork(runtime as Runtime.Runtime<unknown>)
-            const handledApp = App.tapErrorCause(httpApp, (_cause, request) =>
+      serve: (httpApp) => {
+        const handledApp = Effect.tapErrorCause(httpApp, (_cause) =>
+          Effect.flatMap(
+            ServerRequest.ServerRequest,
+            (request) =>
               Effect.sync(() => {
                 const nodeResponse = (request as ServerRequestImpl).response
                 if (!nodeResponse.headersSent) {
@@ -88,9 +88,19 @@ export const make = (
                 if (!nodeResponse.writableEnded) {
                   nodeResponse.end()
                 }
-              }))
+              })
+          ))
+        return Effect.flatMap(Effect.runtime(), (runtime) =>
+          Effect.suspend(() => {
+            const runFork = Runtime.runFork(runtime as Runtime.Runtime<unknown>)
             function handler(nodeRequest: Http.IncomingMessage, nodeResponse: Http.ServerResponse) {
-              runFork(handledApp.handler(new ServerRequestImpl(nodeRequest, nodeResponse)))
+              runFork(
+                Effect.provideService(
+                  handledApp,
+                  ServerRequest.ServerRequest,
+                  new ServerRequestImpl(nodeRequest, nodeResponse)
+                )
+              )
             }
             return Effect.all([
               Effect.acquireRelease(
@@ -100,6 +110,7 @@ export const make = (
               Fiber.join(serverFiber)
             ], { discard: true, concurrency: "unbounded" }) as Effect.Effect<never, Error.ServeError, never>
           }))
+      }
     })
   }).pipe(
     Effect.locally(
@@ -110,10 +121,11 @@ export const make = (
 
 /** @internal */
 export const respond = Middleware.make(<R, E>(httpApp: App.Default<R, E>) =>
-  App.tap(
-    App.mapEffect(httpApp, ServerResponse.toNonEffectBody),
-    handleResponse
-  )
+  Effect.flatMap(ServerRequest.ServerRequest, (request) =>
+    Effect.tap(
+      Effect.flatMap(httpApp, ServerResponse.toNonEffectBody),
+      (response) => handleResponse(request, response)
+    ))
 )
 
 /** @internal */
@@ -217,8 +229,8 @@ export const layer = (
 ) => Layer.scoped(Server.Server, make(evaluate, options))
 
 const handleResponse = (
-  response: ServerResponse.ServerResponse.NonEffectBody,
-  request: ServerRequest.ServerRequest
+  request: ServerRequest.ServerRequest,
+  response: ServerResponse.ServerResponse.NonEffectBody
 ) =>
   Effect.suspend((): Effect.Effect<never, Error.ResponseError, void> => {
     const nodeResponse = (request as ServerRequestImpl).response

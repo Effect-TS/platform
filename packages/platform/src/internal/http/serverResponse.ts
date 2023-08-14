@@ -6,7 +6,7 @@ import type * as FileSystem from "@effect/platform/FileSystem"
 import type * as Body from "@effect/platform/Http/Body"
 import * as Headers from "@effect/platform/Http/Headers"
 import type * as Error from "@effect/platform/Http/ServerError"
-import type * as ServerRequest from "@effect/platform/Http/ServerRequest"
+import * as ServerRequest from "@effect/platform/Http/ServerRequest"
 import type * as ServerResponse from "@effect/platform/Http/ServerResponse"
 import * as UrlParams from "@effect/platform/Http/UrlParams"
 import * as internalBody from "@effect/platform/internal/http/body"
@@ -36,18 +36,23 @@ export const isServerResponse = (u: unknown): u is ServerResponse.ServerResponse
 
 /** @internal */
 export const toNonEffectBody = (
-  self: ServerResponse.ServerResponse,
-  request: ServerRequest.ServerRequest
-): Effect.Effect<never, Error.ResponseError, ServerResponse.ServerResponse.NonEffectBody> =>
+  self: ServerResponse.ServerResponse
+): Effect.Effect<ServerRequest.ServerRequest, Error.ResponseError, ServerResponse.ServerResponse.NonEffectBody> =>
   self.body._tag === "Effect" ?
     Effect.map(
-      Effect.mapError(self.body.effect, (error) =>
-        internalError.responseError({
-          reason: "Decode",
-          request,
-          response: self,
-          error
-        })),
+      Effect.catchAll(self.body.effect, (error) =>
+        Effect.flatMap(
+          ServerRequest.ServerRequest,
+          (request) =>
+            Effect.fail(
+              internalError.responseError({
+                reason: "Decode",
+                request,
+                response: self,
+                error
+              })
+            )
+        )),
       (body) => setBody(self, body) as ServerResponse.ServerResponse.NonEffectBody
     ) :
     Effect.succeed(self as ServerResponse.ServerResponse.NonEffectBody)

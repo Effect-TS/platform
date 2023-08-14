@@ -89,9 +89,9 @@ export const isServerResponse: (u: unknown) => u is ServerResponse = internal.is
  * @since 1.0.0
  */
 export const toNonEffectBody: (
-  self: ServerResponse,
-  request: ServerRequest.ServerRequest
-) => Effect.Effect<never, Error.ResponseError, ServerResponse.NonEffectBody> = internal.toNonEffectBody
+  self: ServerResponse
+) => Effect.Effect<ServerRequest.ServerRequest, Error.ResponseError, ServerResponse.NonEffectBody> =
+  internal.toNonEffectBody
 
 /**
  * @since 1.0.0

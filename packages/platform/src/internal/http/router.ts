@@ -1,16 +1,20 @@
 import * as Chunk from "@effect/data/Chunk"
 import * as Context from "@effect/data/Context"
+import * as Equal from "@effect/data/Equal"
 import { dual } from "@effect/data/Function"
+import * as Hash from "@effect/data/Hash"
 import * as Option from "@effect/data/Option"
 import { pipeArguments } from "@effect/data/Pipeable"
 import * as Effect from "@effect/io/Effect"
-import * as App from "@effect/platform/Http/App"
+import type * as App from "@effect/platform/Http/App"
 import type * as Method from "@effect/platform/Http/Method"
 import type * as Router from "@effect/platform/Http/Router"
 import * as Error from "@effect/platform/Http/ServerError"
 import * as ServerRequest from "@effect/platform/Http/ServerRequest"
-import type * as ServerResponse from "@effect/platform/Http/ServerResponse"
 import * as Schema from "@effect/schema/Schema"
+import * as Channel from "@effect/stream/Channel"
+import * as Sink from "@effect/stream/Sink"
+import * as Stream from "@effect/stream/Stream"
 import type { HTTPMethod } from "find-my-way"
 import FindMyWay from "find-my-way"
 
@@ -29,46 +33,25 @@ export const RouteContextTypeId: Router.RouteContextTypeId = Symbol.for(
 export const RouteContext = Context.Tag<Router.RouteContext>("@effect/platform/Http/Router/RouteContext")
 
 /** @internal */
-export const context: Router.ContextHelpers = {
-  request: Effect.map(RouteContext, (_) => _.request),
-  params: Effect.map(RouteContext, (_) => _.params),
-  searchParams: Effect.map(RouteContext, (_) => _.searchParams),
-  schemaParams<I extends Readonly<Record<string, string>>, A>(schema: Schema.Schema<I, A>) {
-    const parse = Schema.parse(schema)
-    return Effect.flatMap(
-      RouteContext,
-      (_) =>
-        parse({
-          ..._.searchParams,
-          ..._.params
-        })
-    )
-  },
-  schemaHeaders<I extends Readonly<Record<string, string>>, A>(schema: Schema.Schema<I, A>) {
-    const parse = ServerRequest.schemaHeaders(schema)
-    return Effect.flatMap(
-      RouteContext,
-      (_) => parse(_.request)
-    )
-  },
-  schemaBodyJson<I, A>(schema: Schema.Schema<I, A>) {
-    const parse = ServerRequest.schemaBodyJson(schema)
-    return Effect.flatMap(
-      RouteContext,
-      (_) => parse(_.request)
-    )
-  },
-  schemaBodyUrlParams<I extends Readonly<Record<string, string>>, A>(schema: Schema.Schema<I, A>) {
-    const parse = ServerRequest.schemaBodyUrlParams(schema)
-    return Effect.flatMap(
-      RouteContext,
-      (_) => parse(_.request)
-    )
-  }
+export const params = Effect.map(RouteContext, (_) => _.params)
+
+/** @internal */
+export const searchParams = Effect.map(RouteContext, (_) => _.searchParams)
+
+/** @internal */
+export const schemaParams = <I extends Readonly<Record<string, string>>, A>(schema: Schema.Schema<I, A>) => {
+  const parse = Schema.parse(schema)
+  return Effect.flatMap(
+    RouteContext,
+    (_) =>
+      parse({
+        ..._.searchParams,
+        ..._.params
+      })
+  )
 }
 
 class RouterImpl<R, E> implements Router.Router<R, E> {
-  readonly [App.TypeId]: App.TypeId = App.TypeId
   readonly [TypeId]: Router.TypeId = TypeId
   constructor(
     readonly routes: Chunk.Chunk<Router.Route<R, E>>,
@@ -77,45 +60,76 @@ class RouterImpl<R, E> implements Router.Router<R, E> {
   pipe() {
     return pipeArguments(this, arguments)
   }
-  get handler() {
-    const router = FindMyWay()
-    Chunk.forEach(this.mounts, ([path, app]) => {
-      const fn = () => {}
-      fn.handler = App.mapRequest(app, (request: ServerRequest.ServerRequest) => sliceRequestUrl(request, path))
-      router.all(path, fn)
-      router.all(path + "/*", fn)
-    })
-    Chunk.forEach(this.routes, (route) => {
-      const fn = () => {}
-      fn.handler = route
-      if (route.method === "*") {
-        router.all(route.path, fn)
-      } else {
-        router.on(route.method, route.path, fn)
-      }
-    })
-    return (
-      request: ServerRequest.ServerRequest
-    ): Effect.Effect<Exclude<R, Router.RouteContext>, E | Error.RouteNotFound, ServerResponse.ServerResponse> => {
+  private httpApp: App.Default<Exclude<R, Router.RouteContext>, E | Error.RouteNotFound> | undefined
+  commit() {
+    if (this.httpApp === undefined) {
+      this.httpApp = toHttpApp(this)
+    }
+    return this.httpApp
+  }
+
+  // implements HttpApp/Effect
+  public _tag = "Commit" // OP_COMMIT
+  readonly [Effect.EffectTypeId] = undefined as any
+  readonly [Stream.StreamTypeId] = undefined as any
+  readonly [Sink.SinkTypeId] = undefined as any
+  readonly [Channel.ChannelTypeId] = undefined as any;
+  [Equal.symbol](
+    this: RouterImpl<R, E>,
+    that: RouterImpl<R, E>
+  ): boolean {
+    return this === that
+  }
+  [Hash.symbol](this: RouterImpl<R, E>): number {
+    return Hash.random(this)
+  }
+}
+
+const toHttpApp = <R, E>(
+  self: Router.Router<R, E>
+): App.Default<Exclude<R, Router.RouteContext>, E | Error.RouteNotFound> => {
+  const router = FindMyWay()
+  Chunk.forEach(self.mounts, ([path, app]) => {
+    const fn = () => {}
+    fn.handler = Effect.updateService(app, ServerRequest.ServerRequest, (request) => sliceRequestUrl(request, path))
+    router.all(path, fn)
+    router.all(path + "/*", fn)
+  })
+  Chunk.forEach(self.routes, (route) => {
+    const fn = () => {}
+    fn.handler = route
+    if (route.method === "*") {
+      router.all(route.path, fn)
+    } else {
+      router.on(route.method, route.path, fn)
+    }
+  })
+  return Effect.flatMap(
+    ServerRequest.ServerRequest,
+    (request): App.Default<Exclude<R, Router.RouteContext>, E | Error.RouteNotFound> => {
       const result = router.find(request.method as HTTPMethod, request.url)
       if (result === null) {
         return Effect.fail(Error.RouteNotFound({ request }))
       }
       const handler = (result.handler as any).handler
-      if (App.TypeId in handler) {
-        return (handler as App.Default<Exclude<R, Router.RouteContext>, E>).handler(request)
+      if (RouteTypeId in handler) {
+        const route = handler as Router.Route<R, E>
+        if (route.prefix._tag === "Some") {
+          request = sliceRequestUrl(request, route.prefix.value)
+        }
+        return Effect.mapInputContext(
+          route.handler,
+          (context) =>
+            Context.add(
+              Context.add(context, ServerRequest.ServerRequest, request),
+              RouteContext,
+              new RouteContextImpl(result.params, result.searchParams)
+            ) as Context.Context<R>
+        )
       }
-      const route = handler as Router.Route<R, E>
-      if (route.prefix._tag === "Some") {
-        request = sliceRequestUrl(request, route.prefix.value)
-      }
-      return Effect.provideService(
-        route.handler,
-        RouteContext,
-        new RouteContextImpl(request, result.params, result.searchParams)
-      )
+      return (handler as App.Default<Exclude<R, Router.RouteContext>, E>)
     }
-  }
+  )
 }
 
 function sliceRequestUrl(request: ServerRequest.ServerRequest, prefix: string) {
@@ -136,7 +150,6 @@ class RouteImpl<R, E> implements Router.Route<R, E> {
 class RouteContextImpl implements Router.RouteContext {
   readonly [RouteContextTypeId]: Router.RouteContextTypeId = RouteContextTypeId
   constructor(
-    readonly request: ServerRequest.ServerRequest,
     readonly params: Readonly<Record<string, string | undefined>>,
     readonly searchParams: Readonly<Record<string, string>>
   ) {}

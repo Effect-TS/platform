@@ -34,8 +34,7 @@ export const make: (
  */
 export const respond: <R, E>(
   httpApp: App.Default<R, E>
-) => App.HttpApp<R, E | Error.ResponseError, ServerRequest.ServerRequest, ServerResponse.ServerResponse.NonEffectBody> =
-  internal.respond
+) => App.HttpApp<R, E | Error.ResponseError, ServerResponse.ServerResponse.NonEffectBody> = internal.respond
 
 /**
  * @since 1.0.0
@@ -43,7 +42,8 @@ export const respond: <R, E>(
  */
 export const respondServe: <R, E>(
   httpApp: App.Default<R, E>
-) => Effect.Effect<Scope.Scope | Server.Server | R, Error.ServeError, never> = internal.respondServe
+) => Effect.Effect<Scope.Scope | Server.Server | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never> =
+  internal.respondServe
 
 /**
  * @since 1.0.0

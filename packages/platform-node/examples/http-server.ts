@@ -9,7 +9,7 @@ Http.router.empty.pipe(
   Http.router.get(
     "/",
     Effect.map(
-      Http.router.context.request,
+      Http.request.ServerRequest,
       (req) => Http.response.text(req.url)
     )
   ),

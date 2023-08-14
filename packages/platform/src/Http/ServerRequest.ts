@@ -1,6 +1,7 @@
 /**
  * @since 1.0.0
  */
+import type * as Context from "@effect/data/Context"
 import type * as Effect from "@effect/io/Effect"
 import type * as Scope from "@effect/io/Scope"
 import type * as FileSystem from "@effect/platform/FileSystem"
@@ -11,6 +12,8 @@ import type { Method } from "@effect/platform/Http/Method"
 import type * as Error from "@effect/platform/Http/ServerError"
 import * as internal from "@effect/platform/internal/http/serverRequest"
 import type * as Path from "@effect/platform/Path"
+import type * as ParseResult from "@effect/schema/ParseResult"
+import type * as Schema from "@effect/schema/Schema"
 import type * as Stream from "@effect/stream/Stream"
 
 export {
@@ -18,22 +21,7 @@ export {
    * @since 1.0.0
    * @category fiber refs
    */
-  maxBodySize,
-  /**
-   * @since 1.0.0
-   * @category schema
-   */
-  schemaBodyJson,
-  /**
-   * @since 1.0.0
-   * @category schema
-   */
-  schemaBodyUrlParams,
-  /**
-   * @since 1.0.0
-   * @category schema
-   */
-  schemaHeaders
+  maxBodySize
 } from "@effect/platform/Http/IncomingMessage"
 
 /**
@@ -64,3 +52,33 @@ export interface ServerRequest extends IncomingMessage.IncomingMessage<Error.Req
   readonly setUrl: (url: string) => ServerRequest
   readonly replaceHeaders: (headers: Headers.Headers) => ServerRequest
 }
+
+/**
+ * @since 1.0.0
+ * @category context
+ */
+export const ServerRequest: Context.Tag<ServerRequest, ServerRequest> = internal.serverRequestTag
+
+/**
+ * @since 1.0.0
+ * @category schema
+ */
+export const schemaHeaders: <I extends Readonly<Record<string, string>>, A>(
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<ServerRequest, ParseResult.ParseError, A> = internal.schemaHeaders
+
+/**
+ * @since 1.0.0
+ * @category schema
+ */
+export const schemaBodyJson: <I, A>(
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<ServerRequest, Error.RequestError | ParseResult.ParseError, A> = internal.schemaBodyJson
+
+/**
+ * @since 1.0.0
+ * @category schema
+ */
+export const schemaBodyUrlParams: <I extends Readonly<Record<string, string>>, A>(
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<ServerRequest, Error.RequestError | ParseResult.ParseError, A> = internal.schemaBodyUrlParams

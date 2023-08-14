@@ -8,7 +8,6 @@ import type * as Effect from "@effect/io/Effect"
 import type * as App from "@effect/platform/Http/App"
 import type * as Method from "@effect/platform/Http/Method"
 import type * as Error from "@effect/platform/Http/ServerError"
-import type * as ServerRequest from "@effect/platform/Http/ServerRequest"
 import type * as ServerResponse from "@effect/platform/Http/ServerResponse"
 import * as internal from "@effect/platform/internal/http/router"
 import type * as ParseResult from "@effect/schema/ParseResult"
@@ -92,7 +91,6 @@ export type RouteContextTypeId = typeof RouteContextTypeId
  */
 export interface RouteContext {
   readonly [RouteContextTypeId]: RouteContextTypeId
-  readonly request: ServerRequest.ServerRequest
   readonly params: Readonly<Record<string, string | undefined>>
   readonly searchParams: Readonly<Record<string, string>>
 }
@@ -105,43 +103,31 @@ export const RouteContext: Context.Tag<RouteContext, RouteContext> = internal.Ro
 
 /**
  * @since 1.0.0
- * @category models
+ * @category route context
  */
-export interface ContextHelpers {
-  readonly request: Effect.Effect<
-    RouteContext,
-    never,
-    ServerRequest.ServerRequest
-  >
-  readonly params: Effect.Effect<
-    RouteContext,
-    never,
-    Readonly<Record<string, string | undefined>>
-  >
-  readonly searchParams: Effect.Effect<
-    RouteContext,
-    never,
-    Readonly<Record<string, string>>
-  >
-  readonly schemaParams: <I extends Readonly<Record<string, string>>, A>(
-    schema: Schema.Schema<I, A>
-  ) => Effect.Effect<RouteContext, ParseResult.ParseError, A>
-  readonly schemaHeaders: <I extends Readonly<Record<string, string>>, A>(
-    schema: Schema.Schema<I, A>
-  ) => Effect.Effect<RouteContext, ParseResult.ParseError, A>
-  readonly schemaBodyJson: <I, A>(
-    schema: Schema.Schema<I, A>
-  ) => Effect.Effect<RouteContext, ParseResult.ParseError | Error.RequestError, A>
-  readonly schemaBodyUrlParams: <I extends Readonly<Record<string, string>>, A>(
-    schema: Schema.Schema<I, A>
-  ) => Effect.Effect<RouteContext, Error.RequestError | ParseResult.ParseError, A>
-}
+export const params: Effect.Effect<
+  RouteContext,
+  never,
+  Readonly<Record<string, string | undefined>>
+> = internal.params
 
 /**
  * @since 1.0.0
  * @category route context
  */
-export const context: ContextHelpers = internal.context
+export const searchParams: Effect.Effect<
+  RouteContext,
+  never,
+  Readonly<Record<string, string>>
+> = internal.searchParams
+
+/**
+ * @since 1.0.0
+ * @category route context
+ */
+export const schemaParams: <I extends Readonly<Record<string, string>>, A>(
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<RouteContext, ParseResult.ParseError, A> = internal.schemaParams
 
 /**
  * @since 1.0.0

@@ -46,7 +46,7 @@ describe("HttpServer", () => {
         Http.router.get(
           "/todos/:id",
           Effect.map(
-            Http.router.context.schemaParams(IdParams),
+            Http.router.schemaParams(IdParams),
             ({ id }) => todoResponse({ id, title: "test" })
           )
         ),
@@ -65,7 +65,7 @@ describe("HttpServer", () => {
         Http.router.post(
           "/upload",
           Effect.gen(function*(_) {
-            const request = yield* _(Http.router.context.request)
+            const request = yield* _(Http.request.ServerRequest)
             const formData = yield* _(request.formData)
             const file = formData.get("file") as globalThis.File
             expect(file.name.endsWith("/test.txt")).toEqual(true)
@@ -89,8 +89,8 @@ describe("HttpServer", () => {
   it("mount", () =>
     Effect.gen(function*(_) {
       const child = Http.router.empty.pipe(
-        Http.router.get("/", Effect.map(Http.router.context.request, (_) => Http.response.text(_.url))),
-        Http.router.get("/:id", Effect.map(Http.router.context.request, (_) => Http.response.text(_.url)))
+        Http.router.get("/", Effect.map(Http.request.ServerRequest, (_) => Http.response.text(_.url))),
+        Http.router.get("/:id", Effect.map(Http.request.ServerRequest, (_) => Http.response.text(_.url)))
       )
       yield* _(
         Http.router.empty,
@@ -108,8 +108,8 @@ describe("HttpServer", () => {
   it("mountApp", () =>
     Effect.gen(function*(_) {
       const child = Http.router.empty.pipe(
-        Http.router.get("/", Effect.map(Http.router.context.request, (_) => Http.response.text(_.url))),
-        Http.router.get("/:id", Effect.map(Http.router.context.request, (_) => Http.response.text(_.url)))
+        Http.router.get("/", Effect.map(Http.request.ServerRequest, (_) => Http.response.text(_.url))),
+        Http.router.get("/:id", Effect.map(Http.request.ServerRequest, (_) => Http.response.text(_.url)))
       )
       yield* _(
         Http.router.empty,
