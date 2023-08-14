@@ -10,7 +10,7 @@ Http.router.empty.pipe(
   Http.router.get("/", Effect.succeed(response)),
   Http.router.toHttpApp,
   Http.server.respond,
-  // Http.middleware.logger,
+  Http.middleware.logger,
   Http.server.serve,
   Effect.provideLayer(ServerLive),
   Effect.tapErrorCause(Effect.logError),
