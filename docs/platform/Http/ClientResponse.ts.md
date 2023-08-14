@@ -17,7 +17,8 @@ Added in v1.0.0
 - [models](#models)
   - [ClientResponse (interface)](#clientresponse-interface)
 - [schema](#schema)
-  - [schemaBody](#schemabody)
+  - [schemaBodyJson](#schemabodyjson)
+  - [schemaBodyUrlParams](#schemabodyurlparams)
   - [schemaHeaders](#schemaheaders)
 - [type ids](#type-ids)
   - [TypeId](#typeid)
@@ -55,14 +56,26 @@ Added in v1.0.0
 
 # schema
 
-## schemaBody
+## schemaBodyJson
 
 **Signature**
 
 ```ts
-export declare const schemaBody: <I, A>(
+export declare const schemaBodyJson: <I, A>(
   schema: Schema<I, A>
 ) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, E | ParseError, A>
+```
+
+Added in v1.0.0
+
+## schemaBodyUrlParams
+
+**Signature**
+
+```ts
+export declare const schemaBodyUrlParams: <I extends Readonly<Record<string, string>>, A>(
+  schema: Schema<I, A>
+) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, ParseError | E, A>
 ```
 
 Added in v1.0.0
@@ -72,7 +85,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const schemaHeaders: <I, A>(
+export declare const schemaHeaders: <I extends Readonly<Record<string, string>>, A>(
   schema: Schema<I, A>
 ) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, ParseError, A>
 ```

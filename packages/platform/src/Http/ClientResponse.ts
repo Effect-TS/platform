@@ -12,7 +12,12 @@ export {
    * @since 1.0.0
    * @category schema
    */
-  schemaBody,
+  schemaBodyJson,
+  /**
+   * @since 1.0.0
+   * @category schema
+   */
+  schemaBodyUrlParams,
   /**
    * @since 1.0.0
    * @category schema

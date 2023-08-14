@@ -2,9 +2,9 @@ import * as Effect from "@effect/io/Effect"
 import type * as Error from "@effect/platform/Http/ClientError"
 import type * as ClientRequest from "@effect/platform/Http/ClientRequest"
 import type * as ClientResponse from "@effect/platform/Http/ClientResponse"
-import type * as FormData from "@effect/platform/Http/FormData"
 import * as Headers from "@effect/platform/Http/Headers"
 import * as IncomingMessage from "@effect/platform/Http/IncomingMessage"
+import * as UrlParams from "@effect/platform/Http/UrlParams"
 import * as internalError from "@effect/platform/internal/http/clientError"
 import * as Stream from "@effect/stream/Stream"
 
@@ -77,6 +77,20 @@ class ClientResponseImpl implements ClientResponse.ClientResponse {
     })
   }
 
+  get urlParams(): Effect.Effect<never, Error.ResponseError, UrlParams.UrlParams> {
+    return Effect.flatMap(this.text, (_) =>
+      Effect.try({
+        try: () => UrlParams.fromInput(new URLSearchParams(_)),
+        catch: (_) =>
+          internalError.responseError({
+            request: this.request,
+            response: this,
+            reason: "Decode",
+            error: _
+          })
+      }))
+  }
+
   get formData(): Effect.Effect<never, Error.ResponseError, FormData> {
     return Effect.tryPromise({
       try: () => this.source.formData(),
@@ -88,15 +102,6 @@ class ClientResponseImpl implements ClientResponse.ClientResponse {
           error: _
         })
     })
-  }
-
-  get formDataStream(): Stream.Stream<never, Error.ResponseError, FormData.Part> {
-    return Stream.fail(internalError.responseError({
-      request: this.request,
-      response: this,
-      reason: "Decode",
-      error: "not implemented"
-    }))
   }
 
   get arrayBuffer(): Effect.Effect<never, Error.ResponseError, ArrayBuffer> {

@@ -4,6 +4,7 @@ import * as FiberRef from "@effect/io/FiberRef"
 import * as NodeStream from "@effect/platform-node/Stream"
 import * as Headers from "@effect/platform/Http/Headers"
 import * as IncomingMessage from "@effect/platform/Http/IncomingMessage"
+import * as UrlParams from "@effect/platform/Http/UrlParams"
 import type * as Stream from "@effect/stream/Stream"
 import type * as Http from "node:http"
 
@@ -37,6 +38,14 @@ export class IncomingMessageImpl<E> implements IncomingMessage.IncomingMessage<E
       try: (_) => JSON.parse(_) as unknown,
       catch: this.onError
     })
+  }
+
+  get urlParams(): Effect.Effect<never, E, UrlParams.UrlParams> {
+    return Effect.flatMap(this.text, (_) =>
+      Effect.try({
+        try: () => UrlParams.fromInput(new URLSearchParams(_)),
+        catch: this.onError
+      }))
   }
 
   get stream(): Stream.Stream<never, E, Uint8Array> {

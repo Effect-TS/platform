@@ -7,6 +7,7 @@ import * as Effect from "@effect/io/Effect"
 import * as FiberRef from "@effect/io/FiberRef"
 import type * as FileSystem from "@effect/platform/FileSystem"
 import type * as Headers from "@effect/platform/Http/Headers"
+import type * as UrlParams from "@effect/platform/Http/UrlParams"
 import type * as ParseResult from "@effect/schema/ParseResult"
 import * as Schema from "@effect/schema/Schema"
 import type * as Stream from "@effect/stream/Stream"
@@ -32,6 +33,7 @@ export interface IncomingMessage<E> {
   readonly headers: Headers.Headers
   readonly json: Effect.Effect<never, E, unknown>
   readonly text: Effect.Effect<never, E, string>
+  readonly urlParams: Effect.Effect<never, E, UrlParams.UrlParams>
   readonly arrayBuffer: Effect.Effect<never, E, ArrayBuffer>
   readonly stream: Stream.Stream<never, E, Uint8Array>
 }
@@ -40,7 +42,7 @@ export interface IncomingMessage<E> {
  * @since 1.0.0
  * @category schema
  */
-export const schemaBody = <I, A>(schema: Schema.Schema<I, A>) => {
+export const schemaBodyJson = <I, A>(schema: Schema.Schema<I, A>) => {
   const parse = Schema.parse(schema)
   return <E>(self: IncomingMessage<E>): Effect.Effect<never, E | ParseResult.ParseError, A> =>
     Effect.flatMap(self.json, parse)
@@ -50,7 +52,17 @@ export const schemaBody = <I, A>(schema: Schema.Schema<I, A>) => {
  * @since 1.0.0
  * @category schema
  */
-export const schemaHeaders = <I, A>(schema: Schema.Schema<I, A>) => {
+export const schemaBodyUrlParams = <I extends Readonly<Record<string, string>>, A>(schema: Schema.Schema<I, A>) => {
+  const parse = Schema.parse(schema)
+  return <E>(self: IncomingMessage<E>): Effect.Effect<never, E | ParseResult.ParseError, A> =>
+    Effect.flatMap(self.urlParams, (_) => parse(Object.fromEntries(_)))
+}
+
+/**
+ * @since 1.0.0
+ * @category schema
+ */
+export const schemaHeaders = <I extends Readonly<Record<string, string>>, A>(schema: Schema.Schema<I, A>) => {
   const parse = Schema.parse(schema)
   return <E>(self: IncomingMessage<E>): Effect.Effect<never, ParseResult.ParseError, A> =>
     parse(Object.fromEntries(self.headers))

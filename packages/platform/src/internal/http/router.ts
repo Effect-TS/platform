@@ -60,8 +60,17 @@ export const schemaHeaders = <I extends Readonly<Record<string, string>>, A>(sch
 }
 
 /** @internal */
-export const schemaBody = <I extends Readonly<Record<string, string>>, A>(schema: Schema.Schema<I, A>) => {
-  const parse = ServerRequest.schemaBody(schema)
+export const schemaBodyJson = <I, A>(schema: Schema.Schema<I, A>) => {
+  const parse = ServerRequest.schemaBodyJson(schema)
+  return Effect.flatMap(
+    RouteContext,
+    (_) => parse(_.request)
+  )
+}
+
+/** @internal */
+export const schemaBodyUrlParams = <I extends Readonly<Record<string, string>>, A>(schema: Schema.Schema<I, A>) => {
+  const parse = ServerRequest.schemaBodyUrlParams(schema)
   return Effect.flatMap(
     RouteContext,
     (_) => parse(_.request)
