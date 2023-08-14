@@ -111,8 +111,11 @@ export const formData = (
   source: Http.IncomingMessage
 ) =>
   Effect.flatMap(
-    Effect.all([FileSystem.FileSystem, Path.Path]),
-    ([fs, path_]) =>
+    Effect.all([
+      Effect.flatMap(FileSystem.FileSystem, (_) => _.makeTempDirectoryScoped()),
+      Path.Path
+    ]),
+    ([dir, path_]) =>
       Stream.runFoldEffect(
         fromRequest(source),
         new globalThis.FormData(),
@@ -122,22 +125,17 @@ export const formData = (
             return Effect.succeed(formData)
           }
           const file = part as FileImpl
-          return Effect.flatMap(
-            fs.makeTempDirectoryScoped(),
-            (dir) => {
-              const path = path_.join(dir, file.name)
-              formData.append(part.key, new Blob(), path)
-              return Effect.as(
-                Effect.tryPromise({
-                  try: (signal) =>
-                    NodeStreamP.pipeline(file.source, NodeFs.createWriteStream(path), {
-                      signal
-                    }),
-                  catch: identity
+          const path = path_.join(dir, file.name)
+          formData.append(part.key, new Blob([], { type: file.contentType }), path)
+          return Effect.as(
+            Effect.tryPromise({
+              try: (signal) =>
+                NodeStreamP.pipeline(file.source, NodeFs.createWriteStream(path), {
+                  signal
                 }),
-                formData
-              )
-            }
+              catch: identity
+            }),
+            formData
           )
         }
       )

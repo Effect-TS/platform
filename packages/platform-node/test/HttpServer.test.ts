@@ -68,6 +68,9 @@ describe("HttpServer", () => {
           Effect.gen(function*(_) {
             const request = yield* _(Http.router.request)
             const formData = yield* _(request.formData)
+            const file = formData.get("file") as globalThis.File
+            expect(file.name.endsWith("/test.txt")).toEqual(true)
+            expect(file.type).toEqual("text/plain")
             return Http.response.json({ ok: formData.has("file") })
           }).pipe(Effect.scoped)
         ),
@@ -77,7 +80,7 @@ describe("HttpServer", () => {
       )
       const client = yield* _(makeClient)
       const formData = new FormData()
-      formData.append("file", new Blob(["test"]), "test.txt")
+      formData.append("file", new Blob(["test"], { type: "text/plain" }), "test.txt")
       const result = yield* _(
         client(HttpC.request.post("/upload", { body: HttpC.body.formData(formData) })),
         Effect.flatMap((_) => _.json)
