@@ -8,7 +8,6 @@ const response = Http.response.unsafeJson({ message: "Hello World" })
 
 Http.router.empty.pipe(
   Http.router.get("/", Effect.succeed(response)),
-  Http.router.toHttpApp,
   Http.server.respond,
   Http.middleware.logger,
   Http.server.serve,

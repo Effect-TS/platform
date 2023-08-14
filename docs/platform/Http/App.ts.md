@@ -388,7 +388,7 @@ Added in v1.0.0
 ```ts
 export interface HttpApp<R, E, In, Out> extends Pipeable {
   readonly [TypeId]: TypeId
-  (request: In): Effect.Effect<R, E, Out>
+  readonly handler: (request: In) => Effect.Effect<R, E, Out>
 }
 ```
 

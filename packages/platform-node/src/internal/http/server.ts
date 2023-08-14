@@ -90,13 +90,13 @@ export const make = (
                 }
               }))
             function handler(nodeRequest: Http.IncomingMessage, nodeResponse: Http.ServerResponse) {
-              runFork(handledApp(new ServerRequestImpl(nodeRequest, nodeResponse)))
+              runFork(handledApp.handler(new ServerRequestImpl(nodeRequest, nodeResponse)))
             }
             return Effect.all([
-              Effect.async<never, never, never>(() => {
-                server.on("request", handler)
-                return Effect.sync(() => server.off("request", handler))
-              }),
+              Effect.acquireRelease(
+                Effect.sync(() => server.on("request", handler)),
+                () => Effect.sync(() => server.off("request", handler))
+              ),
               Fiber.join(serverFiber)
             ], { discard: true, concurrency: "unbounded" }) as Effect.Effect<never, Error.ServeError, never>
           }))

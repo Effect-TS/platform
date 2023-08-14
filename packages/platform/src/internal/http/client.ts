@@ -114,7 +114,7 @@ export const fetchOk = (
 ): Client.Client.Default => filterStatusOk(fetch(options))
 
 /** @internal */
-export const fetchLayer = Layer.succeed(tag, fetch())
+export const layer = Layer.succeed(tag, fetch())
 
 /** @internal */
 export const catchTag: {

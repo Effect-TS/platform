@@ -13,7 +13,7 @@ export const logger = make(<R, E>(httpApp: App.Default<R, E>) =>
   internalApp.makeDefault((request) =>
     Effect.withLogSpan(
       Effect.onExit(
-        httpApp(request),
+        httpApp.handler(request),
         (exit) =>
           Effect.annotateLogs(Effect.log("", exit._tag === "Failure" ? exit.cause : undefined), {
             "http.method": request.method,
@@ -31,7 +31,7 @@ export const tracer = make(<R, E>(httpApp: App.Default<R, E>) =>
   internalApp.makeDefault((request) =>
     Effect.withSpan(
       Effect.tap(
-        httpApp(request),
+        httpApp.handler(request),
         (response) => Effect.annotateCurrentSpan("http.status", response.status)
       ),
       `http ${request.method}`,
@@ -45,8 +45,8 @@ export const xForwardedHeaders = make((httpApp) =>
   internalApp.makeDefault((request) => {
     const forwardedHost = Headers.get(request.headers, "x-forwarded-host")
     return forwardedHost._tag === "Some"
-      ? httpApp(request.replaceHeaders(Headers.set(request.headers, "host", forwardedHost.value)))
-      : httpApp(request)
+      ? httpApp.handler(request.replaceHeaders(Headers.set(request.headers, "host", forwardedHost.value)))
+      : httpApp.handler(request)
   })
 )
 

@@ -27,7 +27,7 @@ export type TypeId = typeof TypeId
  */
 export interface HttpApp<R, E, In, Out> extends Pipeable {
   readonly [TypeId]: TypeId
-  (request: In): Effect.Effect<R, E, Out>
+  readonly handler: (request: In) => Effect.Effect<R, E, Out>
 }
 
 /**
@@ -104,12 +104,7 @@ export const catchTags: {
     | {
       [K in keyof Cases]: Cases[K] extends (...args: Array<any>) => Effect.Effect<infer R, any, any> ? R : never
     }[keyof Cases],
-    | Exclude<E, {
-      _tag: keyof Cases /**
-       * @since 1.0.0
-       * @category combinators
-       */
-    }>
+    | Exclude<E, { _tag: keyof Cases }>
     | {
       [K in keyof Cases]: Cases[K] extends (...args: Array<any>) => Effect.Effect<any, infer E, any> ? E : never
     }[keyof Cases],

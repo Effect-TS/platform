@@ -27,7 +27,7 @@ Added in v1.0.0
   - [filterStatus](#filterstatus)
   - [filterStatusOk](#filterstatusok)
 - [layers](#layers)
-  - [fetchLayer](#fetchlayer)
+  - [layer](#layer)
 - [mapping & sequencing](#mapping--sequencing)
   - [map](#map)
   - [mapEffect](#mapeffect)
@@ -248,12 +248,12 @@ Added in v1.0.0
 
 # layers
 
-## fetchLayer
+## layer
 
 **Signature**
 
 ```ts
-export declare const fetchLayer: Layer.Layer<never, never, Client.Default>
+export declare const layer: Layer.Layer<never, never, Client.Default>
 ```
 
 Added in v1.0.0

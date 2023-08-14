@@ -3,6 +3,7 @@
  */
 import type * as Context from "@effect/data/Context"
 import type * as Effect from "@effect/io/Effect"
+import type * as Scope from "@effect/io/Scope"
 import type * as App from "@effect/platform/Http/App"
 import type * as Error from "@effect/platform/Http/ServerError"
 import * as internal from "@effect/platform/internal/http/server"
@@ -25,7 +26,7 @@ export type TypeId = typeof TypeId
  */
 export interface Server {
   readonly [TypeId]: TypeId
-  readonly serve: <R, E>(httpApp: App.Default<R, E>) => Effect.Effect<R, Error.ServeError, never>
+  readonly serve: <R, E>(httpApp: App.Default<R, E>) => Effect.Effect<R | Scope.Scope, Error.ServeError, never>
   readonly address: Address
 }
 
@@ -75,5 +76,6 @@ export const make: (
  * @since 1.0.0
  * @category accessors
  */
-export const serve: <R, E>(httpApp: App.Default<R, E>) => Effect.Effect<Server | R, Error.ServeError, never> =
-  internal.serve
+export const serve: <R, E>(
+  httpApp: App.Default<R, E>
+) => Effect.Effect<Server | R | Scope.Scope, Error.ServeError, never> = internal.serve

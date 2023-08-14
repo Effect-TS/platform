@@ -24,7 +24,7 @@ export * from "@effect/platform/Http/Server"
  * @category constructors
  */
 export const make: (
-  evaluate: LazyArg<Http.Server<typeof Http.IncomingMessage, typeof Http.ServerResponse>>,
+  evaluate: LazyArg<Http.Server>,
   options: Net.ListenOptions
 ) => Effect.Effect<Scope.Scope, never, Server.Server> = internal.make
 
@@ -43,7 +43,7 @@ export const respond: <R, E>(
  */
 export const respondServe: <R, E>(
   httpApp: App.Default<R, E>
-) => Effect.Effect<R | Server.Server, Error.ServeError, never> = internal.respondServe
+) => Effect.Effect<Scope.Scope | Server.Server | R, Error.ServeError, never> = internal.respondServe
 
 /**
  * @since 1.0.0

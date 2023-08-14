@@ -49,7 +49,7 @@ export const Client: Context.Tag<Client.Default, Client.Default> = internal.tag
  * @since 1.0.0
  * @category layers
  */
-export const fetchLayer: Layer.Layer<never, never, Client.Default> = internal.fetchLayer
+export const layer: Layer.Layer<never, never, Client.Default> = internal.layer
 
 /**
  * @since 1.0.0

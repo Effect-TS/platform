@@ -28,8 +28,9 @@ export const isHttpApp = (
 export const make = <R, E, In, Out>(
   f: (req: In) => Effect.Effect<R, E, Out>
 ): App.HttpApp<R, E, In, Out> => {
-  Object.setPrototypeOf(f, httpAppProto)
-  return f as any
+  const a = Object.create(httpAppProto)
+  a.handler = f
+  return a
 }
 
 /** @internal */
@@ -87,7 +88,7 @@ export const catchTag: {
     tag: K,
     f: (e: Extract<E, { _tag: K }>, request: InX) => Effect.Effect<R1, E1, A1>
   ): App.HttpApp<R1 | R, E1 | Exclude<E, { _tag: K }>, In, A1 | A> =>
-    make((request) => Effect.catchTag(self(request), tag, (e) => f(e, request as InX)))
+    make((request) => Effect.catchTag(self.handler(request), tag, (e) => f(e, request as InX)))
 )
 
 /** @internal */
@@ -202,7 +203,7 @@ export const catchTags: {
       ) => Effect.Effect<any, any, infer A> ? A
         : never
     }[keyof Cases]
-  > => make((request) => Effect.catchTags(self(request), cases))
+  > => make((request) => Effect.catchTags(self.handler(request), cases))
 )
 
 /** @internal */
@@ -222,7 +223,7 @@ export const catchAll: {
     self: App.HttpApp<R, E, In, A>,
     f: (e: E, request: InX) => Effect.Effect<R2, E2, A2>
   ): App.HttpApp<R | R2, E2, In, A2 | A> =>
-    make((request) => Effect.catchAll(self(request), (e) => f(e, request as InX)))
+    make((request) => Effect.catchAll(self.handler(request), (e) => f(e, request as InX)))
 )
 
 /** @internal */
@@ -242,7 +243,7 @@ export const catchAllCause: {
     self: App.HttpApp<R, E, In, A>,
     f: (e: Cause.Cause<E>, request: InX) => Effect.Effect<R2, E2, A2>
   ): App.HttpApp<R | R2, E2, In, A2 | A> =>
-    make((request) => Effect.catchAllCause(self(request), (e) => f(e, request as InX)))
+    make((request) => Effect.catchAllCause(self.handler(request), (e) => f(e, request as InX)))
 )
 
 /** @internal */
@@ -256,7 +257,7 @@ export const compose = dual<
     self: App.HttpApp<R, E, In, Out>,
     that: App.HttpApp<R2, E2, InX, Out2>
   ) => App.HttpApp<R | R2, E | E2, In, Out2>
->(2, (self, that) => make((req) => Effect.flatMap(self(req), (out) => that(out as any))))
+>(2, (self, that) => make((req) => Effect.flatMap(self.handler(req), (out) => that.handler(out as any))))
 
 /** @internal */
 export const map = dual<
@@ -267,7 +268,7 @@ export const map = dual<
     self: App.HttpApp<R, E, In, A>,
     f: (a: A, request: In) => B
   ) => App.HttpApp<R, E, In, B>
->(2, (self, f) => make((req) => Effect.map(self(req), (a) => f(a, req))))
+>(2, (self, f) => make((req) => Effect.map(self.handler(req), (a) => f(a, req))))
 
 /** @internal */
 export const mapEffect = dual<
@@ -280,7 +281,7 @@ export const mapEffect = dual<
     self: App.HttpApp<R, E, In, A>,
     f: (a: A, request: In) => Effect.Effect<R2, E1, B>
   ) => App.HttpApp<R | R2, E | E1, In, B>
->(2, (self, f) => make((req) => Effect.flatMap(self(req), (a) => f(a, req))))
+>(2, (self, f) => make((req) => Effect.flatMap(self.handler(req), (a) => f(a, req))))
 
 /** @internal */
 export const mapRequest = dual<
@@ -291,7 +292,7 @@ export const mapRequest = dual<
     self: App.HttpApp<R, E, In, A>,
     f: (request: In2) => In
   ) => App.HttpApp<R, E, In2, A>
->(2, (self, f) => make((req) => self(f(req))))
+>(2, (self, f) => make((req) => self.handler(f(req))))
 
 /** @internal */
 export const mapRequestEffect = dual<
@@ -304,7 +305,7 @@ export const mapRequestEffect = dual<
     self: App.HttpApp<R, E, In, A>,
     f: (request: In2) => Effect.Effect<R2, E1, In>
   ) => App.HttpApp<R | R2, E | E1, In2, A>
->(2, (self, f) => make((req) => Effect.flatMap(f(req), self)))
+>(2, (self, f) => make((req) => Effect.flatMap(f(req), self.handler)))
 
 /** @internal */
 export const provideService = dual<
@@ -319,7 +320,7 @@ export const provideService = dual<
     tag: T,
     service: (request: In) => Context.Tag.Service<T>
   ) => App.HttpApp<Exclude<R, Context.Tag.Identifier<T>>, E, In, Out>
->(3, (self, tag, service) => make((req) => Effect.provideService(self(req), tag, service(req))))
+>(3, (self, tag, service) => make((req) => Effect.provideService(self.handler(req), tag, service(req))))
 
 /** @internal */
 export const provideServiceEffect = dual<
@@ -334,7 +335,7 @@ export const provideServiceEffect = dual<
     tag: T,
     service: (request: In) => Effect.Effect<R1, E1, Context.Tag.Service<T>>
   ) => App.HttpApp<R1 | Exclude<R, Context.Tag.Identifier<T>>, E | E1, In, Out>
->(3, (self, tag, service) => make((req) => Effect.provideServiceEffect(self(req), tag, service(req))))
+>(3, (self, tag, service) => make((req) => Effect.provideServiceEffect(self.handler(req), tag, service(req))))
 
 /** @internal */
 export const tap = dual<
@@ -347,7 +348,7 @@ export const tap = dual<
     self: App.HttpApp<R, E, In, A>,
     f: (a: A, request: In) => Effect.Effect<R2, E1, _>
   ) => App.HttpApp<R | R2, E | E1, In, A>
->(2, (self, f) => make((req) => Effect.tap(self(req), (a) => f(a, req))))
+>(2, (self, f) => make((req) => Effect.tap(self.handler(req), (a) => f(a, req))))
 
 /** @internal */
 export const tapErrorCause: {
@@ -366,7 +367,7 @@ export const tapErrorCause: {
     self: App.HttpApp<R, E, In, A>,
     f: (e: Cause.Cause<E>, request: InX) => Effect.Effect<R2, E2, _>
   ): App.HttpApp<R | R2, E | E2, In, A> =>
-    make((request) => Effect.tapErrorCause(self(request), (e) => f(e, request as InX)))
+    make((request) => Effect.tapErrorCause(self.handler(request), (e) => f(e, request as InX)))
 )
 
 /** @internal */
@@ -380,4 +381,4 @@ export const tapRequest = dual<
     self: App.HttpApp<R, E, In, A>,
     f: (request: In) => Effect.Effect<R2, E1, _>
   ) => App.HttpApp<R | R2, E | E1, In, A>
->(2, (self, f) => make((req) => Effect.zipRight(f(req), self(req))))
+>(2, (self, f) => make((req) => Effect.zipRight(f(req), self.handler(req))))
