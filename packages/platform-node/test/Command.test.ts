@@ -14,6 +14,7 @@ import * as Path from "node:path"
 import { describe, expect } from "vitest"
 
 const TEST_BASH_SCRIPTS_DIRECTORY = Path.join(__dirname, "fixtures", "bash")
+const TEST_NODE_SCRIPTS_DIRECTORY = Path.join(__dirname, "fixtures", "node")
 
 const runPromise = <E, A>(self: Effect.Effect<FileSystem.FileSystem | CommandExecutor.CommandExecutor, E, A>) =>
   Effect.runPromise(
@@ -333,4 +334,14 @@ describe("Command", () => {
     const stdout = Command.flatten(command).map((command) => command.stdout)
     expect(stdout).toEqual(["pipe", "pipe", "inherit"])
   })
+
+  it.only("should not end a stream when a line is cleared", () =>
+    runPromise(Effect.gen(function*($) {
+      const command = pipe(
+        Command.make("node", "./clear-line.js"),
+        Command.workingDirectory(TEST_NODE_SCRIPTS_DIRECTORY)
+      )
+      const result = yield* $(Stream.runCollect(Command.streamLines(command)))
+      expect(Array.from(result)).toEqual(["1", "2", "3"])
+    })))
 })
