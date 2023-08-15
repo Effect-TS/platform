@@ -32,7 +32,7 @@ Added in v1.0.0
 ```ts
 export declare const respondServe: <R, E>(
   httpApp: App.Default<R, E>
-) => Effect.Effect<Scope.Scope | Server.Server | R, Error.ServeError, never>
+) => Effect.Effect<Scope.Scope | Server.Server | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
 ```
 
 Added in v1.0.0
@@ -76,7 +76,7 @@ Added in v1.0.0
 ```ts
 export declare const respond: <R, E>(
   httpApp: App.Default<R, E>
-) => App.HttpApp<R, E | Error.ResponseError, ServerRequest.ServerRequest, ServerResponse.ServerResponse.NonEffectBody>
+) => App.HttpApp<R, E | Error.ResponseError, ServerResponse.ServerResponse.NonEffectBody>
 ```
 
 Added in v1.0.0

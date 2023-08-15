@@ -37,7 +37,7 @@ Added in v1.0.0
 ```ts
 export declare const serve: <R, E>(
   httpApp: App.Default<R, E>
-) => Effect.Effect<Scope.Scope | Server | R, Error.ServeError, never>
+) => Effect.Effect<Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
 ```
 
 Added in v1.0.0
@@ -86,7 +86,9 @@ Added in v1.0.0
 ```ts
 export interface Server {
   readonly [TypeId]: TypeId
-  readonly serve: <R, E>(httpApp: App.Default<R, E>) => Effect.Effect<R | Scope.Scope, Error.ServeError, never>
+  readonly serve: <R, E>(
+    httpApp: App.Default<R, E>
+  ) => Effect.Effect<Exclude<R, ServerRequest.ServerRequest> | Scope.Scope, Error.ServeError, never>
   readonly address: Address
 }
 ```

@@ -67,7 +67,7 @@ Added in v1.0.0
 ```ts
 export declare const schemaBodyJson: <I, A>(
   schema: Schema.Schema<I, A>
-) => <E>(self: IncomingMessage<E>) => Effect.Effect<never, E | ParseResult.ParseError, A>
+) => <E>(self: IncomingMessage<E>) => Effect.Effect<never, ParseResult.ParseError | E, A>
 ```
 
 Added in v1.0.0

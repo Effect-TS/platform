@@ -286,9 +286,8 @@ Added in v1.0.0
 
 ```ts
 export declare const toNonEffectBody: (
-  self: ServerResponse,
-  request: ServerRequest.ServerRequest
-) => Effect.Effect<never, Error.ResponseError, ServerResponse.NonEffectBody>
+  self: ServerResponse
+) => Effect.Effect<ServerRequest.ServerRequest, Error.ResponseError, ServerResponse.NonEffectBody>
 ```
 
 Added in v1.0.0

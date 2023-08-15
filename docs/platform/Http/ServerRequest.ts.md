@@ -12,6 +12,8 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [context](#context)
+  - [ServerRequest](#serverrequest)
 - [fiber refs](#fiber-refs)
   - [maxBodySize](#maxbodysize)
 - [models](#models)
@@ -25,6 +27,18 @@ Added in v1.0.0
   - [TypeId (type alias)](#typeid-type-alias)
 
 ---
+
+# context
+
+## ServerRequest
+
+**Signature**
+
+```ts
+export declare const ServerRequest: Context.Tag<ServerRequest, ServerRequest>
+```
+
+Added in v1.0.0
 
 # fiber refs
 
@@ -69,8 +83,8 @@ Added in v1.0.0
 
 ```ts
 export declare const schemaBodyJson: <I, A>(
-  schema: Schema<I, A>
-) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, E | ParseError, A>
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<ServerRequest, ParseResult.ParseError | Error.RequestError, A>
 ```
 
 Added in v1.0.0
@@ -81,8 +95,8 @@ Added in v1.0.0
 
 ```ts
 export declare const schemaBodyUrlParams: <I extends Readonly<Record<string, string>>, A>(
-  schema: Schema<I, A>
-) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, ParseError | E, A>
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<ServerRequest, ParseResult.ParseError | Error.RequestError, A>
 ```
 
 Added in v1.0.0
@@ -93,8 +107,8 @@ Added in v1.0.0
 
 ```ts
 export declare const schemaHeaders: <I extends Readonly<Record<string, string>>, A>(
-  schema: Schema<I, A>
-) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, ParseError, A>
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<ServerRequest, ParseResult.ParseError, A>
 ```
 
 Added in v1.0.0

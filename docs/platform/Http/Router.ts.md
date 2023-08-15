@@ -20,13 +20,14 @@ Added in v1.0.0
   - [fromIterable](#fromiterable)
   - [makeRoute](#makeroute)
 - [models](#models)
-  - [ContextHelpers (interface)](#contexthelpers-interface)
   - [Route (interface)](#route-interface)
   - [RouteContext (interface)](#routecontext-interface)
   - [Router (interface)](#router-interface)
 - [route context](#route-context)
   - [RouteContext](#routecontext)
-  - [context](#context)
+  - [params](#params)
+  - [schemaParams](#schemaparams)
+  - [searchParams](#searchparams)
 - [routing](#routing)
   - [all](#all)
   - [del](#del)
@@ -111,32 +112,6 @@ Added in v1.0.0
 
 # models
 
-## ContextHelpers (interface)
-
-**Signature**
-
-```ts
-export interface ContextHelpers {
-  readonly request: Effect.Effect<RouteContext, never, ServerRequest.ServerRequest>
-  readonly params: Effect.Effect<RouteContext, never, Readonly<Record<string, string | undefined>>>
-  readonly searchParams: Effect.Effect<RouteContext, never, Readonly<Record<string, string>>>
-  readonly schemaParams: <I extends Readonly<Record<string, string>>, A>(
-    schema: Schema.Schema<I, A>
-  ) => Effect.Effect<RouteContext, ParseResult.ParseError, A>
-  readonly schemaHeaders: <I extends Readonly<Record<string, string>>, A>(
-    schema: Schema.Schema<I, A>
-  ) => Effect.Effect<RouteContext, ParseResult.ParseError, A>
-  readonly schemaBodyJson: <I, A>(
-    schema: Schema.Schema<I, A>
-  ) => Effect.Effect<RouteContext, ParseResult.ParseError | Error.RequestError, A>
-  readonly schemaBodyUrlParams: <I extends Readonly<Record<string, string>>, A>(
-    schema: Schema.Schema<I, A>
-  ) => Effect.Effect<RouteContext, Error.RequestError | ParseResult.ParseError, A>
-}
-```
-
-Added in v1.0.0
-
 ## Route (interface)
 
 **Signature**
@@ -160,7 +135,6 @@ Added in v1.0.0
 ```ts
 export interface RouteContext {
   readonly [RouteContextTypeId]: RouteContextTypeId
-  readonly request: ServerRequest.ServerRequest
   readonly params: Readonly<Record<string, string | undefined>>
   readonly searchParams: Readonly<Record<string, string>>
 }
@@ -194,12 +168,34 @@ export declare const RouteContext: Context.Tag<RouteContext, RouteContext>
 
 Added in v1.0.0
 
-## context
+## params
 
 **Signature**
 
 ```ts
-export declare const context: ContextHelpers
+export declare const params: Effect.Effect<RouteContext, never, Readonly<Record<string, string | undefined>>>
+```
+
+Added in v1.0.0
+
+## schemaParams
+
+**Signature**
+
+```ts
+export declare const schemaParams: <I extends Readonly<Record<string, string>>, A>(
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<RouteContext, ParseResult.ParseError, A>
+```
+
+Added in v1.0.0
+
+## searchParams
+
+**Signature**
+
+```ts
+export declare const searchParams: Effect.Effect<RouteContext, never, Readonly<Record<string, string>>>
 ```
 
 Added in v1.0.0
