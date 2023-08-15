@@ -3,7 +3,7 @@ import { pipe } from "@effect/data/Function"
 import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
 import type { FromReadableOptions } from "@effect/platform-node/Stream"
-import type { Size } from "@effect/platform/FileSystem"
+import type { SizeInput } from "@effect/platform/FileSystem"
 import * as Stream from "@effect/stream/Stream"
 import type { Readable } from "node:stream"
 
@@ -11,7 +11,7 @@ import type { Readable } from "node:stream"
 export const fromReadable = <E, A>(
   evaluate: LazyArg<Readable>,
   onError: (error: unknown) => E,
-  { chunkSize = Option.none() }: FromReadableOptions = {}
+  { chunkSize }: FromReadableOptions = {}
 ): Stream.Stream<never, E, A> =>
   pipe(
     Effect.acquireRelease(Effect.sync(evaluate), (stream) =>
@@ -52,10 +52,10 @@ export const fromReadable = <E, A>(
 
 const readChunk = <A>(
   stream: Readable,
-  size: Option.Option<Size>
+  size: SizeInput | undefined
 ): Effect.Effect<never, Option.Option<never>, A> =>
   pipe(
-    Effect.sync(() => (size._tag === "Some" ? stream.read(Number(size)) : stream.read()) as A | null),
+    Effect.sync(() => (size ? stream.read(Number(size)) : stream.read()) as A | null),
     Effect.flatMap((_) => (_ ? Effect.succeed(_) : Effect.fail(Option.none())))
   )
 
@@ -65,7 +65,7 @@ export const toString = <E>(
     readable: LazyArg<Readable>
     onFailure: (error: unknown) => E
     encoding?: BufferEncoding
-    maxBytes?: Size
+    maxBytes?: SizeInput
   }
 ): Effect.Effect<never, E, string> => {
   const maxBytesNumber = options.maxBytes ? Number(options.maxBytes) : undefined
@@ -108,7 +108,7 @@ export const toUint8Array = <E>(
   options: {
     readable: LazyArg<Readable>
     onFailure: (error: unknown) => E
-    maxBytes?: Size
+    maxBytes?: SizeInput
   }
 ): Effect.Effect<never, E, Uint8Array> => {
   const maxBytesNumber = options.maxBytes ? Number(options.maxBytes) : undefined

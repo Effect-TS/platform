@@ -2,10 +2,9 @@
  * @since 1.0.0
  */
 import type { LazyArg } from "@effect/data/Function"
-import type { Option } from "@effect/data/Option"
 import type { Effect } from "@effect/io/Effect"
 import * as internal from "@effect/platform-node/internal/stream"
-import type { Size } from "@effect/platform/FileSystem"
+import type { SizeInput } from "@effect/platform/FileSystem"
 import type { Stream } from "@effect/stream/Stream"
 import type { Readable } from "stream"
 
@@ -14,8 +13,8 @@ import type { Readable } from "stream"
  * @since 1.0.0
  */
 export interface FromReadableOptions {
-  /** Defaults to None, which lets Node.js decide the chunk size */
-  readonly chunkSize?: Option<Size>
+  /** Defaults to undefined, which lets Node.js decide the chunk size */
+  readonly chunkSize?: SizeInput
 }
 
 /**
@@ -36,8 +35,8 @@ export const toString: <E>(
   options: {
     readable: LazyArg<Readable>
     onFailure: (error: unknown) => E
-    encoding?: BufferEncoding | undefined
-    maxBytes?: Size | undefined
+    encoding?: BufferEncoding
+    maxBytes?: SizeInput
   }
 ) => Effect<never, E, string> = internal.toString
 
@@ -46,5 +45,9 @@ export const toString: <E>(
  * @category conversions
  */
 export const toUint8Array: <E>(
-  options: { readable: LazyArg<Readable>; onFailure: (error: unknown) => E; maxBytes?: Size | undefined }
+  options: {
+    readable: LazyArg<Readable>
+    onFailure: (error: unknown) => E
+    maxBytes?: SizeInput
+  }
 ) => Effect<never, E, Uint8Array> = internal.toUint8Array

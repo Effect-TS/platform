@@ -232,13 +232,14 @@ const makeFile = (() => {
       return Effect.map(nodeStat(this.fd), makeFileInfo)
     }
 
-    seek(offset: FileSystem.Size, from: FileSystem.SeekMode) {
+    seek(offset: FileSystem.SizeInput, from: FileSystem.SeekMode) {
+      const offsetSize = FileSystem.Size(offset)
       return this.semaphore.withPermits(1)(
         Effect.sync(() => {
           if (from === "start") {
-            this.position = offset
+            this.position = offsetSize
           } else if (from === "current") {
-            this.position = this.position + offset
+            this.position = this.position + offsetSize
           }
 
           return this.position
@@ -264,9 +265,10 @@ const makeFile = (() => {
       )
     }
 
-    readAlloc(size: FileSystem.Size) {
+    readAlloc(size: FileSystem.SizeInput) {
+      const sizeNumber = Number(size)
       return this.semaphore.withPermits(1)(Effect.flatMap(
-        Effect.sync(() => Buffer.allocUnsafeSlow(Number(size))),
+        Effect.sync(() => Buffer.allocUnsafeSlow(sizeNumber)),
         (buffer) =>
           Effect.map(
             nodeReadAlloc(this.fd, {
@@ -279,7 +281,7 @@ const makeFile = (() => {
               }
 
               this.position = this.position + BigInt(bytesRead)
-              if (bytesRead === Number(size)) {
+              if (bytesRead === sizeNumber) {
                 return Option.some(buffer)
               }
 
@@ -291,7 +293,7 @@ const makeFile = (() => {
       ))
     }
 
-    truncate(length?: FileSystem.Size) {
+    truncate(length?: FileSystem.SizeInput) {
       return this.semaphore.withPermits(1)(
         Effect.map(nodeTruncate(this.fd, length ? Number(length) : undefined), () => {
           if (!this.append) {
@@ -505,7 +507,8 @@ const truncate = (() => {
     handleErrnoException("FileSystem", "truncate"),
     handleBadArgument("truncate")
   )
-  return (path: string, length?: FileSystem.Size) => nodeTruncate(path, length ? Number(length) : undefined)
+  return (path: string, length?: FileSystem.SizeInput) =>
+    nodeTruncate(path, length !== undefined ? Number(length) : undefined)
 })()
 
 // == utimes

@@ -28,7 +28,9 @@ import { Readable } from "node:stream"
 /** @internal */
 export const make = (
   evaluate: LazyArg<Http.Server>,
-  options: Net.ListenOptions
+  options: Net.ListenOptions & {
+    readonly maxBodySize?: Option.Option<FileSystem.Size>
+  }
 ): Effect.Effect<Scope.Scope, never, Server.Server> =>
   Effect.gen(function*(_) {
     const server = evaluate()
@@ -115,7 +117,7 @@ export const make = (
   }).pipe(
     Effect.locally(
       IncomingMessage.maxBodySize,
-      Option.some(FileSystem.Size(1024 * 1024 * 10))
+      options.maxBodySize ?? Option.some(FileSystem.Size(1024 * 1024 * 10))
     )
   )
 
