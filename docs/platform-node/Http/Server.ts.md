@@ -12,8 +12,6 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [accessors](#accessors)
-  - [serve](#serve)
 - [constructors](#constructors)
   - [make](#make)
 - [layers](#layers)
@@ -22,20 +20,6 @@ Added in v1.0.0
   - [respond](#respond)
 
 ---
-
-# accessors
-
-## serve
-
-**Signature**
-
-```ts
-export declare const serve: <R, E>(
-  httpApp: App.Default<R, E>
-) => Effect.Effect<Scope.Scope | Server.Server | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
-```
-
-Added in v1.0.0
 
 # constructors
 

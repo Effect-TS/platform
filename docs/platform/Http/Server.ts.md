@@ -13,12 +13,13 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [accessors](#accessors)
-  - [serveWithoutResponse](#servewithoutresponse)
+  - [serve](#serve)
 - [constructors](#constructors)
   - [Server](#server)
   - [make](#make)
 - [models](#models)
   - [Address (type alias)](#address-type-alias)
+  - [ServeOptions (interface)](#serveoptions-interface)
   - [Server (interface)](#server-interface)
   - [TcpAddress (interface)](#tcpaddress-interface)
   - [UnixAddress (interface)](#unixaddress-interface)
@@ -30,14 +31,21 @@ Added in v1.0.0
 
 # accessors
 
-## serveWithoutResponse
+## serve
 
 **Signature**
 
 ```ts
-export declare const serveWithoutResponse: <R, E>(
-  httpApp: App.Default<R, E>
-) => Effect.Effect<Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
+export declare const serve: {
+  (options?: ServeOptions): <R, E>(
+    httpApp: App.Default<R, E>
+  ) => Effect.Effect<Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
+  <R, E>(httpApp: App.Default<R, E>, options?: ServeOptions): Effect.Effect<
+    Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>,
+    Error.ServeError,
+    never
+  >
+}
 ```
 
 Added in v1.0.0
@@ -59,10 +67,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: (options: {
-  readonly serve: (httpApp: App.Default<unknown, unknown>) => Effect.Effect<never, Error.ServeError, never>
-  readonly address: Address
-}) => Server
+export declare const make: (options: Omit<Server, typeof TypeId>) => Server
 ```
 
 Added in v1.0.0
@@ -79,6 +84,18 @@ export type Address = UnixAddress | TcpAddress
 
 Added in v1.0.0
 
+## ServeOptions (interface)
+
+**Signature**
+
+```ts
+export interface ServeOptions {
+  readonly respond: boolean
+}
+```
+
+Added in v1.0.0
+
 ## Server (interface)
 
 **Signature**
@@ -87,7 +104,8 @@ Added in v1.0.0
 export interface Server {
   readonly [TypeId]: TypeId
   readonly serve: <R, E>(
-    httpApp: App.Default<R, E>
+    httpApp: App.Default<R, E>,
+    options: ServeOptions
   ) => Effect.Effect<Exclude<R, ServerRequest.ServerRequest> | Scope.Scope, Error.ServeError, never>
   readonly address: Address
 }
