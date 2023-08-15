@@ -1,4 +1,4 @@
-import { flow, type LazyArg } from "@effect/data/Function"
+import type { LazyArg } from "@effect/data/Function"
 import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
 import * as Fiber from "@effect/io/Fiber"
@@ -74,21 +74,24 @@ export const make = (
           hostname: address.address,
           port: address.port
         },
-      serve: (httpApp) => {
-        const handledApp = Effect.tapErrorCause(httpApp, (_cause) =>
-          Effect.flatMap(
-            ServerRequest.ServerRequest,
-            (request) =>
-              Effect.sync(() => {
-                const nodeResponse = (request as ServerRequestImpl).response
-                if (!nodeResponse.headersSent) {
-                  nodeResponse.writeHead(500)
-                }
-                if (!nodeResponse.writableEnded) {
-                  nodeResponse.end()
-                }
-              })
-          ))
+      serve: (httpApp, options) => {
+        const handledApp = Effect.tapErrorCause(
+          options.respond ? respond(httpApp) : httpApp,
+          (_cause) =>
+            Effect.flatMap(
+              ServerRequest.ServerRequest,
+              (request) =>
+                Effect.sync(() => {
+                  const nodeResponse = (request as ServerRequestImpl).response
+                  if (!nodeResponse.headersSent) {
+                    nodeResponse.writeHead(500)
+                  }
+                  if (!nodeResponse.writableEnded) {
+                    nodeResponse.end()
+                  }
+                })
+            )
+        )
         return Effect.flatMap(Effect.runtime(), (runtime) => {
           const runFork = Runtime.runFork(runtime as Runtime.Runtime<unknown>)
           function handler(nodeRequest: Http.IncomingMessage, nodeResponse: Http.ServerResponse) {
@@ -125,9 +128,6 @@ export const respond = Middleware.make((httpApp) =>
       (response) => handleResponse(request, response)
     ))
 )
-
-/** @internal */
-export const serve = flow(respond, Server.serveWithoutResponse)
 
 class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implements ServerRequest.ServerRequest {
   readonly [ServerRequest.TypeId]: ServerRequest.TypeId = ServerRequest.TypeId

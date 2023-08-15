@@ -28,9 +28,18 @@ export type TypeId = typeof TypeId
 export interface Server {
   readonly [TypeId]: TypeId
   readonly serve: <R, E>(
-    httpApp: App.Default<R, E>
+    httpApp: App.Default<R, E>,
+    options: ServeOptions
   ) => Effect.Effect<Exclude<R, ServerRequest.ServerRequest> | Scope.Scope, Error.ServeError, never>
   readonly address: Address
+}
+
+/**
+ * @since 1.0.0
+ * @category models
+ */
+export interface ServeOptions {
+  readonly respond: boolean
 }
 
 /**
@@ -68,18 +77,18 @@ export const Server: Context.Tag<Server, Server> = internal.serverTag
  * @since 1.0.0
  * @category constructors
  */
-export const make: (
-  options: {
-    readonly serve: (httpApp: App.Default<unknown, unknown>) => Effect.Effect<never, Error.ServeError, never>
-    readonly address: Address
-  }
-) => Server = internal.make
+export const make: (options: Omit<Server, typeof TypeId>) => Server = internal.make
 
 /**
  * @since 1.0.0
  * @category accessors
  */
-export const serveWithoutResponse: <R, E>(
-  httpApp: App.Default<R, E>
-) => Effect.Effect<Server | Scope.Scope | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never> =
-  internal.serveWithoutResponse
+export const serve: {
+  (options?: ServeOptions): <R, E>(
+    httpApp: App.Default<R, E>
+  ) => Effect.Effect<Server | Scope.Scope | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
+  <R, E>(
+    httpApp: App.Default<R, E>,
+    options?: ServeOptions
+  ): Effect.Effect<Server | Scope.Scope | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
+} = internal.serve

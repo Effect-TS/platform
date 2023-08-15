@@ -9,7 +9,6 @@ import * as internal from "@effect/platform-node/internal/http/server"
 import type * as App from "@effect/platform/Http/App"
 import type * as Server from "@effect/platform/Http/Server"
 import type * as Error from "@effect/platform/Http/ServerError"
-import type * as ServerRequest from "@effect/platform/Http/ServerRequest"
 import type * as ServerResponse from "@effect/platform/Http/ServerResponse"
 import type * as Http from "node:http"
 import type * as Net from "node:net"
@@ -35,15 +34,6 @@ export const make: (
 export const respond: <R, E>(
   httpApp: App.Default<R, E>
 ) => App.HttpApp<R, E | Error.ResponseError, ServerResponse.ServerResponse.NonEffectBody> = internal.respond
-
-/**
- * @since 1.0.0
- * @category accessors
- */
-export const serve: <R, E>(
-  httpApp: App.Default<R, E>
-) => Effect.Effect<Scope.Scope | Server.Server | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never> =
-  internal.serve
 
 /**
  * @since 1.0.0
