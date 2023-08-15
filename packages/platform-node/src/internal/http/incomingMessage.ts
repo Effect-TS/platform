@@ -21,16 +21,23 @@ export class IncomingMessageImpl<E> implements IncomingMessage.IncomingMessage<E
     return Headers.fromInput(this.source.headers as any)
   }
 
+  private textEffect: Effect.Effect<never, E, string> | undefined
   get text(): Effect.Effect<never, E, string> {
-    return Effect.flatMap(
-      FiberRef.get(IncomingMessage.maxBodySize),
-      (maxBodySize) =>
-        NodeStream.toString({
-          readable: () => this.source,
-          onFailure: this.onError,
-          maxBytes: Option.getOrUndefined(maxBodySize)
-        })
-    )
+    if (this.textEffect) {
+      return this.textEffect
+    }
+    this.textEffect = Effect.runSync(Effect.cached(
+      Effect.flatMap(
+        FiberRef.get(IncomingMessage.maxBodySize),
+        (maxBodySize) =>
+          NodeStream.toString({
+            readable: () => this.source,
+            onFailure: this.onError,
+            maxBytes: Option.getOrUndefined(maxBodySize)
+          })
+      )
+    ))
+    return this.textEffect
   }
 
   get json(): Effect.Effect<never, E, unknown> {
