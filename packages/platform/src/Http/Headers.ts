@@ -42,7 +42,10 @@ export const fromInput: (input?: Input) => Headers = (input) => {
  * @since 1.0.0
  * @category combinators
  */
-export const has = dual<
+export const has: {
+  (key: string): (self: Headers) => boolean
+  (self: Headers, key: string): boolean
+} = dual<
   (key: string) => (self: Headers) => boolean,
   (self: Headers, key: string) => boolean
 >(2, (self, key) => HashMap.has(self, key.toLowerCase()))
@@ -51,7 +54,10 @@ export const has = dual<
  * @since 1.0.0
  * @category combinators
  */
-export const get = dual<
+export const get: {
+  (key: string): (self: Headers) => Option.Option<string>
+  (self: Headers, key: string): Option.Option<string>
+} = dual<
   (key: string) => (self: Headers) => Option.Option<string>,
   (self: Headers, key: string) => Option.Option<string>
 >(2, (self, key) => HashMap.get(self, key.toLowerCase()))
@@ -60,7 +66,10 @@ export const get = dual<
  * @since 1.0.0
  * @category combinators
  */
-export const set = dual<
+export const set: {
+  (key: string, value: string): (self: Headers) => Headers
+  (self: Headers, key: string, value: string): Headers
+} = dual<
   (key: string, value: string) => (self: Headers) => Headers,
   (self: Headers, key: string, value: string) => Headers
 >(3, (self, key, value) => HashMap.set(self, key.toLowerCase(), value))
@@ -69,7 +78,10 @@ export const set = dual<
  * @since 1.0.0
  * @category combinators
  */
-export const setAll = dual<
+export const setAll: {
+  (headers: Input): (self: Headers) => Headers
+  (self: Headers, headers: Input): Headers
+} = dual<
   (headers: Input) => (self: Headers) => Headers,
   (self: Headers, headers: Input) => Headers
 >(2, (self, headers) =>
@@ -82,7 +94,10 @@ export const setAll = dual<
  * @since 1.0.0
  * @category combinators
  */
-export const remove = dual<
+export const remove: {
+  (key: string): (self: Headers) => Headers
+  (self: Headers, key: string): Headers
+} = dual<
   (key: string) => (self: Headers) => Headers,
   (self: Headers, key: string) => Headers
 >(2, (self, key) => HashMap.remove(self, key.toLowerCase()))

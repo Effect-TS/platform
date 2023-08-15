@@ -34,8 +34,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const get: ((key: string) => (self: Headers) => Option.Option<string>) &
-  ((self: Headers, key: string) => Option.Option<string>)
+export declare const get: {
+  (key: string): (self: Headers) => Option.Option<string>
+  (self: Headers, key: string): Option.Option<string>
+}
 ```
 
 Added in v1.0.0
@@ -45,7 +47,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const has: ((key: string) => (self: Headers) => boolean) & ((self: Headers, key: string) => boolean)
+export declare const has: { (key: string): (self: Headers) => boolean; (self: Headers, key: string): boolean }
 ```
 
 Added in v1.0.0
@@ -55,7 +57,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const remove: ((key: string) => (self: Headers) => Headers) & ((self: Headers, key: string) => Headers)
+export declare const remove: { (key: string): (self: Headers) => Headers; (self: Headers, key: string): Headers }
 ```
 
 Added in v1.0.0
@@ -65,8 +67,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const set: ((key: string, value: string) => (self: Headers) => Headers) &
-  ((self: Headers, key: string, value: string) => Headers)
+export declare const set: {
+  (key: string, value: string): (self: Headers) => Headers
+  (self: Headers, key: string, value: string): Headers
+}
 ```
 
 Added in v1.0.0
@@ -76,8 +80,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const setAll: ((headers: Input) => (self: Headers) => Headers) &
-  ((self: Headers, headers: Input) => Headers)
+export declare const setAll: { (headers: Input): (self: Headers) => Headers; (self: Headers, headers: Input): Headers }
 ```
 
 Added in v1.0.0
