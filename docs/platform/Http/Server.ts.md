@@ -13,7 +13,7 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [accessors](#accessors)
-  - [serve](#serve)
+  - [serveWithoutResponse](#servewithoutresponse)
 - [constructors](#constructors)
   - [Server](#server)
   - [make](#make)
@@ -30,12 +30,12 @@ Added in v1.0.0
 
 # accessors
 
-## serve
+## serveWithoutResponse
 
 **Signature**
 
 ```ts
-export declare const serve: <R, E>(
+export declare const serveWithoutResponse: <R, E>(
   httpApp: App.Default<R, E>
 ) => Effect.Effect<Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
 ```

@@ -13,7 +13,7 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [accessors](#accessors)
-  - [respondServe](#respondserve)
+  - [serve](#serve)
 - [constructors](#constructors)
   - [make](#make)
 - [layers](#layers)
@@ -25,12 +25,12 @@ Added in v1.0.0
 
 # accessors
 
-## respondServe
+## serve
 
 **Signature**
 
 ```ts
-export declare const respondServe: <R, E>(
+export declare const serve: <R, E>(
   httpApp: App.Default<R, E>
 ) => Effect.Effect<Scope.Scope | Server.Server | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
 ```

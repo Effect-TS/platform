@@ -79,7 +79,7 @@ export const make: (
  * @since 1.0.0
  * @category accessors
  */
-export const serve: <R, E>(
+export const serveWithoutResponse: <R, E>(
   httpApp: App.Default<R, E>
 ) => Effect.Effect<Server | Scope.Scope | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never> =
-  internal.serve
+  internal.serveWithoutResponse

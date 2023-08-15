@@ -26,7 +26,7 @@ export const make = (
 ): Server.Server => Object.assign(Object.create(serverProto), options)
 
 /** @internal */
-export const serve = <R, E>(httpApp: App.Default<R, E>) =>
+export const serveWithoutResponse = <R, E>(httpApp: App.Default<R, E>) =>
   Effect.flatMap(
     serverTag,
     (server) => server.serve(httpApp)

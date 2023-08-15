@@ -40,10 +40,10 @@ export const respond: <R, E>(
  * @since 1.0.0
  * @category accessors
  */
-export const respondServe: <R, E>(
+export const serve: <R, E>(
   httpApp: App.Default<R, E>
 ) => Effect.Effect<Scope.Scope | Server.Server | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never> =
-  internal.respondServe
+  internal.serve
 
 /**
  * @since 1.0.0

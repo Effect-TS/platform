@@ -13,7 +13,7 @@ Http.router.empty.pipe(
       (req) => Http.response.text(req.url)
     )
   ),
-  Http.server.respondServe,
+  Http.server.serve,
   Effect.scoped,
   Effect.provideLayer(ServerLive),
   Effect.tapErrorCause(Effect.logError),

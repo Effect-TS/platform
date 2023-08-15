@@ -50,7 +50,7 @@ describe("HttpServer", () => {
             ({ id }) => todoResponse({ id, title: "test" })
           )
         ),
-        Http.server.respondServe,
+        Http.server.serve,
         Effect.fork
       )
       const client = yield* _(makeTodoClient)
@@ -73,7 +73,7 @@ describe("HttpServer", () => {
             return Http.response.json({ ok: formData.has("file") })
           }).pipe(Effect.scoped)
         ),
-        Http.server.respondServe,
+        Http.server.serve,
         Effect.fork
       )
       const client = yield* _(makeClient)
@@ -95,7 +95,7 @@ describe("HttpServer", () => {
       yield* _(
         Http.router.empty,
         Http.router.mount("/child", child),
-        Http.server.respondServe,
+        Http.server.serve,
         Effect.fork
       )
       const client = yield* _(makeClient)
@@ -114,7 +114,7 @@ describe("HttpServer", () => {
       yield* _(
         Http.router.empty,
         Http.router.mountApp("/child", child),
-        Http.server.respondServe,
+        Http.server.serve,
         Effect.fork
       )
       const client = yield* _(makeClient)

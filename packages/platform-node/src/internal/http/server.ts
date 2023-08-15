@@ -127,7 +127,7 @@ export const respond = Middleware.make((httpApp) =>
 )
 
 /** @internal */
-export const respondServe = flow(respond, Server.serve)
+export const serve = flow(respond, Server.serveWithoutResponse)
 
 class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implements ServerRequest.ServerRequest {
   readonly [ServerRequest.TypeId]: ServerRequest.TypeId = ServerRequest.TypeId
