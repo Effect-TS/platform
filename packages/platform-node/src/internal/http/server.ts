@@ -9,7 +9,6 @@ import * as internalFormData from "@effect/platform-node/internal/http/formData"
 import { IncomingMessageImpl } from "@effect/platform-node/internal/http/incomingMessage"
 import * as NodeSink from "@effect/platform-node/Sink"
 import * as FileSystem from "@effect/platform/FileSystem"
-import type * as App from "@effect/platform/Http/App"
 import type * as FormData from "@effect/platform/Http/FormData"
 import * as Headers from "@effect/platform/Http/Headers"
 import * as IncomingMessage from "@effect/platform/Http/IncomingMessage"
@@ -28,26 +27,24 @@ import { Readable } from "node:stream"
 /** @internal */
 export const make = (
   evaluate: LazyArg<Http.Server>,
-  options: Net.ListenOptions & {
-    readonly maxBodySize?: Option.Option<FileSystem.Size>
-  }
+  options: Net.ListenOptions
 ): Effect.Effect<Scope.Scope, never, Server.Server> =>
   Effect.gen(function*(_) {
     const server = evaluate()
 
     const serverFiber = yield* _(
-      Effect.zipRight(
-        Effect.addFinalizer(() =>
-          Effect.async<never, never, void>((resume) => {
-            server.close((error) => {
-              if (error) {
-                resume(Effect.die(error))
-              } else {
-                resume(Effect.unit)
-              }
-            })
+      Effect.addFinalizer(() =>
+        Effect.async<never, never, void>((resume) => {
+          server.close((error) => {
+            if (error) {
+              resume(Effect.die(error))
+            } else {
+              resume(Effect.unit)
+            }
           })
-        ),
+        })
+      ),
+      Effect.zipRight(
         Effect.async<never, Error.ServeError, never>((resume) => {
           server.on("error", (error) => {
             resume(Effect.fail(Error.ServeError({ error })))
@@ -92,37 +89,36 @@ export const make = (
                 }
               })
           ))
-        return Effect.flatMap(Effect.runtime(), (runtime) =>
-          Effect.suspend(() => {
-            const runFork = Runtime.runFork(runtime as Runtime.Runtime<unknown>)
-            function handler(nodeRequest: Http.IncomingMessage, nodeResponse: Http.ServerResponse) {
-              runFork(
-                Effect.provideService(
-                  handledApp,
-                  ServerRequest.ServerRequest,
-                  new ServerRequestImpl(nodeRequest, nodeResponse)
-                )
+        return Effect.flatMap(Effect.runtime(), (runtime) => {
+          const runFork = Runtime.runFork(runtime as Runtime.Runtime<unknown>)
+          function handler(nodeRequest: Http.IncomingMessage, nodeResponse: Http.ServerResponse) {
+            runFork(
+              Effect.provideService(
+                handledApp,
+                ServerRequest.ServerRequest,
+                new ServerRequestImpl(nodeRequest, nodeResponse)
               )
-            }
-            return Effect.all([
-              Effect.acquireRelease(
-                Effect.sync(() => server.on("request", handler)),
-                () => Effect.sync(() => server.off("request", handler))
-              ),
-              Fiber.join(serverFiber)
-            ], { discard: true, concurrency: "unbounded" }) as Effect.Effect<never, Error.ServeError, never>
-          }))
+            )
+          }
+          return Effect.all([
+            Effect.acquireRelease(
+              Effect.sync(() => server.on("request", handler)),
+              () => Effect.sync(() => server.off("request", handler))
+            ),
+            Fiber.join(serverFiber)
+          ], { discard: true, concurrency: "unbounded" }) as Effect.Effect<never, Error.ServeError, never>
+        })
       }
     })
   }).pipe(
     Effect.locally(
       IncomingMessage.maxBodySize,
-      options.maxBodySize ?? Option.some(FileSystem.Size(1024 * 1024 * 10))
+      Option.some(FileSystem.Size(1024 * 1024 * 10))
     )
   )
 
 /** @internal */
-export const respond = Middleware.make(<R, E>(httpApp: App.Default<R, E>) =>
+export const respond = Middleware.make((httpApp) =>
   Effect.flatMap(ServerRequest.ServerRequest, (request) =>
     Effect.tap(
       Effect.flatMap(httpApp, ServerResponse.toNonEffectBody),
