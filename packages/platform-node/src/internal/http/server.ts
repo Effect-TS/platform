@@ -1,5 +1,6 @@
 import type { LazyArg } from "@effect/data/Function"
 import * as Option from "@effect/data/Option"
+import * as Config from "@effect/io/Config"
 import * as Effect from "@effect/io/Effect"
 import * as Fiber from "@effect/io/Fiber"
 import * as Layer from "@effect/io/Layer"
@@ -220,6 +221,19 @@ export const layer = (
   evaluate: LazyArg<Http.Server>,
   options: Net.ListenOptions
 ) => Layer.scoped(Server.Server, make(evaluate, options))
+
+/** @internal */
+export const layerConfig = (
+  evaluate: LazyArg<Http.Server>,
+  options: Config.Config.Wrap<Net.ListenOptions>
+) =>
+  Layer.scoped(
+    Server.Server,
+    Effect.flatMap(
+      Effect.config(Config.unwrap(options)),
+      (options) => make(evaluate, options)
+    )
+  )
 
 const handleResponse = (
   request: ServerRequest.ServerRequest,

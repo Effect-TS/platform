@@ -2,6 +2,8 @@
  * @since 1.0.0
  */
 import type { LazyArg } from "@effect/data/Function"
+import type * as Config from "@effect/io/Config"
+import type * as ConfigError from "@effect/io/Config/Error"
 import type * as Effect from "@effect/io/Effect"
 import type * as Layer from "@effect/io/Layer"
 import type * as Scope from "@effect/io/Scope"
@@ -29,6 +31,15 @@ export const make: (
  * @category layers
  */
 export const layer: (
-  evaluate: LazyArg<Http.Server<typeof Http.IncomingMessage, typeof Http.ServerResponse>>,
+  evaluate: LazyArg<Http.Server>,
   options: Net.ListenOptions
 ) => Layer.Layer<never, never, Server.Server> = internal.layer
+
+/**
+ * @since 1.0.0
+ * @category layers
+ */
+export const layerConfig: (
+  evaluate: LazyArg<Http.Server>,
+  options: Config.Config.Wrap<Net.ListenOptions>
+) => Layer.Layer<never, ConfigError.ConfigError, Server.Server> = internal.layerConfig

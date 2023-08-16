@@ -16,6 +16,7 @@ Added in v1.0.0
   - [make](#make)
 - [layers](#layers)
   - [layer](#layer)
+  - [layerConfig](#layerconfig)
 
 ---
 
@@ -42,9 +43,22 @@ Added in v1.0.0
 
 ```ts
 export declare const layer: (
-  evaluate: LazyArg<Http.Server<typeof Http.IncomingMessage, typeof Http.ServerResponse>>,
+  evaluate: LazyArg<Http.Server>,
   options: Net.ListenOptions
 ) => Layer.Layer<never, never, Server.Server>
+```
+
+Added in v1.0.0
+
+## layerConfig
+
+**Signature**
+
+```ts
+export declare const layerConfig: (
+  evaluate: LazyArg<Http.Server>,
+  options: Config.Config.Wrap<Net.ListenOptions>
+) => Layer.Layer<never, ConfigError.ConfigError, Server.Server>
 ```
 
 Added in v1.0.0
