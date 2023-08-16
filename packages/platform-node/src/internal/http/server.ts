@@ -74,24 +74,8 @@ export const make = (
           hostname: address.address,
           port: address.port
         },
-      serve: (httpApp, options) => {
-        const handledApp = Effect.tapErrorCause(
-          options.respond ? respond(httpApp) : httpApp,
-          (_cause) =>
-            Effect.flatMap(
-              ServerRequest.ServerRequest,
-              (request) =>
-                Effect.sync(() => {
-                  const nodeResponse = (request as ServerRequestImpl).response
-                  if (!nodeResponse.headersSent) {
-                    nodeResponse.writeHead(500)
-                  }
-                  if (!nodeResponse.writableEnded) {
-                    nodeResponse.end()
-                  }
-                })
-            )
-        )
+      serve: (httpApp, middleware) => {
+        const handledApp = middleware ? middleware(respond(httpApp)) : respond(httpApp)
         return Effect.flatMap(Effect.runtime(), (runtime) => {
           const runFork = Runtime.runFork(runtime as Runtime.Runtime<unknown>)
           function handler(nodeRequest: Http.IncomingMessage, nodeResponse: Http.ServerResponse) {
@@ -120,12 +104,23 @@ export const make = (
     )
   )
 
-/** @internal */
-export const respond = Middleware.make((httpApp) =>
+const respond = Middleware.make((httpApp) =>
   Effect.flatMap(ServerRequest.ServerRequest, (request) =>
-    Effect.tap(
-      Effect.flatMap(httpApp, ServerResponse.toNonEffectBody),
-      (response) => handleResponse(request, response)
+    Effect.tapErrorCause(
+      Effect.tap(
+        Effect.flatMap(httpApp, ServerResponse.toNonEffectBody),
+        (response) => handleResponse(request, response)
+      ),
+      (_cause) =>
+        Effect.sync(() => {
+          const nodeResponse = (request as ServerRequestImpl).response
+          if (!nodeResponse.headersSent) {
+            nodeResponse.writeHead(500)
+          }
+          if (!nodeResponse.writableEnded) {
+            nodeResponse.end()
+          }
+        })
     ))
 )
 

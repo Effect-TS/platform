@@ -16,8 +16,6 @@ Added in v1.0.0
   - [make](#make)
 - [layers](#layers)
   - [layer](#layer)
-- [middleware](#middleware)
-  - [respond](#respond)
 
 ---
 
@@ -47,20 +45,6 @@ export declare const layer: (
   evaluate: LazyArg<Http.Server<typeof Http.IncomingMessage, typeof Http.ServerResponse>>,
   options: Net.ListenOptions
 ) => Layer.Layer<never, never, Server.Server>
-```
-
-Added in v1.0.0
-
-# middleware
-
-## respond
-
-**Signature**
-
-```ts
-export declare const respond: <R, E>(
-  httpApp: App.Default<R, E>
-) => App.HttpApp<R, E | Error.ResponseError, ServerResponse.ServerResponse.NonEffectBody>
 ```
 
 Added in v1.0.0

@@ -3,6 +3,7 @@ import { dual } from "@effect/data/Function"
 import * as Effect from "@effect/io/Effect"
 import type * as Scope from "@effect/io/Scope"
 import type * as App from "@effect/platform/Http/App"
+import type * as Middleware from "@effect/platform/Http/Middleware"
 import type * as Server from "@effect/platform/Http/Server"
 import type * as Error from "@effect/platform/Http/ServerError"
 import type * as ServerRequest from "@effect/platform/Http/ServerRequest"
@@ -22,20 +23,51 @@ export const isServer = (u: unknown): u is Server.Server => typeof u === "object
 
 /** @internal */
 export const make = (
-  options: Omit<Server.Server, Server.TypeId>
+  options: {
+    readonly serve: (
+      httpApp: App.Default<never, unknown>,
+      middleware?: Middleware.Middleware
+    ) => Effect.Effect<Scope.Scope, Error.ServeError, never>
+    readonly address: Server.Address
+  }
 ): Server.Server => Object.assign(Object.create(serverProto), options)
 
 /** @internal */
 export const serve = dual<
-  (options?: Server.ServeOptions) => <R, E>(
-    httpApp: App.Default<R, E>
-  ) => Effect.Effect<Server.Server | Scope.Scope | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>,
-  <R, E>(
+  {
+    <R, E, App extends App.Default<any, any>>(middleware: Middleware.Middleware.Applied<R, E, App>): (
+      httpApp: App.Default<R, E>
+    ) => Effect.Effect<
+      Server.Server | Scope.Scope | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>,
+      Error.ServeError,
+      never
+    >
+  },
+  {
+    <R, E>(
+      httpApp: App.Default<R, E>
+    ): Effect.Effect<Server.Server | Scope.Scope | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
+    <R, E, App extends App.Default<any, any>>(
+      httpApp: App.Default<R, E>,
+      middleware: Middleware.Middleware.Applied<R, E, App>
+    ): Effect.Effect<
+      Server.Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest> | Scope.Scope,
+      Error.ServeError,
+      never
+    >
+  }
+>(
+  (args) => Effect.isEffect(args[0]),
+  (<R, E, App extends App.Default<any, any>>(
     httpApp: App.Default<R, E>,
-    options?: Server.ServeOptions
-  ) => Effect.Effect<Server.Server | Scope.Scope | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
->((args) => Effect.isEffect(args[0]), (httpApp, options) =>
-  Effect.flatMap(
-    serverTag,
-    (server) => server.serve(httpApp, { respond: options?.respond ?? true })
-  ))
+    middleware: Middleware.Middleware.Applied<R, E, App>
+  ): Effect.Effect<
+    Server.Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest> | Scope.Scope,
+    Error.ServeError,
+    never
+  > =>
+    Effect.flatMap(
+      serverTag,
+      (server) => server.serve(httpApp, middleware)
+    )) as any
+)

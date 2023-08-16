@@ -37,11 +37,23 @@ Added in v1.0.0
 
 ```ts
 export declare const serve: {
-  (options?: ServeOptions): <R, E>(
+  <R, E, App extends App.Default<any, any>>(middleware: Middleware.Middleware.Applied<R, E, App>): (
     httpApp: App.Default<R, E>
-  ) => Effect.Effect<Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
-  <R, E>(httpApp: App.Default<R, E>, options?: ServeOptions): Effect.Effect<
+  ) => Effect.Effect<
+    Scope.Scope | Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>,
+    Error.ServeError,
+    never
+  >
+  <R, E>(httpApp: App.Default<R, E>): Effect.Effect<
     Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>,
+    Error.ServeError,
+    never
+  >
+  <R, E, App extends App.Default<any, any>>(
+    httpApp: App.Default<R, E>,
+    middleware: Middleware.Middleware.Applied<R, E, App>
+  ): Effect.Effect<
+    Scope.Scope | Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>,
     Error.ServeError,
     never
   >
@@ -67,7 +79,13 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: (options: Omit<Server, typeof TypeId>) => Server
+export declare const make: (options: {
+  readonly serve: (
+    httpApp: App.Default<never, unknown>,
+    middleware?: Middleware.Middleware
+  ) => Effect.Effect<Scope.Scope, Error.ServeError, never>
+  readonly address: Address
+}) => Server
 ```
 
 Added in v1.0.0
@@ -103,10 +121,21 @@ Added in v1.0.0
 ```ts
 export interface Server {
   readonly [TypeId]: TypeId
-  readonly serve: <R, E>(
-    httpApp: App.Default<R, E>,
-    options: ServeOptions
-  ) => Effect.Effect<Exclude<R, ServerRequest.ServerRequest> | Scope.Scope, Error.ServeError, never>
+  readonly serve: {
+    <R, E>(httpApp: App.Default<R, E>): Effect.Effect<
+      Exclude<R, ServerRequest.ServerRequest> | Scope.Scope,
+      Error.ServeError,
+      never
+    >
+    <R, E, App extends App.Default<any, any>>(
+      httpApp: App.Default<R, E>,
+      middleware: Middleware.Middleware.Applied<R, E, App>
+    ): Effect.Effect<
+      Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest> | Scope.Scope,
+      Error.ServeError,
+      never
+    >
+  }
   readonly address: Address
 }
 ```
