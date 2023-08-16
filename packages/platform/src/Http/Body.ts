@@ -2,6 +2,8 @@
  * @since 1.0.0
  */
 import type * as Effect from "@effect/io/Effect"
+import type * as PlatformError from "@effect/platform/Error"
+import type * as FileSystem from "@effect/platform/FileSystem"
 import * as internal from "@effect/platform/internal/http/body"
 import type * as Schema from "@effect/schema/Schema"
 import type * as Stream_ from "@effect/stream/Stream"
@@ -162,3 +164,12 @@ export interface Stream extends Body.Proto {
  * @category constructors
  */
 export const stream: (body: Stream_.Stream<never, unknown, globalThis.Uint8Array>) => Stream = internal.stream
+
+/**
+ * @since 1.0.0
+ * @category constructors
+ */
+export const file: (
+  path: string,
+  options?: FileSystem.StreamOptions & { readonly contentType?: string }
+) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, Stream> = internal.file

@@ -86,14 +86,14 @@ export const jsonSchema = <I, A>(schema: Schema.Schema<I, A>) => {
 /** @internal */
 export const file = (
   path: string,
-  contentType?: string
+  options?: FileSystem.StreamOptions & { readonly contentType?: string }
 ): Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, Body.Stream> =>
   Effect.flatMap(
     FileSystem.FileSystem,
     (fs) =>
       Effect.map(
         fs.stat(path),
-        (stat) => stream(fs.stream(path), contentType, Number(stat.size))
+        (stat) => stream(fs.stream(path, options), options?.contentType, Number(stat.size))
       )
   )
 

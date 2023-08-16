@@ -171,7 +171,7 @@ export const stream: (body: Stream.Stream<never, unknown, Uint8Array>, options?:
  */
 export const file: (
   path: string,
-  options?: Options
+  options?: Options & FileSystem.StreamOptions
 ) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, ServerResponse> = internal.file
 
 /**

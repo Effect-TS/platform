@@ -360,11 +360,11 @@ export const streamBody: {
 export const fileBody: {
   (
     path: string,
-    contentType?: string
+    options?: FileSystem.StreamOptions & { readonly contentType?: string }
   ): (self: ClientRequest) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, ClientRequest>
   (
     self: ClientRequest,
     path: string,
-    contentType?: string
+    options?: FileSystem.StreamOptions & { readonly contentType?: string }
   ): Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, ClientRequest>
 } = internal.fileBody

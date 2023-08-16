@@ -114,7 +114,7 @@ Added in v1.0.0
 ```ts
 export declare const file: (
   path: string,
-  options?: Options
+  options?: Options & FileSystem.StreamOptions
 ) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, ServerResponse>
 ```
 

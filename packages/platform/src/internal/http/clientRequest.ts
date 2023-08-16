@@ -344,18 +344,18 @@ export const unsafeJsonBody = dual<
 export const fileBody = dual<
   (
     path: string,
-    contentType?: string
+    options?: FileSystem.StreamOptions & { readonly contentType?: string }
   ) => (
     self: ClientRequest.ClientRequest
   ) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, ClientRequest.ClientRequest>,
   (
     self: ClientRequest.ClientRequest,
     path: string,
-    contentType?: string
+    options?: FileSystem.StreamOptions & { readonly contentType?: string }
   ) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, ClientRequest.ClientRequest>
 >(
   (args) => isClientRequest(args[0]),
-  (self, path) => Effect.map(internalBody.file(path), (body) => setBody(self, body))
+  (self, path, options) => Effect.map(internalBody.file(path, options), (body) => setBody(self, body))
 )
 
 /** @internal */

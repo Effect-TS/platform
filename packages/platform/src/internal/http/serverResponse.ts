@@ -125,9 +125,9 @@ export const schemaJson = <I, A>(
 /** @internal */
 export const file = (
   path: string,
-  options?: ServerResponse.Options
+  options?: ServerResponse.Options & FileSystem.StreamOptions
 ): Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, ServerResponse.ServerResponse> =>
-  Effect.map(internalBody.file(path, options?.contentType), (body) =>
+  Effect.map(internalBody.file(path, options), (body) =>
     new ServerResponseImpl(
       options?.status ?? 200,
       options?.statusText,
