@@ -126,7 +126,7 @@ const respond = Middleware.make((httpApp) =>
 )
 
 class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implements ServerRequest.ServerRequest {
-  readonly [ServerRequest.TypeId]: ServerRequest.TypeId = ServerRequest.TypeId
+  readonly [ServerRequest.TypeId]: ServerRequest.TypeId
 
   constructor(
     readonly source: Http.IncomingMessage,
@@ -140,6 +140,7 @@ class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implemen
         reason: "Decode",
         error: _
       }))
+    this[ServerRequest.TypeId] = ServerRequest.TypeId
   }
 
   get originalUrl(): string {
@@ -155,12 +156,22 @@ class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implemen
     return this.headersOverride
   }
 
+  private formDataEffect:
+    | Effect.Effect<
+      Scope.Scope | FileSystem.FileSystem | Path.Path,
+      Error.RequestError,
+      globalThis.FormData
+    >
+    | undefined
   get formData(): Effect.Effect<
     Scope.Scope | FileSystem.FileSystem | Path.Path,
     Error.RequestError,
     globalThis.FormData
   > {
-    return Effect.mapError(
+    if (this.formDataEffect) {
+      return this.formDataEffect
+    }
+    this.formDataEffect = Effect.runSync(Effect.cached(Effect.mapError(
       internalFormData.formData(this.source),
       (error) =>
         Error.RequestError({
@@ -168,7 +179,8 @@ class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implemen
           reason: "Decode",
           error
         })
-    )
+    )))
+    return this.formDataEffect
   }
 
   get formDataStream(): Stream.Stream<never, Error.RequestError, FormData.Part> {

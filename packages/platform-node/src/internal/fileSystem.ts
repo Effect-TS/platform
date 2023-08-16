@@ -1,4 +1,4 @@
-import { identity, pipe } from "@effect/data/Function"
+import { pipe } from "@effect/data/Function"
 import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
 import * as Layer from "@effect/io/Layer"
@@ -218,7 +218,7 @@ const makeFile = (() => {
   const nodeWriteAll = nodeWriteFactory("writeAll")
 
   class FileImpl implements FileSystem.File {
-    readonly [FileSystem.FileTypeId] = identity
+    readonly [FileSystem.FileTypeId]: FileSystem.FileTypeId
 
     private readonly semaphore = Effect.unsafeMakeSemaphore(1)
     private position: bigint = 0n
@@ -226,7 +226,9 @@ const makeFile = (() => {
     constructor(
       readonly fd: FileSystem.File.Descriptor,
       private readonly append: boolean
-    ) {}
+    ) {
+      this[FileSystem.FileTypeId] = FileSystem.FileTypeId
+    }
 
     get stat() {
       return Effect.map(nodeStat(this.fd), makeFileInfo)

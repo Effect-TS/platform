@@ -46,7 +46,7 @@ export const schemaFormDataJson = <I, A>(schema: Schema.Schema<I, A>) => {
         ({ request }) =>
           Error.RequestError({ request, reason: "Decode", error: "schemaFormDataJson: field was not a string" })
       ),
-      Effect.bind("value", ({ field, request }) =>
+      Effect.flatMap(({ field, request }) =>
         Effect.flatMap(
           Effect.try({
             try: () => JSON.parse(field as string),
@@ -58,24 +58,22 @@ export const schemaFormDataJson = <I, A>(schema: Schema.Schema<I, A>) => {
               })
           }),
           parse
-        )),
-      Effect.map(({ formData, value }) => [value, formData] as const)
+        )
+      )
     )
 }
 
 /** @internal */
 export const schemaFormDataFields = <I extends Readonly<Record<string, string>>, A>(schema: Schema.Schema<I, A>) => {
   const parse = Schema.parse(schema)
-  return pipe(
-    Effect.Do,
-    Effect.bind("request", () => serverRequestTag),
-    Effect.bind("formData", ({ request }) => request.formData),
-    Effect.let("fields", ({ formData }) =>
-      ReadonlyArray.filter(
-        formData.entries(),
-        (entry): entry is [string, string] => Predicate.isString(entry[1])
-      )),
-    Effect.bind("value", ({ fields }) => parse(fields)),
-    Effect.map(({ formData, value }) => [value, formData] as const)
+  return Effect.flatMap(
+    Effect.flatMap(serverRequestTag, (request) => request.formData),
+    (formData) =>
+      parse(
+        ReadonlyArray.filter(
+          formData.entries(),
+          (entry): entry is [string, string] => Predicate.isString(entry[1])
+        )
+      )
   )
 }

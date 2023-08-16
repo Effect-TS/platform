@@ -92,7 +92,7 @@ export const schemaFormDataFields: <I extends Readonly<Record<string, string>>, 
 ) => Effect.Effect<
   ServerRequest | Scope.Scope | FileSystem.FileSystem | Path.Path,
   Error.RequestError | ParseResult.ParseError,
-  readonly [A, FormData]
+  A
 > = internal.schemaFormDataFields
 
 /**
@@ -106,5 +106,5 @@ export const schemaFormDataJson: <I, A>(
 ) => Effect.Effect<
   ServerRequest | Scope.Scope | FileSystem.FileSystem | Path.Path,
   Error.RequestError | ParseResult.ParseError,
-  readonly [A, FormData]
+  A
 > = internal.schemaFormDataJson

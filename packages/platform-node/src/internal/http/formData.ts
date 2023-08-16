@@ -85,17 +85,19 @@ export const fromRequest = (source: Http.IncomingMessage): Stream.Stream<never, 
   )
 
 class FieldImpl implements FormData.Field {
-  readonly [FormData.TypeId]: FormData.TypeId = FormData.TypeId
+  readonly [FormData.TypeId]: FormData.TypeId
   readonly _tag = "Field"
   constructor(
     readonly key: string,
     readonly contentType: string,
     readonly value: string
-  ) {}
+  ) {
+    this[FormData.TypeId] = FormData.TypeId
+  }
 }
 
 class FileImpl implements FormData.File {
-  readonly [FormData.TypeId]: FormData.TypeId = FormData.TypeId
+  readonly [FormData.TypeId]: FormData.TypeId
   readonly _tag = "File"
   constructor(
     readonly key: string,
@@ -103,7 +105,9 @@ class FileImpl implements FormData.File {
     readonly contentType: string,
     readonly content: Stream.Stream<never, unknown, Uint8Array>,
     readonly source: Readable
-  ) {}
+  ) {
+    this[FormData.TypeId] = FormData.TypeId
+  }
 }
 
 /** @internal */

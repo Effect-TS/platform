@@ -100,7 +100,7 @@ Added in v1.0.0
 
 ```ts
 export interface File {
-  readonly [FileTypeId]: (_: never) => unknown
+  readonly [FileTypeId]: FileTypeId
   readonly fd: File.Descriptor
   readonly stat: Effect.Effect<never, PlatformError, File.Info>
   readonly seek: (offset: SizeInput, from: SeekMode) => Effect.Effect<never, never, void>

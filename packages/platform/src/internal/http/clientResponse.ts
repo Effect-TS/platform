@@ -18,13 +18,16 @@ export const fromWeb = (
 ): ClientResponse.ClientResponse => new ClientResponseImpl(request, source)
 
 class ClientResponseImpl implements ClientResponse.ClientResponse {
-  readonly [IncomingMessage.TypeId]: IncomingMessage.TypeId = IncomingMessage.TypeId
-  readonly [TypeId]: ClientResponse.TypeId = TypeId
+  readonly [IncomingMessage.TypeId]: IncomingMessage.TypeId
+  readonly [TypeId]: ClientResponse.TypeId
 
   constructor(
     private readonly request: ClientRequest.ClientRequest,
     private readonly source: globalThis.Response
-  ) {}
+  ) {
+    this[IncomingMessage.TypeId] = IncomingMessage.TypeId
+    this[TypeId] = TypeId
+  }
 
   get status(): number {
     return this.source.status

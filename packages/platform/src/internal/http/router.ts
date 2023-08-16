@@ -52,11 +52,17 @@ export const schemaParams = <I extends Readonly<Record<string, string>>, A>(sche
 }
 
 class RouterImpl<R, E> implements Router.Router<R, E> {
-  readonly [TypeId]: Router.TypeId = TypeId
+  readonly [TypeId]: Router.TypeId
   constructor(
     readonly routes: Chunk.Chunk<Router.Route<R, E>>,
     readonly mounts: Chunk.Chunk<readonly [string, App.Default<R, E>]>
-  ) {}
+  ) {
+    this[TypeId] = TypeId
+    this[Effect.EffectTypeId] = undefined
+    this[Stream.StreamTypeId] = undefined
+    this[Sink.SinkTypeId] = undefined
+    this[Channel.ChannelTypeId] = undefined
+  }
   pipe() {
     return pipeArguments(this, arguments)
   }
@@ -70,10 +76,10 @@ class RouterImpl<R, E> implements Router.Router<R, E> {
 
   // implements HttpApp/Effect
   public _tag = "Commit" // OP_COMMIT
-  readonly [Effect.EffectTypeId] = undefined as any
-  readonly [Stream.StreamTypeId] = undefined as any
-  readonly [Sink.SinkTypeId] = undefined as any
-  readonly [Channel.ChannelTypeId] = undefined as any;
+  readonly [Effect.EffectTypeId]: any
+  readonly [Stream.StreamTypeId]: any
+  readonly [Sink.SinkTypeId]: any
+  readonly [Channel.ChannelTypeId]: any;
   [Equal.symbol](
     this: RouterImpl<R, E>,
     that: RouterImpl<R, E>
@@ -138,21 +144,25 @@ function sliceRequestUrl(request: ServerRequest.ServerRequest, prefix: string) {
 }
 
 class RouteImpl<R, E> implements Router.Route<R, E> {
-  readonly [RouteTypeId]: Router.RouteTypeId = RouteTypeId
+  readonly [RouteTypeId]: Router.RouteTypeId
   constructor(
     readonly method: Method.Method | "*",
     readonly path: string,
     readonly handler: Router.Route.Handler<R, E>,
     readonly prefix = Option.none<string>()
-  ) {}
+  ) {
+    this[RouteTypeId] = RouteTypeId
+  }
 }
 
 class RouteContextImpl implements Router.RouteContext {
-  readonly [RouteContextTypeId]: Router.RouteContextTypeId = RouteContextTypeId
+  readonly [RouteContextTypeId]: Router.RouteContextTypeId
   constructor(
     readonly params: Readonly<Record<string, string | undefined>>,
     readonly searchParams: Readonly<Record<string, string>>
-  ) {}
+  ) {
+    this[RouteContextTypeId] = RouteContextTypeId
+  }
 }
 
 /** @internal */

@@ -172,7 +172,7 @@ const waitForFinish = (nodeRequest: Http.ClientRequest, request: ClientRequest.C
   })
 
 class ClientResponseImpl extends IncomingMessageImpl<Error.ResponseError> implements ClientResponse.ClientResponse {
-  readonly [ClientResponse.TypeId]: ClientResponse.TypeId = ClientResponse.TypeId
+  readonly [ClientResponse.TypeId]: ClientResponse.TypeId
 
   constructor(
     readonly request: ClientRequest.ClientRequest,
@@ -185,6 +185,7 @@ class ClientResponseImpl extends IncomingMessageImpl<Error.ResponseError> implem
         reason: "Decode",
         error: _
       }))
+    this[ClientResponse.TypeId] = ClientResponse.TypeId
   }
 
   get status() {

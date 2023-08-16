@@ -18,13 +18,15 @@ import type * as Stream from "@effect/stream/Stream"
 export const TypeId: ServerResponse.TypeId = Symbol.for("@effect/platform/Http/ServerResponse") as ServerResponse.TypeId
 
 class ServerResponseImpl implements ServerResponse.ServerResponse {
-  readonly [TypeId]: ServerResponse.TypeId = TypeId
+  readonly [TypeId]: ServerResponse.TypeId
   constructor(
     readonly status: number,
     readonly statusText: string | undefined,
     readonly headers: Headers.Headers,
     readonly body: Body.Body
-  ) {}
+  ) {
+    this[TypeId] = TypeId
+  }
   pipe() {
     return pipeArguments(this, arguments)
   }

@@ -10,12 +10,14 @@ import type * as Http from "node:http"
 
 /** @internal */
 export class IncomingMessageImpl<E> implements IncomingMessage.IncomingMessage<E> {
-  readonly [IncomingMessage.TypeId]: IncomingMessage.TypeId = IncomingMessage.TypeId
+  readonly [IncomingMessage.TypeId]: IncomingMessage.TypeId
 
   constructor(
     readonly source: Http.IncomingMessage,
     readonly onError: (error: unknown) => E
-  ) {}
+  ) {
+    this[IncomingMessage.TypeId] = IncomingMessage.TypeId
+  }
 
   get headers() {
     return Headers.fromInput(this.source.headers as any)

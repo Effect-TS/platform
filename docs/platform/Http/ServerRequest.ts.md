@@ -113,7 +113,7 @@ export declare const schemaFormDataFields: <I extends Readonly<Record<string, st
 ) => Effect.Effect<
   Path.Path | FileSystem.FileSystem | Scope.Scope | ServerRequest,
   ParseResult.ParseError | Error.RequestError,
-  readonly [A, FormData]
+  A
 >
 ```
 
@@ -131,7 +131,7 @@ export declare const schemaFormDataJson: <I, A>(
 ) => Effect.Effect<
   Path.Path | FileSystem.FileSystem | Scope.Scope | ServerRequest,
   ParseResult.ParseError | Error.RequestError,
-  readonly [A, FormData]
+  A
 >
 ```
 

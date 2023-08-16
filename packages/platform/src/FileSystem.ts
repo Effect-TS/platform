@@ -430,7 +430,7 @@ export const isFile = (u: unknown): u is File => typeof u === "object" && u !== 
  * @category model
  */
 export interface File {
-  readonly [FileTypeId]: (_: never) => unknown
+  readonly [FileTypeId]: FileTypeId
   readonly fd: File.Descriptor
   readonly stat: Effect.Effect<never, PlatformError, File.Info>
   readonly seek: (offset: SizeInput, from: SeekMode) => Effect.Effect<never, never, void>

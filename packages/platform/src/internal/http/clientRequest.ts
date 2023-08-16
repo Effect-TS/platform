@@ -18,14 +18,16 @@ import type * as Stream from "@effect/stream/Stream"
 export const TypeId: ClientRequest.TypeId = Symbol.for("@effect/platform/Http/ClientRequest") as ClientRequest.TypeId
 
 class ClientRequestImpl implements ClientRequest.ClientRequest {
-  readonly [TypeId]: ClientRequest.TypeId = TypeId
+  readonly [TypeId]: ClientRequest.TypeId
   constructor(
     readonly method: Method,
     readonly url: string,
     readonly urlParams: UrlParams.UrlParams,
     readonly headers: Headers.Headers,
     readonly body: Body.Body
-  ) {}
+  ) {
+    this[TypeId] = TypeId
+  }
   pipe() {
     return pipeArguments(this, arguments)
   }
