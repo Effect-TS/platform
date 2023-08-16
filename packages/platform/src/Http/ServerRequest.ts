@@ -82,3 +82,29 @@ export const schemaBodyJson: <I, A>(
 export const schemaBodyUrlParams: <I extends Readonly<Record<string, string>>, A>(
   schema: Schema.Schema<I, A>
 ) => Effect.Effect<ServerRequest, Error.RequestError | ParseResult.ParseError, A> = internal.schemaBodyUrlParams
+
+/**
+ * @since 1.0.0
+ * @category schema
+ */
+export const schemaFormDataFields: <I extends Readonly<Record<string, string>>, A>(
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<
+  ServerRequest | Scope.Scope | FileSystem.FileSystem | Path.Path,
+  Error.RequestError | ParseResult.ParseError,
+  readonly [A, FormData]
+> = internal.schemaFormDataFields
+
+/**
+ * @since 1.0.0
+ * @category schema
+ */
+export const schemaFormDataJson: <I, A>(
+  schema: Schema.Schema<I, A>
+) => (
+  field: string
+) => Effect.Effect<
+  ServerRequest | Scope.Scope | FileSystem.FileSystem | Path.Path,
+  Error.RequestError | ParseResult.ParseError,
+  readonly [A, FormData]
+> = internal.schemaFormDataJson

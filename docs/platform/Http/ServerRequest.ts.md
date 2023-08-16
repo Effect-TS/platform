@@ -21,6 +21,8 @@ Added in v1.0.0
 - [schema](#schema)
   - [schemaBodyJson](#schemabodyjson)
   - [schemaBodyUrlParams](#schemabodyurlparams)
+  - [schemaFormDataFields](#schemaformdatafields)
+  - [schemaFormDataJson](#schemaformdatajson)
   - [schemaHeaders](#schemaheaders)
 - [type ids](#type-ids)
   - [TypeId](#typeid)
@@ -97,6 +99,40 @@ Added in v1.0.0
 export declare const schemaBodyUrlParams: <I extends Readonly<Record<string, string>>, A>(
   schema: Schema.Schema<I, A>
 ) => Effect.Effect<ServerRequest, ParseResult.ParseError | Error.RequestError, A>
+```
+
+Added in v1.0.0
+
+## schemaFormDataFields
+
+**Signature**
+
+```ts
+export declare const schemaFormDataFields: <I extends Readonly<Record<string, string>>, A>(
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<
+  Path.Path | FileSystem.FileSystem | Scope.Scope | ServerRequest,
+  ParseResult.ParseError | Error.RequestError,
+  readonly [A, FormData]
+>
+```
+
+Added in v1.0.0
+
+## schemaFormDataJson
+
+**Signature**
+
+```ts
+export declare const schemaFormDataJson: <I, A>(
+  schema: Schema.Schema<I, A>
+) => (
+  field: string
+) => Effect.Effect<
+  Path.Path | FileSystem.FileSystem | Scope.Scope | ServerRequest,
+  ParseResult.ParseError | Error.RequestError,
+  readonly [A, FormData]
+>
 ```
 
 Added in v1.0.0

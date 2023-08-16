@@ -15,6 +15,7 @@ Added in v1.0.0
 - [constructors](#constructors)
   - [effect](#effect)
   - [empty](#empty)
+  - [file](#file)
   - [formData](#formdata)
   - [json](#json)
   - [jsonSchema](#jsonschema)
@@ -56,6 +57,19 @@ Added in v1.0.0
 
 ```ts
 export declare const empty: Empty
+```
+
+Added in v1.0.0
+
+## file
+
+**Signature**
+
+```ts
+export declare const file: (
+  path: string,
+  options?: FileSystem.StreamOptions & { readonly contentType?: string }
+) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, Stream>
 ```
 
 Added in v1.0.0
