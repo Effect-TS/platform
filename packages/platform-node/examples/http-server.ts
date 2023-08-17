@@ -5,15 +5,7 @@ import { createServer } from "node:http"
 
 const ServerLive = Http.server.layer(() => createServer(), { port: 3000 })
 
-Http.router.empty.pipe(
-  Http.router.get(
-    "/",
-    Effect.map(
-      Http.request.ServerRequest,
-      (req) => Http.response.text(req.url)
-    )
-  ),
-  Http.server.serve(),
+Http.server.serve(Effect.succeed(Http.response.text("Hello World"))).pipe(
   Effect.scoped,
   Effect.provideLayer(ServerLive),
   Effect.tapErrorCause(Effect.logError),

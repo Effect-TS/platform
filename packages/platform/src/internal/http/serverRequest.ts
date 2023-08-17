@@ -15,14 +15,25 @@ export const TypeId: ServerRequest.TypeId = Symbol.for("@effect/platform/Http/Se
 export const serverRequestTag = Context.Tag<ServerRequest.ServerRequest>(TypeId)
 
 /** @internal */
-export const formDataFiles = Effect.map(
+export const formDataRecord = Effect.map(
   Effect.flatMap(serverRequestTag, (request) => request.formData),
-  (formData): Record<string, globalThis.File> =>
-    Object.fromEntries(
-      ReadonlyArray.filter(
-        formData.entries(),
-        (entry): entry is [string, globalThis.File] => !Predicate.isString(entry[1])
-      )
+  (formData): Record<string, Array<globalThis.File> | string> =>
+    ReadonlyArray.reduce(
+      formData.entries(),
+      {} as Record<string, Array<globalThis.File> | string>,
+      (acc, [key, value]) => {
+        if (Predicate.isString(value)) {
+          acc[key] = value
+        } else {
+          const existing = acc[key]
+          if (Array.isArray(existing)) {
+            existing.push(value)
+          } else {
+            acc[key] = [value]
+          }
+        }
+        return acc
+      }
     )
 )
 
@@ -42,6 +53,24 @@ export const schemaBodyJson = <I, A>(schema: Schema.Schema<I, A>) => {
 export const schemaBodyUrlParams = <I extends Readonly<Record<string, string>>, A>(schema: Schema.Schema<I, A>) => {
   const parse = IncomingMessage.schemaBodyUrlParams(schema)
   return Effect.flatMap(serverRequestTag, parse)
+}
+
+/** @internal */
+export const filesSchema: Schema.Schema<ReadonlyArray<File>, ReadonlyArray<File>> = Schema.array(
+  pipe(
+    Schema.instanceOf(Blob),
+    Schema.filter(
+      (blob): blob is File => "name" in blob
+    )
+  ) as any as Schema.Schema<File, File>
+)
+
+/** @internal */
+export const schemaFormData = <I extends Readonly<Record<string, string | ReadonlyArray<globalThis.File>>>, A>(
+  schema: Schema.Schema<I, A>
+) => {
+  const parse = Schema.parse(schema)
+  return Effect.flatMap(formDataRecord, parse)
 }
 
 /** @internal */
@@ -73,19 +102,4 @@ export const schemaFormDataJson = <I, A>(schema: Schema.Schema<I, A>) => {
         )
       )
     )
-}
-
-/** @internal */
-export const schemaFormDataFields = <I extends Readonly<Record<string, string>>, A>(schema: Schema.Schema<I, A>) => {
-  const parse = Schema.parse(schema)
-  return Effect.flatMap(
-    Effect.flatMap(serverRequestTag, (request) => request.formData),
-    (formData) =>
-      parse(
-        ReadonlyArray.filter(
-          formData.entries(),
-          (entry): entry is [string, string] => Predicate.isString(entry[1])
-        )
-      )
-  )
 }

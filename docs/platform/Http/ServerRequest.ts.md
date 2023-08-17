@@ -13,7 +13,7 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [accessors](#accessors)
-  - [formDataFiles](#formdatafiles)
+  - [formDataRecord](#formdatarecord)
 - [context](#context)
   - [ServerRequest](#serverrequest)
 - [fiber refs](#fiber-refs)
@@ -21,9 +21,10 @@ Added in v1.0.0
 - [models](#models)
   - [ServerRequest (interface)](#serverrequest-interface)
 - [schema](#schema)
+  - [filesSchema](#filesschema)
   - [schemaBodyJson](#schemabodyjson)
   - [schemaBodyUrlParams](#schemabodyurlparams)
-  - [schemaFormDataFields](#schemaformdatafields)
+  - [schemaFormData](#schemaformdata)
   - [schemaFormDataJson](#schemaformdatajson)
   - [schemaHeaders](#schemaheaders)
 - [type ids](#type-ids)
@@ -34,15 +35,15 @@ Added in v1.0.0
 
 # accessors
 
-## formDataFiles
+## formDataRecord
 
 **Signature**
 
 ```ts
-export declare const formDataFiles: Effect.Effect<
+export declare const formDataRecord: Effect.Effect<
   Path.Path | FileSystem.FileSystem | Scope.Scope | ServerRequest,
   FormData.FormDataError,
-  Record<string, File>
+  Record<string, string | File[]>
 >
 ```
 
@@ -97,6 +98,16 @@ Added in v1.0.0
 
 # schema
 
+## filesSchema
+
+**Signature**
+
+```ts
+export declare const filesSchema: Schema.Schema<readonly File[], readonly File[]>
+```
+
+Added in v1.0.0
+
 ## schemaBodyJson
 
 **Signature**
@@ -121,12 +132,12 @@ export declare const schemaBodyUrlParams: <I extends Readonly<Record<string, str
 
 Added in v1.0.0
 
-## schemaFormDataFields
+## schemaFormData
 
 **Signature**
 
 ```ts
-export declare const schemaFormDataFields: <I extends Readonly<Record<string, string>>, A>(
+export declare const schemaFormData: <I extends Readonly<Record<string, string | readonly File[]>>, A>(
   schema: Schema.Schema<I, A>
 ) => Effect.Effect<
   Path.Path | FileSystem.FileSystem | Scope.Scope | ServerRequest,

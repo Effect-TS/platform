@@ -63,11 +63,11 @@ export const ServerRequest: Context.Tag<ServerRequest, ServerRequest> = internal
  * @since 1.0.0
  * @category accessors
  */
-export const formDataFiles: Effect.Effect<
+export const formDataRecord: Effect.Effect<
   Scope.Scope | FileSystem.FileSystem | Path.Path | ServerRequest,
   FormData.FormDataError,
-  Record<string, File>
-> = internal.formDataFiles
+  Record<string, string | Array<File>>
+> = internal.formDataRecord
 
 /**
  * @since 1.0.0
@@ -97,13 +97,19 @@ export const schemaBodyUrlParams: <I extends Readonly<Record<string, string>>, A
  * @since 1.0.0
  * @category schema
  */
-export const schemaFormDataFields: <I extends Readonly<Record<string, string>>, A>(
+export const filesSchema: Schema.Schema<ReadonlyArray<File>, ReadonlyArray<File>> = internal.filesSchema
+
+/**
+ * @since 1.0.0
+ * @category schema
+ */
+export const schemaFormData: <I extends Readonly<Record<string, string | ReadonlyArray<File>>>, A>(
   schema: Schema.Schema<I, A>
 ) => Effect.Effect<
   ServerRequest | Scope.Scope | FileSystem.FileSystem | Path.Path,
   FormData.FormDataError | ParseResult.ParseError,
   A
-> = internal.schemaFormDataFields
+> = internal.schemaFormData
 
 /**
  * @since 1.0.0

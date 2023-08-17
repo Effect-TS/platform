@@ -91,18 +91,23 @@ describe("HttpServer", () => {
       expect(result).toEqual({ ok: true })
     }).pipe(runPromise))
 
-  it("formDataFiles", () =>
+  it("schemaFormData", () =>
     Effect.gen(function*(_) {
       yield* _(
         Http.router.empty,
         Http.router.post(
           "/upload",
           Effect.gen(function*(_) {
-            const files = yield* _(Http.request.formDataFiles)
+            const files = yield* _(Http.request.schemaFormData(Schema.struct({
+              file: Http.request.filesSchema,
+              test: Schema.string
+            })))
             expect(files).toHaveProperty("file")
+            expect(files).toHaveProperty("test")
             return Http.response.empty()
           }).pipe(Effect.scoped)
         ),
+        Effect.tapErrorCause(Effect.logError),
         Http.server.serve(),
         Effect.scoped,
         Effect.fork
@@ -110,9 +115,11 @@ describe("HttpServer", () => {
       const client = yield* _(makeClient)
       const formData = new FormData()
       formData.append("file", new Blob(["test"], { type: "text/plain" }), "test.txt")
-      yield* _(
+      formData.append("test", "test")
+      const response = yield* _(
         client(HttpC.request.post("/upload", { body: HttpC.body.formData(formData) }))
       )
+      expect(response.status).toEqual(204)
     }).pipe(runPromise))
 
   it("formData withMaxFileSize", () =>
