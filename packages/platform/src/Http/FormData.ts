@@ -2,8 +2,10 @@
  * @since 1.0.0
  */
 import * as Chunk from "@effect/data/Chunk"
+import { dual } from "@effect/data/Function"
 import { globalValue } from "@effect/data/Global"
 import * as Option from "@effect/data/Option"
+import * as Effect from "@effect/io/Effect"
 import * as FiberRef from "@effect/io/FiberRef"
 import * as FileSystem from "@effect/platform/FileSystem"
 import type * as Stream from "@effect/stream/Stream"
@@ -69,8 +71,17 @@ export interface File extends Part.Proto {
  */
 export const maxFieldSize: FiberRef.FiberRef<FileSystem.Size> = globalValue(
   "@effect/platform/Http/FormData/maxFieldSize",
-  () => FiberRef.unsafeMake(FileSystem.Size(100))
+  () => FiberRef.unsafeMake(FileSystem.Size(1024 * 1024))
 )
+
+/**
+ * @since 1.0.0
+ * @category fiber refs
+ */
+export const withMaxFieldSize = dual<
+  (size: FileSystem.SizeInput) => <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>,
+  <R, E, A>(effect: Effect.Effect<R, E, A>, size: FileSystem.SizeInput) => Effect.Effect<R, E, A>
+>(2, (effect, size) => Effect.locally(effect, maxFieldSize, FileSystem.Size(size)))
 
 /**
  * @since 1.0.0
@@ -85,7 +96,25 @@ export const maxFileSize: FiberRef.FiberRef<Option.Option<FileSystem.Size>> = gl
  * @since 1.0.0
  * @category fiber refs
  */
+export const withMaxFileSize = dual<
+  (size: Option.Option<FileSystem.SizeInput>) => <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>,
+  <R, E, A>(effect: Effect.Effect<R, E, A>, size: Option.Option<FileSystem.SizeInput>) => Effect.Effect<R, E, A>
+>(2, (effect, size) => Effect.locally(effect, maxFileSize, Option.map(size, FileSystem.Size)))
+
+/**
+ * @since 1.0.0
+ * @category fiber refs
+ */
 export const fieldMimeTypes: FiberRef.FiberRef<Chunk.Chunk<string>> = globalValue(
   "@effect/platform/Http/FormData/fieldMimeTypes",
   () => FiberRef.unsafeMake(Chunk.make("application/json"))
 )
+
+/**
+ * @since 1.0.0
+ * @category fiber refs
+ */
+export const withFieldMimeTypes = dual<
+  (mimeTypes: ReadonlyArray<string>) => <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>,
+  <R, E, A>(effect: Effect.Effect<R, E, A>, mimeTypes: ReadonlyArray<string>) => Effect.Effect<R, E, A>
+>(2, (effect, mimeTypes) => Effect.locally(effect, fieldMimeTypes, Chunk.fromIterable(mimeTypes)))

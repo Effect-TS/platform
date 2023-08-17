@@ -1,11 +1,12 @@
 /**
  * @since 1.0.0
  */
+import { dual } from "@effect/data/Function"
 import * as Global from "@effect/data/Global"
 import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
 import * as FiberRef from "@effect/io/FiberRef"
-import type * as FileSystem from "@effect/platform/FileSystem"
+import * as FileSystem from "@effect/platform/FileSystem"
 import type * as Headers from "@effect/platform/Http/Headers"
 import type * as UrlParams from "@effect/platform/Http/UrlParams"
 import type * as ParseResult from "@effect/schema/ParseResult"
@@ -76,3 +77,12 @@ export const maxBodySize: FiberRef.FiberRef<Option.Option<FileSystem.Size>> = Gl
   "@effect/platform/Http/ImcomingMessage/maxBodySize",
   () => FiberRef.unsafeMake(Option.none<FileSystem.Size>())
 )
+
+/**
+ * @since 1.0.0
+ * @category fiber refs
+ */
+export const withMaxBodySize = dual<
+  (size: Option.Option<FileSystem.SizeInput>) => <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>,
+  <R, E, A>(effect: Effect.Effect<R, E, A>, size: Option.Option<FileSystem.SizeInput>) => Effect.Effect<R, E, A>
+>(2, (effect, size) => Effect.locally(effect, maxBodySize, Option.map(size, FileSystem.Size)))
