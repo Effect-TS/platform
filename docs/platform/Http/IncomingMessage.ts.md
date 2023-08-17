@@ -14,6 +14,7 @@ Added in v1.0.0
 
 - [fiber refs](#fiber-refs)
   - [maxBodySize](#maxbodysize)
+  - [withMaxBodySize](#withmaxbodysize)
 - [models](#models)
   - [IncomingMessage (interface)](#incomingmessage-interface)
 - [schema](#schema)
@@ -34,6 +35,19 @@ Added in v1.0.0
 
 ```ts
 export declare const maxBodySize: FiberRef.FiberRef<Option.Option<FileSystem.Size>>
+```
+
+Added in v1.0.0
+
+## withMaxBodySize
+
+**Signature**
+
+```ts
+export declare const withMaxBodySize: ((
+  size: Option.Option<FileSystem.SizeInput>
+) => <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>) &
+  (<R, E, A>(effect: Effect.Effect<R, E, A>, size: Option.Option<FileSystem.SizeInput>) => Effect.Effect<R, E, A>)
 ```
 
 Added in v1.0.0

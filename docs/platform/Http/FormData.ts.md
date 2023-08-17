@@ -16,6 +16,9 @@ Added in v1.0.0
   - [fieldMimeTypes](#fieldmimetypes)
   - [maxFieldSize](#maxfieldsize)
   - [maxFileSize](#maxfilesize)
+  - [withFieldMimeTypes](#withfieldmimetypes)
+  - [withMaxFieldSize](#withmaxfieldsize)
+  - [withMaxFileSize](#withmaxfilesize)
 - [models](#models)
   - [Field (interface)](#field-interface)
   - [File (interface)](#file-interface)
@@ -54,6 +57,45 @@ Added in v1.0.0
 
 ```ts
 export declare const maxFileSize: FiberRef.FiberRef<Option.Option<FileSystem.Size>>
+```
+
+Added in v1.0.0
+
+## withFieldMimeTypes
+
+**Signature**
+
+```ts
+export declare const withFieldMimeTypes: ((
+  mimeTypes: ReadonlyArray<string>
+) => <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>) &
+  (<R, E, A>(effect: Effect.Effect<R, E, A>, mimeTypes: ReadonlyArray<string>) => Effect.Effect<R, E, A>)
+```
+
+Added in v1.0.0
+
+## withMaxFieldSize
+
+**Signature**
+
+```ts
+export declare const withMaxFieldSize: ((
+  size: FileSystem.SizeInput
+) => <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>) &
+  (<R, E, A>(effect: Effect.Effect<R, E, A>, size: FileSystem.SizeInput) => Effect.Effect<R, E, A>)
+```
+
+Added in v1.0.0
+
+## withMaxFileSize
+
+**Signature**
+
+```ts
+export declare const withMaxFileSize: ((
+  size: Option.Option<FileSystem.SizeInput>
+) => <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>) &
+  (<R, E, A>(effect: Effect.Effect<R, E, A>, size: Option.Option<FileSystem.SizeInput>) => Effect.Effect<R, E, A>)
 ```
 
 Added in v1.0.0
