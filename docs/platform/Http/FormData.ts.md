@@ -12,6 +12,8 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [conversions](#conversions)
+  - [toRecord](#torecord)
 - [errors](#errors)
   - [FormDataError](#formdataerror)
   - [FormDataError (interface)](#formdataerror-interface)
@@ -26,6 +28,10 @@ Added in v1.0.0
   - [Field (interface)](#field-interface)
   - [File (interface)](#file-interface)
   - [Part (type alias)](#part-type-alias)
+- [schema](#schema)
+  - [filesSchema](#filesschema)
+  - [schemaJson](#schemajson)
+  - [schemaRecord](#schemarecord)
 - [type ids](#type-ids)
   - [ErrorTypeId](#errortypeid)
   - [ErrorTypeId (type alias)](#errortypeid-type-alias)
@@ -33,6 +39,18 @@ Added in v1.0.0
   - [TypeId (type alias)](#typeid-type-alias)
 
 ---
+
+# conversions
+
+## toRecord
+
+**Signature**
+
+```ts
+export declare const toRecord: (formData: FormData) => Record<string, string | Array<globalThis.File>>
+```
+
+Added in v1.0.0
 
 # errors
 
@@ -54,7 +72,7 @@ Added in v1.0.0
 export interface FormDataError extends Data.Case {
   readonly [ErrorTypeId]: ErrorTypeId
   readonly _tag: 'FormDataError'
-  readonly reason: 'FileTooLarge' | 'FieldTooLarge' | 'InternalError'
+  readonly reason: 'FileTooLarge' | 'FieldTooLarge' | 'InternalError' | 'Parse'
   readonly error: unknown
 }
 ```
@@ -98,10 +116,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const withFieldMimeTypes: ((
-  mimeTypes: ReadonlyArray<string>
-) => <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>) &
-  (<R, E, A>(effect: Effect.Effect<R, E, A>, mimeTypes: ReadonlyArray<string>) => Effect.Effect<R, E, A>)
+export declare const withFieldMimeTypes: {
+  (mimeTypes: ReadonlyArray<string>): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
+  <R, E, A>(effect: Effect.Effect<R, E, A>, mimeTypes: ReadonlyArray<string>): Effect.Effect<R, E, A>
+}
 ```
 
 Added in v1.0.0
@@ -111,10 +129,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const withMaxFieldSize: ((
-  size: FileSystem.SizeInput
-) => <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>) &
-  (<R, E, A>(effect: Effect.Effect<R, E, A>, size: FileSystem.SizeInput) => Effect.Effect<R, E, A>)
+export declare const withMaxFieldSize: {
+  (size: FileSystem.SizeInput): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
+  <R, E, A>(effect: Effect.Effect<R, E, A>, size: FileSystem.SizeInput): Effect.Effect<R, E, A>
+}
 ```
 
 Added in v1.0.0
@@ -124,10 +142,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const withMaxFileSize: ((
-  size: Option.Option<FileSystem.SizeInput>
-) => <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>) &
-  (<R, E, A>(effect: Effect.Effect<R, E, A>, size: Option.Option<FileSystem.SizeInput>) => Effect.Effect<R, E, A>)
+export declare const withMaxFileSize: {
+  (size: Option.Option<FileSystem.SizeInput>): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
+  <R, E, A>(effect: Effect.Effect<R, E, A>, size: Option.Option<FileSystem.SizeInput>): Effect.Effect<R, E, A>
+}
 ```
 
 Added in v1.0.0
@@ -171,6 +189,45 @@ Added in v1.0.0
 
 ```ts
 export type Part = Field | File
+```
+
+Added in v1.0.0
+
+# schema
+
+## filesSchema
+
+**Signature**
+
+```ts
+export declare const filesSchema: Schema.Schema<readonly globalThis.File[], readonly globalThis.File[]>
+```
+
+Added in v1.0.0
+
+## schemaJson
+
+**Signature**
+
+```ts
+export declare const schemaJson: <I, A>(
+  schema: Schema.Schema<I, A>
+) => {
+  (field: string): (formData: FormData) => Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
+  (formData: FormData, field: string): Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
+}
+```
+
+Added in v1.0.0
+
+## schemaRecord
+
+**Signature**
+
+```ts
+export declare const schemaRecord: <I extends Readonly<Record<string, string | readonly globalThis.File[]>>, A>(
+  schema: Schema.Schema<I, A>
+) => (formData: FormData) => Effect.Effect<never, ParseResult.ParseError, A>
 ```
 
 Added in v1.0.0

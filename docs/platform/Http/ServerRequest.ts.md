@@ -21,7 +21,6 @@ Added in v1.0.0
 - [models](#models)
   - [ServerRequest (interface)](#serverrequest-interface)
 - [schema](#schema)
-  - [filesSchema](#filesschema)
   - [schemaBodyJson](#schemabodyjson)
   - [schemaBodyUrlParams](#schemabodyurlparams)
   - [schemaFormData](#schemaformdata)
@@ -97,16 +96,6 @@ export interface ServerRequest extends IncomingMessage.IncomingMessage<Error.Req
 Added in v1.0.0
 
 # schema
-
-## filesSchema
-
-**Signature**
-
-```ts
-export declare const filesSchema: Schema.Schema<readonly File[], readonly File[]>
-```
-
-Added in v1.0.0
 
 ## schemaBodyJson
 
