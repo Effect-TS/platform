@@ -46,8 +46,8 @@ export interface ServerRequest extends IncomingMessage.IncomingMessage<Error.Req
   readonly originalUrl: string
   readonly method: Method
 
-  readonly formData: Effect.Effect<Scope.Scope | FileSystem.FileSystem | Path.Path, Error.RequestError, FormData>
-  readonly formDataStream: Stream.Stream<never, Error.RequestError, FormData.Part>
+  readonly formData: Effect.Effect<Scope.Scope | FileSystem.FileSystem | Path.Path, FormData.FormDataError, FormData>
+  readonly formDataStream: Stream.Stream<never, FormData.FormDataError, FormData.Part>
 
   readonly setUrl: (url: string) => ServerRequest
   readonly replaceHeaders: (headers: Headers.Headers) => ServerRequest
@@ -91,7 +91,7 @@ export const schemaFormDataFields: <I extends Readonly<Record<string, string>>, 
   schema: Schema.Schema<I, A>
 ) => Effect.Effect<
   ServerRequest | Scope.Scope | FileSystem.FileSystem | Path.Path,
-  Error.RequestError | ParseResult.ParseError,
+  FormData.FormDataError | ParseResult.ParseError,
   A
 > = internal.schemaFormDataFields
 
@@ -105,6 +105,6 @@ export const schemaFormDataJson: <I, A>(
   field: string
 ) => Effect.Effect<
   ServerRequest | Scope.Scope | FileSystem.FileSystem | Path.Path,
-  Error.RequestError | ParseResult.ParseError,
+  Error.RequestError | FormData.FormDataError | ParseResult.ParseError,
   A
 > = internal.schemaFormDataJson

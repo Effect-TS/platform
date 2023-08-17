@@ -37,6 +37,9 @@ Added in v1.0.0
 
 ```ts
 export declare const serve: {
+  (): <R, E>(
+    httpApp: App.Default<R, E>
+  ) => Effect.Effect<Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
   <R, E, App extends App.Default<any, any>>(middleware: Middleware.Middleware.Applied<R, E, App>): (
     httpApp: App.Default<R, E>
   ) => Effect.Effect<

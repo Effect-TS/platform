@@ -1,4 +1,5 @@
 import { flow } from "@effect/data/Function"
+import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
 import * as Layer from "@effect/io/Layer"
 import * as HttpC from "@effect/platform-node/HttpClient"
@@ -15,14 +16,7 @@ const EnvLive = Layer.mergeAll(
   Layer.provide(HttpC.nodeClient.makeAgentLayer({ keepAlive: false }), HttpC.nodeClient.layerWithoutAgent)
 )
 const runPromise = flow(Effect.provideLayer(EnvLive), Effect.runPromise)
-const makeClient = Effect.map(
-  Effect.all([Http.server.Server, HttpC.client.Client]),
-  ([server, client]) =>
-    HttpC.client.mapRequest(
-      client,
-      HttpC.request.prependUrl(`http://127.0.0.1:${(server.address as Http.server.TcpAddress).port}`)
-    )
-)
+
 const Todo = Schema.struct({
   id: Schema.number,
   title: Schema.string
@@ -31,6 +25,15 @@ const IdParams = Schema.struct({
   id: Schema.NumberFromString
 })
 const todoResponse = Http.response.schemaJson(Todo)
+
+const makeClient = Effect.map(
+  Effect.all([Http.server.Server, HttpC.client.Client]),
+  ([server, client]) =>
+    HttpC.client.mapRequest(
+      client,
+      HttpC.request.prependUrl(`http://127.0.0.1:${(server.address as Http.server.TcpAddress).port}`)
+    )
+)
 const makeTodoClient = Effect.map(
   makeClient,
   HttpC.client.mapEffect(
@@ -85,6 +88,68 @@ describe("HttpServer", () => {
       )
       expect(result).toEqual({ ok: true })
     }).pipe(Effect.scoped, runPromise))
+
+  it("formData withMaxFileSize", () =>
+    Effect.gen(function*(_) {
+      yield* _(
+        Http.router.empty,
+        Http.router.post(
+          "/upload",
+          Effect.gen(function*(_) {
+            const request = yield* _(Http.request.ServerRequest)
+            yield* _(request.formData)
+            return Http.response.empty()
+          }).pipe(Effect.scoped)
+        ),
+        Effect.catchTag("FormDataError", (error) =>
+          error.reason === "FileTooLarge" ?
+            Effect.succeed(Http.response.empty({ status: 413 })) :
+            Effect.fail(error)),
+        Http.server.serve(Http.middleware.logger),
+        Http.formData.withMaxFileSize(Option.some(100)),
+        Effect.scoped,
+        Effect.fork
+      )
+      const client = yield* _(makeClient)
+      const formData = new FormData()
+      const data = new Uint8Array(1000)
+      formData.append("file", new Blob([data], { type: "text/plain" }), "test.txt")
+      const response = yield* _(
+        client(HttpC.request.post("/upload", { body: HttpC.body.formData(formData) }))
+      )
+      expect(response.status).toEqual(413)
+    }).pipe(runPromise))
+
+  it("formData withMaxFieldSize", () =>
+    Effect.gen(function*(_) {
+      yield* _(
+        Http.router.empty,
+        Http.router.post(
+          "/upload",
+          Effect.gen(function*(_) {
+            const request = yield* _(Http.request.ServerRequest)
+            yield* _(request.formData)
+            return Http.response.empty()
+          }).pipe(Effect.scoped)
+        ),
+        Effect.catchTag("FormDataError", (error) =>
+          error.reason === "FieldTooLarge" ?
+            Effect.succeed(Http.response.empty({ status: 413 })) :
+            Effect.fail(error)),
+        Http.server.serve(),
+        Http.formData.withMaxFieldSize(100),
+        Effect.scoped,
+        Effect.fork
+      )
+      const client = yield* _(makeClient)
+      const formData = new FormData()
+      const data = new Uint8Array(1000).fill(1)
+      formData.append("file", new TextDecoder().decode(data))
+      const response = yield* _(
+        client(HttpC.request.post("/upload", { body: HttpC.body.formData(formData) }))
+      )
+      expect(response.status).toEqual(413)
+    }).pipe(runPromise))
 
   it("mount", () =>
     Effect.gen(function*(_) {

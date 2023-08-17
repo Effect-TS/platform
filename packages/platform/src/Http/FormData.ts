@@ -2,6 +2,7 @@
  * @since 1.0.0
  */
 import * as Chunk from "@effect/data/Chunk"
+import * as Data from "@effect/data/Data"
 import { dual } from "@effect/data/Function"
 import { globalValue } from "@effect/data/Global"
 import * as Option from "@effect/data/Option"
@@ -62,8 +63,43 @@ export interface File extends Part.Proto {
   readonly key: string
   readonly name: string
   readonly contentType: string
-  readonly content: Stream.Stream<never, unknown, Uint8Array>
+  readonly content: Stream.Stream<never, FormDataError, Uint8Array>
 }
+
+/**
+ * @since 1.0.0
+ * @category type ids
+ */
+export const ErrorTypeId = Symbol.for("@effect/platform/Http/FormData/Error")
+
+/**
+ * @since 1.0.0
+ * @category type ids
+ */
+export type ErrorTypeId = typeof ErrorTypeId
+
+/**
+ * @since 1.0.0
+ * @category errors
+ */
+export interface FormDataError extends Data.Case {
+  readonly [ErrorTypeId]: ErrorTypeId
+  readonly _tag: "FormDataError"
+  readonly reason: "FileTooLarge" | "FieldTooLarge" | "InternalError"
+  readonly error: unknown
+}
+
+/**
+ * @since 1.0.0
+ * @category errors
+ */
+export const FormDataError = (reason: FormDataError["reason"], error: unknown): FormDataError =>
+  Data.struct({
+    [ErrorTypeId]: ErrorTypeId,
+    _tag: "FormDataError",
+    reason,
+    error
+  })
 
 /**
  * @since 1.0.0

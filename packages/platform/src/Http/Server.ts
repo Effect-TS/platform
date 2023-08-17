@@ -104,6 +104,13 @@ export const make: (
  * @category accessors
  */
 export const serve: {
+  (): <R, E>(
+    httpApp: App.Default<R, E>
+  ) => Effect.Effect<
+    Server | Scope.Scope | Exclude<R, ServerRequest.ServerRequest>,
+    Error.ServeError,
+    never
+  >
   <R, E, App extends App.Default<any, any>>(
     middleware: Middleware.Middleware.Applied<R, E, App>
   ): (

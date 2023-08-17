@@ -1,5 +1,5 @@
 import * as Chunk from "@effect/data/Chunk"
-import { identity, pipe } from "@effect/data/Function"
+import { pipe } from "@effect/data/Function"
 import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
 import * as FiberRef from "@effect/io/FiberRef"
@@ -14,7 +14,9 @@ import type * as Http from "node:http"
 import type { Readable } from "node:stream"
 import * as NodeStreamP from "node:stream/promises"
 
-export const fromRequest = (source: Http.IncomingMessage): Stream.Stream<never, unknown, FormData.Part> =>
+export const fromRequest = (
+  source: Http.IncomingMessage
+): Stream.Stream<never, FormData.FormDataError, FormData.Part> =>
   pipe(
     Effect.Do,
     Effect.bind("fieldMimeTypes", () => FiberRef.get(FormData.fieldMimeTypes)),
@@ -42,25 +44,32 @@ export const fromRequest = (source: Http.IncomingMessage): Stream.Stream<never, 
       )),
     Effect.map(({ busboy, fieldMimeTypes }) =>
       Stream.mapEffect(
-        Stream.async<never, unknown, FieldImpl | FileImpl>((emit) => {
+        Stream.async<never, FormData.FormDataError, FieldImpl | FileImpl>((emit) => {
           busboy.on("field", (name, value, info) => {
-            emit.single(new FieldImpl(name, info.mimeType, value))
+            if (info.valueTruncated) {
+              emit.fail(FormData.FormDataError("FieldTooLarge", new Error("maxFieldSize exceeded")))
+            } else {
+              emit.single(new FieldImpl(name, info.mimeType, value))
+            }
           })
 
           busboy.on("file", (name, stream, info) => {
+            stream.once("limit", () => {
+              emit.fail(FormData.FormDataError("FileTooLarge", new Error("maxFileSize exceeded")))
+            })
             emit.single(
               new FileImpl(
                 name,
                 info.filename,
                 info.mimeType,
-                NodeStream.fromReadable(() => stream, identity),
+                NodeStream.fromReadable(() => stream, (error) => FormData.FormDataError("InternalError", error)),
                 stream
               )
             )
           })
 
           busboy.on("error", (_) => {
-            emit.fail(_)
+            emit.fail(FormData.FormDataError("InternalError", _))
           })
 
           busboy.on("finish", () => {
@@ -74,7 +83,7 @@ export const fromRequest = (source: Http.IncomingMessage): Stream.Stream<never, 
             Effect.map(
               NodeStream.toString({
                 readable: () => part.source,
-                onFailure: identity
+                onFailure: (error) => FormData.FormDataError("InternalError", error)
               }),
               (content) => new FieldImpl(part.key, part.contentType, content)
             )
@@ -103,7 +112,7 @@ class FileImpl implements FormData.File {
     readonly key: string,
     readonly name: string,
     readonly contentType: string,
-    readonly content: Stream.Stream<never, unknown, Uint8Array>,
+    readonly content: Stream.Stream<never, FormData.FormDataError, Uint8Array>,
     readonly source: Readable
   ) {
     this[FormData.TypeId] = FormData.TypeId
@@ -116,7 +125,10 @@ export const formData = (
 ) =>
   Effect.flatMap(
     Effect.all([
-      Effect.flatMap(FileSystem.FileSystem, (_) => _.makeTempDirectoryScoped()),
+      Effect.mapError(
+        Effect.flatMap(FileSystem.FileSystem, (_) => _.makeTempDirectoryScoped()),
+        (error) => FormData.FormDataError("InternalError", error)
+      ),
       Path.Path
     ]),
     ([dir, path_]) =>
@@ -137,7 +149,7 @@ export const formData = (
                 NodeStreamP.pipeline(file.source, NodeFs.createWriteStream(path), {
                   signal
                 }),
-              catch: identity
+              catch: (error) => FormData.FormDataError("InternalError", error)
             }),
             formData
           )

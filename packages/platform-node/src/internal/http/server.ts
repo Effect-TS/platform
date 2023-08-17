@@ -159,40 +159,26 @@ class ServerRequestImpl extends IncomingMessageImpl<Error.RequestError> implemen
   private formDataEffect:
     | Effect.Effect<
       Scope.Scope | FileSystem.FileSystem | Path.Path,
-      Error.RequestError,
+      FormData.FormDataError,
       globalThis.FormData
     >
     | undefined
   get formData(): Effect.Effect<
     Scope.Scope | FileSystem.FileSystem | Path.Path,
-    Error.RequestError,
+    FormData.FormDataError,
     globalThis.FormData
   > {
     if (this.formDataEffect) {
       return this.formDataEffect
     }
-    this.formDataEffect = Effect.runSync(Effect.cached(Effect.mapError(
-      internalFormData.formData(this.source),
-      (error) =>
-        Error.RequestError({
-          request: this,
-          reason: "Decode",
-          error
-        })
-    )))
+    this.formDataEffect = Effect.runSync(Effect.cached(
+      internalFormData.formData(this.source)
+    ))
     return this.formDataEffect
   }
 
-  get formDataStream(): Stream.Stream<never, Error.RequestError, FormData.Part> {
-    return Stream.mapError(
-      internalFormData.fromRequest(this.source),
-      (error) =>
-        Error.RequestError({
-          request: this,
-          reason: "Decode",
-          error
-        })
-    )
+  get formDataStream(): Stream.Stream<never, FormData.FormDataError, FormData.Part> {
+    return internalFormData.fromRequest(this.source)
   }
 
   setUrl(url: string): ServerRequest.ServerRequest {

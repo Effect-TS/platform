@@ -12,6 +12,9 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [errors](#errors)
+  - [FormDataError](#formdataerror)
+  - [FormDataError (interface)](#formdataerror-interface)
 - [fiber refs](#fiber-refs)
   - [fieldMimeTypes](#fieldmimetypes)
   - [maxFieldSize](#maxfieldsize)
@@ -24,10 +27,39 @@ Added in v1.0.0
   - [File (interface)](#file-interface)
   - [Part (type alias)](#part-type-alias)
 - [type ids](#type-ids)
+  - [ErrorTypeId](#errortypeid)
+  - [ErrorTypeId (type alias)](#errortypeid-type-alias)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
 
 ---
+
+# errors
+
+## FormDataError
+
+**Signature**
+
+```ts
+export declare const FormDataError: (reason: FormDataError['reason'], error: unknown) => FormDataError
+```
+
+Added in v1.0.0
+
+## FormDataError (interface)
+
+**Signature**
+
+```ts
+export interface FormDataError extends Data.Case {
+  readonly [ErrorTypeId]: ErrorTypeId
+  readonly _tag: 'FormDataError'
+  readonly reason: 'FileTooLarge' | 'FieldTooLarge' | 'InternalError'
+  readonly error: unknown
+}
+```
+
+Added in v1.0.0
 
 # fiber refs
 
@@ -127,7 +159,7 @@ export interface File extends Part.Proto {
   readonly key: string
   readonly name: string
   readonly contentType: string
-  readonly content: Stream.Stream<never, unknown, Uint8Array>
+  readonly content: Stream.Stream<never, FormDataError, Uint8Array>
 }
 ```
 
@@ -144,6 +176,26 @@ export type Part = Field | File
 Added in v1.0.0
 
 # type ids
+
+## ErrorTypeId
+
+**Signature**
+
+```ts
+export declare const ErrorTypeId: typeof ErrorTypeId
+```
+
+Added in v1.0.0
+
+## ErrorTypeId (type alias)
+
+**Signature**
+
+```ts
+export type ErrorTypeId = typeof ErrorTypeId
+```
+
+Added in v1.0.0
 
 ## TypeId
 
