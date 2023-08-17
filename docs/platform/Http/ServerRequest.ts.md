@@ -12,6 +12,8 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [accessors](#accessors)
+  - [formDataFiles](#formdatafiles)
 - [context](#context)
   - [ServerRequest](#serverrequest)
 - [fiber refs](#fiber-refs)
@@ -29,6 +31,22 @@ Added in v1.0.0
   - [TypeId (type alias)](#typeid-type-alias)
 
 ---
+
+# accessors
+
+## formDataFiles
+
+**Signature**
+
+```ts
+export declare const formDataFiles: Effect.Effect<
+  Path.Path | FileSystem.FileSystem | Scope.Scope | ServerRequest,
+  FormData.FormDataError,
+  Record<string, File>
+>
+```
+
+Added in v1.0.0
 
 # context
 
@@ -112,7 +130,7 @@ export declare const schemaFormDataFields: <I extends Readonly<Record<string, st
   schema: Schema.Schema<I, A>
 ) => Effect.Effect<
   Path.Path | FileSystem.FileSystem | Scope.Scope | ServerRequest,
-  ParseResult.ParseError | FormData.FormDataError,
+  FormData.FormDataError | ParseResult.ParseError,
   A
 >
 ```
@@ -130,7 +148,7 @@ export declare const schemaFormDataJson: <I, A>(
   field: string
 ) => Effect.Effect<
   Path.Path | FileSystem.FileSystem | Scope.Scope | ServerRequest,
-  ParseResult.ParseError | Error.RequestError | FormData.FormDataError,
+  FormData.FormDataError | ParseResult.ParseError | Error.RequestError,
   A
 >
 ```

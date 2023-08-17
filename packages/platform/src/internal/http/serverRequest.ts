@@ -15,6 +15,18 @@ export const TypeId: ServerRequest.TypeId = Symbol.for("@effect/platform/Http/Se
 export const serverRequestTag = Context.Tag<ServerRequest.ServerRequest>(TypeId)
 
 /** @internal */
+export const formDataFiles = Effect.map(
+  Effect.flatMap(serverRequestTag, (request) => request.formData),
+  (formData): Record<string, globalThis.File> =>
+    Object.fromEntries(
+      ReadonlyArray.filter(
+        formData.entries(),
+        (entry): entry is [string, globalThis.File] => !Predicate.isString(entry[1])
+      )
+    )
+)
+
+/** @internal */
 export const schemaHeaders = <I extends Readonly<Record<string, string>>, A>(schema: Schema.Schema<I, A>) => {
   const parse = IncomingMessage.schemaHeaders(schema)
   return Effect.flatMap(serverRequestTag, parse)

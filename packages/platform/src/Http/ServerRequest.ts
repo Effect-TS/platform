@@ -61,6 +61,16 @@ export const ServerRequest: Context.Tag<ServerRequest, ServerRequest> = internal
 
 /**
  * @since 1.0.0
+ * @category accessors
+ */
+export const formDataFiles: Effect.Effect<
+  Scope.Scope | FileSystem.FileSystem | Path.Path | ServerRequest,
+  FormData.FormDataError,
+  Record<string, File>
+> = internal.formDataFiles
+
+/**
+ * @since 1.0.0
  * @category schema
  */
 export const schemaHeaders: <I extends Readonly<Record<string, string>>, A>(
