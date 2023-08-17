@@ -53,13 +53,14 @@ describe("HttpServer", () => {
             ({ id }) => todoResponse({ id, title: "test" })
           )
         ),
-        Http.server.serve,
+        Http.server.serve(),
+        Effect.scoped,
         Effect.fork
       )
       const client = yield* _(makeTodoClient)
       const todo = yield* _(client(HttpC.request.get("/todos/1")))
       expect(todo).toEqual({ id: 1, title: "test" })
-    }).pipe(Effect.scoped, runPromise))
+    }).pipe(runPromise))
 
   it("formData", () =>
     Effect.gen(function*(_) {
@@ -76,7 +77,8 @@ describe("HttpServer", () => {
             return Http.response.json({ ok: formData.has("file") })
           }).pipe(Effect.scoped)
         ),
-        Http.server.serve,
+        Http.server.serve(),
+        Effect.scoped,
         Effect.fork
       )
       const client = yield* _(makeClient)
@@ -87,7 +89,7 @@ describe("HttpServer", () => {
         Effect.flatMap((_) => _.json)
       )
       expect(result).toEqual({ ok: true })
-    }).pipe(Effect.scoped, runPromise))
+    }).pipe(runPromise))
 
   it("formData withMaxFileSize", () =>
     Effect.gen(function*(_) {
@@ -105,7 +107,7 @@ describe("HttpServer", () => {
           error.reason === "FileTooLarge" ?
             Effect.succeed(Http.response.empty({ status: 413 })) :
             Effect.fail(error)),
-        Http.server.serve(Http.middleware.logger),
+        Http.server.serve(),
         Http.formData.withMaxFileSize(Option.some(100)),
         Effect.scoped,
         Effect.fork
@@ -160,7 +162,8 @@ describe("HttpServer", () => {
       yield* _(
         Http.router.empty,
         Http.router.mount("/child", child),
-        Http.server.serve,
+        Http.server.serve(),
+        Effect.scoped,
         Effect.fork
       )
       const client = yield* _(makeClient)
@@ -168,7 +171,7 @@ describe("HttpServer", () => {
       expect(todo).toEqual("/1")
       const root = yield* _(client(HttpC.request.get("/child")), Effect.flatMap((_) => _.text))
       expect(root).toEqual("/")
-    }).pipe(Effect.scoped, runPromise))
+    }).pipe(runPromise))
 
   it("mountApp", () =>
     Effect.gen(function*(_) {
@@ -179,7 +182,8 @@ describe("HttpServer", () => {
       yield* _(
         Http.router.empty,
         Http.router.mountApp("/child", child),
-        Http.server.serve,
+        Http.server.serve(),
+        Effect.scoped,
         Effect.fork
       )
       const client = yield* _(makeClient)
@@ -187,5 +191,5 @@ describe("HttpServer", () => {
       expect(todo).toEqual("/1")
       const root = yield* _(client(HttpC.request.get("/child")), Effect.flatMap((_) => _.text))
       expect(root).toEqual("/")
-    }).pipe(Effect.scoped, runPromise))
+    }).pipe(runPromise))
 })
