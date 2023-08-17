@@ -1,6 +1,6 @@
 ---
 title: Http/UrlParams.ts
-nav_order: 16
+nav_order: 23
 parent: "@effect/platform"
 ---
 
@@ -36,8 +36,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const append: ((key: string, value: string) => (self: UrlParams) => UrlParams) &
-  ((self: UrlParams, key: string, value: string) => UrlParams)
+export declare const append: {
+  (key: string, value: string): (self: UrlParams) => UrlParams
+  (self: UrlParams, key: string, value: string): UrlParams
+}
 ```
 
 Added in v1.0.0
@@ -47,8 +49,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const appendAll: ((input: Input) => (self: UrlParams) => UrlParams) &
-  ((self: UrlParams, input: Input) => UrlParams)
+export declare const appendAll: {
+  (input: Input): (self: UrlParams) => UrlParams
+  (self: UrlParams, input: Input): UrlParams
+}
 ```
 
 Added in v1.0.0
@@ -58,8 +62,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const remove: ((key: string) => (self: UrlParams) => UrlParams) &
-  ((self: UrlParams, key: string) => UrlParams)
+export declare const remove: {
+  (key: string): (self: UrlParams) => UrlParams
+  (self: UrlParams, key: string): UrlParams
+}
 ```
 
 Added in v1.0.0
@@ -69,8 +75,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const set: ((key: string, value: string) => (self: UrlParams) => UrlParams) &
-  ((self: UrlParams, key: string, value: string) => UrlParams)
+export declare const set: {
+  (key: string, value: string): (self: UrlParams) => UrlParams
+  (self: UrlParams, key: string, value: string): UrlParams
+}
 ```
 
 Added in v1.0.0
@@ -80,8 +88,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const setAll: ((input: Input) => (self: UrlParams) => UrlParams) &
-  ((self: UrlParams, input: Input) => UrlParams)
+export declare const setAll: {
+  (input: Input): (self: UrlParams) => UrlParams
+  (self: UrlParams, input: Input): UrlParams
+}
 ```
 
 Added in v1.0.0

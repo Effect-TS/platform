@@ -1,6 +1,6 @@
 ---
 title: Http/Client.ts
-nav_order: 8
+nav_order: 9
 parent: "@effect/platform"
 ---
 
@@ -27,7 +27,7 @@ Added in v1.0.0
   - [filterStatus](#filterstatus)
   - [filterStatusOk](#filterstatusok)
 - [layers](#layers)
-  - [fetchLayer](#fetchlayer)
+  - [layer](#layer)
 - [mapping & sequencing](#mapping--sequencing)
   - [map](#map)
   - [mapEffect](#mapeffect)
@@ -71,9 +71,11 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: <R, E, A>(
-  f: (request: ClientRequest.ClientRequest) => Effect.Effect<R, E, A>
-) => Client<R, E, A>
+export declare const make: (
+  f: (
+    request: ClientRequest.ClientRequest.NonEffectBody
+  ) => Effect.Effect<never, Error.HttpClientError, ClientResponse.ClientResponse>
+) => Client.Default
 ```
 
 Added in v1.0.0
@@ -246,12 +248,12 @@ Added in v1.0.0
 
 # layers
 
-## fetchLayer
+## layer
 
 **Signature**
 
 ```ts
-export declare const fetchLayer: Layer.Layer<never, never, Client.Default>
+export declare const layer: Layer.Layer<never, never, Client.Default>
 ```
 
 Added in v1.0.0

@@ -1,6 +1,6 @@
 ---
 title: Http/ClientResponse.ts
-nav_order: 11
+nav_order: 12
 parent: "@effect/platform"
 ---
 
@@ -17,7 +17,9 @@ Added in v1.0.0
 - [models](#models)
   - [ClientResponse (interface)](#clientresponse-interface)
 - [schema](#schema)
-  - [parseSchema](#parseschema)
+  - [schemaBodyJson](#schemabodyjson)
+  - [schemaBodyUrlParams](#schemabodyurlparams)
+  - [schemaHeaders](#schemaheaders)
 - [type ids](#type-ids)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
@@ -46,6 +48,7 @@ Added in v1.0.0
 export interface ClientResponse extends IncomingMessage.IncomingMessage<Error.ResponseError> {
   readonly [TypeId]: TypeId
   readonly status: number
+  readonly formData: Effect.Effect<never, Error.ResponseError, FormData>
 }
 ```
 
@@ -53,14 +56,38 @@ Added in v1.0.0
 
 # schema
 
-## parseSchema
+## schemaBodyJson
 
 **Signature**
 
 ```ts
-export declare const parseSchema: <I, A>(
+export declare const schemaBodyJson: <I, A>(
   schema: Schema<I, A>
-) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect<never, E | ParseError, A>
+) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, ParseError | E, A>
+```
+
+Added in v1.0.0
+
+## schemaBodyUrlParams
+
+**Signature**
+
+```ts
+export declare const schemaBodyUrlParams: <I extends Readonly<Record<string, string>>, A>(
+  schema: Schema<I, A>
+) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, ParseError | E, A>
+```
+
+Added in v1.0.0
+
+## schemaHeaders
+
+**Signature**
+
+```ts
+export declare const schemaHeaders: <I extends Readonly<Record<string, string>>, A>(
+  schema: Schema<I, A>
+) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, ParseError, A>
 ```
 
 Added in v1.0.0

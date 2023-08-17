@@ -1,6 +1,6 @@
 ---
 title: Http/Headers.ts
-nav_order: 13
+nav_order: 14
 parent: "@effect/platform"
 ---
 
@@ -13,6 +13,8 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [combinators](#combinators)
+  - [get](#get)
+  - [has](#has)
   - [remove](#remove)
   - [set](#set)
   - [setAll](#setall)
@@ -27,12 +29,35 @@ Added in v1.0.0
 
 # combinators
 
+## get
+
+**Signature**
+
+```ts
+export declare const get: {
+  (key: string): (self: Headers) => Option.Option<string>
+  (self: Headers, key: string): Option.Option<string>
+}
+```
+
+Added in v1.0.0
+
+## has
+
+**Signature**
+
+```ts
+export declare const has: { (key: string): (self: Headers) => boolean; (self: Headers, key: string): boolean }
+```
+
+Added in v1.0.0
+
 ## remove
 
 **Signature**
 
 ```ts
-export declare const remove: ((key: string) => (self: Headers) => Headers) & ((self: Headers, key: string) => Headers)
+export declare const remove: { (key: string): (self: Headers) => Headers; (self: Headers, key: string): Headers }
 ```
 
 Added in v1.0.0
@@ -42,8 +67,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const set: ((key: string, value: string) => (self: Headers) => Headers) &
-  ((self: Headers, key: string, value: string) => Headers)
+export declare const set: {
+  (key: string, value: string): (self: Headers) => Headers
+  (self: Headers, key: string, value: string): Headers
+}
 ```
 
 Added in v1.0.0
@@ -53,8 +80,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const setAll: ((headers: Input) => (self: Headers) => Headers) &
-  ((self: Headers, headers: Input) => Headers)
+export declare const setAll: { (headers: Input): (self: Headers) => Headers; (self: Headers, headers: Input): Headers }
 ```
 
 Added in v1.0.0

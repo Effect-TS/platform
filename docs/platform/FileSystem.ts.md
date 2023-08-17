@@ -24,6 +24,7 @@ Added in v1.0.0
   - [OpenFlag (type alias)](#openflag-type-alias)
   - [SeekMode (type alias)](#seekmode-type-alias)
   - [Size (type alias)](#size-type-alias)
+  - [SizeInput (type alias)](#sizeinput-type-alias)
 - [options](#options)
   - [AccessFileOptions (interface)](#accessfileoptions-interface)
   - [CopyOptions (interface)](#copyoptions-interface)
@@ -62,7 +63,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Size: (bytes: number | bigint) => Size
+export declare const Size: (bytes: SizeInput) => Size
 ```
 
 Added in v1.0.0
@@ -99,13 +100,13 @@ Added in v1.0.0
 
 ```ts
 export interface File {
-  readonly [FileTypeId]: (_: never) => unknown
+  readonly [FileTypeId]: FileTypeId
   readonly fd: File.Descriptor
   readonly stat: Effect.Effect<never, PlatformError, File.Info>
-  readonly seek: (offset: Size, from: SeekMode) => Effect.Effect<never, never, void>
+  readonly seek: (offset: SizeInput, from: SeekMode) => Effect.Effect<never, never, void>
   readonly read: (buffer: Uint8Array) => Effect.Effect<never, PlatformError, Size>
-  readonly readAlloc: (size: Size) => Effect.Effect<never, PlatformError, Option<Uint8Array>>
-  readonly truncate: (length?: Size) => Effect.Effect<never, PlatformError, void>
+  readonly readAlloc: (size: SizeInput) => Effect.Effect<never, PlatformError, Option<Uint8Array>>
+  readonly truncate: (length?: SizeInput) => Effect.Effect<never, PlatformError, void>
   readonly write: (buffer: Uint8Array) => Effect.Effect<never, PlatformError, Size>
   readonly writeAll: (buffer: Uint8Array) => Effect.Effect<never, PlatformError, void>
 }
@@ -258,7 +259,7 @@ export interface FileSystem {
    * Truncate a file to a specified length. If the `length` is not specified,
    * the file will be truncated to length `0`.
    */
-  readonly truncate: (path: string, length?: Size) => Effect.Effect<never, PlatformError, void>
+  readonly truncate: (path: string, length?: SizeInput) => Effect.Effect<never, PlatformError, void>
   /**
    * Change the file system timestamps of the file at `path`.
    */
@@ -316,6 +317,18 @@ Represents a size in bytes.
 
 ```ts
 export type Size = Brand.Branded<bigint, 'Size'>
+```
+
+Added in v1.0.0
+
+## SizeInput (type alias)
+
+Represents a size in bytes.
+
+**Signature**
+
+```ts
+export type SizeInput = bigint | number | Size
 ```
 
 Added in v1.0.0
@@ -442,9 +455,9 @@ Added in v1.0.0
 ```ts
 export interface StreamOptions {
   readonly bufferSize?: number
-  readonly bytesToRead?: Size
-  readonly chunkSize?: Size
-  readonly offset?: Size
+  readonly bytesToRead?: SizeInput
+  readonly chunkSize?: SizeInput
+  readonly offset?: SizeInput
 }
 ```
 

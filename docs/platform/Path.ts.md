@@ -1,6 +1,6 @@
 ---
 title: Path.ts
-nav_order: 18
+nav_order: 26
 parent: "@effect/platform"
 ---
 

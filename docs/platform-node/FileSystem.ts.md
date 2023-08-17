@@ -39,7 +39,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Size: (bytes: number | bigint) => Size
+export declare const Size: (bytes: SizeInput) => Size
 ```
 
 Added in v1.0.0
