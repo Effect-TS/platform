@@ -97,12 +97,6 @@ export const schemaBodyUrlParams: <I extends Readonly<Record<string, string>>, A
  * @since 1.0.0
  * @category schema
  */
-export const filesSchema: Schema.Schema<ReadonlyArray<File>, ReadonlyArray<File>> = internal.filesSchema
-
-/**
- * @since 1.0.0
- * @category schema
- */
 export const schemaFormData: <I extends Readonly<Record<string, string | ReadonlyArray<File>>>, A>(
   schema: Schema.Schema<I, A>
 ) => Effect.Effect<

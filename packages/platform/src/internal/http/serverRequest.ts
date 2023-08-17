@@ -1,12 +1,10 @@
 import * as Context from "@effect/data/Context"
-import { pipe } from "@effect/data/Function"
-import * as Predicate from "@effect/data/Predicate"
-import * as ReadonlyArray from "@effect/data/ReadonlyArray"
 import * as Effect from "@effect/io/Effect"
+import * as FormData from "@effect/platform/Http/FormData"
 import * as IncomingMessage from "@effect/platform/Http/IncomingMessage"
 import * as Error from "@effect/platform/Http/ServerError"
 import type * as ServerRequest from "@effect/platform/Http/ServerRequest"
-import * as Schema from "@effect/schema/Schema"
+import type * as Schema from "@effect/schema/Schema"
 
 /** @internal */
 export const TypeId: ServerRequest.TypeId = Symbol.for("@effect/platform/Http/ServerRequest") as ServerRequest.TypeId
@@ -17,24 +15,7 @@ export const serverRequestTag = Context.Tag<ServerRequest.ServerRequest>(TypeId)
 /** @internal */
 export const formDataRecord = Effect.map(
   Effect.flatMap(serverRequestTag, (request) => request.formData),
-  (formData): Record<string, Array<globalThis.File> | string> =>
-    ReadonlyArray.reduce(
-      formData.entries(),
-      {} as Record<string, Array<globalThis.File> | string>,
-      (acc, [key, value]) => {
-        if (Predicate.isString(value)) {
-          acc[key] = value
-        } else {
-          const existing = acc[key]
-          if (Array.isArray(existing)) {
-            existing.push(value)
-          } else {
-            acc[key] = [value]
-          }
-        }
-        return acc
-      }
-    )
+  FormData.toRecord
 )
 
 /** @internal */
@@ -56,50 +37,35 @@ export const schemaBodyUrlParams = <I extends Readonly<Record<string, string>>, 
 }
 
 /** @internal */
-export const filesSchema: Schema.Schema<ReadonlyArray<File>, ReadonlyArray<File>> = Schema.array(
-  pipe(
-    Schema.instanceOf(Blob),
-    Schema.filter(
-      (blob): blob is File => "name" in blob
-    )
-  ) as any as Schema.Schema<File, File>
-)
-
-/** @internal */
 export const schemaFormData = <I extends Readonly<Record<string, string | ReadonlyArray<globalThis.File>>>, A>(
   schema: Schema.Schema<I, A>
 ) => {
-  const parse = Schema.parse(schema)
-  return Effect.flatMap(formDataRecord, parse)
+  const parse = FormData.schemaRecord(schema)
+  return Effect.flatMap(
+    Effect.flatMap(serverRequestTag, (request) => request.formData),
+    parse
+  )
 }
 
 /** @internal */
 export const schemaFormDataJson = <I, A>(schema: Schema.Schema<I, A>) => {
-  const parse = Schema.parse(schema)
+  const parse = FormData.schemaJson(schema)
   return (field: string) =>
-    pipe(
-      Effect.Do,
-      Effect.bind("request", () => serverRequestTag),
-      Effect.bind("formData", ({ request }) => request.formData),
-      Effect.let("field", ({ formData }) => formData.get(field)),
-      Effect.filterOrFail(
-        ({ field }) => Predicate.isString(field),
-        ({ request }) =>
-          Error.RequestError({ request, reason: "Decode", error: "schemaFormDataJson: field was not a string" })
-      ),
-      Effect.flatMap(({ field, request }) =>
-        Effect.flatMap(
-          Effect.try({
-            try: () => JSON.parse(field as string),
-            catch: (error) =>
-              Error.RequestError({
-                request,
-                reason: "Decode",
-                error: `schemaFormDataJson: field was not valid json: ${error}`
-              })
-          }),
-          parse
-        )
-      )
-    )
+    Effect.flatMap(serverRequestTag, (request) =>
+      Effect.flatMap(
+        request.formData,
+        (formData) =>
+          Effect.catchTag(
+            parse(formData, field),
+            "FormDataError",
+            (error) =>
+              Effect.fail(
+                Error.RequestError({
+                  reason: "Decode",
+                  request,
+                  error: error.error
+                })
+              )
+          )
+      ))
 }

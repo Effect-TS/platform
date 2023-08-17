@@ -20,7 +20,7 @@ const serve = Http.router.empty.pipe(
     "/upload",
     Effect.gen(function*(_) {
       const data = yield* _(Http.request.schemaFormData(Schema.struct({
-        files: Http.request.filesSchema
+        files: Http.formData.filesSchema
       })))
       console.log("got files", data.files)
       return Http.response.empty()

@@ -99,7 +99,7 @@ describe("HttpServer", () => {
           "/upload",
           Effect.gen(function*(_) {
             const files = yield* _(Http.request.schemaFormData(Schema.struct({
-              file: Http.request.filesSchema,
+              file: Http.formData.filesSchema,
               test: Schema.string
             })))
             expect(files).toHaveProperty("file")

@@ -1,21 +1,22 @@
 /**
  * @since 1.0.0
  */
-import * as Chunk from "@effect/data/Chunk"
-import * as Data from "@effect/data/Data"
-import { dual } from "@effect/data/Function"
-import { globalValue } from "@effect/data/Global"
-import * as Option from "@effect/data/Option"
-import * as Effect from "@effect/io/Effect"
-import * as FiberRef from "@effect/io/FiberRef"
-import * as FileSystem from "@effect/platform/FileSystem"
+import type * as Chunk from "@effect/data/Chunk"
+import type * as Data from "@effect/data/Data"
+import type * as Option from "@effect/data/Option"
+import type * as Effect from "@effect/io/Effect"
+import type * as FiberRef from "@effect/io/FiberRef"
+import type * as FileSystem from "@effect/platform/FileSystem"
+import * as internal from "@effect/platform/internal/http/formData"
+import type * as ParseResult from "@effect/schema/ParseResult"
+import type * as Schema from "@effect/schema/Schema"
 import type * as Stream from "@effect/stream/Stream"
 
 /**
  * @since 1.0.0
  * @category type ids
  */
-export const TypeId = Symbol.for("@effect/platform/Http/FormData")
+export const TypeId: unique symbol = internal.TypeId
 
 /**
  * @since 1.0.0
@@ -70,7 +71,7 @@ export interface File extends Part.Proto {
  * @since 1.0.0
  * @category type ids
  */
-export const ErrorTypeId = Symbol.for("@effect/platform/Http/FormData/Error")
+export const ErrorTypeId: unique symbol = internal.ErrorTypeId
 
 /**
  * @since 1.0.0
@@ -85,7 +86,7 @@ export type ErrorTypeId = typeof ErrorTypeId
 export interface FormDataError extends Data.Case {
   readonly [ErrorTypeId]: ErrorTypeId
   readonly _tag: "FormDataError"
-  readonly reason: "FileTooLarge" | "FieldTooLarge" | "InternalError"
+  readonly reason: "FileTooLarge" | "FieldTooLarge" | "InternalError" | "Parse"
   readonly error: unknown
 }
 
@@ -93,64 +94,84 @@ export interface FormDataError extends Data.Case {
  * @since 1.0.0
  * @category errors
  */
-export const FormDataError = (reason: FormDataError["reason"], error: unknown): FormDataError =>
-  Data.struct({
-    [ErrorTypeId]: ErrorTypeId,
-    _tag: "FormDataError",
-    reason,
-    error
-  })
+export const FormDataError: (
+  reason: FormDataError["reason"],
+  error: unknown
+) => FormDataError = internal.FormDataError
 
 /**
  * @since 1.0.0
  * @category fiber refs
  */
-export const maxFieldSize: FiberRef.FiberRef<FileSystem.Size> = globalValue(
-  "@effect/platform/Http/FormData/maxFieldSize",
-  () => FiberRef.unsafeMake(FileSystem.Size(1024 * 1024))
-)
+export const maxFieldSize: FiberRef.FiberRef<FileSystem.Size> = internal.maxFieldSize
 
 /**
  * @since 1.0.0
  * @category fiber refs
  */
-export const withMaxFieldSize = dual<
-  (size: FileSystem.SizeInput) => <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>,
-  <R, E, A>(effect: Effect.Effect<R, E, A>, size: FileSystem.SizeInput) => Effect.Effect<R, E, A>
->(2, (effect, size) => Effect.locally(effect, maxFieldSize, FileSystem.Size(size)))
+export const withMaxFieldSize: {
+  (size: FileSystem.SizeInput): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
+  <R, E, A>(effect: Effect.Effect<R, E, A>, size: FileSystem.SizeInput): Effect.Effect<R, E, A>
+} = internal.withMaxFieldSize
 
 /**
  * @since 1.0.0
  * @category fiber refs
  */
-export const maxFileSize: FiberRef.FiberRef<Option.Option<FileSystem.Size>> = globalValue(
-  "@effect/platform/Http/FormData/maxFileSize",
-  () => FiberRef.unsafeMake(Option.none<FileSystem.Size>())
-)
+export const maxFileSize: FiberRef.FiberRef<Option.Option<FileSystem.Size>> = internal.maxFileSize
 
 /**
  * @since 1.0.0
  * @category fiber refs
  */
-export const withMaxFileSize = dual<
-  (size: Option.Option<FileSystem.SizeInput>) => <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>,
-  <R, E, A>(effect: Effect.Effect<R, E, A>, size: Option.Option<FileSystem.SizeInput>) => Effect.Effect<R, E, A>
->(2, (effect, size) => Effect.locally(effect, maxFileSize, Option.map(size, FileSystem.Size)))
+export const withMaxFileSize: {
+  (size: Option.Option<FileSystem.SizeInput>): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
+  <R, E, A>(effect: Effect.Effect<R, E, A>, size: Option.Option<FileSystem.SizeInput>): Effect.Effect<R, E, A>
+} = internal.withMaxFileSize
 
 /**
  * @since 1.0.0
  * @category fiber refs
  */
-export const fieldMimeTypes: FiberRef.FiberRef<Chunk.Chunk<string>> = globalValue(
-  "@effect/platform/Http/FormData/fieldMimeTypes",
-  () => FiberRef.unsafeMake(Chunk.make("application/json"))
-)
+export const fieldMimeTypes: FiberRef.FiberRef<Chunk.Chunk<string>> = internal.fieldMimeTypes
 
 /**
  * @since 1.0.0
  * @category fiber refs
  */
-export const withFieldMimeTypes = dual<
-  (mimeTypes: ReadonlyArray<string>) => <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>,
-  <R, E, A>(effect: Effect.Effect<R, E, A>, mimeTypes: ReadonlyArray<string>) => Effect.Effect<R, E, A>
->(2, (effect, mimeTypes) => Effect.locally(effect, fieldMimeTypes, Chunk.fromIterable(mimeTypes)))
+export const withFieldMimeTypes: {
+  (mimeTypes: ReadonlyArray<string>): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
+  <R, E, A>(effect: Effect.Effect<R, E, A>, mimeTypes: ReadonlyArray<string>): Effect.Effect<R, E, A>
+} = internal.withFieldMimeTypes
+
+/**
+ * @since 1.0.0
+ * @category conversions
+ */
+export const toRecord: (formData: FormData) => Record<string, string | Array<globalThis.File>> = internal.toRecord
+
+/**
+ * @since 1.0.0
+ * @category schema
+ */
+export const filesSchema: Schema.Schema<ReadonlyArray<globalThis.File>, ReadonlyArray<globalThis.File>> =
+  internal.filesSchema
+
+/**
+ * @since 1.0.0
+ * @category schema
+ */
+export const schemaJson: <I, A>(
+  schema: Schema.Schema<I, A>
+) => {
+  (field: string): (formData: FormData) => Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
+  (formData: FormData, field: string): Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
+} = internal.schemaJson
+
+/**
+ * @since 1.0.0
+ * @category schema
+ */
+export const schemaRecord: <I extends Readonly<Record<string, string | ReadonlyArray<globalThis.File>>>, A>(
+  schema: Schema.Schema<I, A>
+) => (formData: FormData) => Effect.Effect<never, ParseResult.ParseError, A> = internal.schemaRecord
