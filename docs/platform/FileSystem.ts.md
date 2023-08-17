@@ -14,7 +14,6 @@ Added in v1.0.0
 
 - [constructor](#constructor)
   - [FileDescriptor](#filedescriptor)
-  - [Size](#size)
   - [make](#make)
 - [guard](#guard)
   - [isFile](#isfile)
@@ -23,8 +22,6 @@ Added in v1.0.0
   - [FileSystem (interface)](#filesystem-interface)
   - [OpenFlag (type alias)](#openflag-type-alias)
   - [SeekMode (type alias)](#seekmode-type-alias)
-  - [Size (type alias)](#size-type-alias)
-  - [SizeInput (type alias)](#sizeinput-type-alias)
 - [options](#options)
   - [AccessFileOptions (interface)](#accessfileoptions-interface)
   - [CopyOptions (interface)](#copyoptions-interface)
@@ -38,6 +35,15 @@ Added in v1.0.0
   - [StreamOptions (interface)](#streamoptions-interface)
   - [WriteFileOptions (interface)](#writefileoptions-interface)
   - [WriteFileStringOptions (interface)](#writefilestringoptions-interface)
+- [sizes](#sizes)
+  - [GiB](#gib)
+  - [KiB](#kib)
+  - [MiB](#mib)
+  - [PiB](#pib)
+  - [Size](#size)
+  - [Size (type alias)](#size-type-alias)
+  - [SizeInput (type alias)](#sizeinput-type-alias)
+  - [TiB](#tib)
 - [tag](#tag)
   - [FileSystem](#filesystem)
 - [type id](#type-id)
@@ -54,16 +60,6 @@ Added in v1.0.0
 
 ```ts
 export declare const FileDescriptor: Brand.Brand.Constructor<File.Descriptor>
-```
-
-Added in v1.0.0
-
-## Size
-
-**Signature**
-
-```ts
-export declare const Size: (bytes: SizeInput) => Size
 ```
 
 Added in v1.0.0
@@ -309,30 +305,6 @@ export type SeekMode = 'start' | 'current'
 
 Added in v1.0.0
 
-## Size (type alias)
-
-Represents a size in bytes.
-
-**Signature**
-
-```ts
-export type Size = Brand.Branded<bigint, 'Size'>
-```
-
-Added in v1.0.0
-
-## SizeInput (type alias)
-
-Represents a size in bytes.
-
-**Signature**
-
-```ts
-export type SizeInput = bigint | number | Size
-```
-
-Added in v1.0.0
-
 # options
 
 ## AccessFileOptions (interface)
@@ -485,6 +457,92 @@ export interface WriteFileStringOptions {
   readonly flag?: OpenFlag
   readonly mode?: number
 }
+```
+
+Added in v1.0.0
+
+# sizes
+
+## GiB
+
+**Signature**
+
+```ts
+export declare const GiB: (n: number) => Size
+```
+
+Added in v1.0.0
+
+## KiB
+
+**Signature**
+
+```ts
+export declare const KiB: (n: number) => Size
+```
+
+Added in v1.0.0
+
+## MiB
+
+**Signature**
+
+```ts
+export declare const MiB: (n: number) => Size
+```
+
+Added in v1.0.0
+
+## PiB
+
+**Signature**
+
+```ts
+export declare const PiB: (n: number) => Size
+```
+
+Added in v1.0.0
+
+## Size
+
+**Signature**
+
+```ts
+export declare const Size: (bytes: SizeInput) => Size
+```
+
+Added in v1.0.0
+
+## Size (type alias)
+
+Represents a size in bytes.
+
+**Signature**
+
+```ts
+export type Size = Brand.Branded<bigint, 'Size'>
+```
+
+Added in v1.0.0
+
+## SizeInput (type alias)
+
+Represents a size in bytes.
+
+**Signature**
+
+```ts
+export type SizeInput = bigint | number | Size
+```
+
+Added in v1.0.0
+
+## TiB
+
+**Signature**
+
+```ts
+export declare const TiB: (n: number) => Size
 ```
 
 Added in v1.0.0
