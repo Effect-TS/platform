@@ -91,6 +91,30 @@ describe("HttpServer", () => {
       expect(result).toEqual({ ok: true })
     }).pipe(runPromise))
 
+  it("formDataFiles", () =>
+    Effect.gen(function*(_) {
+      yield* _(
+        Http.router.empty,
+        Http.router.post(
+          "/upload",
+          Effect.gen(function*(_) {
+            const files = yield* _(Http.request.formDataFiles)
+            expect(files).toHaveProperty("file")
+            return Http.response.empty()
+          }).pipe(Effect.scoped)
+        ),
+        Http.server.serve(),
+        Effect.scoped,
+        Effect.fork
+      )
+      const client = yield* _(makeClient)
+      const formData = new FormData()
+      formData.append("file", new Blob(["test"], { type: "text/plain" }), "test.txt")
+      yield* _(
+        client(HttpC.request.post("/upload", { body: HttpC.body.formData(formData) }))
+      )
+    }).pipe(runPromise))
+
   it("formData withMaxFileSize", () =>
     Effect.gen(function*(_) {
       yield* _(
