@@ -1,6 +1,6 @@
 ---
 title: Http/ServerError.ts
-nav_order: 20
+nav_order: 19
 parent: "@effect/platform"
 ---
 

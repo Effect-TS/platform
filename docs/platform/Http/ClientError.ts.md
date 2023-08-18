@@ -1,6 +1,6 @@
 ---
 title: Http/ClientError.ts
-nav_order: 10
+nav_order: 9
 parent: "@effect/platform"
 ---
 

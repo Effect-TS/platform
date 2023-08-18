@@ -1,6 +1,6 @@
 ---
 title: NodeContext.ts
-nav_order: 11
+nav_order: 10
 parent: "@effect/platform-node"
 ---
 
@@ -38,7 +38,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type NodeContext = Console.Console | CommandExecutor.CommandExecutor | FileSystem.FileSystem | Path.Path
+export type NodeContext = CommandExecutor.CommandExecutor | FileSystem.FileSystem | Path.Path
 ```
 
 Added in v1.0.0
