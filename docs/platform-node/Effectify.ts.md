@@ -15,7 +15,7 @@ Added in v1.0.0
 - [constructor](#constructor)
   - [effectify](#effectify)
 - [utils](#utils)
-  - [Effectify](#effectify)
+  - [Effectify](#effectify-1)
   - [EffectifyError](#effectifyerror)
 
 ---

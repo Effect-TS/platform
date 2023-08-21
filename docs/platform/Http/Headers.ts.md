@@ -114,7 +114,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface Headers extends HashMap.HashMap<string, string> {}
+export interface Headers extends ReadonlyRecord.ReadonlyRecord<string> {}
 ```
 
 Added in v1.0.0
@@ -124,7 +124,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type Input = Headers | Readonly<Record<string, string>> | Iterable<readonly [string, string]>
+export type Input = Headers | Iterable<readonly [string, string]>
 ```
 
 Added in v1.0.0
