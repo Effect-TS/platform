@@ -16,8 +16,8 @@ Added in v1.0.0
   - [RunMain](#runmain)
   - [Teardown](#teardown)
 - [runtime](#runtime)
-  - [runMain](#runmain)
-- [teardown](#teardown)
+  - [runMain](#runmain-1)
+- [teardown](#teardown-1)
   - [defaultTeardown](#defaultteardown)
 
 ---
