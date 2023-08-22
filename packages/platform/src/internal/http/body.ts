@@ -131,7 +131,7 @@ export const fileEtag = (
           fs.stream(path, options),
           options?.contentType ?? Mime.getType(path) ?? undefined,
           Number(info.size),
-          etag
+          Etag.toString(etag)
         )
     )
   )

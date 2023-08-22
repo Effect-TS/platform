@@ -8,23 +8,53 @@ import * as internal from "@effect/platform/internal/http/etag"
 
 /**
  * @since 1.0.0
- * @category type ids
+ * @category models
  */
-export const TypeId: unique symbol = internal.TypeId
+export type Etag = Weak | Strong
+
+/**
+ * @since 1.0.0
+ * @category models
+ */
+export interface Weak {
+  readonly _tag: "Weak"
+  readonly value: string
+}
+
+/**
+ * @since 1.0.0
+ * @category models
+ */
+export interface Strong {
+  readonly _tag: "Strong"
+  readonly value: string
+}
+
+/**
+ * @since 1.0.0
+ * @category convertions
+ */
+export const toString: (self: Etag) => string = internal.toString
 
 /**
  * @since 1.0.0
  * @category type ids
  */
-export type TypeId = typeof TypeId
+export const GeneratorTypeId: unique symbol = internal.GeneratorTypeId
+
+/**
+ * @since 1.0.0
+ * @category type ids
+ */
+export type GeneratorTypeId = typeof GeneratorTypeId
 
 /**
  * @since 1.0.0
  * @category models
  */
 export interface EtagGenerator {
-  readonly [TypeId]: TypeId
-  readonly fromFileInfo: (info: FileSystem.File.Info) => Effect.Effect<never, never, string>
+  readonly [GeneratorTypeId]: GeneratorTypeId
+  readonly fromFileInfo: (info: FileSystem.File.Info) => Effect.Effect<never, never, Etag>
 }
 
 /**

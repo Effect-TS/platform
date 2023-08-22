@@ -223,4 +223,22 @@ describe("HttpServer", () => {
       const root = yield* _(client(HttpC.request.get("/child")), Effect.flatMap((_) => _.text))
       expect(root).toEqual("/")
     }).pipe(runPromise))
+
+  it("file", () =>
+    Effect.gen(function*(_) {
+      yield* _(
+        Effect.succeed(yield* _(Http.response.file(`${__dirname}/fixtures/text.txt`))),
+        Http.server.serve(),
+        Effect.scoped,
+        Effect.fork
+      )
+      const client = yield* _(makeClient)
+      const res = yield* _(client(HttpC.request.get("/")))
+      expect(res.status).toEqual(200)
+      expect(res.headers["content-type"]).toEqual("text/plain")
+      expect(res.headers["content-length"]).toEqual("27")
+      expect(res.headers.etag).toEqual("\"1b-188bd51cab2\"")
+      const text = yield* _(res.text)
+      expect(text.trim()).toEqual("lorem ipsum dolar sit amet")
+    }).pipe(runPromise))
 })
