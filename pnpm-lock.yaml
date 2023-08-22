@@ -113,6 +113,9 @@ importers:
       find-my-way:
         specifier: ^7.6.2
         version: 7.6.2
+      mime:
+        specifier: ^3.0.0
+        version: 3.0.0
       path-browserify:
         specifier: ^1.0.1
         version: 1.0.1
@@ -129,6 +132,9 @@ importers:
       '@effect/stream':
         specifier: ^0.34.0
         version: 0.34.0(@effect/data@0.17.5)(@effect/io@0.38.2)
+      '@types/mime':
+        specifier: ^3.0.1
+        version: 3.0.1
       '@types/path-browserify':
         specifier: ^1.0.0
         version: 1.0.0
@@ -1315,6 +1321,10 @@ packages:
 
   /@types/json5@0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+    dev: true
+
+  /@types/mime@3.0.1:
+    resolution: {integrity: sha512-Y4XFY5VJAuw0FgAqPNd6NNoV44jbq9Bz2L7Rh/J6jLTiHBSBJa9fxqQIvkIld4GsoDOcCbvzOUAbLPsSKKg+uA==}
     dev: true
 
   /@types/minimist@1.2.2:
@@ -4301,6 +4311,12 @@ packages:
       braces: 3.0.2
       picomatch: 2.3.1
     dev: true
+
+  /mime@3.0.0:
+    resolution: {integrity: sha512-jSCU7/VB1loIWBZe14aEYHU/+1UMEHoaO7qxCOVJOw9GgH72VAWppxNcjU+x9a2k3GSIBXNKxXQFqRvvZ7vr3A==}
+    engines: {node: '>=10.0.0'}
+    hasBin: true
+    dev: false
 
   /mimic-fn@2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}

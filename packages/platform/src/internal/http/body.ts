@@ -1,9 +1,12 @@
+import { pipe } from "@effect/data/Function"
 import * as Effect from "@effect/io/Effect"
 import type * as PlatformError from "@effect/platform/Error"
 import * as FileSystem from "@effect/platform/FileSystem"
 import type * as Body from "@effect/platform/Http/Body"
+import * as Etag from "@effect/platform/Http/Etag"
 import * as Schema from "@effect/schema/Schema"
 import type * as Stream_ from "@effect/stream/Stream"
+import * as Mime from "mime/lite"
 
 /** @internal */
 export const TypeId: Body.TypeId = Symbol.for(
@@ -100,10 +103,37 @@ export const file = (
   Effect.flatMap(
     FileSystem.FileSystem,
     (fs) =>
-      Effect.map(
-        fs.stat(path),
-        (stat) => stream(fs.stream(path, options), options?.contentType, Number(stat.size))
-      )
+      Effect.map(fs.stat(path), (info) =>
+        stream(
+          fs.stream(path, options),
+          options?.contentType ?? Mime.getType(path) ?? undefined,
+          Number(info.size)
+        ))
+  )
+
+/** @internal */
+export const fileEtag = (
+  path: string,
+  options?: FileSystem.StreamOptions & { readonly contentType?: string }
+): Effect.Effect<FileSystem.FileSystem | Etag.EtagGenerator, PlatformError.PlatformError, Body.Stream> =>
+  pipe(
+    Effect.Do,
+    Effect.bind("fs", () => FileSystem.FileSystem),
+    Effect.bind("info", ({ fs }) => fs.stat(path)),
+    Effect.bind("etag", ({ info }) =>
+      Effect.flatMap(
+        Etag.EtagGenerator,
+        (etag) => etag.fromFileInfo(info)
+      )),
+    Effect.map(
+      ({ etag, fs, info }) =>
+        stream(
+          fs.stream(path, options),
+          options?.contentType ?? Mime.getType(path) ?? undefined,
+          Number(info.size),
+          etag
+        )
+    )
   )
 
 class FormDataImpl implements Body.FormData {
@@ -125,7 +155,8 @@ class StreamImpl implements Body.Stream {
   constructor(
     readonly stream: Stream_.Stream<never, unknown, Uint8Array>,
     readonly contentType: string,
-    readonly contentLength?: number
+    readonly contentLength?: number,
+    readonly etag?: string
   ) {
     this[TypeId] = TypeId
   }
@@ -135,5 +166,6 @@ class StreamImpl implements Body.Stream {
 export const stream = (
   body: Stream_.Stream<never, unknown, Uint8Array>,
   contentType?: string,
-  contentLength?: number
-): Body.Stream => new StreamImpl(body, contentType ?? "application/octet-stream", contentLength)
+  contentLength?: number,
+  etag?: string
+): Body.Stream => new StreamImpl(body, contentType ?? "application/octet-stream", contentLength, etag)

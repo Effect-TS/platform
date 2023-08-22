@@ -4,6 +4,7 @@
 import type * as Effect from "@effect/io/Effect"
 import type * as PlatformError from "@effect/platform/Error"
 import type * as FileSystem from "@effect/platform/FileSystem"
+import type * as Etag from "@effect/platform/Http/Etag"
 import * as internal from "@effect/platform/internal/http/body"
 import type * as Schema from "@effect/schema/Schema"
 import type * as Stream_ from "@effect/stream/Stream"
@@ -45,6 +46,7 @@ export namespace Body {
     readonly _tag: string
     readonly contentType?: string
     readonly contentLength?: number
+    readonly etag?: string
   }
 }
 
@@ -163,7 +165,12 @@ export interface Stream extends Body.Proto {
  * @since 1.0.0
  * @category constructors
  */
-export const stream: (body: Stream_.Stream<never, unknown, globalThis.Uint8Array>) => Stream = internal.stream
+export const stream: (
+  body: Stream_.Stream<never, unknown, globalThis.Uint8Array>,
+  contentType?: string,
+  contentLength?: number,
+  etag?: string
+) => Stream = internal.stream
 
 /**
  * @since 1.0.0
@@ -172,4 +179,4 @@ export const stream: (body: Stream_.Stream<never, unknown, globalThis.Uint8Array
 export const file: (
   path: string,
   options?: FileSystem.StreamOptions & { readonly contentType?: string }
-) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, Stream> = internal.file
+) => Effect.Effect<FileSystem.FileSystem | Etag.EtagGenerator, PlatformError.PlatformError, Stream> = internal.file

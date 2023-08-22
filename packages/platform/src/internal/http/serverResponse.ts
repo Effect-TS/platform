@@ -4,6 +4,7 @@ import * as Effect from "@effect/io/Effect"
 import type * as PlatformError from "@effect/platform/Error"
 import type * as FileSystem from "@effect/platform/FileSystem"
 import type * as Body from "@effect/platform/Http/Body"
+import type * as Etag from "@effect/platform/Http/Etag"
 import * as Headers from "@effect/platform/Http/Headers"
 import type * as Error from "@effect/platform/Http/ServerError"
 import * as ServerRequest from "@effect/platform/Http/ServerRequest"
@@ -27,13 +28,16 @@ class ServerResponseImpl implements ServerResponse.ServerResponse {
     readonly body: Body.Body
   ) {
     this[TypeId] = TypeId
-    if (body.contentType || body.contentLength) {
+    if (body.contentType || body.contentLength || body.etag) {
       const newHeaders = { ...headers }
       if (body.contentType) {
         newHeaders["content-type"] = body.contentType
       }
       if (body.contentLength) {
         newHeaders["content-length"] = body.contentLength.toString()
+      }
+      if (body.etag) {
+        newHeaders["etag"] = body.etag
       }
       this.headers = newHeaders
     } else {
@@ -141,8 +145,12 @@ export const schemaJson = <I, A>(
 export const file = (
   path: string,
   options?: ServerResponse.Options & FileSystem.StreamOptions
-): Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, ServerResponse.ServerResponse> =>
-  Effect.map(internalBody.file(path, options), (body) =>
+): Effect.Effect<
+  FileSystem.FileSystem | Etag.EtagGenerator,
+  PlatformError.PlatformError,
+  ServerResponse.ServerResponse
+> =>
+  Effect.map(internalBody.fileEtag(path, options), (body) =>
     new ServerResponseImpl(
       options?.status ?? 200,
       options?.statusText,
