@@ -1,6 +1,6 @@
 ---
 title: Http/Server.ts
-nav_order: 7
+nav_order: 8
 parent: "@effect/platform-node"
 ---
 
@@ -45,7 +45,7 @@ Added in v1.0.0
 export declare const layer: (
   evaluate: LazyArg<Http.Server>,
   options: Net.ListenOptions
-) => Layer.Layer<never, never, Server.Server>
+) => Layer.Layer<never, never, Server.Server | Etag.EtagGenerator>
 ```
 
 Added in v1.0.0
@@ -58,7 +58,7 @@ Added in v1.0.0
 export declare const layerConfig: (
   evaluate: LazyArg<Http.Server>,
   options: Config.Config.Wrap<Net.ListenOptions>
-) => Layer.Layer<never, ConfigError.ConfigError, Server.Server>
+) => Layer.Layer<never, ConfigError.ConfigError, Server.Server | Etag.EtagGenerator>
 ```
 
 Added in v1.0.0

@@ -69,7 +69,7 @@ Added in v1.0.0
 export declare const file: (
   path: string,
   options?: FileSystem.StreamOptions & { readonly contentType?: string }
-) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, Stream>
+) => Effect.Effect<FileSystem.FileSystem | Etag.EtagGenerator, PlatformError.PlatformError, Stream>
 ```
 
 Added in v1.0.0
@@ -119,7 +119,12 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const stream: (body: Stream_.Stream<never, unknown, globalThis.Uint8Array>) => Stream
+export declare const stream: (
+  body: Stream_.Stream<never, unknown, globalThis.Uint8Array>,
+  contentType?: string,
+  contentLength?: number,
+  etag?: string
+) => Stream
 ```
 
 Added in v1.0.0
