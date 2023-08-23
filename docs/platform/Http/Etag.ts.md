@@ -16,11 +16,11 @@ Added in v1.0.0
   - [toString](#tostring)
 - [models](#models)
   - [Etag (type alias)](#etag-type-alias)
-  - [EtagGenerator (interface)](#etaggenerator-interface)
+  - [Generator (interface)](#generator-interface)
   - [Strong (interface)](#strong-interface)
   - [Weak (interface)](#weak-interface)
 - [tags](#tags)
-  - [EtagGenerator](#etaggenerator)
+  - [Generator](#generator)
 - [type ids](#type-ids)
   - [GeneratorTypeId](#generatortypeid)
   - [GeneratorTypeId (type alias)](#generatortypeid-type-alias)
@@ -51,12 +51,12 @@ export type Etag = Weak | Strong
 
 Added in v1.0.0
 
-## EtagGenerator (interface)
+## Generator (interface)
 
 **Signature**
 
 ```ts
-export interface EtagGenerator {
+export interface Generator {
   readonly [GeneratorTypeId]: GeneratorTypeId
   readonly fromFileInfo: (info: FileSystem.File.Info) => Effect.Effect<never, never, Etag>
 }
@@ -92,12 +92,12 @@ Added in v1.0.0
 
 # tags
 
-## EtagGenerator
+## Generator
 
 **Signature**
 
 ```ts
-export declare const EtagGenerator: Context.Tag<EtagGenerator, EtagGenerator>
+export declare const Generator: Context.Tag<Generator, Generator>
 ```
 
 Added in v1.0.0

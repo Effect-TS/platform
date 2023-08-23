@@ -12,8 +12,8 @@ const fromFileInfo = (info: FileSystem.File.Info) => {
 
 /** @internal */
 export const layer = Layer.succeed(
-  Etag.EtagGenerator,
-  Etag.EtagGenerator.of({
+  Etag.Generator,
+  Etag.Generator.of({
     [Etag.GeneratorTypeId]: Etag.GeneratorTypeId,
     fromFileInfo(info) {
       return Effect.sync(() => ({ _tag: "Strong", value: fromFileInfo(info) }))
@@ -23,8 +23,8 @@ export const layer = Layer.succeed(
 
 /** @internal */
 export const layerWeak = Layer.succeed(
-  Etag.EtagGenerator,
-  Etag.EtagGenerator.of({
+  Etag.Generator,
+  Etag.Generator.of({
     [Etag.GeneratorTypeId]: Etag.GeneratorTypeId,
     fromFileInfo(info) {
       return Effect.sync(() => ({ _tag: "Weak", value: fromFileInfo(info) }))

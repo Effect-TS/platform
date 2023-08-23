@@ -115,7 +115,7 @@ Added in v1.0.0
 export declare const file: (
   path: string,
   options?: Options & FileSystem.StreamOptions
-) => Effect.Effect<FileSystem.FileSystem | Etag.EtagGenerator, PlatformError.PlatformError, ServerResponse>
+) => Effect.Effect<FileSystem.FileSystem | Etag.Generator, PlatformError.PlatformError, ServerResponse>
 ```
 
 Added in v1.0.0

@@ -11,4 +11,4 @@ export * from "@effect/platform/Http/Etag"
  * @since 1.0.0
  * @category layers
  */
-export const layer: Layer.Layer<never, never, Etag.EtagGenerator> = internal.layer
+export const layer: Layer.Layer<never, never, Etag.Generator> = internal.layer

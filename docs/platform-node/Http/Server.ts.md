@@ -45,7 +45,7 @@ Added in v1.0.0
 export declare const layer: (
   evaluate: LazyArg<Http.Server>,
   options: Net.ListenOptions
-) => Layer.Layer<never, never, Server.Server | Etag.EtagGenerator>
+) => Layer.Layer<never, never, Server.Server | Etag.Generator>
 ```
 
 Added in v1.0.0
@@ -58,7 +58,7 @@ Added in v1.0.0
 export declare const layerConfig: (
   evaluate: LazyArg<Http.Server>,
   options: Config.Config.Wrap<Net.ListenOptions>
-) => Layer.Layer<never, ConfigError.ConfigError, Server.Server | Etag.EtagGenerator>
+) => Layer.Layer<never, ConfigError.ConfigError, Server.Server | Etag.Generator>
 ```
 
 Added in v1.0.0

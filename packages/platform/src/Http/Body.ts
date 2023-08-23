@@ -4,7 +4,6 @@
 import type * as Effect from "@effect/io/Effect"
 import type * as PlatformError from "@effect/platform/Error"
 import type * as FileSystem from "@effect/platform/FileSystem"
-import type * as Etag from "@effect/platform/Http/Etag"
 import * as internal from "@effect/platform/internal/http/body"
 import type * as Schema from "@effect/schema/Schema"
 import type * as Stream_ from "@effect/stream/Stream"
@@ -179,4 +178,14 @@ export const stream: (
 export const file: (
   path: string,
   options?: FileSystem.StreamOptions & { readonly contentType?: string }
-) => Effect.Effect<FileSystem.FileSystem | Etag.EtagGenerator, PlatformError.PlatformError, Stream> = internal.file
+) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, Stream> = internal.file
+
+/**
+ * @since 1.0.0
+ * @category constructors
+ */
+export const fileInfo: (
+  path: string,
+  info: FileSystem.File.Info,
+  options?: FileSystem.StreamOptions & { readonly contentType?: string }
+) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, Stream> = internal.fileInfo

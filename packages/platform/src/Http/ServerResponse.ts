@@ -173,8 +173,7 @@ export const stream: (body: Stream.Stream<never, unknown, Uint8Array>, options?:
 export const file: (
   path: string,
   options?: Options & FileSystem.StreamOptions
-) => Effect.Effect<FileSystem.FileSystem | Etag.EtagGenerator, PlatformError.PlatformError, ServerResponse> =
-  internal.file
+) => Effect.Effect<FileSystem.FileSystem | Etag.Generator, PlatformError.PlatformError, ServerResponse> = internal.file
 
 /**
  * @since 1.0.0

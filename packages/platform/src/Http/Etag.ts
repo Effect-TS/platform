@@ -52,7 +52,7 @@ export type GeneratorTypeId = typeof GeneratorTypeId
  * @since 1.0.0
  * @category models
  */
-export interface EtagGenerator {
+export interface Generator {
   readonly [GeneratorTypeId]: GeneratorTypeId
   readonly fromFileInfo: (info: FileSystem.File.Info) => Effect.Effect<never, never, Etag>
 }
@@ -61,4 +61,4 @@ export interface EtagGenerator {
  * @since 1.0.0
  * @category tags
  */
-export const EtagGenerator: Context.Tag<EtagGenerator, EtagGenerator> = internal.tag
+export const Generator: Context.Tag<Generator, Generator> = internal.tag

@@ -16,6 +16,7 @@ Added in v1.0.0
   - [effect](#effect)
   - [empty](#empty)
   - [file](#file)
+  - [fileInfo](#fileinfo)
   - [formData](#formdata)
   - [json](#json)
   - [jsonSchema](#jsonschema)
@@ -69,7 +70,21 @@ Added in v1.0.0
 export declare const file: (
   path: string,
   options?: FileSystem.StreamOptions & { readonly contentType?: string }
-) => Effect.Effect<FileSystem.FileSystem | Etag.EtagGenerator, PlatformError.PlatformError, Stream>
+) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, Stream>
+```
+
+Added in v1.0.0
+
+## fileInfo
+
+**Signature**
+
+```ts
+export declare const fileInfo: (
+  path: string,
+  info: FileSystem.File.Info,
+  options?: FileSystem.StreamOptions & { readonly contentType?: string }
+) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, Stream>
 ```
 
 Added in v1.0.0

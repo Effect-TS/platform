@@ -3,11 +3,11 @@ import type * as Etag from "@effect/platform/Http/Etag"
 
 /** @internal */
 export const GeneratorTypeId: Etag.GeneratorTypeId = Symbol.for(
-  "@effect/platform/Http/Etag/EtagGenerator"
+  "@effect/platform/Http/Etag/Generator"
 ) as Etag.GeneratorTypeId
 
 /** @internal */
-export const tag = Context.Tag<Etag.EtagGenerator>(GeneratorTypeId)
+export const tag = Context.Tag<Etag.Generator>(GeneratorTypeId)
 
 /** @internal */
 export const toString = (self: Etag.Etag): string => {
