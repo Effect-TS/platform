@@ -41,6 +41,9 @@ Added in v1.0.0
   - [schemaFunction](#schemafunction)
 - [tags](#tags)
   - [Client](#client)
+- [type ids](#type-ids)
+  - [TypeId](#typeid)
+  - [TypeId (type alias)](#typeid-type-alias)
 
 ---
 
@@ -359,6 +362,7 @@ Added in v1.0.0
 
 ```ts
 export interface Client<R, E, A> extends Pipeable {
+  readonly [TypeId]: TypeId
   (request: ClientRequest.ClientRequest): Effect.Effect<R, E, A>
 }
 ```
@@ -394,6 +398,28 @@ Added in v1.0.0
 
 ```ts
 export declare const Client: Context.Tag<Client.Default, Client.Default>
+```
+
+Added in v1.0.0
+
+# type ids
+
+## TypeId
+
+**Signature**
+
+```ts
+export declare const TypeId: typeof TypeId
+```
+
+Added in v1.0.0
+
+## TypeId (type alias)
+
+**Signature**
+
+```ts
+export type TypeId = typeof TypeId
 ```
 
 Added in v1.0.0

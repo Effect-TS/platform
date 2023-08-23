@@ -16,6 +16,7 @@ Added in v1.0.0
   - [effect](#effect)
   - [empty](#empty)
   - [file](#file)
+  - [fileInfo](#fileinfo)
   - [formData](#formdata)
   - [json](#json)
   - [jsonSchema](#jsonschema)
@@ -74,6 +75,20 @@ export declare const file: (
 
 Added in v1.0.0
 
+## fileInfo
+
+**Signature**
+
+```ts
+export declare const fileInfo: (
+  path: string,
+  info: FileSystem.File.Info,
+  options?: FileSystem.StreamOptions & { readonly contentType?: string }
+) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, Stream>
+```
+
+Added in v1.0.0
+
 ## formData
 
 **Signature**
@@ -119,7 +134,12 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const stream: (body: Stream_.Stream<never, unknown, globalThis.Uint8Array>) => Stream
+export declare const stream: (
+  body: Stream_.Stream<never, unknown, globalThis.Uint8Array>,
+  contentType?: string,
+  contentLength?: number,
+  etag?: string
+) => Stream
 ```
 
 Added in v1.0.0
