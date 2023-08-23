@@ -21,7 +21,7 @@ Added in v1.0.0
   - [prefixAll](#prefixall)
   - [provideService](#provideservice)
   - [provideServiceEffect](#provideserviceeffect)
-  - [transform](#transform)
+  - [use](#use)
 - [constructors](#constructors)
   - [empty](#empty)
   - [fromIterable](#fromiterable)
@@ -217,12 +217,12 @@ export declare const provideServiceEffect: {
 
 Added in v1.0.0
 
-## transform
+## use
 
 **Signature**
 
 ```ts
-export declare const transform: (<R, E, R1, E1>(
+export declare const use: (<R, E, R1, E1>(
   f: (self: Route.Handler<R, E>) => Route.Handler<R1, E1>
 ) => (self: Router<R, E>) => Router<R1, E1>) &
   (<R, E, R1, E1>(self: Router<R, E>, f: (self: Route.Handler<R, E>) => Route.Handler<R1, E1>) => Router<R1, E1>)
