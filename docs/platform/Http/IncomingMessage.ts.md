@@ -64,7 +64,7 @@ export interface IncomingMessage<E> {
   readonly headers: Headers.Headers
   readonly json: Effect.Effect<never, E, unknown>
   readonly text: Effect.Effect<never, E, string>
-  readonly urlParams: Effect.Effect<never, E, UrlParams.UrlParams>
+  readonly urlParamsBody: Effect.Effect<never, E, UrlParams.UrlParams>
   readonly arrayBuffer: Effect.Effect<never, E, ArrayBuffer>
   readonly stream: Stream.Stream<never, E, Uint8Array>
 }
