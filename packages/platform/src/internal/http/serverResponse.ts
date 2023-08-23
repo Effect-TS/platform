@@ -28,16 +28,13 @@ class ServerResponseImpl implements ServerResponse.ServerResponse {
     readonly body: Body.Body
   ) {
     this[TypeId] = TypeId
-    if (body.contentType || body.contentLength || body.etag) {
+    if (body.contentType || body.contentLength) {
       const newHeaders = { ...headers }
       if (body.contentType) {
         newHeaders["content-type"] = body.contentType
       }
       if (body.contentLength) {
         newHeaders["content-length"] = body.contentLength.toString()
-      }
-      if (body.etag) {
-        newHeaders["etag"] = body.etag
       }
       this.headers = newHeaders
     } else {

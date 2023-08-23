@@ -45,7 +45,6 @@ export namespace Body {
     readonly _tag: string
     readonly contentType?: string
     readonly contentLength?: number
-    readonly etag?: string
   }
 }
 
