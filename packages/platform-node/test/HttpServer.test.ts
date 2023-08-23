@@ -227,7 +227,7 @@ describe("HttpServer", () => {
 
   it("file", () =>
     Effect.gen(function*(_) {
-      const mtime = new Date(0)
+      const mtime = new Date(123456789)
       yield* _(
         Effect.succeed(
           yield* _(
@@ -254,7 +254,7 @@ describe("HttpServer", () => {
       expect(res.status).toEqual(200)
       expect(res.headers["content-type"]).toEqual("text/plain")
       expect(res.headers["content-length"]).toEqual("27")
-      expect(res.headers.etag).toEqual("\"1b-0\"")
+      expect(res.headers.etag).toEqual("\"1b-75bcd15\"")
       const text = yield* _(res.text)
       expect(text.trim()).toEqual("lorem ipsum dolar sit amet")
     }).pipe(runPromise))
