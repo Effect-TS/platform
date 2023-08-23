@@ -12,8 +12,6 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [combinators](#combinators)
-  - [compose](#compose)
 - [constructors](#constructors)
   - [logger](#logger)
   - [loggerTracer](#loggertracer)
@@ -24,28 +22,6 @@ Added in v1.0.0
   - [Middleware (interface)](#middleware-interface)
 
 ---
-
-# combinators
-
-## compose
-
-**Signature**
-
-```ts
-export declare const compose: {
-  <B extends App.Default<any, any>, C extends App.Default<any, any>>(that: (b: B) => C): <
-    A extends App.Default<any, any>
-  >(
-    self: (a: A) => B
-  ) => (a: A) => C
-  <A extends App.Default<any, any>, B extends App.Default<any, any>, C extends App.Default<any, any>>(
-    self: (a: A) => B,
-    that: (b: B) => C
-  ): (a: A) => C
-}
-```
-
-Added in v1.0.0
 
 # constructors
 
