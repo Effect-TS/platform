@@ -12,3 +12,9 @@ export * from "@effect/platform/Http/Etag"
  * @category layers
  */
 export const layer: Layer.Layer<never, never, Etag.Generator> = internal.layer
+
+/**
+ * @since 1.0.0
+ * @category layers
+ */
+export const layerWeak: Layer.Layer<never, never, Etag.Generator> = internal.layerWeak

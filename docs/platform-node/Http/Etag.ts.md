@@ -14,6 +14,7 @@ Added in v1.0.0
 
 - [layers](#layers)
   - [layer](#layer)
+  - [layerWeak](#layerweak)
 
 ---
 
@@ -25,6 +26,16 @@ Added in v1.0.0
 
 ```ts
 export declare const layer: Layer.Layer<never, never, Etag.Generator>
+```
+
+Added in v1.0.0
+
+## layerWeak
+
+**Signature**
+
+```ts
+export declare const layerWeak: Layer.Layer<never, never, Etag.Generator>
 ```
 
 Added in v1.0.0
