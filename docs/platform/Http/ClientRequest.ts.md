@@ -19,6 +19,7 @@ Added in v1.0.0
   - [appendUrlParam](#appendurlparam)
   - [appendUrlParams](#appendurlparams)
   - [basicAuth](#basicauth)
+  - [bearerToken](#bearertoken)
   - [effectBody](#effectbody)
   - [fileBody](#filebody)
   - [formDataBody](#formdatabody)
@@ -125,6 +126,19 @@ Added in v1.0.0
 export declare const basicAuth: {
   (username: string, password: string): (self: ClientRequest) => ClientRequest
   (self: ClientRequest, username: string, password: string): ClientRequest
+}
+```
+
+Added in v1.0.0
+
+## bearerToken
+
+**Signature**
+
+```ts
+export declare const bearerToken: {
+  (token: string): (self: ClientRequest) => ClientRequest
+  (self: ClientRequest, token: string): ClientRequest
 }
 ```
 
