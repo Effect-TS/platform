@@ -9,8 +9,7 @@ function packages() {
 }
 
 function pkgName(pkg) {
-  return require(Path.join(process.cwd(), "packages", pkg, "package.json"))
-    .name;
+  return require(Path.join(process.cwd(), "packages", pkg, "package.json")).name;
 }
 
 function copyFiles(pkg) {
@@ -38,6 +37,8 @@ function copyFiles(pkg) {
     }
   }
 
+  Fs.rmSync(dest, { recursive: true, force: true });
+  Fs.mkdirSync(dest, { recursive: true });
   handleFiles("", files);
 }
 

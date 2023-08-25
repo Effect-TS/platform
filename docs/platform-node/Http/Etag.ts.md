@@ -8,6 +8,8 @@ parent: "@effect/platform-node"
 
 Added in v1.0.0
 
+Also includes exports from [`@effect/platform/Http/Etag`](https://effect-ts.github.io/platform/platform/Http/Etag.ts.html).
+
 ---
 
 <h2 class="text-delta">Table of contents</h2>
