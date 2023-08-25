@@ -20,10 +20,16 @@ Added in v1.0.0
 - [fiber refs](#fiber-refs)
   - [fieldMimeTypes](#fieldmimetypes)
   - [maxFieldSize](#maxfieldsize)
+  - [maxFields](#maxfields)
   - [maxFileSize](#maxfilesize)
+  - [maxFiles](#maxfiles)
+  - [maxParts](#maxparts)
   - [withFieldMimeTypes](#withfieldmimetypes)
   - [withMaxFieldSize](#withmaxfieldsize)
+  - [withMaxFields](#withmaxfields)
   - [withMaxFileSize](#withmaxfilesize)
+  - [withMaxFiles](#withmaxfiles)
+  - [withMaxParts](#withmaxparts)
 - [models](#models)
   - [Field (interface)](#field-interface)
   - [File (interface)](#file-interface)
@@ -101,12 +107,42 @@ export declare const maxFieldSize: FiberRef.FiberRef<FileSystem.Size>
 
 Added in v1.0.0
 
+## maxFields
+
+**Signature**
+
+```ts
+export declare const maxFields: FiberRef.FiberRef<Option.Option<number>>
+```
+
+Added in v1.0.0
+
 ## maxFileSize
 
 **Signature**
 
 ```ts
 export declare const maxFileSize: FiberRef.FiberRef<Option.Option<FileSystem.Size>>
+```
+
+Added in v1.0.0
+
+## maxFiles
+
+**Signature**
+
+```ts
+export declare const maxFiles: FiberRef.FiberRef<Option.Option<number>>
+```
+
+Added in v1.0.0
+
+## maxParts
+
+**Signature**
+
+```ts
+export declare const maxParts: FiberRef.FiberRef<Option.Option<number>>
 ```
 
 Added in v1.0.0
@@ -137,6 +173,19 @@ export declare const withMaxFieldSize: {
 
 Added in v1.0.0
 
+## withMaxFields
+
+**Signature**
+
+```ts
+export declare const withMaxFields: {
+  (count: Option.Option<number>): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
+  <R, E, A>(effect: Effect.Effect<R, E, A>, count: Option.Option<number>): Effect.Effect<R, E, A>
+}
+```
+
+Added in v1.0.0
+
 ## withMaxFileSize
 
 **Signature**
@@ -145,6 +194,32 @@ Added in v1.0.0
 export declare const withMaxFileSize: {
   (size: Option.Option<FileSystem.SizeInput>): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
   <R, E, A>(effect: Effect.Effect<R, E, A>, size: Option.Option<FileSystem.SizeInput>): Effect.Effect<R, E, A>
+}
+```
+
+Added in v1.0.0
+
+## withMaxFiles
+
+**Signature**
+
+```ts
+export declare const withMaxFiles: {
+  (count: Option.Option<number>): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
+  <R, E, A>(effect: Effect.Effect<R, E, A>, count: Option.Option<number>): Effect.Effect<R, E, A>
+}
+```
+
+Added in v1.0.0
+
+## withMaxParts
+
+**Signature**
+
+```ts
+export declare const withMaxParts: {
+  (count: Option.Option<number>): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
+  <R, E, A>(effect: Effect.Effect<R, E, A>, count: Option.Option<number>): Effect.Effect<R, E, A>
 }
 ```
 
