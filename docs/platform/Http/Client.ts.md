@@ -76,7 +76,7 @@ Added in v1.0.0
 ```ts
 export declare const make: (
   f: (
-    request: ClientRequest.ClientRequest.NonEffectBody
+    request: ClientRequest.ClientRequest
   ) => Effect.Effect<never, Error.HttpClientError, ClientResponse.ClientResponse>
 ) => Client.Default
 ```
