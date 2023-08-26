@@ -104,7 +104,7 @@ export const json: (
  */
 export const schemaJson: <I, A>(
   schema: Schema.Schema<I, A>
-) => (body: A, options?: Options.WithContent | undefined) => Effect.Effect<never, Body.BodyError, ServerResponse> =
+) => (body: A, options?: Options.WithContent) => Effect.Effect<never, Body.BodyError, ServerResponse> =
   internal.schemaJson
 
 /**
