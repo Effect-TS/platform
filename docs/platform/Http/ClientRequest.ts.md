@@ -20,7 +20,6 @@ Added in v1.0.0
   - [appendUrlParams](#appendurlparams)
   - [basicAuth](#basicauth)
   - [bearerToken](#bearertoken)
-  - [effectBody](#effectbody)
   - [fileBody](#filebody)
   - [formDataBody](#formdatabody)
   - [jsonBody](#jsonbody)
@@ -144,19 +143,6 @@ export declare const bearerToken: {
 
 Added in v1.0.0
 
-## effectBody
-
-**Signature**
-
-```ts
-export declare const effectBody: {
-  (body: Effect.Effect<never, unknown, Body.NonEffect>): (self: ClientRequest) => ClientRequest
-  (self: ClientRequest, body: Effect.Effect<never, unknown, Body.NonEffect>): ClientRequest
-}
-```
-
-Added in v1.0.0
-
 ## fileBody
 
 **Signature**
@@ -195,8 +181,8 @@ Added in v1.0.0
 
 ```ts
 export declare const jsonBody: {
-  (body: unknown): (self: ClientRequest) => ClientRequest
-  (self: ClientRequest, body: unknown): ClientRequest
+  (body: unknown): (self: ClientRequest) => Effect.Effect<never, Body.BodyError, ClientRequest>
+  (self: ClientRequest, body: unknown): Effect.Effect<never, Body.BodyError, ClientRequest>
 }
 ```
 
@@ -235,7 +221,10 @@ Added in v1.0.0
 ```ts
 export declare const schemaBody: <I, A>(
   schema: Schema.Schema<I, A>
-) => { (body: A): (self: ClientRequest) => ClientRequest; (self: ClientRequest, body: A): ClientRequest }
+) => {
+  (body: A): (self: ClientRequest) => Effect.Effect<never, Body.BodyError, ClientRequest>
+  (self: ClientRequest, body: A): Effect.Effect<never, Body.BodyError, ClientRequest>
+}
 ```
 
 Added in v1.0.0

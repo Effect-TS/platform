@@ -17,7 +17,6 @@ Added in v1.0.0
   - [setHeader](#setheader)
   - [setHeaders](#setheaders)
 - [constructors](#constructors)
-  - [effect](#effect)
   - [empty](#empty)
   - [file](#file)
   - [formData](#formdata)
@@ -37,7 +36,6 @@ Added in v1.0.0
   - [TypeId (type alias)](#typeid-type-alias)
 - [utils](#utils)
   - [isServerResponse](#isserverresponse)
-  - [toNonEffectBody](#tononeffectbody)
 
 ---
 
@@ -84,19 +82,6 @@ Added in v1.0.0
 
 # constructors
 
-## effect
-
-**Signature**
-
-```ts
-export declare const effect: (
-  body: Effect.Effect<never, unknown, Body.NonEffect>,
-  options?: Options.WithContent
-) => ServerResponse
-```
-
-Added in v1.0.0
-
 ## empty
 
 **Signature**
@@ -135,7 +120,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const json: (body: unknown, options?: Options.WithContent) => ServerResponse
+export declare const json: (
+  body: unknown,
+  options?: Options.WithContent
+) => Effect.Effect<never, Body.BodyError, ServerResponse>
 ```
 
 Added in v1.0.0
@@ -157,7 +145,7 @@ Added in v1.0.0
 ```ts
 export declare const schemaJson: <I, A>(
   schema: Schema.Schema<I, A>
-) => (body: A, options?: Options.WithContent) => ServerResponse
+) => (body: A, options?: Options.WithContent | undefined) => Effect.Effect<never, Body.BodyError, ServerResponse>
 ```
 
 Added in v1.0.0
@@ -276,18 +264,6 @@ Added in v1.0.0
 
 ```ts
 export declare const isServerResponse: (u: unknown) => u is ServerResponse
-```
-
-Added in v1.0.0
-
-## toNonEffectBody
-
-**Signature**
-
-```ts
-export declare const toNonEffectBody: (
-  self: ServerResponse
-) => Effect.Effect<ServerRequest.ServerRequest, Error.ResponseError, ServerResponse.NonEffectBody>
 ```
 
 Added in v1.0.0

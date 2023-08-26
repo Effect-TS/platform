@@ -13,7 +13,6 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructors](#constructors)
-  - [effect](#effect)
   - [empty](#empty)
   - [file](#file)
   - [fileInfo](#fileinfo)
@@ -25,32 +24,26 @@ Added in v1.0.0
   - [text](#text)
   - [uint8Array](#uint8array)
   - [unsafeJson](#unsafejson)
+- [errors](#errors)
+  - [BodyError](#bodyerror)
+  - [BodyError (interface)](#bodyerror-interface)
+  - [BodyErrorReason (type alias)](#bodyerrorreason-type-alias)
 - [models](#models)
   - [Body (type alias)](#body-type-alias)
-  - [EffectBody (interface)](#effectbody-interface)
   - [Empty (interface)](#empty-interface)
   - [FormData (interface)](#formdata-interface)
-  - [NonEffect (type alias)](#noneffect-type-alias)
   - [Raw (interface)](#raw-interface)
   - [Stream (interface)](#stream-interface)
   - [Uint8Array (interface)](#uint8array-interface)
 - [type ids](#type-ids)
+  - [ErrorTypeId](#errortypeid)
+  - [ErrorTypeId (type alias)](#errortypeid-type-alias)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
 
 ---
 
 # constructors
-
-## effect
-
-**Signature**
-
-```ts
-export declare const effect: (body: Effect.Effect<never, unknown, NonEffect>) => EffectBody
-```
-
-Added in v1.0.0
 
 ## empty
 
@@ -104,7 +97,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const json: (body: unknown) => EffectBody
+export declare const json: (body: unknown) => Effect.Effect<never, BodyError, Uint8Array>
 ```
 
 Added in v1.0.0
@@ -114,7 +107,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const jsonSchema: <I, A>(schema: Schema.Schema<I, A>) => (body: A) => EffectBody
+export declare const jsonSchema: <I, A>(
+  schema: Schema.Schema<I, A>
+) => (body: A) => Effect.Effect<never, BodyError, Uint8Array>
 ```
 
 Added in v1.0.0
@@ -174,6 +169,50 @@ export declare const unsafeJson: (body: unknown) => Uint8Array
 
 Added in v1.0.0
 
+# errors
+
+## BodyError
+
+**Signature**
+
+```ts
+export declare const BodyError: (reason: BodyErrorReason) => BodyError
+```
+
+Added in v1.0.0
+
+## BodyError (interface)
+
+**Signature**
+
+```ts
+export interface BodyError extends Data.Case {
+  readonly [ErrorTypeId]: ErrorTypeId
+  readonly _tag: 'BodyError'
+  readonly reason: BodyErrorReason
+}
+```
+
+Added in v1.0.0
+
+## BodyErrorReason (type alias)
+
+**Signature**
+
+```ts
+export type BodyErrorReason =
+  | {
+      readonly _tag: 'JsonError'
+      readonly error: unknown
+    }
+  | {
+      readonly _tag: 'SchemaError'
+      readonly error: ParseResult.ParseError
+    }
+```
+
+Added in v1.0.0
+
 # models
 
 ## Body (type alias)
@@ -181,20 +220,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type Body = Empty | Raw | Uint8Array | EffectBody | FormData | Stream
-```
-
-Added in v1.0.0
-
-## EffectBody (interface)
-
-**Signature**
-
-```ts
-export interface EffectBody extends Body.Proto {
-  readonly _tag: 'Effect'
-  readonly effect: Effect.Effect<never, unknown, NonEffect>
-}
+export type Body = Empty | Raw | Uint8Array | FormData | Stream
 ```
 
 Added in v1.0.0
@@ -220,16 +246,6 @@ export interface FormData extends Body.Proto {
   readonly _tag: 'FormData'
   readonly formData: globalThis.FormData
 }
-```
-
-Added in v1.0.0
-
-## NonEffect (type alias)
-
-**Signature**
-
-```ts
-export type NonEffect = Exclude<Body, EffectBody>
 ```
 
 Added in v1.0.0
@@ -278,6 +294,26 @@ export interface Uint8Array extends Body.Proto {
 Added in v1.0.0
 
 # type ids
+
+## ErrorTypeId
+
+**Signature**
+
+```ts
+export declare const ErrorTypeId: typeof ErrorTypeId
+```
+
+Added in v1.0.0
+
+## ErrorTypeId (type alias)
+
+**Signature**
+
+```ts
+export type ErrorTypeId = typeof ErrorTypeId
+```
+
+Added in v1.0.0
 
 ## TypeId
 
