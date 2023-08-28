@@ -25,20 +25,7 @@ export const make: (
     has: (key) => Effect.map(impl.get(key), Option.isSome),
     isEmpty: Effect.map(impl.size, (size) => size === 0),
 
-    modify: (key, f) =>
-      Effect.gen(function*(_) {
-        const value = yield* _(impl.get(key))
-
-        if (Option.isNone(value)) {
-          return Option.none()
-        }
-
-        const newValue = f(value.value)
-
-        yield* _(impl.set(key, newValue))
-
-        return Option.some(newValue)
-      })
+    modify: (key, f) => pipe(impl.get(key), Effect.map(Option.map(f)))
   })
 
 /** @internal */

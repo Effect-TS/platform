@@ -1,4 +1,3 @@
-import { pipe } from "@effect/data/Function"
 import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
 import * as Layer from "@effect/io/Layer"
@@ -6,11 +5,13 @@ import * as Fs from "@effect/platform-node/FileSystem"
 import * as Path from "@effect/platform-node/Path"
 import * as Kv from "@effect/platform/KeyValueStore"
 
+const KeyValueLive = Kv.layerFileSystem(`${__dirname}/fixtures/kv`).pipe(
+  Layer.use(Fs.layer),
+  Layer.use(Path.layer)
+)
+
 export const run = <E, A>(self: Effect.Effect<Kv.KeyValueStore, E, A>) =>
-  Effect.runPromise(pipe(
-    Effect.provideLayer(self, Kv.layerFileSystem(`${__dirname}/fixtures/kv`)),
-    Effect.provideLayer(Layer.merge(Fs.layer, Path.layer))
-  ))
+  Effect.runPromise(Effect.provideLayer(self, KeyValueLive))
 
 describe("KeyValueStore / layerFileSystem", () => {
   it("set", () =>
