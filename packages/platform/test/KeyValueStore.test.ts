@@ -6,7 +6,7 @@ import * as KeyValueStore from "@effect/platform/KeyValueStore"
 const run = <E, A>(effect: Effect.Effect<KeyValueStore.KeyValueStore, E, A>) =>
   Effect.runPromise(Effect.provideLayer(effect, KeyValueStore.layerMemory))
 
-describe("KeyValueStore", () => {
+describe("KeyValueStore/ layerMemory", () => {
   it("set", () =>
     run(Effect.gen(function*(_) {
       const kv = yield* _(KeyValueStore.KeyValueStore)
@@ -17,6 +17,14 @@ describe("KeyValueStore", () => {
 
       expect(value).toEqual(Option.some("bar"))
       expect(length).toEqual(1)
+    })))
+
+  it("get/ missing", () =>
+    run(Effect.gen(function*(_) {
+      const kv = yield* _(KeyValueStore.KeyValueStore)
+      const value = yield* _(kv.get("foo"))
+
+      expect(value).toEqual(Option.none())
     })))
 
   it("remove", () =>
