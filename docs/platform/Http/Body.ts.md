@@ -16,6 +16,7 @@ Added in v1.0.0
   - [empty](#empty)
   - [file](#file)
   - [fileInfo](#fileinfo)
+  - [fileWeb](#fileweb)
   - [formData](#formdata)
   - [json](#json)
   - [jsonSchema](#jsonschema)
@@ -78,6 +79,16 @@ export declare const fileInfo: (
   info: FileSystem.File.Info,
   options?: FileSystem.StreamOptions & { readonly contentType?: string }
 ) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, Stream>
+```
+
+Added in v1.0.0
+
+## fileWeb
+
+**Signature**
+
+```ts
+export declare const fileWeb: (file: Body.FileLike) => Stream
 ```
 
 Added in v1.0.0
