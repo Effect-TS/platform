@@ -1,4 +1,5 @@
 import * as Context from "@effect/data/Context"
+import { pipe } from "@effect/data/Function"
 import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
 import * as Layer from "@effect/io/Layer"
@@ -16,12 +17,12 @@ export const tag = Context.Tag<KeyValueStore.KeyValueStore>(TypeId)
 
 /** @internal */
 export const make: (
-  impl: Omit<KeyValueStore.KeyValueStore, KeyValueStore.TypeId | "has" | "setMany" | "modify" | "isEmpty">
+  impl: Omit<KeyValueStore.KeyValueStore, KeyValueStore.TypeId | "has" | "modify" | "isEmpty">
 ) => KeyValueStore.KeyValueStore = (impl) =>
   tag.of({
     ...impl,
     [TypeId]: TypeId,
-    has: (key) => impl.get(key).pipe(Effect.map(Option.isSome)),
+    has: (key) => Effect.map(impl.get(key), Option.isSome),
     isEmpty: Effect.map(impl.size, (size) => size === 0),
 
     modify: (key, f) =>
@@ -53,7 +54,6 @@ export const layerMemory = Layer.sync(tag, () => {
   })
 })
 
-// WARNING: Untested
 /** @internal */
 export const layerFileSystem = (directory: string) =>
   Layer.effect(
@@ -64,13 +64,13 @@ export const layerFileSystem = (directory: string) =>
       const keyPath = (key: string) => path.join(directory, key)
 
       if (!(yield* _(fs.exists(directory)))) {
-        yield* _(fs.makeDirectory(directory))
+        yield* _(fs.makeDirectory(directory, { recursive: true }))
       }
 
       return make({
         get: (key: string) =>
-          fs.readFileString(keyPath(key)).pipe(
-            Effect.map(Option.some),
+          pipe(
+            Effect.map(fs.readFileString(keyPath(key)), Option.some),
             Effect.catchTag(
               "SystemError",
               (sysError) => sysError.reason === "NotFound" ? Effect.succeed(Option.none()) : Effect.fail(sysError)
@@ -78,8 +78,14 @@ export const layerFileSystem = (directory: string) =>
           ),
         set: (key: string, value: string) => fs.writeFileString(keyPath(key), value),
         remove: (key: string) => fs.remove(keyPath(key)),
-        clear: fs.remove(directory, { recursive: true }).pipe(Effect.flatMap(() => fs.makeDirectory(directory))),
-        size: fs.readDirectory(directory).pipe(Effect.map((files) => files.length))
+        clear: Effect.zipRight(
+          fs.remove(directory, { recursive: true }),
+          fs.makeDirectory(directory, { recursive: true })
+        ),
+        size: Effect.map(
+          fs.readDirectory(directory),
+          (files) => files.length
+        )
       })
     })
   )

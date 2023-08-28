@@ -21,7 +21,7 @@ export const layerLocalStorage = Layer.succeed(
         catch: () =>
           storageError({
             pathOrDescriptor: "layerLocalStorage",
-            method: "getItem",
+            method: "get",
             message: `Unable to get item with key ${key}`
           })
       }),
@@ -32,7 +32,7 @@ export const layerLocalStorage = Layer.succeed(
         catch: () =>
           storageError({
             pathOrDescriptor: "layerLocalStorage",
-            method: "setItem",
+            method: "set",
             message: `Unable to set item with key ${key}`
           })
       }),
@@ -43,7 +43,7 @@ export const layerLocalStorage = Layer.succeed(
         catch: () =>
           storageError({
             pathOrDescriptor: "layerLocalStorage",
-            method: "removeItem",
+            method: "remove",
             message: `Unable to remove item with key ${key}`
           })
       }),
@@ -80,7 +80,7 @@ export const layerSessionStorage = Layer.succeed(
         catch: () =>
           storageError({
             pathOrDescriptor: "layerSessionStorage",
-            method: "getItem",
+            method: "get",
             message: `Unable to get item with key ${key}`
           })
       }),
@@ -91,7 +91,7 @@ export const layerSessionStorage = Layer.succeed(
         catch: () =>
           storageError({
             pathOrDescriptor: "layerSessionStorage",
-            method: "setItem",
+            method: "set",
             message: `Unable to set item with key ${key}`
           })
       }),
@@ -102,7 +102,7 @@ export const layerSessionStorage = Layer.succeed(
         catch: () =>
           storageError({
             pathOrDescriptor: "layerSessionStorage",
-            method: "removeItem",
+            method: "remove",
             message: `Unable to remove item with key ${key}`
           })
       }),
