@@ -1,6 +1,7 @@
 import * as Effect from "@effect/io/Effect"
 import * as Layer from "@effect/io/Layer"
 import type * as FileSystem from "@effect/platform/FileSystem"
+import type * as Body from "@effect/platform/Http/Body"
 import * as Etag from "@effect/platform/Http/Etag"
 
 const fromFileInfo = (info: FileSystem.File.Info) => {
@@ -10,7 +11,7 @@ const fromFileInfo = (info: FileSystem.File.Info) => {
   return `${info.size.toString(16)}-${mtime}`
 }
 
-const fromFileWeb = (file: File) => {
+const fromFileWeb = (file: Body.Body.FileLike) => {
   return `${file.size.toString(16)}-${file.lastModified.toString(16)}`
 }
 
