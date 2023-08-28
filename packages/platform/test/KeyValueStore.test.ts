@@ -6,7 +6,7 @@ import * as KeyValueStore from "@effect/platform/KeyValueStore"
 const run = <E, A>(effect: Effect.Effect<KeyValueStore.KeyValueStore, E, A>) =>
   Effect.runPromise(Effect.provideLayer(effect, KeyValueStore.layerMemory))
 
-describe("KeyValueStore/ layerMemory", () => {
+describe("KeyValueStore", () => {
   it("set", () =>
     run(Effect.gen(function*(_) {
       const kv = yield* _(KeyValueStore.KeyValueStore)
