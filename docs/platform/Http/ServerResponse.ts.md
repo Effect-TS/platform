@@ -145,7 +145,7 @@ Added in v1.0.0
 ```ts
 export declare const schemaJson: <I, A>(
   schema: Schema.Schema<I, A>
-) => (body: A, options?: Options.WithContent | undefined) => Effect.Effect<never, Body.BodyError, ServerResponse>
+) => (body: A, options?: Options.WithContent) => Effect.Effect<never, Body.BodyError, ServerResponse>
 ```
 
 Added in v1.0.0

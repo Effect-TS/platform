@@ -206,12 +206,12 @@ Added in v1.0.0
 export declare const provideServiceEffect: {
   <T extends Context.Tag<any, any>, R1, E1>(tag: T, effect: Effect.Effect<R1, E1, Context.Tag.Service<T>>): <R, E>(
     self: Router<R, E>
-  ) => Router<R1 | Exclude<R, Context.Tag.Identifier<T>>, E1 | E>
+  ) => Router<Exclude<R1, ServerRequest.ServerRequest | RouteContext> | Exclude<R, Context.Tag.Identifier<T>>, E1 | E>
   <R, E, T extends Context.Tag<any, any>, R1, E1>(
     self: Router<R, E>,
     tag: T,
     effect: Effect.Effect<R1, E1, Context.Tag.Service<T>>
-  ): Router<R1 | Exclude<R, Context.Tag.Identifier<T>>, E | E1>
+  ): Router<Exclude<R1, ServerRequest.ServerRequest | RouteContext> | Exclude<R, Context.Tag.Identifier<T>>, E | E1>
 }
 ```
 
@@ -222,10 +222,15 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const use: (<R, E, R1, E1>(
-  f: (self: Route.Handler<R, E>) => Route.Handler<R1, E1>
-) => (self: Router<R, E>) => Router<R1, E1>) &
-  (<R, E, R1, E1>(self: Router<R, E>, f: (self: Route.Handler<R, E>) => Route.Handler<R1, E1>) => Router<R1, E1>)
+export declare const use: {
+  <R, E, R1, E1>(f: (self: Route.Handler<R, E>) => App.Default<R1, E1>): (
+    self: Router<R, E>
+  ) => Router<Exclude<R1, ServerRequest.ServerRequest | RouteContext>, E1>
+  <R, E, R1, E1>(self: Router<R, E>, f: (self: Route.Handler<R, E>) => App.Default<R1, E1>): Router<
+    Exclude<R1, ServerRequest.ServerRequest | RouteContext>,
+    E1
+  >
+}
 ```
 
 Added in v1.0.0
@@ -362,9 +367,9 @@ Added in v1.0.0
 export declare const all: {
   <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
     self: Router<R, E>
-  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  ) => Router<R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>, E1 | E>
   <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
-    R | Exclude<R1, RouteContext>,
+    R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>,
     E | E1
   >
 }
@@ -380,9 +385,9 @@ Added in v1.0.0
 export declare const del: {
   <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
     self: Router<R, E>
-  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  ) => Router<R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>, E1 | E>
   <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
-    R | Exclude<R1, RouteContext>,
+    R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>,
     E | E1
   >
 }
@@ -398,9 +403,9 @@ Added in v1.0.0
 export declare const get: {
   <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
     self: Router<R, E>
-  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  ) => Router<R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>, E1 | E>
   <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
-    R | Exclude<R1, RouteContext>,
+    R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>,
     E | E1
   >
 }
@@ -416,9 +421,9 @@ Added in v1.0.0
 export declare const head: {
   <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
     self: Router<R, E>
-  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  ) => Router<R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>, E1 | E>
   <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
-    R | Exclude<R1, RouteContext>,
+    R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>,
     E | E1
   >
 }
@@ -445,8 +450,16 @@ Added in v1.0.0
 
 ```ts
 export declare const mountApp: {
-  <R1, E1>(path: string, that: App.Default<R1, E1>): <R, E>(self: Router<R, E>) => Router<R1 | R, E1 | E>
-  <R, E, R1, E1>(self: Router<R, E>, path: string, that: App.Default<R1, E1>): Router<R | R1, E | E1>
+  <R1, E1>(path: string, that: App.Default<R1, E1>): <R, E>(
+    self: Router<R, E>
+  ) => Router<
+    Exclude<R1, ServerRequest.ServerRequest | RouteContext> | Exclude<R, ServerRequest.ServerRequest | RouteContext>,
+    E1 | E
+  >
+  <R, E, R1, E1>(self: Router<R, E>, path: string, that: App.Default<R1, E1>): Router<
+    Exclude<R, ServerRequest.ServerRequest | RouteContext> | Exclude<R1, ServerRequest.ServerRequest | RouteContext>,
+    E | E1
+  >
 }
 ```
 
@@ -460,9 +473,9 @@ Added in v1.0.0
 export declare const options: {
   <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
     self: Router<R, E>
-  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  ) => Router<R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>, E1 | E>
   <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
-    R | Exclude<R1, RouteContext>,
+    R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>,
     E | E1
   >
 }
@@ -478,9 +491,9 @@ Added in v1.0.0
 export declare const patch: {
   <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
     self: Router<R, E>
-  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  ) => Router<R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>, E1 | E>
   <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
-    R | Exclude<R1, RouteContext>,
+    R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>,
     E | E1
   >
 }
@@ -496,9 +509,9 @@ Added in v1.0.0
 export declare const post: {
   <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
     self: Router<R, E>
-  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  ) => Router<R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>, E1 | E>
   <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
-    R | Exclude<R1, RouteContext>,
+    R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>,
     E | E1
   >
 }
@@ -514,9 +527,9 @@ Added in v1.0.0
 export declare const put: {
   <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
     self: Router<R, E>
-  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  ) => Router<R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>, E1 | E>
   <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
-    R | Exclude<R1, RouteContext>,
+    R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>,
     E | E1
   >
 }
@@ -529,12 +542,12 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const route: (method: Method.Method) => {
+export declare const route: (method: Method.Method | '*') => {
   <R1, E1>(path: string, handler: Route.Handler<R1, E1>): <R, E>(
     self: Router<R, E>
-  ) => Router<R | Exclude<R1, RouteContext>, E1 | E>
+  ) => Router<R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>, E1 | E>
   <R, E, R1, E1>(self: Router<R, E>, path: string, handler: Route.Handler<R1, E1>): Router<
-    R | Exclude<R1, RouteContext>,
+    R | Exclude<R1, ServerRequest.ServerRequest | RouteContext>,
     E | E1
   >
 }
