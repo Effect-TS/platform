@@ -21,6 +21,7 @@ Added in v1.0.0
   - [basicAuth](#basicauth)
   - [bearerToken](#bearertoken)
   - [fileBody](#filebody)
+  - [fileWebBody](#filewebbody)
   - [formDataBody](#formdatabody)
   - [jsonBody](#jsonbody)
   - [modify](#modify)
@@ -157,6 +158,19 @@ export declare const fileBody: {
     path: string,
     options?: FileSystem.StreamOptions & { readonly contentType?: string }
   ): Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, ClientRequest>
+}
+```
+
+Added in v1.0.0
+
+## fileWebBody
+
+**Signature**
+
+```ts
+export declare const fileWebBody: {
+  (file: Body.Body.FileLike): (self: ClientRequest) => ClientRequest
+  (self: ClientRequest, file: Body.Body.FileLike): ClientRequest
 }
 ```
 

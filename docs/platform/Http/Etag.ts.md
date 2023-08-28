@@ -59,6 +59,7 @@ Added in v1.0.0
 export interface Generator {
   readonly [GeneratorTypeId]: GeneratorTypeId
   readonly fromFileInfo: (info: FileSystem.File.Info) => Effect.Effect<never, never, Etag>
+  readonly fromFileWeb: (file: Body.Body.FileLike) => Effect.Effect<never, never, Etag>
 }
 ```
 

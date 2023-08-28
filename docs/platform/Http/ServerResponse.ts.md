@@ -19,6 +19,7 @@ Added in v1.0.0
 - [constructors](#constructors)
   - [empty](#empty)
   - [file](#file)
+  - [fileWeb](#fileweb)
   - [formData](#formdata)
   - [json](#json)
   - [raw](#raw)
@@ -101,6 +102,19 @@ export declare const file: (
   path: string,
   options?: Options & FileSystem.StreamOptions
 ) => Effect.Effect<FileSystem.FileSystem | Etag.Generator, PlatformError.PlatformError, ServerResponse>
+```
+
+Added in v1.0.0
+
+## fileWeb
+
+**Signature**
+
+```ts
+export declare const fileWeb: (
+  file: Body.Body.FileLike,
+  options?: Options.WithContent
+) => Effect.Effect<Etag.Generator, never, ServerResponse>
 ```
 
 Added in v1.0.0
