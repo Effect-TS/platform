@@ -140,6 +140,28 @@ importers:
         version: 1.0.0
     publishDirectory: dist
 
+  packages/platform-browser:
+    devDependencies:
+      '@effect/data':
+        specifier: ^0.17.5
+        version: 0.17.5
+      '@effect/io':
+        specifier: ^0.38.2
+        version: 0.38.2(@effect/data@0.17.5)
+      '@effect/platform':
+        specifier: workspace:^
+        version: link:../platform/dist
+      '@effect/schema':
+        specifier: ^0.33.1
+        version: 0.33.1(@effect/data@0.17.5)(@effect/io@0.38.2)
+      '@effect/stream':
+        specifier: ^0.34.0
+        version: 0.34.0(@effect/data@0.17.5)(@effect/io@0.38.2)
+      '@types/busboy':
+        specifier: ^1.5.0
+        version: 1.5.0
+    publishDirectory: dist
+
   packages/platform-node:
     dependencies:
       busboy:
