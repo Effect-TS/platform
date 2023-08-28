@@ -63,7 +63,9 @@ export const layerFileSystem = (directory: string) =>
       const path = yield* _(Path.Path)
       const keyPath = (key: string) => path.join(directory, key)
 
-      yield* _(fs.makeDirectory(directory))
+      if (!(yield* _(fs.exists(directory)))) {
+        yield* _(fs.makeDirectory(directory))
+      }
 
       return make({
         get: (key: string) =>
@@ -76,7 +78,7 @@ export const layerFileSystem = (directory: string) =>
           ),
         set: (key: string, value: string) => fs.writeFileString(keyPath(key), value),
         remove: (key: string) => fs.remove(keyPath(key)),
-        clear: fs.remove(directory).pipe(Effect.flatMap(() => fs.makeDirectory(directory))),
+        clear: fs.remove(directory, { recursive: true }).pipe(Effect.flatMap(() => fs.makeDirectory(directory))),
         size: fs.readDirectory(directory).pipe(Effect.map((files) => files.length))
       })
     })
