@@ -18,6 +18,9 @@ export default defineConfig({
       "@effect/platform/test": path.join(__dirname, "packages/platform/test"),
       "@effect/platform": path.join(__dirname, "packages/platform/src"),
 
+      "@effect/platform-browser/test": path.join(__dirname, "packages/platform-browser/test"),
+      "@effect/platform-browser": path.join(__dirname, "packages/platform-browser/src"),
+
       "@effect/platform-node/test": path.join(__dirname, "packages/platform-node/test"),
       "@effect/platform-node": path.join(__dirname, "packages/platform-node/src")
     }
