@@ -25,7 +25,20 @@ export const make: (
     has: (key) => Effect.map(impl.get(key), Option.isSome),
     isEmpty: Effect.map(impl.size, (size) => size === 0),
 
-    modify: (key, f) => pipe(impl.get(key), Effect.map(Option.map(f)))
+    modify: (key, f) =>
+      Effect.flatMap(
+        impl.get(key),
+        (o) => {
+          if (Option.isNone(o)) {
+            return Effect.succeedNone
+          }
+          const newValue = f(o.value)
+          return Effect.as(
+            impl.set(key, newValue),
+            Option.some(newValue)
+          )
+        }
+      )
   })
 
 /** @internal */
