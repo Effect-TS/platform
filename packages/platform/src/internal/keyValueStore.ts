@@ -17,14 +17,14 @@ export const tag = Context.Tag<KeyValueStore.KeyValueStore>(TypeId)
 
 /** @internal */
 export const make: (
-  impl: Omit<KeyValueStore.KeyValueStore, KeyValueStore.TypeId | "has" | "modify" | "isEmpty">
+  impl:
+    & Omit<KeyValueStore.KeyValueStore, KeyValueStore.TypeId | "has" | "modify" | "isEmpty">
+    & Partial<KeyValueStore.KeyValueStore>
 ) => KeyValueStore.KeyValueStore = (impl) =>
   tag.of({
-    ...impl,
     [TypeId]: TypeId,
     has: (key) => Effect.map(impl.get(key), Option.isSome),
     isEmpty: Effect.map(impl.size, (size) => size === 0),
-
     modify: (key, f) =>
       Effect.flatMap(
         impl.get(key),
@@ -38,7 +38,8 @@ export const make: (
             Option.some(newValue)
           )
         }
-      )
+      ),
+    ...impl
   })
 
 /** @internal */
@@ -78,6 +79,7 @@ export const layerFileSystem = (directory: string) =>
           ),
         set: (key: string, value: string) => fs.writeFileString(keyPath(key), value),
         remove: (key: string) => fs.remove(keyPath(key)),
+        has: (key: string) => fs.exists(keyPath(key)),
         clear: Effect.zipRight(
           fs.remove(directory, { recursive: true }),
           fs.makeDirectory(directory, { recursive: true })

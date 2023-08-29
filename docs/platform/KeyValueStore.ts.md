@@ -34,7 +34,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: (impl: Omit<KeyValueStore, typeof TypeId | 'has' | 'modify' | 'isEmpty'>) => KeyValueStore
+export declare const make: (
+  impl: Omit<KeyValueStore, typeof TypeId | 'has' | 'modify' | 'isEmpty'> & Partial<KeyValueStore>
+) => KeyValueStore
 ```
 
 Added in v1.0.0
