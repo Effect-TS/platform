@@ -100,7 +100,7 @@ export const KeyValueStore: Context.Tag<KeyValueStore, KeyValueStore> = internal
  * @category constructors
  */
 export const make: (
-  impl: Omit<KeyValueStore, typeof TypeId | "has" | "modify" | "isEmpty"> & Partial<KeyValueStore>
+  impl: Omit<KeyValueStore, typeof TypeId | "has" | "modify" | "isEmpty" | "forSchema"> & Partial<KeyValueStore>
 ) => KeyValueStore = internal.make
 
 /**

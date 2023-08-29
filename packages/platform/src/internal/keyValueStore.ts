@@ -168,11 +168,9 @@ export const layerFileSystem = (directory: string) =>
 /** @internal */
 export const layerSchema = <I, A>(
   schema: Schema.Schema<I, A>,
-  options?: {
-    readonly identifier?: unknown
-  }
+  tagIdentifier?: unknown
 ) => {
-  const tag = Context.Tag<KeyValueStore.SchemaStore<A>>(options?.identifier)
+  const tag = Context.Tag<KeyValueStore.SchemaStore<A>>(tagIdentifier)
   const layer = Layer.effect(tag, Effect.map(keyValueStoreTag, (store) => store.forSchema(schema)))
   return { tag, layer } as const
 }
