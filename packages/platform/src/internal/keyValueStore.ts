@@ -61,7 +61,7 @@ export const layerFileSystem = (directory: string) =>
     Effect.gen(function*(_) {
       const fs = yield* _(FileSystem.FileSystem)
       const path = yield* _(Path.Path)
-      const keyPath = (key: string) => path.join(directory, key)
+      const keyPath = (key: string) => path.join(directory, btoa(key))
 
       if (!(yield* _(fs.exists(directory)))) {
         yield* _(fs.makeDirectory(directory, { recursive: true }))
