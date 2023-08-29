@@ -1,6 +1,6 @@
 ---
 title: Sink.ts
-nav_order: 14
+nav_order: 15
 parent: "@effect/platform-node"
 ---
 
