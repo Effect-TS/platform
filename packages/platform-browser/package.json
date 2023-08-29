@@ -50,7 +50,6 @@
   "peerDependencies": {
     "@effect/data": "^0.17.5",
     "@effect/io": "^0.38.2",
-    "@effect/platform": "workspace:^",
-    "@effect/stream": "^0.34.0"
+    "@effect/platform": "workspace:^"
   }
 }
