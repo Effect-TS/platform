@@ -34,9 +34,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: (
-  impl: Omit<KeyValueStore, typeof TypeId | 'has' | 'setMany' | 'modify' | 'isEmpty'>
-) => KeyValueStore
+export declare const make: (impl: Omit<KeyValueStore, typeof TypeId | 'has' | 'modify' | 'isEmpty'>) => KeyValueStore
 ```
 
 Added in v1.0.0
@@ -50,7 +48,7 @@ Added in v1.0.0
 ```ts
 export declare const layerFileSystem: (
   directory: string
-) => Layer.Layer<FileSystem.FileSystem | Path.Path, never, KeyValueStore>
+) => Layer.Layer<FileSystem.FileSystem | Path.Path, PlatformError.PlatformError, KeyValueStore>
 ```
 
 Added in v1.0.0
@@ -74,27 +72,48 @@ Added in v1.0.0
 ```ts
 export interface KeyValueStore {
   readonly [TypeId]: TypeId
+  /**
+   * Returns the value of the specified key if it exists.
+   */
   readonly get: (key: string) => Effect.Effect<never, PlatformError.PlatformError, Option.Option<string>>
+
+  /**
+   * Sets the value of the specified key.
+   */
   readonly set: (key: string, value: string) => Effect.Effect<never, PlatformError.PlatformError, void>
+
+  /**
+   * Removes the specified key.
+   */
   readonly remove: (key: string) => Effect.Effect<never, PlatformError.PlatformError, void>
+
+  /**
+   * Removes all entries.
+   */
   readonly clear: Effect.Effect<never, PlatformError.PlatformError, void>
+
+  /**
+   * Returns the number of entries.
+   */
   readonly size: Effect.Effect<never, PlatformError.PlatformError, number>
+
   /**
    * Updates the value of the specified key if it exists.
    */
   readonly modify: (
     key: string,
     f: (value: string) => string
-  ) => Effect.Effect<never, PlatformError.PlatformError, void>
+  ) => Effect.Effect<never, PlatformError.PlatformError, Option.Option<string>>
+
+  /**
+   * Returns true if the KeyValueStore contains the specified key.
+   */
   readonly has: (key: string) => Effect.Effect<never, PlatformError.PlatformError, boolean>
+
   /**
    * Checks if the KeyValueStore contains any entries.
    */
   readonly isEmpty: Effect.Effect<never, PlatformError.PlatformError, boolean>
-  readonly setMany: (values: Record<string, string>) => Effect.Effect<never, PlatformError.PlatformError, void>
-
-  // getMany([fillObj])
-  // removeMany(keys[])
 }
 ```
 
