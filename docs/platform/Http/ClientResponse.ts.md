@@ -20,6 +20,7 @@ Added in v1.0.0
   - [schemaBodyJson](#schemabodyjson)
   - [schemaBodyUrlParams](#schemabodyurlparams)
   - [schemaHeaders](#schemaheaders)
+  - [schemaJson](#schemajson)
 - [type ids](#type-ids)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
@@ -62,8 +63,8 @@ Added in v1.0.0
 
 ```ts
 export declare const schemaBodyJson: <I, A>(
-  schema: Schema<I, A>
-) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, ParseError | E, A>
+  schema: Schema.Schema<I, A>
+) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, ParseResult.ParseError | E, A>
 ```
 
 Added in v1.0.0
@@ -74,8 +75,8 @@ Added in v1.0.0
 
 ```ts
 export declare const schemaBodyUrlParams: <I extends Readonly<Record<string, string>>, A>(
-  schema: Schema<I, A>
-) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, ParseError | E, A>
+  schema: Schema.Schema<I, A>
+) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, ParseResult.ParseError | E, A>
 ```
 
 Added in v1.0.0
@@ -86,8 +87,27 @@ Added in v1.0.0
 
 ```ts
 export declare const schemaHeaders: <I extends Readonly<Record<string, string>>, A>(
-  schema: Schema<I, A>
-) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, ParseError, A>
+  schema: Schema.Schema<I, A>
+) => <E>(self: IncomingMessage.IncomingMessage<E>) => Effect.Effect<never, ParseResult.ParseError, A>
+```
+
+Added in v1.0.0
+
+## schemaJson
+
+**Signature**
+
+```ts
+export declare const schemaJson: <
+  I extends {
+    readonly status?: number | undefined
+    readonly headers?: Headers.Headers | undefined
+    readonly body?: unknown
+  },
+  A
+>(
+  schema: Schema.Schema<I, A>
+) => (self: ClientResponse) => Effect.Effect<never, ParseResult.ParseError | Error.ResponseError, A>
 ```
 
 Added in v1.0.0
