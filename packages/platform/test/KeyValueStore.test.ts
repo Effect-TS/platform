@@ -1,12 +1,20 @@
 import * as Option from "@effect/data/Option"
 import * as Effect from "@effect/io/Effect"
+import type * as Layer from "@effect/io/Layer"
 import * as KeyValueStore from "@effect/platform/KeyValueStore"
+import { afterEach } from "vitest"
 
-// runs effect using the memory implementation of KeyValueStore
-const run = <E, A>(effect: Effect.Effect<KeyValueStore.KeyValueStore, E, A>) =>
-  Effect.runPromise(Effect.provideLayer(effect, KeyValueStore.layerMemory))
+export const testLayer = <E>(layer: Layer.Layer<never, E, KeyValueStore.KeyValueStore>) => {
+  const run = <E, A>(effect: Effect.Effect<KeyValueStore.KeyValueStore, E, A>) =>
+    Effect.runPromise(Effect.provideLayer(effect, layer))
 
-describe("KeyValueStore", () => {
+  afterEach(() =>
+    run(Effect.gen(function*(_) {
+      const kv = yield* _(KeyValueStore.KeyValueStore)
+      yield* _(kv.clear)
+    }))
+  )
+
   it("set", () =>
     run(Effect.gen(function*(_) {
       const kv = yield* _(KeyValueStore.KeyValueStore)
@@ -22,6 +30,7 @@ describe("KeyValueStore", () => {
   it("get/ missing", () =>
     run(Effect.gen(function*(_) {
       const kv = yield* _(KeyValueStore.KeyValueStore)
+      yield* _(kv.clear)
       const value = yield* _(kv.get("foo"))
 
       expect(value).toEqual(Option.none())
@@ -75,4 +84,6 @@ describe("KeyValueStore", () => {
       expect(value).toEqual(Option.none())
       expect(length).toEqual(0)
     })))
-})
+}
+
+describe("KeyValueStore / layerMemory", () => testLayer(KeyValueStore.layerMemory))
