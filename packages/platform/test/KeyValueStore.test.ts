@@ -18,9 +18,9 @@ export const testLayer = <E>(layer: Layer.Layer<never, E, KeyValueStore.KeyValue
   it("set", () =>
     run(Effect.gen(function*(_) {
       const kv = yield* _(KeyValueStore.KeyValueStore)
-      yield* _(kv.set("foo", "bar"))
+      yield* _(kv.set("/foo/bar", "bar"))
 
-      const value = yield* _(kv.get("foo"))
+      const value = yield* _(kv.get("/foo/bar"))
       const length = yield* _(kv.size)
 
       expect(value).toEqual(Option.some("bar"))
