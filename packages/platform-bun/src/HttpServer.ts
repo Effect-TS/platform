@@ -1,9 +1,9 @@
 /**
  * @since 1.0.0
  */
+import * as server from "@effect/platform-bun/Http/Server"
 import * as etag from "@effect/platform-node/Http/Etag"
 import * as formData from "@effect/platform-node/Http/FormData"
-import * as server from "@effect/platform-node/Http/Server"
 import * as app from "@effect/platform/Http/App"
 import * as body from "@effect/platform/Http/Body"
 import * as headers from "@effect/platform/Http/Headers"
@@ -88,8 +88,8 @@ export {
   /**
    * @since 1.0.0
    *
-   * - Docs: [Http/Server](https://effect-ts.github.io/platform/platform-node/Http/Server.ts.html)
-   * - Module: `@effect/platform-node/Http/Server`
+   * - Docs: [Http/Router](https://effect-ts.github.io/platform/platform-bun/Http/Server.ts.html)
+   * - Module: `@effect/platform-bun/Http/Server`
    */
   server,
   /**
