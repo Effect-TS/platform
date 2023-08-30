@@ -1,7 +1,7 @@
 ---
 title: HttpClient.ts
-nav_order: 10
-parent: "@effect/platform-node"
+nav_order: 8
+parent: "@effect/platform-bun"
 ---
 
 ## HttpClient overview
@@ -17,7 +17,6 @@ Added in v1.0.0
   - [client](#client)
   - [error](#error)
   - [headers](#headers)
-  - [nodeClient](#nodeclient)
   - [request](#request)
   - [response](#response)
   - [urlParams](#urlparams)
@@ -77,19 +76,6 @@ Added in v1.0.0
 
 - Docs: [Http/Headers](https://effect-ts.github.io/platform/platform/Http/Headers.ts.html)
 - Module: `@effect/platform/Http/Headers`
-
-## nodeClient
-
-**Signature**
-
-```ts
-export declare const nodeClient: typeof nodeClient
-```
-
-Added in v1.0.0
-
-- Docs: [Http/NodeClient](https://effect-ts.github.io/platform/platform-node/Http/NodeClient.ts.html)
-- Module: `@effect/platform-node/Http/NodeClient`
 
 ## request
 

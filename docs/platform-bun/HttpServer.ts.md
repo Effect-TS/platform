@@ -1,7 +1,7 @@
 ---
 title: HttpServer.ts
-nav_order: 11
-parent: "@effect/platform-node"
+nav_order: 9
+parent: "@effect/platform-bun"
 ---
 
 ## HttpServer overview
@@ -170,8 +170,8 @@ export declare const server: typeof server
 
 Added in v1.0.0
 
-- Docs: [Http/Server](https://effect-ts.github.io/platform/platform-node/Http/Server.ts.html)
-- Module: `@effect/platform-node/Http/Server`
+- Docs: [Http/Router](https://effect-ts.github.io/platform/platform-bun/Http/Server.ts.html)
+- Module: `@effect/platform-bun/Http/Server`
 
 ## urlParams
 

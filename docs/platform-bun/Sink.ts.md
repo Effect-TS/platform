@@ -1,7 +1,7 @@
 ---
 title: Sink.ts
-nav_order: 16
-parent: "@effect/platform-node"
+nav_order: 13
+parent: "@effect/platform-bun"
 ---
 
 ## Sink overview
@@ -15,7 +15,7 @@ Added in v1.0.0
 - [constructor](#constructor)
   - [fromWritable](#fromwritable)
 - [model](#model)
-  - [FromWritableOptions (interface)](#fromwritableoptions-interface)
+  - [FromWritableOptions](#fromwritableoptions)
 
 ---
 
@@ -29,7 +29,7 @@ Added in v1.0.0
 export declare const fromWritable: <E, A>(
   evaluate: LazyArg<Writable>,
   onError: (error: unknown) => E,
-  options?: FromWritableOptions
+  options?: FromWritableOptions | undefined
 ) => Sink<never, E, A, never, void>
 ```
 
@@ -37,15 +37,12 @@ Added in v1.0.0
 
 # model
 
-## FromWritableOptions (interface)
+## FromWritableOptions
 
 **Signature**
 
 ```ts
-export interface FromWritableOptions {
-  readonly endOnClose?: boolean
-  readonly encoding?: BufferEncoding
-}
+export declare const FromWritableOptions: FromWritableOptions
 ```
 
 Added in v1.0.0

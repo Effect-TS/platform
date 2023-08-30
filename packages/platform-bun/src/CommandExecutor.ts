@@ -3,6 +3,10 @@
  */
 
 export type {
+  /**
+   * @since 1.0.0
+   * @category models
+   */
   ExitCode,
   /**
    * @since 1.0.0
@@ -27,6 +31,10 @@ export type {
 } from "@effect/platform/CommandExecutor"
 
 export {
+  /**
+   * @since 1.0.0
+   * @category tag
+   */
   CommandExecutor,
   /**
    * @since 1.0.0

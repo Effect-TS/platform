@@ -1,7 +1,7 @@
 ---
 title: Http/Server.ts
-nav_order: 9
-parent: "@effect/platform-node"
+nav_order: 7
+parent: "@effect/platform-bun"
 ---
 
 ## Server overview
@@ -30,8 +30,7 @@ Also includes exports from [`@effect/platform/Http/Server`](https://effect-ts.gi
 
 ```ts
 export declare const make: (
-  evaluate: LazyArg<Http.Server>,
-  options: Net.ListenOptions
+  options: Omit<ServeOptions, 'fetch' | 'error'>
 ) => Effect.Effect<Scope.Scope, never, Server.Server>
 ```
 
@@ -45,8 +44,7 @@ Added in v1.0.0
 
 ```ts
 export declare const layer: (
-  evaluate: LazyArg<Http.Server>,
-  options: Net.ListenOptions
+  options: Omit<ServeOptions, 'fetch' | 'error'>
 ) => Layer.Layer<never, never, Server.Server | Etag.Generator>
 ```
 
@@ -58,8 +56,7 @@ Added in v1.0.0
 
 ```ts
 export declare const layerConfig: (
-  evaluate: LazyArg<Http.Server>,
-  options: Config.Config.Wrap<Net.ListenOptions>
+  options: Config.Config.Wrap<Omit<ServeOptions, 'fetch' | 'error'>>
 ) => Layer.Layer<never, ConfigError.ConfigError, Server.Server | Etag.Generator>
 ```
 

@@ -1,7 +1,7 @@
 ---
 title: Runtime.ts
-nav_order: 15
-parent: "@effect/platform-node"
+nav_order: 12
+parent: "@effect/platform-bun"
 ---
 
 ## Runtime overview

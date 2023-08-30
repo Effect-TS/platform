@@ -1,7 +1,7 @@
 ---
 title: KeyValueStore.ts
-nav_order: 12
-parent: "@effect/platform-node"
+nav_order: 10
+parent: "@effect/platform-bun"
 ---
 
 ## KeyValueStore overview
@@ -26,9 +26,7 @@ Also includes exports from [`@effect/platform/KeyValueStore`](https://effect-ts.
 **Signature**
 
 ```ts
-export declare const layerFileSystem: (
-  directory: string
-) => Layer.Layer<never, PlatformError.PlatformError, KeyValueStore.KeyValueStore>
+export declare const layerFileSystem: (directory: string) => Layer<never, PlatformError, KeyValueStore>
 ```
 
 Added in v1.0.0

@@ -1,7 +1,7 @@
 ---
 title: Stream.ts
-nav_order: 17
-parent: "@effect/platform-node"
+nav_order: 14
+parent: "@effect/platform-bun"
 ---
 
 ## Stream overview
@@ -18,7 +18,7 @@ Added in v1.0.0
   - [toString](#tostring)
   - [toUint8Array](#touint8array)
 - [models](#models)
-  - [FromReadableOptions (interface)](#fromreadableoptions-interface)
+  - [FromReadableOptions](#fromreadableoptions)
 
 ---
 
@@ -32,7 +32,7 @@ Added in v1.0.0
 export declare const fromReadable: <E, A>(
   evaluate: LazyArg<Readable>,
   onError: (error: unknown) => E,
-  options?: FromReadableOptions
+  options?: FromReadableOptions | undefined
 ) => Stream<never, E, A>
 ```
 
@@ -71,15 +71,12 @@ Added in v1.0.0
 
 # models
 
-## FromReadableOptions (interface)
+## FromReadableOptions
 
 **Signature**
 
 ```ts
-export interface FromReadableOptions {
-  /** Defaults to undefined, which lets Node.js decide the chunk size */
-  readonly chunkSize?: SizeInput
-}
+export declare const FromReadableOptions: FromReadableOptions
 ```
 
 Added in v1.0.0

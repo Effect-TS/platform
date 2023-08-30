@@ -1,7 +1,7 @@
 ---
 title: Path.ts
-nav_order: 14
-parent: "@effect/platform-node"
+nav_order: 11
+parent: "@effect/platform-bun"
 ---
 
 ## Path overview
