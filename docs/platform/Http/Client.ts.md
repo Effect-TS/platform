@@ -44,6 +44,10 @@ Added in v1.0.0
 - [type ids](#type-ids)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
+- [utils](#utils)
+  - [Client (namespace)](#client-namespace)
+    - [Default (type alias)](#default-type-alias)
+    - [WithResponse (type alias)](#withresponse-type-alias)
 
 ---
 
@@ -420,6 +424,32 @@ Added in v1.0.0
 
 ```ts
 export type TypeId = typeof TypeId
+```
+
+Added in v1.0.0
+
+# utils
+
+## Client (namespace)
+
+Added in v1.0.0
+
+### Default (type alias)
+
+**Signature**
+
+```ts
+export type Default = WithResponse<never, Error.HttpClientError>
+```
+
+Added in v1.0.0
+
+### WithResponse (type alias)
+
+**Signature**
+
+```ts
+export type WithResponse<R, E> = Client<R, E, ClientResponse.ClientResponse>
 ```
 
 Added in v1.0.0

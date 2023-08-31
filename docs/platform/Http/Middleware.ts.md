@@ -20,6 +20,9 @@ Added in v1.0.0
   - [xForwardedHeaders](#xforwardedheaders)
 - [models](#models)
   - [Middleware (interface)](#middleware-interface)
+- [utils](#utils)
+  - [Middleware (namespace)](#middleware-namespace)
+    - [Applied (interface)](#applied-interface)
 
 ---
 
@@ -84,6 +87,24 @@ Added in v1.0.0
 ```ts
 export interface Middleware {
   <R, E>(self: App.Default<R, E>): App.Default<any, any>
+}
+```
+
+Added in v1.0.0
+
+# utils
+
+## Middleware (namespace)
+
+Added in v1.0.0
+
+### Applied (interface)
+
+**Signature**
+
+```ts
+export interface Applied<R, E, A extends App.Default<any, any>> {
+  (self: App.Default<R, E>): A
 }
 ```
 

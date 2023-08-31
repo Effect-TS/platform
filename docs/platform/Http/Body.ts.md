@@ -41,6 +41,10 @@ Added in v1.0.0
   - [ErrorTypeId (type alias)](#errortypeid-type-alias)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
+- [utils](#utils)
+  - [Body (namespace)](#body-namespace)
+    - [FileLike (interface)](#filelike-interface)
+    - [Proto (interface)](#proto-interface)
 
 ---
 
@@ -342,6 +346,43 @@ Added in v1.0.0
 
 ```ts
 export type TypeId = typeof TypeId
+```
+
+Added in v1.0.0
+
+# utils
+
+## Body (namespace)
+
+Added in v1.0.0
+
+### FileLike (interface)
+
+**Signature**
+
+```ts
+export interface FileLike {
+  readonly name: string
+  readonly lastModified: number
+  readonly size: number
+  readonly stream: () => unknown
+  readonly type: string
+}
+```
+
+Added in v1.0.0
+
+### Proto (interface)
+
+**Signature**
+
+```ts
+export interface Proto {
+  readonly [TypeId]: TypeId
+  readonly _tag: string
+  readonly contentType?: string
+  readonly contentLength?: number
+}
 ```
 
 Added in v1.0.0

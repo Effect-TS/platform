@@ -49,6 +49,11 @@ Added in v1.0.0
 - [type id](#type-id)
   - [FileTypeId](#filetypeid)
   - [FileTypeId (type alias)](#filetypeid-type-alias)
+- [utils](#utils)
+  - [File (namespace)](#file-namespace)
+    - [Info (interface)](#info-interface)
+    - [Descriptor (type alias)](#descriptor-type-alias)
+    - [Type (type alias)](#type-type-alias)
 
 ---
 
@@ -577,6 +582,65 @@ Added in v1.0.0
 
 ```ts
 export type FileTypeId = typeof FileTypeId
+```
+
+Added in v1.0.0
+
+# utils
+
+## File (namespace)
+
+Added in v1.0.0
+
+### Info (interface)
+
+**Signature**
+
+```ts
+export interface Info {
+  readonly type: Type
+  readonly mtime: Option<Date>
+  readonly atime: Option<Date>
+  readonly birthtime: Option<Date>
+  readonly dev: number
+  readonly ino: Option<number>
+  readonly mode: number
+  readonly nlink: Option<number>
+  readonly uid: Option<number>
+  readonly gid: Option<number>
+  readonly rdev: Option<number>
+  readonly size: Size
+  readonly blksize: Option<Size>
+  readonly blocks: Option<number>
+}
+```
+
+Added in v1.0.0
+
+### Descriptor (type alias)
+
+**Signature**
+
+```ts
+export type Descriptor = Brand.Branded<number, 'FileDescriptor'>
+```
+
+Added in v1.0.0
+
+### Type (type alias)
+
+**Signature**
+
+```ts
+export type Type =
+  | 'File'
+  | 'Directory'
+  | 'SymbolicLink'
+  | 'BlockDevice'
+  | 'CharacterDevice'
+  | 'FIFO'
+  | 'Socket'
+  | 'Unknown'
 ```
 
 Added in v1.0.0

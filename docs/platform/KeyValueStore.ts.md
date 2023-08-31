@@ -30,6 +30,9 @@ Added in v1.0.0
   - [SchemaStoreTypeId (type alias)](#schemastoretypeid-type-alias)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
+- [utils](#utils)
+  - [KeyValueStore (namespace)](#keyvaluestore-namespace)
+    - [AnyStore (type alias)](#anystore-type-alias)
 
 ---
 
@@ -272,6 +275,22 @@ Added in v1.0.0
 
 ```ts
 export type TypeId = typeof TypeId
+```
+
+Added in v1.0.0
+
+# utils
+
+## KeyValueStore (namespace)
+
+Added in v1.0.0
+
+### AnyStore (type alias)
+
+**Signature**
+
+```ts
+export type AnyStore = KeyValueStore | SchemaStore<any>
 ```
 
 Added in v1.0.0

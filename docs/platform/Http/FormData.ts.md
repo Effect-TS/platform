@@ -43,6 +43,9 @@ Added in v1.0.0
   - [ErrorTypeId (type alias)](#errortypeid-type-alias)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
+- [utils](#utils)
+  - [Part (namespace)](#part-namespace)
+    - [Proto (interface)](#proto-interface)
 
 ---
 
@@ -345,6 +348,25 @@ Added in v1.0.0
 
 ```ts
 export type TypeId = typeof TypeId
+```
+
+Added in v1.0.0
+
+# utils
+
+## Part (namespace)
+
+Added in v1.0.0
+
+### Proto (interface)
+
+**Signature**
+
+```ts
+export interface Proto {
+  readonly [TypeId]: TypeId
+  readonly _tag: string
+}
 ```
 
 Added in v1.0.0

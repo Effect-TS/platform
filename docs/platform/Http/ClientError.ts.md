@@ -21,6 +21,10 @@ Added in v1.0.0
 - [type id](#type-id)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
+- [utils](#utils)
+  - [HttpError (namespace)](#httperror-namespace)
+    - [Proto (interface)](#proto-interface)
+    - [ProvidedFields (type alias)](#providedfields-type-alias)
 
 ---
 
@@ -105,6 +109,35 @@ Added in v1.0.0
 
 ```ts
 export type TypeId = typeof TypeId
+```
+
+Added in v1.0.0
+
+# utils
+
+## HttpError (namespace)
+
+Added in v1.0.0
+
+### Proto (interface)
+
+**Signature**
+
+```ts
+export interface Proto extends Data.Case {
+  readonly [TypeId]: TypeId
+  readonly _tag: string
+}
+```
+
+Added in v1.0.0
+
+### ProvidedFields (type alias)
+
+**Signature**
+
+```ts
+export type ProvidedFields = TypeId | '_tag' | keyof Data.Case
 ```
 
 Added in v1.0.0
