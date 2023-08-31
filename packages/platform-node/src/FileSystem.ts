@@ -41,6 +41,11 @@ export type {
    * @since 1.0.0
    * @category model
    */
+  SeekMode,
+  /**
+   * @since 1.0.0
+   * @category model
+   */
   SinkOptions,
   /**
    * @since 1.0.0
@@ -60,11 +65,6 @@ export {
    * @category tag
    */
   FileSystem,
-  /**
-   * @since 1.0.0
-   * @category model
-   */
-  SeekMode,
   /**
    * @since 1.0.0
    * @category constructor

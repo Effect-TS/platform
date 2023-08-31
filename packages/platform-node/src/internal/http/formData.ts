@@ -150,7 +150,10 @@ export const formData = (
           }
           const file = part as FileImpl
           const path = path_.join(dir, file.name)
-          formData.append(part.key, new Blob([], { type: file.contentType }), path)
+          const blob = "Bun" in globalThis ?
+            (globalThis as any).Bun.file(path, { type: file.contentType })
+            : new Blob([], { type: file.contentType })
+          formData.append(part.key, blob, path)
           return Effect.as(
             Effect.tryPromise({
               try: (signal) =>

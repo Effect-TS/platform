@@ -1,12 +1,11 @@
 import * as Effect from "@effect/io/Effect"
 import * as Layer from "@effect/io/Layer"
-import * as Http from "@effect/platform-node/HttpServer"
-import * as NodeContext from "@effect/platform-node/NodeContext"
+import * as NodeContext from "@effect/platform-bun/BunContext"
+import * as Http from "@effect/platform-bun/HttpServer"
 import { runMain } from "@effect/platform-node/Runtime"
 import * as Schema from "@effect/schema/Schema"
-import { createServer } from "node:http"
 
-const ServerLive = Http.server.layer(() => createServer(), { port: 3000 })
+const ServerLive = Http.server.layer({ port: 3000 })
 
 const serve = Http.router.empty.pipe(
   Http.router.get(
@@ -24,17 +23,16 @@ const serve = Http.router.empty.pipe(
       })))
       console.log("got files", data.files)
       return Http.response.empty()
-    })
+    }).pipe(Effect.scoped)
   ),
   Http.server.serve(Http.middleware.logger)
 )
 
-const HttpLive = Layer.scopedDiscard(serve).pipe(
-  Layer.use(ServerLive),
-  Layer.use(NodeContext.layer)
-)
+const EnvLive = Layer.merge(ServerLive, NodeContext.layer)
 
-Layer.launch(HttpLive).pipe(
+serve.pipe(
+  Effect.scoped,
+  Effect.provideLayer(EnvLive),
   Effect.tapErrorCause(Effect.logError),
   runMain
 )

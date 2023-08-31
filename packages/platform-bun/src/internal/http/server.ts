@@ -1,3 +1,4 @@
+import { pipe } from "@effect/data/Function"
 import * as Config from "@effect/io/Config"
 import * as Effect from "@effect/io/Effect"
 import * as Layer from "@effect/io/Layer"
@@ -17,7 +18,7 @@ import type * as ServerResponse from "@effect/platform/Http/ServerResponse"
 import * as UrlParams from "@effect/platform/Http/UrlParams"
 import type * as Path from "@effect/platform/Path"
 import * as Stream from "@effect/stream/Stream"
-import type { ServeOptions } from "bun"
+import type { ServeOptions, Server as BunServer } from "bun"
 import { Readable } from "node:stream"
 
 /** @internal */
@@ -25,16 +26,21 @@ export const make = (
   options: Omit<ServeOptions, "fetch" | "error">
 ): Effect.Effect<Scope.Scope, never, Server.Server> =>
   Effect.gen(function*(_) {
+    const handerStack: Array<(request: Request, server: BunServer) => Response | Promise<Response>> = [
+      function(_request, _server) {
+        return new Response("not found", { status: 404 })
+      }
+    ]
     const server = Bun.serve({
       ...options,
-      fetch(_request, _server) {
-        return new Response("serve not called", { status: 500 })
-      }
+      fetch: handerStack[0]
     })
 
-    yield* _(Effect.addFinalizer(() => Effect.sync(() => server.stop())))
-
-    console.log("server", server)
+    yield* _(Effect.addFinalizer(() =>
+      Effect.sync(() => {
+        server.stop()
+      })
+    ))
 
     return Server.make({
       address: { _tag: "TcpAddress", port: server.port, hostname: server.hostname },
@@ -43,19 +49,29 @@ export const make = (
           middleware ? middleware(httpApp) : httpApp,
           respond
         )
-        return Effect.flatMap(Effect.runtime<never>(), (runtime) =>
-          Effect.async<never, Error.ServeError, never>(() => {
-            const runPromise = Runtime.runPromise(runtime)
-            server.reload({
-              fetch(request, _server) {
+        return pipe(
+          Effect.runtime<never>(),
+          Effect.flatMap((runtime) =>
+            Effect.async<never, Error.ServeError, never>(() => {
+              const runPromise = Runtime.runPromise(runtime)
+              function handler(request: Request, _server: BunServer) {
                 return runPromise(Effect.provideService(
                   app,
                   ServerRequest.ServerRequest,
                   new ServerRequestImpl(request)
                 ))
               }
-            } as ServeOptions)
-          }))
+              handerStack.push(handler)
+              server.reload({ fetch: handler } as ServeOptions)
+            })
+          ),
+          Effect.acquireRelease(() =>
+            Effect.sync(() => {
+              handerStack.pop()
+              server.reload({ fetch: handerStack[handerStack.length - 1] } as ServeOptions)
+            })
+          )
+        )
       }
     })
   })
