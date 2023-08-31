@@ -8,9 +8,25 @@
       "@effect/platform/examples/*": ["./packages/platform/build/examples/*"],
       "@effect/platform/*": ["./packages/platform/build/esm/*"],
 
+      "@effect/platform-bun/test/*": ["./packages/platform-bun/build/test/*"],
+      "@effect/platform-bun/examples/*": [
+        "./packages/platform-bun/build/examples/*"
+      ],
+      "@effect/platform-bun/*": ["./packages/platform-bun/build/esm/*"],
+
+      "@effect/platform-browser/test/*": [
+        "./packages/platform-browser/build/test/*"
+      ],
+      "@effect/platform-browser/examples/*": [
+        "./packages/platform-browser/build/examples/*"
+      ],
+      "@effect/platform-browser/*": ["./packages/platform-browser/build/esm/*"],
+
       "@effect/platform-node/test/*": ["./packages/platform-node/build/test/*"],
-      "@effect/platform-node/examples/*": ["./packages/platform-node/build/examples/*"],
-      "@effect/platform-node/*": ["./packages/platform-node/build/esm/*"],
+      "@effect/platform-node/examples/*": [
+        "./packages/platform-node/build/examples/*"
+      ],
+      "@effect/platform-node/*": ["./packages/platform-node/build/esm/*"]
     }
   },
   "include": [
@@ -18,8 +34,16 @@
     "./packages/platform/build/test/**/*.js",
     "./packages/platform/build/examples/**/*.js",
 
+    "./packages/platform-bun/build/esm/**/*.js",
+    "./packages/platform-bun/build/test/**/*.js",
+    "./packages/platform-bun/build/examples/**/*.js",
+
+    "./packages/platform-browser/build/esm/**/*.js",
+    "./packages/platform-browser/build/test/**/*.js",
+    "./packages/platform-browser/build/examples/**/*.js",
+
     "./packages/platform-node/build/esm/**/*.js",
     "./packages/platform-node/build/test/**/*.js",
-    "./packages/platform-node/build/examples/**/*.js",
+    "./packages/platform-node/build/examples/**/*.js"
   ]
 }

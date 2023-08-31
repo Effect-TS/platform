@@ -36,6 +36,9 @@ Added in v1.0.0
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
 - [utils](#utils)
+  - [Options (namespace)](#options-namespace)
+    - [WithContent (interface)](#withcontent-interface)
+    - [WithContentType (interface)](#withcontenttype-interface)
   - [isServerResponse](#isserverresponse)
 
 ---
@@ -271,6 +274,30 @@ export type TypeId = typeof TypeId
 Added in v1.0.0
 
 # utils
+
+## Options (namespace)
+
+Added in v1.0.0
+
+### WithContent (interface)
+
+**Signature**
+
+```ts
+export interface WithContent extends Omit<Options, 'contentType' | 'contentLength'> {}
+```
+
+Added in v1.0.0
+
+### WithContentType (interface)
+
+**Signature**
+
+```ts
+export interface WithContentType extends Omit<Options, 'contentLength'> {}
+```
+
+Added in v1.0.0
 
 ## isServerResponse
 

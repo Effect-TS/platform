@@ -5,13 +5,8 @@
     "declarationDir": "build/test-dts",
     "tsBuildInfoFile": "build/tsbuildinfo/test.tsbuildinfo",
     "rootDir": "test",
-    "noEmit": true,
     "types": ["vitest/globals"]
   },
   "include": ["test/**/*.ts"],
-  "references": [
-    {
-      "path": "./tsconfig.build.json"
-    }
-  ]
+  "references": [{ "path": "./tsconfig.build.json" }]
 }

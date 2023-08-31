@@ -55,6 +55,10 @@ Added in v1.0.0
 - [type ids](#type-ids)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
+- [utils](#utils)
+  - [Options (namespace)](#options-namespace)
+    - [NoBody (interface)](#nobody-interface)
+    - [NoUrl (interface)](#nourl-interface)
 
 ---
 
@@ -555,6 +559,32 @@ Added in v1.0.0
 
 ```ts
 export type TypeId = typeof TypeId
+```
+
+Added in v1.0.0
+
+# utils
+
+## Options (namespace)
+
+Added in v1.0.0
+
+### NoBody (interface)
+
+**Signature**
+
+```ts
+export interface NoBody extends Omit<Options, 'method' | 'url' | 'body'> {}
+```
+
+Added in v1.0.0
+
+### NoUrl (interface)
+
+**Signature**
+
+```ts
+export interface NoUrl extends Omit<Options, 'method' | 'url'> {}
 ```
 
 Added in v1.0.0

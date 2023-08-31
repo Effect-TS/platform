@@ -39,6 +39,10 @@ Added in v1.0.0
 - [refinements](#refinements)
   - [isCommand](#iscommand)
 - [utils](#utils)
+  - [Command (namespace)](#command-namespace)
+    - [Proto (interface)](#proto-interface)
+    - [Input (type alias)](#input-type-alias)
+    - [Output (type alias)](#output-type-alias)
   - [CommandTypeId](#commandtypeid)
   - [CommandTypeId (type alias)](#commandtypeid-type-alias)
 
@@ -360,6 +364,48 @@ export declare const isCommand: (u: unknown) => u is Command
 Added in v1.0.0
 
 # utils
+
+## Command (namespace)
+
+Added in v1.0.0
+
+### Proto (interface)
+
+**Signature**
+
+```ts
+export interface Proto {
+  readonly [CommandTypeId]: CommandTypeId
+}
+```
+
+Added in v1.0.0
+
+### Input (type alias)
+
+Configures the pipe that is established between the parent and child
+processes' `stdin` stream.
+
+**Signature**
+
+```ts
+export type Input = CommandInput
+```
+
+Added in v1.0.0
+
+### Output (type alias)
+
+Configures the pipes that are established between the parent and child
+processes `stderr` and `stdout` streams.
+
+**Signature**
+
+```ts
+export type Output = CommandOutput
+```
+
+Added in v1.0.0
 
 ## CommandTypeId
 

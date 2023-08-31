@@ -17,7 +17,9 @@ const TodoWithoutId = Todo.schemaStruct().pipe(Schema.omit("id"))
 type TodoWithoutId = Schema.To<typeof TodoWithoutId>
 
 interface TodoService {
-  readonly create: (_: TodoWithoutId) => Effect.Effect<never, Http.error.HttpClientError | ParseResult.ParseError, Todo>
+  readonly create: (
+    _: TodoWithoutId
+  ) => Effect.Effect<never, Http.error.HttpClientError | Http.body.BodyError | ParseResult.ParseError, Todo>
 }
 const TodoService = Context.Tag<TodoService>()
 
@@ -30,16 +32,14 @@ const makeTodoService = Effect.gen(function*(_) {
   const decodeTodo = Http.response.schemaBodyJson(Todo.schema())
 
   const addTodoWithoutIdBody = Http.request.schemaBody(TodoWithoutId)
-  const create = (todo: TodoWithoutId) => {
-    const request = addTodoWithoutIdBody(
+  const create = (todo: TodoWithoutId) =>
+    addTodoWithoutIdBody(
       Http.request.post("/todos"),
       todo
+    ).pipe(
+      Effect.flatMap(clientWithBaseUrl),
+      Effect.flatMap(decodeTodo)
     )
-    return Effect.flatMap(
-      clientWithBaseUrl(request),
-      decodeTodo
-    )
-  }
 
   return TodoService.of({ create })
 })

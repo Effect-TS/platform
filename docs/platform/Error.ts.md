@@ -24,6 +24,10 @@ Added in v1.0.0
 - [type id](#type-id)
   - [PlatformErrorTypeId](#platformerrortypeid)
   - [PlatformErrorTypeId (type alias)](#platformerrortypeid-type-alias)
+- [utils](#utils)
+  - [PlatformError (namespace)](#platformerror-namespace)
+    - [Base (interface)](#base-interface)
+    - [ProvidedFields (type alias)](#providedfields-type-alias)
 
 ---
 
@@ -129,6 +133,38 @@ Added in v1.0.0
 
 ```ts
 export type PlatformErrorTypeId = typeof PlatformErrorTypeId
+```
+
+Added in v1.0.0
+
+# utils
+
+## PlatformError (namespace)
+
+Added in v1.0.0
+
+### Base (interface)
+
+**Signature**
+
+```ts
+export interface Base extends Data.Case {
+  readonly [PlatformErrorTypeId]: typeof PlatformErrorTypeId
+  readonly _tag: string
+  readonly module: 'Command' | 'FileSystem' | 'Path' | 'KeyValueStore'
+  readonly method: string
+  readonly message: string
+}
+```
+
+Added in v1.0.0
+
+### ProvidedFields (type alias)
+
+**Signature**
+
+```ts
+export type ProvidedFields = PlatformErrorTypeId | '_tag' | keyof Data.Case
 ```
 
 Added in v1.0.0

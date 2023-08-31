@@ -40,6 +40,10 @@
       "@effect/platform/examples/*": ["./packages/platform/examples/*"],
       "@effect/platform/*": ["./packages/platform/src/*"],
 
+      "@effect/platform-bun/test/*": ["./packages/platform-bun/test/*"],
+      "@effect/platform-bun/examples/*": ["./packages/platform-bun/examples/*"],
+      "@effect/platform-bun/*": ["./packages/platform-bun/src/*"],
+
       "@effect/platform-browser/test/*": ["./packages/platform-browser/test/*"],
       "@effect/platform-browser/examples/*": [
         "./packages/platform-browser/examples/*"

@@ -54,6 +54,12 @@ Added in v1.0.0
   - [RouteTypeId (type alias)](#routetypeid-type-alias)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
+- [utils](#utils)
+  - [Route (namespace)](#route-namespace)
+    - [Handler (type alias)](#handler-type-alias)
+  - [Router (namespace)](#router-namespace)
+    - [ExcludeProvided (type alias)](#excludeprovided-type-alias)
+    - [WithoutProvided (type alias)](#withoutprovided-type-alias)
 
 ---
 
@@ -613,6 +619,50 @@ Added in v1.0.0
 
 ```ts
 export type TypeId = typeof TypeId
+```
+
+Added in v1.0.0
+
+# utils
+
+## Route (namespace)
+
+Added in v1.0.0
+
+### Handler (type alias)
+
+**Signature**
+
+```ts
+export type Handler<R, E> = Effect.Effect<
+  R | RouteContext | ServerRequest.ServerRequest,
+  E,
+  ServerResponse.ServerResponse
+>
+```
+
+Added in v1.0.0
+
+## Router (namespace)
+
+Added in v1.0.0
+
+### ExcludeProvided (type alias)
+
+**Signature**
+
+```ts
+export type ExcludeProvided<A> = Exclude<A, RouteContext | ServerRequest.ServerRequest>
+```
+
+Added in v1.0.0
+
+### WithoutProvided (type alias)
+
+**Signature**
+
+```ts
+export type WithoutProvided<R, E> = Router<ExcludeProvided<R>, E>
 ```
 
 Added in v1.0.0

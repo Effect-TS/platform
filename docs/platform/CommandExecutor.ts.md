@@ -27,6 +27,9 @@ Added in v1.0.0
   - [ProcessTypeId (type alias)](#processtypeid-type-alias)
 - [tags](#tags)
   - [CommandExecutor](#commandexecutor)
+- [utils](#utils)
+  - [Process (namespace)](#process-namespace)
+    - [Id (type alias)](#id-type-alias)
 
 ---
 
@@ -247,6 +250,22 @@ Added in v1.0.0
 
 ```ts
 export declare const CommandExecutor: Tag<CommandExecutor, CommandExecutor>
+```
+
+Added in v1.0.0
+
+# utils
+
+## Process (namespace)
+
+Added in v1.0.0
+
+### Id (type alias)
+
+**Signature**
+
+```ts
+export type Id = ProcessId
 ```
 
 Added in v1.0.0

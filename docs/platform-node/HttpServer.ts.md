@@ -1,6 +1,6 @@
 ---
 title: HttpServer.ts
-nav_order: 10
+nav_order: 11
 parent: "@effect/platform-node"
 ---
 
@@ -92,8 +92,8 @@ export declare const formData: typeof formData
 
 Added in v1.0.0
 
-- Docs: [Http/FormData](https://effect-ts.github.io/platform/platform/Http/FormData.ts.html)
-- Module: `@effect/platform/Http/FormData`
+- Docs: [Http/FormData](https://effect-ts.github.io/platform/platform-node/Http/FormData.ts.html)
+- Module: `@effect/platform-node/Http/FormData`
 
 ## headers
 

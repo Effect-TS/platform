@@ -18,6 +18,9 @@ Added in v1.0.0
   - [Path (interface)](#path-interface)
 - [tag](#tag)
   - [Path](#path)
+- [utils](#utils)
+  - [Path (namespace)](#path-namespace)
+    - [Parsed (interface)](#parsed-interface)
 
 ---
 
@@ -73,6 +76,28 @@ Added in v1.0.0
 
 ```ts
 export declare const Path: Tag<Path, Path>
+```
+
+Added in v1.0.0
+
+# utils
+
+## Path (namespace)
+
+Added in v1.0.0
+
+### Parsed (interface)
+
+**Signature**
+
+```ts
+export interface Parsed {
+  readonly root: string
+  readonly dir: string
+  readonly base: string
+  readonly ext: string
+  readonly name: string
+}
 ```
 
 Added in v1.0.0

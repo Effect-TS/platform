@@ -2,10 +2,10 @@
  * @since 1.0.0
  */
 import * as etag from "@effect/platform-node/Http/Etag"
+import * as formData from "@effect/platform-node/Http/FormData"
 import * as server from "@effect/platform-node/Http/Server"
 import * as app from "@effect/platform/Http/App"
 import * as body from "@effect/platform/Http/Body"
-import * as formData from "@effect/platform/Http/FormData"
 import * as headers from "@effect/platform/Http/Headers"
 import * as middleware from "@effect/platform/Http/Middleware"
 import * as router from "@effect/platform/Http/Router"
@@ -46,8 +46,8 @@ export {
   /**
    * @since 1.0.0
    *
-   * - Docs: [Http/FormData](https://effect-ts.github.io/platform/platform/Http/FormData.ts.html)
-   * - Module: `@effect/platform/Http/FormData`
+   * - Docs: [Http/FormData](https://effect-ts.github.io/platform/platform-node/Http/FormData.ts.html)
+   * - Module: `@effect/platform-node/Http/FormData`
    */
   formData,
   /**
