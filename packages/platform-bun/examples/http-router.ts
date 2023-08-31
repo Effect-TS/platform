@@ -15,6 +15,7 @@ const serve = Http.router.empty.pipe(
       (req) => Http.response.text(req.url)
     )
   ),
+  Http.router.get("/package", Http.response.file("./package.json")),
   Http.router.post(
     "/upload",
     Effect.gen(function*(_) {

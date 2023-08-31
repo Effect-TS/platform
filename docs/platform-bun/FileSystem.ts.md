@@ -123,7 +123,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SeekMode: any
+export declare const SeekMode: SeekMode
 ```
 
 Added in v1.0.0

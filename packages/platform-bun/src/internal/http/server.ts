@@ -26,14 +26,14 @@ export const make = (
   options: Omit<ServeOptions, "fetch" | "error">
 ): Effect.Effect<Scope.Scope, never, Server.Server> =>
   Effect.gen(function*(_) {
-    const handerStack: Array<(request: Request, server: BunServer) => Response | Promise<Response>> = [
+    const handlerStack: Array<(request: Request, server: BunServer) => Response | Promise<Response>> = [
       function(_request, _server) {
         return new Response("not found", { status: 404 })
       }
     ]
     const server = Bun.serve({
       ...options,
-      fetch: handerStack[0]
+      fetch: handlerStack[0]
     })
 
     yield* _(Effect.addFinalizer(() =>
@@ -61,14 +61,14 @@ export const make = (
                   new ServerRequestImpl(request)
                 ))
               }
-              handerStack.push(handler)
+              handlerStack.push(handler)
               server.reload({ fetch: handler } as ServeOptions)
             })
           ),
           Effect.acquireRelease(() =>
             Effect.sync(() => {
-              handerStack.pop()
-              server.reload({ fetch: handerStack[handerStack.length - 1] } as ServeOptions)
+              handlerStack.pop()
+              server.reload({ fetch: handlerStack[handlerStack.length - 1] } as ServeOptions)
             })
           )
         )
