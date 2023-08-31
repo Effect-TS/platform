@@ -170,7 +170,7 @@ export declare const server: typeof server
 
 Added in v1.0.0
 
-- Docs: [Http/Router](https://effect-ts.github.io/platform/platform-bun/Http/Server.ts.html)
+- Docs: [Http/Server](https://effect-ts.github.io/platform/platform-bun/Http/Server.ts.html)
 - Module: `@effect/platform-bun/Http/Server`
 
 ## urlParams
