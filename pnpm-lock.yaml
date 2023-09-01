@@ -121,17 +121,17 @@ importers:
         version: 1.0.1
     devDependencies:
       '@effect/data':
-        specifier: ^0.17.6
-        version: 0.17.6
+        specifier: ^0.18.3
+        version: 0.18.3
       '@effect/io':
-        specifier: ^0.38.2
-        version: 0.38.2(@effect/data@0.17.6)
+        specifier: ^0.39.0
+        version: 0.39.0(@effect/data@0.18.3)
       '@effect/schema':
-        specifier: ^0.33.2
-        version: 0.33.2(@effect/data@0.17.6)(@effect/io@0.38.2)
-      '@effect/stream':
         specifier: ^0.34.0
-        version: 0.34.0(@effect/data@0.17.6)(@effect/io@0.38.2)
+        version: 0.34.0(@effect/data@0.18.3)(@effect/io@0.39.0)
+      '@effect/stream':
+        specifier: ^0.35.1
+        version: 0.35.1(@effect/data@0.18.3)(@effect/io@0.39.0)
       '@types/mime':
         specifier: ^3.0.1
         version: 3.0.1
@@ -143,20 +143,20 @@ importers:
   packages/platform-browser:
     devDependencies:
       '@effect/data':
-        specifier: ^0.17.6
-        version: 0.17.6
+        specifier: ^0.18.3
+        version: 0.18.3
       '@effect/io':
-        specifier: ^0.38.2
-        version: 0.38.2(@effect/data@0.17.6)
+        specifier: ^0.39.0
+        version: 0.39.0(@effect/data@0.18.3)
       '@effect/platform':
         specifier: workspace:^
         version: link:../platform/dist
       '@effect/schema':
-        specifier: ^0.33.2
-        version: 0.33.2(@effect/data@0.17.6)(@effect/io@0.38.2)
-      '@effect/stream':
         specifier: ^0.34.0
-        version: 0.34.0(@effect/data@0.17.6)(@effect/io@0.38.2)
+        version: 0.34.0(@effect/data@0.18.3)(@effect/io@0.39.0)
+      '@effect/stream':
+        specifier: ^0.35.1
+        version: 0.35.1(@effect/data@0.18.3)(@effect/io@0.39.0)
       vitest-localstorage-mock:
         specifier: ^0.0.1
         version: 0.0.1(vitest@0.34.3)
@@ -165,20 +165,20 @@ importers:
   packages/platform-bun:
     devDependencies:
       '@effect/data':
-        specifier: ^0.17.6
-        version: 0.17.6
+        specifier: ^0.18.3
+        version: 0.18.3
       '@effect/io':
-        specifier: ^0.38.2
-        version: 0.38.2(@effect/data@0.17.6)
+        specifier: ^0.39.0
+        version: 0.39.0(@effect/data@0.18.3)
       '@effect/platform-node':
         specifier: workspace:^
         version: link:../platform-node/dist
       '@effect/schema':
-        specifier: ^0.33.2
-        version: 0.33.2(@effect/data@0.17.6)(@effect/io@0.38.2)
-      '@effect/stream':
         specifier: ^0.34.0
-        version: 0.34.0(@effect/data@0.17.6)(@effect/io@0.38.2)
+        version: 0.34.0(@effect/data@0.18.3)(@effect/io@0.39.0)
+      '@effect/stream':
+        specifier: ^0.35.1
+        version: 0.35.1(@effect/data@0.18.3)(@effect/io@0.39.0)
       bun-types:
         specifier: ^0.8.1
         version: 0.8.1
@@ -191,20 +191,20 @@ importers:
         version: 1.6.0
     devDependencies:
       '@effect/data':
-        specifier: ^0.17.6
-        version: 0.17.6
+        specifier: ^0.18.3
+        version: 0.18.3
       '@effect/io':
-        specifier: ^0.38.2
-        version: 0.38.2(@effect/data@0.17.6)
+        specifier: ^0.39.0
+        version: 0.39.0(@effect/data@0.18.3)
       '@effect/platform':
         specifier: workspace:^
         version: link:../platform/dist
       '@effect/schema':
-        specifier: ^0.33.2
-        version: 0.33.2(@effect/data@0.17.6)(@effect/io@0.38.2)
-      '@effect/stream':
         specifier: ^0.34.0
-        version: 0.34.0(@effect/data@0.17.6)(@effect/io@0.38.2)
+        version: 0.34.0(@effect/data@0.18.3)(@effect/io@0.39.0)
+      '@effect/stream':
+        specifier: ^0.35.1
+        version: 0.35.1(@effect/data@0.18.3)(@effect/io@0.39.0)
       '@types/busboy':
         specifier: ^1.5.0
         version: 1.5.0
@@ -758,8 +758,8 @@ packages:
     hasBin: true
     dev: true
 
-  /@effect/data@0.17.6:
-    resolution: {integrity: sha512-/vwz7Jh05eS0qY8kczR/YyJd18d0C+PMtUkAealh4f6gwvhABLGCnktNJTcq/+UHxY0Cbv18r5uaJ4+7PPC+WQ==}
+  /@effect/data@0.18.3:
+    resolution: {integrity: sha512-xNG4CwxE758EK0v81EIPnKv9QeU/x9st1Doab/Fjf7sb9V3n55C85aBiKChpKgGD8pKCPHcjGydLsRHVUvzpwg==}
     dev: true
 
   /@effect/docgen@0.1.4(@types/node@20.5.7)(typescript@5.2.2):
@@ -792,37 +792,37 @@ packages:
       diff: 5.1.0
     dev: true
 
-  /@effect/io@0.38.2(@effect/data@0.17.6):
-    resolution: {integrity: sha512-rnAXFo9BDLbY7DgQE1e8uP/sEniyVCsB7gNs+yXPu0XK9s4kaGinH6XgwYRDBuu7Fu1tQ1yd7JoAdEb7yutNRg==}
+  /@effect/io@0.39.0(@effect/data@0.18.3):
+    resolution: {integrity: sha512-9rlW1Pvn6ww1eaxPCg5+PeRlzYA7AfUJwiduPSMfXwgvqdR24gBGCoGgaD8aSKeOE1V1xhgOUNqbaf/oGsmbtQ==}
     peerDependencies:
-      '@effect/data': ^0.17.1
+      '@effect/data': ^0.18.0
     dependencies:
-      '@effect/data': 0.17.6
+      '@effect/data': 0.18.3
     dev: true
 
   /@effect/language-service@0.0.21:
     resolution: {integrity: sha512-e8vfKbjnbYiyneBincEFS0tzXluopGK77OkVFbPRtUbNDS5tJfb+jiwOQEiqASDsadcZmd+9J9+Q6v/z7GuN2g==}
     dev: true
 
-  /@effect/schema@0.33.2(@effect/data@0.17.6)(@effect/io@0.38.2):
-    resolution: {integrity: sha512-GfV4kXAs4tkx09bGD6J4RDqVN+xea4UP0I05r1wloox6j0eYgXYaSKAXAZ7qBKVywkba3cDUDZhc9nplAD8TAA==}
+  /@effect/schema@0.34.0(@effect/data@0.18.3)(@effect/io@0.39.0):
+    resolution: {integrity: sha512-7BdriGSWYj+f9jVqIq6PyfLoPztV05RW1Sj+mdKX3gAwqqIM7MBwkM0kTaLYKAFbGXTE9AK83uG2SSfzMigqTA==}
     peerDependencies:
-      '@effect/data': ^0.17.1
-      '@effect/io': ^0.38.0
+      '@effect/data': ^0.18.3
+      '@effect/io': ^0.39.0
     dependencies:
-      '@effect/data': 0.17.6
-      '@effect/io': 0.38.2(@effect/data@0.17.6)
+      '@effect/data': 0.18.3
+      '@effect/io': 0.39.0(@effect/data@0.18.3)
       fast-check: 3.12.0
     dev: true
 
-  /@effect/stream@0.34.0(@effect/data@0.17.6)(@effect/io@0.38.2):
-    resolution: {integrity: sha512-8eDDQ0JG+ctsstLH/Qo4ojBkcEIFtqpEsWZS6leAwY9gXVmEG54PMWXZiX6dTchgQXKmSnLkEh36leAq4piawQ==}
+  /@effect/stream@0.35.1(@effect/data@0.18.3)(@effect/io@0.39.0):
+    resolution: {integrity: sha512-MPtZdEZ3U2vtQTg+jXm6Xg5i0p4wO+BC4KtXqV93KIajk7sLfjlLlRf7GqlUPZgMH+jSoOAPARjM+G3UsNhMvg==}
     peerDependencies:
-      '@effect/data': ^0.17.1
-      '@effect/io': ^0.38.0
+      '@effect/data': ^0.18.3
+      '@effect/io': ^0.39.0
     dependencies:
-      '@effect/data': 0.17.6
-      '@effect/io': 0.38.2(@effect/data@0.17.6)
+      '@effect/data': 0.18.3
+      '@effect/io': 0.39.0(@effect/data@0.18.3)
     dev: true
 
   /@esbuild/android-arm64@0.18.20:
@@ -4713,6 +4713,15 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
+  /postcss@8.4.29:
+    resolution: {integrity: sha512-cbI+jaqIeu/VGqXEarWkRCCffhjgXc0qjBtXpqJhTBohMUjUQnbBr0xqX3vEKudc4iviTewcJo5ajcec5+wdJw==}
+    engines: {node: ^10 || ^12 || >=14}
+    dependencies:
+      nanoid: 3.3.6
+      picocolors: 1.0.0
+      source-map-js: 1.0.2
+    dev: true
+
   /precinct@8.3.1:
     resolution: {integrity: sha512-pVppfMWLp2wF68rwHqBIpPBYY8Kd12lDhk8LVQzOwqllifVR15qNFyod43YLyFpurKRZQKnE7E4pofAagDOm2Q==}
     engines: {node: ^10.13 || ^12 || >=14}
@@ -5915,7 +5924,7 @@ packages:
     dependencies:
       '@types/node': 20.5.7
       esbuild: 0.18.20
-      postcss: 8.4.28
+      postcss: 8.4.29
       rollup: 3.28.1
     optionalDependencies:
       fsevents: 2.3.3
