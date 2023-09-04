@@ -144,8 +144,8 @@ export declare const response: typeof response
 
 Added in v1.0.0
 
-- Docs: [Http/ServerResponse](https://effect-ts.github.io/platform/platform-bun/Http/ServerResponse.ts.html)
-- Module: `@effect/platform-bun/Http/ServerResponse`
+- Docs: [Http/ServerResponse](https://effect-ts.github.io/platform/platform/Http/ServerResponse.ts.html)
+- Module: `@effect/platform/Http/ServerResponse`
 
 ## router
 

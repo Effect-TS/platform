@@ -1,6 +1,6 @@
 ---
 title: Http/Server.ts
-nav_order: 7
+nav_order: 8
 parent: "@effect/platform-bun"
 ---
 
@@ -45,7 +45,7 @@ Added in v1.0.0
 ```ts
 export declare const layer: (
   options: Omit<ServeOptions, 'fetch' | 'error'>
-) => Layer.Layer<never, never, Server.Server | Etag.Generator>
+) => Layer.Layer<never, never, Server.Server | Platform.Platform>
 ```
 
 Added in v1.0.0
@@ -57,7 +57,7 @@ Added in v1.0.0
 ```ts
 export declare const layerConfig: (
   options: Config.Config.Wrap<Omit<ServeOptions, 'fetch' | 'error'>>
-) => Layer.Layer<never, ConfigError.ConfigError, Server.Server | Etag.Generator>
+) => Layer.Layer<never, ConfigError.ConfigError, Server.Server | Platform.Platform>
 ```
 
 Added in v1.0.0
