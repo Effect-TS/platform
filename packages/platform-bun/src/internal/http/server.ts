@@ -5,7 +5,7 @@ import * as Effect from "@effect/io/Effect"
 import * as Layer from "@effect/io/Layer"
 import * as Runtime from "@effect/io/Runtime"
 import type * as Scope from "@effect/io/Scope"
-import * as Etag from "@effect/platform-node/Http/Etag"
+import * as Platform from "@effect/platform-bun/Http/Platform"
 import * as FormData from "@effect/platform-node/Http/FormData"
 import type * as FileSystem from "@effect/platform/FileSystem"
 import type * as App from "@effect/platform/Http/App"
@@ -143,7 +143,7 @@ export const layer = (
 ) =>
   Layer.merge(
     Layer.scoped(Server.Server, make(options)),
-    Etag.layer
+    Platform.layer
   )
 
 /** @internal */
@@ -152,7 +152,7 @@ export const layerConfig = (
 ) =>
   Layer.merge(
     Layer.scoped(Server.Server, Effect.flatMap(Effect.config(Config.unwrap(options)), make)),
-    Etag.layer
+    Platform.layer
   )
 
 class ServerRequestImpl implements ServerRequest.ServerRequest {

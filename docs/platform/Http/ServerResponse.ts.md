@@ -1,6 +1,6 @@
 ---
 title: Http/ServerResponse.ts
-nav_order: 22
+nav_order: 23
 parent: "@effect/platform"
 ---
 
@@ -104,7 +104,7 @@ Added in v1.0.0
 export declare const file: (
   path: string,
   options?: Options & FileSystem.StreamOptions
-) => Effect.Effect<FileSystem.FileSystem | Etag.Generator, PlatformError.PlatformError, ServerResponse>
+) => Effect.Effect<Platform.Platform, PlatformError.PlatformError, ServerResponse>
 ```
 
 Added in v1.0.0
@@ -116,8 +116,8 @@ Added in v1.0.0
 ```ts
 export declare const fileWeb: (
   file: Body.Body.FileLike,
-  options?: Options.WithContent
-) => Effect.Effect<Etag.Generator, never, ServerResponse>
+  options?: Options.WithContent & FileSystem.StreamOptions
+) => Effect.Effect<Platform.Platform, never, ServerResponse>
 ```
 
 Added in v1.0.0

@@ -1,6 +1,6 @@
 ---
 title: Http/Server.ts
-nav_order: 9
+nav_order: 10
 parent: "@effect/platform-node"
 ---
 
@@ -45,9 +45,9 @@ Added in v1.0.0
 
 ```ts
 export declare const layer: (
-  evaluate: LazyArg<Http.Server>,
+  evaluate: LazyArg<Http.Server<typeof Http.IncomingMessage, typeof Http.ServerResponse>>,
   options: Net.ListenOptions
-) => Layer.Layer<never, never, Server.Server | Etag.Generator>
+) => Layer.Layer<never, never, Server.Server | Platform.Platform>
 ```
 
 Added in v1.0.0
@@ -58,9 +58,9 @@ Added in v1.0.0
 
 ```ts
 export declare const layerConfig: (
-  evaluate: LazyArg<Http.Server>,
+  evaluate: LazyArg<Http.Server<typeof Http.IncomingMessage, typeof Http.ServerResponse>>,
   options: Config.Config.Wrap<Net.ListenOptions>
-) => Layer.Layer<never, ConfigError.ConfigError, Server.Server | Etag.Generator>
+) => Layer.Layer<never, ConfigError.ConfigError, Server.Server | Platform.Platform>
 ```
 
 Added in v1.0.0
