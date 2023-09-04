@@ -247,6 +247,11 @@ export const layerConfig = (
 const handleResponse = (request: ServerRequest.ServerRequest, response: ServerResponse.ServerResponse) =>
   Effect.suspend((): Effect.Effect<never, Error.ResponseError, void> => {
     const nodeResponse = (request as ServerRequestImpl).response
+    if (request.method === "HEAD") {
+      nodeResponse.writeHead(response.status, response.headers)
+      nodeResponse.end()
+      return Effect.unit
+    }
     const body = response.body
     switch (body._tag) {
       case "Empty": {

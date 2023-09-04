@@ -84,7 +84,14 @@ export const make = (
     })
   })
 
-const makeResponse = (response: ServerResponse.ServerResponse): Response => {
+const makeResponse = (request: ServerRequest.ServerRequest, response: ServerResponse.ServerResponse): Response => {
+  if (request.method === "HEAD") {
+    return new Response(undefined, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: response.headers
+    })
+  }
   const body = response.body
   switch (body._tag) {
     case "Empty": {
@@ -128,7 +135,7 @@ const respond = Middleware.make((httpApp) =>
         (exit) =>
           Effect.sync(() => {
             if (exit._tag === "Success") {
-              ;(request as ServerRequestImpl).resolve(makeResponse(exit.value))
+              ;(request as ServerRequestImpl).resolve(makeResponse(request, exit.value))
             } else {
               ;(request as ServerRequestImpl).reject(Cause.pretty(exit.cause))
             }
