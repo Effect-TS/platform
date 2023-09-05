@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@changesets/assemble-release-plan@5.2.4':
-    hash: y6zdktr3vvbtyt7thefqw2zdey
+    hash: z2vvyydifzjx5lfl7g6is67lqy
     path: patches/@changesets__assemble-release-plan@5.2.4.patch
 
 importers:
@@ -541,7 +541,7 @@ packages:
       semver: 7.5.4
     dev: true
 
-  /@changesets/assemble-release-plan@5.2.4(patch_hash=y6zdktr3vvbtyt7thefqw2zdey):
+  /@changesets/assemble-release-plan@5.2.4(patch_hash=z2vvyydifzjx5lfl7g6is67lqy):
     resolution: {integrity: sha512-xJkWX+1/CUaOUWTguXEbCDTyWJFECEhmdtbkjhn5GVBGxdP/JwaHBIU9sW3FR6gD07UwZ7ovpiPclQZs+j+mvg==}
     dependencies:
       '@babel/runtime': 7.22.10
@@ -575,7 +575,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.22.10
       '@changesets/apply-release-plan': 6.1.4
-      '@changesets/assemble-release-plan': 5.2.4(patch_hash=y6zdktr3vvbtyt7thefqw2zdey)
+      '@changesets/assemble-release-plan': 5.2.4(patch_hash=z2vvyydifzjx5lfl7g6is67lqy)
       '@changesets/changelog-git': 0.1.14
       '@changesets/config': 2.3.1
       '@changesets/errors': 0.1.4
@@ -649,7 +649,7 @@ packages:
     resolution: {integrity: sha512-6IwKTubNEgoOZwDontYc2x2cWXfr6IKxP3IhKeK+WjyD6y3M4Gl/jdQvBw+m/5zWILSOCAaGLu2ZF6Q+WiPniw==}
     dependencies:
       '@babel/runtime': 7.22.10
-      '@changesets/assemble-release-plan': 5.2.4(patch_hash=y6zdktr3vvbtyt7thefqw2zdey)
+      '@changesets/assemble-release-plan': 5.2.4(patch_hash=z2vvyydifzjx5lfl7g6is67lqy)
       '@changesets/config': 2.3.1
       '@changesets/pre': 1.0.14
       '@changesets/read': 0.5.9
