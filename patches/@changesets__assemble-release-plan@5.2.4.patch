@@ -1,0 +1,25 @@
+diff --git a/src/determine-dependents.ts b/src/determine-dependents.ts
+index 08c08127ccfb5974d81b3ace592fced5b68aeaf7..13c52dfc709fab33f5a8df4237e82e19bbb9893c 100644
+--- a/src/determine-dependents.ts
++++ b/src/determine-dependents.ts
+@@ -67,20 +67,6 @@ export default function determineDependents({
+           for (const { depType, versionRange } of dependencyVersionRanges) {
+             if (nextRelease.type === "none") {
+               continue;
+-            } else if (
+-              shouldBumpMajor({
+-                dependent,
+-                depType,
+-                versionRange,
+-                releases,
+-                nextRelease,
+-                preInfo,
+-                onlyUpdatePeerDependentsWhenOutOfRange:
+-                  config.___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH
+-                    .onlyUpdatePeerDependentsWhenOutOfRange,
+-              })
+-            ) {
+-              type = "major";
+             } else if (
+               (!releases.has(dependent) ||
+                 releases.get(dependent)!.type === "none") &&
