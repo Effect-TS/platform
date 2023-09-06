@@ -1,7 +1,19 @@
 import * as Effect from "@effect/io/Effect"
 import * as Layer from "@effect/io/Layer"
-import * as Clipboard from "@effect/platform/Clipboard"
+import * as Clipboard from "@effect/platform-browser/Clipboard"
 import * as PlatformError from "@effect/platform/Error"
+import { Tag } from "@effect/data/Context"
+
+export const tag = Tag<Clipboard.Clipboard>("@effect/platform/FileSystem")
+
+export const make = (
+  impl: Omit<Clipboard.Clipboard, "clear">
+): Clipboard.Clipboard =>
+  tag.of({
+    ...impl,
+    clear: impl.writeString("")
+  })
+
 
 const clipboardError = (props: Omit<Parameters<typeof PlatformError.SystemError>[0], "reason" | "module">) =>
   PlatformError.SystemError({
@@ -11,8 +23,8 @@ const clipboardError = (props: Omit<Parameters<typeof PlatformError.SystemError>
   })
 
 export const layerLive = Layer.succeed(
-  Clipboard.Clipboard,
-  Clipboard.make({
+  tag,
+  make({
     read: Effect.tryPromise({
       try: navigator.clipboard.read,
       catch: () =>
