@@ -4,8 +4,10 @@ import * as Clipboard from "@effect/platform-browser/Clipboard"
 import * as PlatformError from "@effect/platform/Error"
 import { Tag } from "@effect/data/Context"
 
+/** @internal */
 export const tag = Tag<Clipboard.Clipboard>("@effect/platform/FileSystem")
 
+/** @internal */
 export const make = (
   impl: Omit<Clipboard.Clipboard, "clear">
 ): Clipboard.Clipboard =>
@@ -15,6 +17,7 @@ export const make = (
   })
 
 
+/** @internal */
 const clipboardError = (props: Omit<Parameters<typeof PlatformError.SystemError>[0], "reason" | "module">) =>
   PlatformError.SystemError({
     reason: "PermissionDenied",
@@ -22,6 +25,7 @@ const clipboardError = (props: Omit<Parameters<typeof PlatformError.SystemError>
     ...props
   })
 
+/** @internal */
 export const layerLive = Layer.succeed(
   tag,
   make({

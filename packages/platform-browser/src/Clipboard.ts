@@ -4,6 +4,10 @@ import * as internal from "@effect/platform-browser/internal/clipboard";
 import { Tag } from "@effect/data/Context"
 import * as Layer from "@effect/io/Layer";
 
+/**
+ * @since 1.0.0
+ * @category models
+ */
 export interface Clipboard {
     read: Effect.Effect<never, PlatformError, ClipboardItems>
     readString: Effect.Effect<never, PlatformError, string>
@@ -27,6 +31,8 @@ export const make: (
 export const Clipboard: Tag<Clipboard, Clipboard> = internal.tag
 
 /**
+ * A layer that directly interfaces with the navigator.clipboard api 
+ * 
  * @since 1.0.0
  * @category layers
  */
