@@ -10,7 +10,8 @@ export default defineConfig({
   plugins: [babel({ babel: babelConfig })],
   test: {
     include: ["./test/**/*.test.ts"],
-    globals: true
+    globals: true,
+    environment: "happy-dom"
   },
   resolve: {
     alias: {

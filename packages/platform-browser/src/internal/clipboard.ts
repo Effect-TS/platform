@@ -1,8 +1,8 @@
+import { Tag } from "@effect/data/Context"
 import * as Effect from "@effect/io/Effect"
 import * as Layer from "@effect/io/Layer"
-import * as Clipboard from "@effect/platform-browser/Clipboard"
+import type * as Clipboard from "@effect/platform-browser/Clipboard"
 import * as PlatformError from "@effect/platform/Error"
-import { Tag } from "@effect/data/Context"
 
 /** @internal */
 export const tag = Tag<Clipboard.Clipboard>("@effect/platform/FileSystem")
@@ -15,7 +15,6 @@ export const make = (
     ...impl,
     clear: impl.writeString("")
   })
-
 
 /** @internal */
 const clipboardError = (props: Omit<Parameters<typeof PlatformError.SystemError>[0], "reason" | "module">) =>
@@ -38,15 +37,16 @@ export const layerLive = Layer.succeed(
           "pathOrDescriptor": "layerLive"
         })
     }),
-    write: (s: ClipboardItem[]) => Effect.tryPromise({
-      try: () => navigator.clipboard.write(s),
-      catch: () =>
-        clipboardError({
-          "message": "Unable to read clipboard",
-          "method": "write",
-          "pathOrDescriptor": "layerLive"
-        })
-    }),
+    write: (s: Array<ClipboardItem>) =>
+      Effect.tryPromise({
+        try: () => navigator.clipboard.write(s),
+        catch: () =>
+          clipboardError({
+            "message": "Unable to read clipboard",
+            "method": "write",
+            "pathOrDescriptor": "layerLive"
+          })
+      }),
     readString: Effect.tryPromise({
       try: navigator.clipboard.readText,
       catch: () =>
