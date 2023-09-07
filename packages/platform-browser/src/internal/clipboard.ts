@@ -5,7 +5,7 @@ import type * as Clipboard from "@effect/platform-browser/Clipboard"
 import * as PlatformError from "@effect/platform/Error"
 
 /** @internal */
-export const tag = Tag<Clipboard.Clipboard>("@effect/platform/Clipboard")
+export const tag = Tag<Clipboard.Clipboard>("@effect/platform-browser/Clipboard")
 
 /** @internal */
 export const make = (
@@ -26,7 +26,7 @@ const clipboardError = (props: Omit<Parameters<typeof PlatformError.SystemError>
   })
 
 /** @internal */
-export const layerLive = Layer.succeed(
+export const layer = Layer.succeed(
   tag,
   make({
     read: Effect.tryPromise({
@@ -35,7 +35,7 @@ export const layerLive = Layer.succeed(
         clipboardError({
           "message": "Unable to read clipboard",
           "method": "read",
-          "pathOrDescriptor": "layerLive"
+          "pathOrDescriptor": "layer"
         })
     }),
     write: (s: Array<ClipboardItem>) =>
@@ -45,7 +45,7 @@ export const layerLive = Layer.succeed(
           clipboardError({
             "message": "Unable to read clipboard",
             "method": "write",
-            "pathOrDescriptor": "layerLive"
+            "pathOrDescriptor": "layer"
           })
       }),
     readString: Effect.tryPromise({
@@ -54,7 +54,7 @@ export const layerLive = Layer.succeed(
         clipboardError({
           "message": "Unable to read clipboard",
           "method": "readString",
-          "pathOrDescriptor": "layerLive"
+          "pathOrDescriptor": "layer"
         })
     }),
     writeString: (text: string) =>
@@ -64,7 +64,7 @@ export const layerLive = Layer.succeed(
           clipboardError({
             "message": "Unable to write to clipboard",
             "method": "writeString",
-            "pathOrDescriptor": "layerLive"
+            "pathOrDescriptor": "layer"
           })
       })
   })

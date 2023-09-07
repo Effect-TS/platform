@@ -17,7 +17,7 @@ Added in v1.0.0
 - [interface](#interface)
   - [Clipboard (interface)](#clipboard-interface)
 - [layers](#layers)
-  - [layerLive](#layerlive)
+  - [layer](#layer)
 - [tag](#tag)
   - [Clipboard](#clipboard)
 
@@ -30,7 +30,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: (impl: Omit<Clipboard, 'clear'>) => Clipboard
+export declare const make: (impl: Omit<Clipboard, 'clear' | 'writeBlob'>) => Clipboard
 ```
 
 Added in v1.0.0
@@ -43,11 +43,12 @@ Added in v1.0.0
 
 ```ts
 export interface Clipboard {
-  read: Effect.Effect<never, PlatformError, ClipboardItems>
-  readString: Effect.Effect<never, PlatformError, string>
-  write: (text: ClipboardItems) => Effect.Effect<never, PlatformError, void>
-  writeString: (text: string) => Effect.Effect<never, PlatformError, void>
-  clear: Effect.Effect<never, PlatformError, void>
+  readonly read: Effect.Effect<never, PlatformError, ClipboardItems>
+  readonly readString: Effect.Effect<never, PlatformError, string>
+  readonly write: (items: ClipboardItems) => Effect.Effect<never, PlatformError, void>
+  readonly writeString: (text: string) => Effect.Effect<never, PlatformError, void>
+  readonly writeBlob: (blob: Blob) => Effect.Effect<never, PlatformError, void>
+  readonly clear: Effect.Effect<never, PlatformError, void>
 }
 ```
 
@@ -55,14 +56,14 @@ Added in v1.0.0
 
 # layers
 
-## layerLive
+## layer
 
 A layer that directly interfaces with the navigator.clipboard api
 
 **Signature**
 
 ```ts
-export declare const layerLive: Layer.Layer<never, never, Clipboard>
+export declare const layer: Layer.Layer<never, never, Clipboard>
 ```
 
 Added in v1.0.0

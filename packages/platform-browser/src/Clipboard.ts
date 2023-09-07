@@ -13,12 +13,12 @@ import type { PlatformError } from "@effect/platform/Error"
  * @category interface
  */
 export interface Clipboard {
-  read: Effect.Effect<never, PlatformError, ClipboardItems>
-  readString: Effect.Effect<never, PlatformError, string>
-  write: (items: ClipboardItems) => Effect.Effect<never, PlatformError, void>
-  writeString: (text: string) => Effect.Effect<never, PlatformError, void>
-  writeBlob: (blob: Blob) => Effect.Effect<never, PlatformError, void>
-  clear: Effect.Effect<never, PlatformError, void>
+  readonly read: Effect.Effect<never, PlatformError, ClipboardItems>
+  readonly readString: Effect.Effect<never, PlatformError, string>
+  readonly write: (items: ClipboardItems) => Effect.Effect<never, PlatformError, void>
+  readonly writeString: (text: string) => Effect.Effect<never, PlatformError, void>
+  readonly writeBlob: (blob: Blob) => Effect.Effect<never, PlatformError, void>
+  readonly clear: Effect.Effect<never, PlatformError, void>
 }
 
 /**
@@ -26,7 +26,7 @@ export interface Clipboard {
  * @category constructor
  */
 export const make: (
-  impl: Omit<Clipboard, "clear">
+  impl: Omit<Clipboard, "clear" | "writeBlob">
 ) => Clipboard = internal.make
 
 /**
@@ -41,4 +41,4 @@ export const Clipboard: Tag<Clipboard, Clipboard> = internal.tag
  * @since 1.0.0
  * @category layers
  */
-export const layerLive: Layer.Layer<never, never, Clipboard> = internal.layerLive
+export const layer: Layer.Layer<never, never, Clipboard> = internal.layer
