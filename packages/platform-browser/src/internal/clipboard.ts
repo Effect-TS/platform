@@ -33,7 +33,7 @@ export const layer = Layer.succeed(
       try: navigator.clipboard.read,
       catch: () =>
         clipboardError({
-          "message": "Unable to read clipboard",
+          "message": "Unable to read from clipboard",
           "method": "read",
           "pathOrDescriptor": "layer"
         })
@@ -43,7 +43,7 @@ export const layer = Layer.succeed(
         try: () => navigator.clipboard.write(s),
         catch: () =>
           clipboardError({
-            "message": "Unable to read clipboard",
+            "message": "Unable to write to clipboard",
             "method": "write",
             "pathOrDescriptor": "layer"
           })
@@ -52,7 +52,7 @@ export const layer = Layer.succeed(
       try: navigator.clipboard.readText,
       catch: () =>
         clipboardError({
-          "message": "Unable to read clipboard",
+          "message": "Unable to read a string from the clipboard",
           "method": "readString",
           "pathOrDescriptor": "layer"
         })
@@ -62,7 +62,7 @@ export const layer = Layer.succeed(
         try: () => navigator.clipboard.writeText(text),
         catch: () =>
           clipboardError({
-            "message": "Unable to write to clipboard",
+            "message": "Unable to write a string to the clipboard",
             "method": "writeString",
             "pathOrDescriptor": "layer"
           })
