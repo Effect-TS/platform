@@ -4,10 +4,6 @@ import type * as Layer from "@effect/io/Layer"
 import * as internal from "@effect/platform-browser/internal/clipboard"
 import type { PlatformError } from "@effect/platform/Error"
 
-/**
- * @since 1.0.0
- * @category models
- */
 export interface Clipboard {
   read: Effect.Effect<never, PlatformError, ClipboardItems>
   readString: Effect.Effect<never, PlatformError, string>
