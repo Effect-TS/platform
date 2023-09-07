@@ -5,15 +5,16 @@ import type * as Clipboard from "@effect/platform-browser/Clipboard"
 import * as PlatformError from "@effect/platform/Error"
 
 /** @internal */
-export const tag = Tag<Clipboard.Clipboard>("@effect/platform/FileSystem")
+export const tag = Tag<Clipboard.Clipboard>("@effect/platform/Clipboard")
 
 /** @internal */
 export const make = (
-  impl: Omit<Clipboard.Clipboard, "clear">
+  impl: Omit<Clipboard.Clipboard, "clear" | "writeBlob">
 ): Clipboard.Clipboard =>
   tag.of({
     ...impl,
-    clear: impl.writeString("")
+    clear: impl.writeString(""),
+    writeBlob: (blob: Blob) => impl.write([new ClipboardItem({ [blob.type]: blob })])
   })
 
 /** @internal */

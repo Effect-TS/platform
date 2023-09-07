@@ -17,6 +17,7 @@ export interface Clipboard {
   readString: Effect.Effect<never, PlatformError, string>
   write: (text: ClipboardItems) => Effect.Effect<never, PlatformError, void>
   writeString: (text: string) => Effect.Effect<never, PlatformError, void>
+  writeBlob: (blob: Blob) => Effect.Effect<never, PlatformError, void>
   clear: Effect.Effect<never, PlatformError, void>
 }
 
