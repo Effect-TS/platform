@@ -15,7 +15,7 @@ import type { PlatformError } from "@effect/platform/Error"
 export interface Clipboard {
   read: Effect.Effect<never, PlatformError, ClipboardItems>
   readString: Effect.Effect<never, PlatformError, string>
-  write: (text: ClipboardItems) => Effect.Effect<never, PlatformError, void>
+  write: (items: ClipboardItems) => Effect.Effect<never, PlatformError, void>
   writeString: (text: string) => Effect.Effect<never, PlatformError, void>
   writeBlob: (blob: Blob) => Effect.Effect<never, PlatformError, void>
   clear: Effect.Effect<never, PlatformError, void>
