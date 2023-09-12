@@ -19,7 +19,7 @@ import * as internalBody from "@effect/platform/internal/http/body"
 import * as internalError from "@effect/platform/internal/http/clientError"
 import * as internalRequest from "@effect/platform/internal/http/clientRequest"
 import * as internalResponse from "@effect/platform/internal/http/clientResponse"
-import * as ParseResult from "@effect/schema/ParseResult"
+import type * as ParseResult from "@effect/schema/ParseResult"
 import * as Schema from "@effect/schema/Schema"
 import * as Stream from "@effect/stream/Stream"
 
@@ -362,51 +362,6 @@ export const mapRequestEffect = dual<
   ) => Client.Client<R | R2, E | E2, A>
 >(2, (self, f) => setProto((request) => Effect.flatMap(f(request), self)))
 
-const SpanSchema = Schema.struct({
-  traceId: Schema.string,
-  spanId: Schema.string,
-  parentSpanId: Schema.union(Schema.string, Schema.undefined)
-})
-
-const parseSpan = IncomingMessage.schemaHeaders(Schema.union(
-  Schema.transformOrFail(
-    Schema.struct({
-      b3: Schema.NonEmpty
-    }),
-    SpanSchema,
-    (_) => {
-      const parts = _.b3.split("-")
-      if (parts.length >= 2) {
-        return ParseResult.success({
-          traceId: parts[0],
-          spanId: parts[1],
-          parentSpanId: parts[3]
-        })
-      }
-      return ParseResult.failure(ParseResult.missing)
-    },
-    (_) => ParseResult.success("")
-  ),
-  Schema.transform(
-    Schema.struct({
-      "x-b3-traceid": Schema.NonEmpty,
-      "x-b3-spanid": Schema.NonEmpty,
-      "x-b3-parentspanid": Schema.optional(Schema.NonEmpty)
-    }),
-    SpanSchema,
-    (_) => ({
-      traceId: _["x-b3-traceid"],
-      spanId: _["x-b3-spanid"],
-      parentSpanId: _["x-b3-parentspanid"]
-    }),
-    (_) => ({
-      "x-b3-traceid": _.traceId,
-      "x-b3-spanid": _.spanId,
-      "x-b3-parentspanid": _.parentSpanId
-    })
-  )
-))
-
 /** @internal */
 export const withB3Propagation = <R, E>(
   self: Client.Client.WithResponse<R, E>
@@ -430,13 +385,7 @@ export const withB3Propagation = <R, E>(
       Effect.flatMap(self),
       Effect.tap((res) =>
         Effect.ignore(
-          Effect.flatMap(parseSpan(res), (span) =>
-            Effect.withParentSpanScoped({
-              _tag: "ExternalSpan",
-              traceId: span.traceId,
-              spanId: span.spanId,
-              context: Context.empty()
-            }))
+          Effect.flatMap(IncomingMessage.schemaExternalSpan(res), Effect.withParentSpanScoped)
         )
       )
     )

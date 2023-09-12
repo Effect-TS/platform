@@ -34,7 +34,7 @@ export const make: <M extends Middleware>(middleware: M) => M = internal.make
  * @since 1.0.0
  * @category constructors
  */
-export const b3Propagation: <R, E>(httpApp: App.Default<R, E>) => App.Default<R, E> = internal.b3Propagation
+export const b3Response: <R, E>(httpApp: App.Default<R, E>) => App.Default<R, E> = internal.b3Response
 
 /**
  * @since 1.0.0

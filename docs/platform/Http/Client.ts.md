@@ -41,6 +41,8 @@ Added in v1.0.0
   - [schemaFunction](#schemafunction)
 - [tags](#tags)
   - [Client](#client)
+- [tracing](#tracing)
+  - [withB3Propagation](#withb3propagation)
 - [type ids](#type-ids)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
@@ -402,6 +404,20 @@ Added in v1.0.0
 
 ```ts
 export declare const Client: Context.Tag<Client.Default, Client.Default>
+```
+
+Added in v1.0.0
+
+# tracing
+
+## withB3Propagation
+
+**Signature**
+
+```ts
+export declare const withB3Propagation: <R, E>(
+  self: Client.WithResponse<R, E>
+) => Client.WithResponse<Scope.Scope | R, E>
 ```
 
 Added in v1.0.0

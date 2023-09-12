@@ -20,6 +20,7 @@ Added in v1.0.0
 - [schema](#schema)
   - [schemaBodyJson](#schemabodyjson)
   - [schemaBodyUrlParams](#schemabodyurlparams)
+  - [schemaExternalSpan](#schemaexternalspan)
   - [schemaHeaders](#schemaheaders)
 - [type ids](#type-ids)
   - [TypeId](#typeid)
@@ -94,6 +95,18 @@ Added in v1.0.0
 export declare const schemaBodyUrlParams: <I extends Readonly<Record<string, string>>, A>(
   schema: Schema.Schema<I, A>
 ) => <E>(self: IncomingMessage<E>) => Effect.Effect<never, ParseResult.ParseError | E, A>
+```
+
+Added in v1.0.0
+
+## schemaExternalSpan
+
+**Signature**
+
+```ts
+export declare const schemaExternalSpan: <E>(
+  self: IncomingMessage<E>
+) => Effect.Effect<never, ParseResult.ParseError, ExternalSpan>
 ```
 
 Added in v1.0.0
