@@ -13,6 +13,7 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructors](#constructors)
+  - [b3Response](#b3response)
   - [logger](#logger)
   - [loggerTracer](#loggertracer)
   - [make](#make)
@@ -27,6 +28,16 @@ Added in v1.0.0
 ---
 
 # constructors
+
+## b3Response
+
+**Signature**
+
+```ts
+export declare const b3Response: <R, E>(httpApp: App.Default<R, E>) => App.Default<R, E>
+```
+
+Added in v1.0.0
 
 ## logger
 
