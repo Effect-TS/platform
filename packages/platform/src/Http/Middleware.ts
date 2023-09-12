@@ -34,6 +34,12 @@ export const make: <M extends Middleware>(middleware: M) => M = internal.make
  * @since 1.0.0
  * @category constructors
  */
+export const b3Propagation: <R, E>(httpApp: App.Default<R, E>) => App.Default<R, E> = internal.b3Propagation
+
+/**
+ * @since 1.0.0
+ * @category constructors
+ */
 export const logger: <R, E>(httpApp: App.Default<R, E>) => App.Default<R, E> = internal.logger
 
 /**

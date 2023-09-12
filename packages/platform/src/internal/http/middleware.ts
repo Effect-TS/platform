@@ -3,6 +3,7 @@ import * as Effect from "@effect/io/Effect"
 import * as Headers from "@effect/platform/Http/Headers"
 import type * as Middleware from "@effect/platform/Http/Middleware"
 import * as ServerRequest from "@effect/platform/Http/ServerRequest"
+import * as ServerResponse from "@effect/platform/Http/ServerResponse"
 
 /** @internal */
 export const make = <M extends Middleware.Middleware>(middleware: M): M => middleware
@@ -44,6 +45,24 @@ export const tracer = make((httpApp) =>
         `http ${request.method}`,
         { attributes: { "http.method": request.method, "http.url": request.url } }
       )
+  )
+)
+
+/** @internal */
+export const b3Propagation = make((httpApp) =>
+  Effect.flatMap(
+    Effect.currentSpan,
+    (span) =>
+      span._tag === "Some"
+        ? Effect.map(httpApp, (res) =>
+          ServerResponse.setHeader(
+            res,
+            "b3",
+            `${span.value.traceId}-${span.value.spanId}-1${
+              span.value.parent._tag === "Some" ? `-${span.value.parent.value.spanId}` : ""
+            }`
+          ))
+        : httpApp
   )
 )
 
