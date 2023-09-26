@@ -14,11 +14,27 @@ Also includes exports from [`@effect/platform/KeyValueStore`](https://effect-ts.
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [exports](#exports)
+  - [From "@effect/platform/KeyValueStore"](#from-effectplatformkeyvaluestore)
 - [models](#models)
   - [layerLocalStorage](#layerlocalstorage)
   - [layerSessionStorage](#layersessionstorage)
 
 ---
+
+# exports
+
+## From "@effect/platform/KeyValueStore"
+
+Re-exports all named exports from the "@effect/platform/KeyValueStore" module.
+
+**Signature**
+
+```ts
+export * from '@effect/platform/KeyValueStore'
+```
+
+Added in v1.0.0
 
 # models
 

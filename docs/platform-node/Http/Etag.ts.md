@@ -14,11 +14,27 @@ Also includes exports from [`@effect/platform/Http/Etag`](https://effect-ts.gith
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [exports](#exports)
+  - [From "@effect/platform/Http/Etag"](#from-effectplatformhttpetag)
 - [layers](#layers)
   - [layer](#layer)
   - [layerWeak](#layerweak)
 
 ---
+
+# exports
+
+## From "@effect/platform/Http/Etag"
+
+Re-exports all named exports from the "@effect/platform/Http/Etag" module.
+
+**Signature**
+
+```ts
+export * from '@effect/platform/Http/Etag'
+```
+
+Added in v1.0.0
 
 # layers
 

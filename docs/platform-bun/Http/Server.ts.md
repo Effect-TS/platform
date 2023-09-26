@@ -16,6 +16,8 @@ Also includes exports from [`@effect/platform/Http/Server`](https://effect-ts.gi
 
 - [constructors](#constructors)
   - [make](#make)
+- [exports](#exports)
+  - [From "@effect/platform/Http/Server"](#from-effectplatformhttpserver)
 - [layers](#layers)
   - [layer](#layer)
   - [layerConfig](#layerconfig)
@@ -32,6 +34,20 @@ Also includes exports from [`@effect/platform/Http/Server`](https://effect-ts.gi
 export declare const make: (
   options: Omit<ServeOptions, 'fetch' | 'error'>
 ) => Effect.Effect<Scope.Scope, never, Server.Server>
+```
+
+Added in v1.0.0
+
+# exports
+
+## From "@effect/platform/Http/Server"
+
+Re-exports all named exports from the "@effect/platform/Http/Server" module.
+
+**Signature**
+
+```ts
+export * from '@effect/platform/Http/Server'
 ```
 
 Added in v1.0.0

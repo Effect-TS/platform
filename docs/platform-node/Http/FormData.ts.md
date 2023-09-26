@@ -17,6 +17,8 @@ Also includes exports from [`@effect/platform/Http/FormData`](https://effect-ts.
 - [constructors](#constructors)
   - [formData](#formdata)
   - [stream](#stream)
+- [exports](#exports)
+  - [From "@effect/platform/Http/FormData"](#from-effectplatformhttpformdata)
 
 ---
 
@@ -44,6 +46,20 @@ export declare const stream: (
   source: Readable,
   headers: IncomingHttpHeaders
 ) => Stream.Stream<never, FormData.FormDataError, FormData.Part>
+```
+
+Added in v1.0.0
+
+# exports
+
+## From "@effect/platform/Http/FormData"
+
+Re-exports all named exports from the "@effect/platform/Http/FormData" module.
+
+**Signature**
+
+```ts
+export * from '@effect/platform/Http/FormData'
 ```
 
 Added in v1.0.0
