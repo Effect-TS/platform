@@ -17,6 +17,7 @@
     "build": "pnpm build-all && ultra -r -b build-pack",
     "build-all": "tsc -b tsconfig.build.json",
     "build-watch": "tsc -b tsconfig.build.json --watch",
+    "gen:index": "ultra -r gen:index",
     "circular": "madge --ts-config ./tsconfig.madge.json --circular --no-color --no-spinner --warning packages/*/build/esm",
     "test": "vitest",
     "autofix": "ultra -r autofix",

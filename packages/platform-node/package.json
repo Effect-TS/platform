@@ -15,6 +15,9 @@
   },
   "homepage": "https://github.com/effect-ts/platform",
   "exports": {
+    ".": {
+      "require": "./build/cjs/index.js"
+    },
     "./*": {
       "require": "./build/cjs/*.js"
     }
@@ -31,6 +34,7 @@
     "build-pack": "concurrently \"pnpm build-cjs\" \"pnpm build-mjs\" && pnpm build-post",
     "build-all": "tsc -b tsconfig.json",
     "build-watch": "tsc -b tsconfig.json --watch",
+    "gen:index": "node scripts/gen-index.mjs > src/index.ts",
     "circular": "madge --ts-config ./tsconfig.madge.json --circular --no-color --no-spinner --warning build/esm",
     "docs": "docgen",
     "lint": "eslint src/**/*.ts test/**/*.ts",
