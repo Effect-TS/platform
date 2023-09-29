@@ -3,7 +3,7 @@
  *
  * Also includes exports from [`@effect/platform/KeyValueStore`](https://effect-ts.github.io/platform/platform/KeyValueStore.ts.html).
  */
-import * as Layer from "@effect/io/Layer"
+import * as Layer from "effect/Layer"
 import * as FileSystem from "@effect/platform-node/FileSystem"
 import * as Path from "@effect/platform-node/Path"
 import type * as PlatformError from "@effect/platform/Error"

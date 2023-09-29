@@ -2,7 +2,7 @@
  * @since 1.0.0
  */
 
-import type { Layer } from "@effect/io/Layer"
+import type { Layer } from "effect/Layer"
 import * as internal from "@effect/platform-node/internal/fileSystem"
 import type { FileSystem } from "@effect/platform/FileSystem"
 
