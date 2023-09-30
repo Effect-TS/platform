@@ -124,13 +124,13 @@ importers:
     devDependencies:
       '@effect/schema':
         specifier: ^0.39.1
-        version: 0.39.1(effect@2.0.0-next.38)
+        version: 0.39.1(effect@2.0.0-next.39)
       '@types/path-browserify':
         specifier: ^1.0.0
         version: 1.0.0
       effect:
-        specifier: 2.0.0-next.38
-        version: 2.0.0-next.38
+        specifier: ^2.0.0-next.39
+        version: 2.0.0-next.39
     publishDirectory: dist
 
   packages/platform-browser:
@@ -140,8 +140,8 @@ importers:
         version: link:../platform/dist
     devDependencies:
       effect:
-        specifier: 2.0.0-next.38
-        version: 2.0.0-next.38
+        specifier: ^2.0.0-next.39
+        version: 2.0.0-next.39
       vitest-localstorage-mock:
         specifier: ^0.0.1
         version: 0.0.1(vitest@0.34.6)
@@ -158,13 +158,13 @@ importers:
     devDependencies:
       '@effect/schema':
         specifier: ^0.39.1
-        version: 0.39.1(effect@2.0.0-next.38)
+        version: 0.39.1(effect@2.0.0-next.39)
       bun-types:
         specifier: ^1.0.3
         version: 1.0.3
       effect:
-        specifier: 2.0.0-next.38
-        version: 2.0.0-next.38
+        specifier: ^2.0.0-next.39
+        version: 2.0.0-next.39
     publishDirectory: dist
 
   packages/platform-node:
@@ -181,7 +181,7 @@ importers:
     devDependencies:
       '@effect/schema':
         specifier: ^0.39.1
-        version: 0.39.1(effect@2.0.0-next.38)
+        version: 0.39.1(effect@2.0.0-next.39)
       '@types/busboy':
         specifier: ^1.5.1
         version: 1.5.1
@@ -189,8 +189,8 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
       effect:
-        specifier: 2.0.0-next.38
-        version: 2.0.0-next.38
+        specifier: ^2.0.0-next.39
+        version: 2.0.0-next.39
     publishDirectory: dist
 
 packages:
@@ -790,12 +790,12 @@ packages:
     resolution: {integrity: sha512-e8vfKbjnbYiyneBincEFS0tzXluopGK77OkVFbPRtUbNDS5tJfb+jiwOQEiqASDsadcZmd+9J9+Q6v/z7GuN2g==}
     dev: true
 
-  /@effect/schema@0.39.1(effect@2.0.0-next.38):
+  /@effect/schema@0.39.1(effect@2.0.0-next.39):
     resolution: {integrity: sha512-O/BO7I4q7A1edmqs0+UrkHpqX7bzWfzAEdEm5u42FJkJFQBjUEMJpz8qaVDrY/WI2dKFWKZRS6Z5oP2qJtILTQ==}
     peerDependencies:
       effect: 2.0.0-next.38
     dependencies:
-      effect: 2.0.0-next.38
+      effect: 2.0.0-next.39
       fast-check: 3.13.1
     dev: true
 
@@ -2559,8 +2559,8 @@ packages:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: true
 
-  /effect@2.0.0-next.38:
-    resolution: {integrity: sha512-J0e0v0l+1SkxrNFkcm6ubLqbocBQ3cHa+vJ8/bTjmbIX2uF0ZIS8CeRnwUNqbAJ+pzbWH+EfI7pjOYcoW3FNNg==}
+  /effect@2.0.0-next.39:
+    resolution: {integrity: sha512-4i6OI4pI55MeDALupg8wOX3Y6nvdwqJcJRGjwYNK7xqAGK3QXy6jbxAi4jf1FBVkIChtJLn2pQ42CbcrjNjewA==}
     dev: true
 
   /electron-to-chromium@1.4.529:
