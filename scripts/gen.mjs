@@ -44,7 +44,10 @@ packages.forEach((pkg) => {
     .map((_) => Path.relative(Path.join(pkg, "src"), _))
     .filter((_) => _ !== "index.ts");
 
-  const modules = resolvedEntrypoints.map((_) => _.replace(/\.tsx?$/, ""));
+  const modules = resolvedEntrypoints
+    .map((_) => _.replace(/\.tsx?$/, ""))
+    .sort();
+
   const files = genFiles(modules);
   const exports = genExports(topName, pkgDir, modules);
   const indexTs = genIndex(pkg, pkgJson.name);

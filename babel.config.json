@@ -1,4 +1,4 @@
 {
-  "plugins": [["annotate-pure-calls"], ["@effect"]],
+  "plugins": [["annotate-pure-calls"]],
   "presets": ["@babel/preset-typescript"]
 }
