@@ -24,8 +24,6 @@
   "homepage": "https://github.com/effect-ts/platform",
   "scripts": {
     "example": "ts-node --project tsconfig.examples.json",
-    "build": "preconstruct fix && preconstruct build",
-    "circular": "madge --ts-config ./tsconfig.madge.json --circular --no-color --no-spinner --warning build/esm",
     "lint": "eslint --ext .ts,.tsx src/**/* test/**/*",
     "tc": "tsc --noEmit",
     "test": "vitest",
@@ -46,7 +44,7 @@
   },
   "peerDependencies": {
     "@effect/schema": "^0.39.1",
-    "effect": "^2.0.0-next.39"
+    "effect": "^2.0.0-next.40"
   },
   "files": [
     "src",

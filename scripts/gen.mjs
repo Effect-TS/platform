@@ -2,34 +2,6 @@ import * as Glob from "glob";
 import * as Fs from "node:fs";
 import * as Path from "node:path";
 
-function readJson(file) {
-  return JSON.parse(Fs.readFileSync(file, "utf8"));
-}
-
-function writeJson(file, content) {
-  Fs.writeFileSync(file, JSON.stringify(content, null, 2) + "\n");
-}
-
-function writeGitignore(pkg, files) {
-  Fs.writeFileSync(
-    `${pkg}/.gitignore`,
-    `coverage/
-*.tsbuildinfo
-node_modules/
-yarn-error.log
-.ultra.cache.json
-.DS_Store
-tmp/
-build/
-dist/
-.direnv/
-
-# files
-${files.map((_) => `/${_}`).join("\n")}
-`
-  );
-}
-
 const packages = Glob.sync("packages/*").sort();
 const topPkgJson = readJson("package.json");
 const topName = topPkgJson.name;
@@ -50,7 +22,7 @@ packages.forEach((pkg) => {
 
   const files = genFiles(modules);
   const exports = genExports(topName, pkgDir, modules);
-  const indexTs = genIndex(pkg, pkgJson.name);
+  const indexTs = genIndex(pkg);
 
   writeGitignore(pkg, files);
   writeJson(`${pkg}/package.json`, {
@@ -60,6 +32,8 @@ packages.forEach((pkg) => {
   });
   Fs.writeFileSync(`${pkg}/src/index.ts`, indexTs);
 });
+
+updateVscodeIgnore();
 
 function genExports(topName, pkgDir, modules) {
   const exportPrefix = `${topName}-${pkgDir}`;
@@ -101,7 +75,7 @@ function genFiles(modules) {
   ];
 }
 
-function genIndex(dir, pkgName) {
+function genIndex(dir) {
   const modules = Glob.sync(`${dir}/src/*.ts`)
     .filter((_) => !_.endsWith("/index.ts"))
     .sort();
@@ -112,8 +86,48 @@ function genIndex(dir, pkgName) {
         const topComment = content.match(/\/\*\*\n.+?\*\//s)?.[0] ?? "";
         const name = Path.basename(module, ".ts");
         return `${topComment}
-export * as ${name} from "${pkgName}/${name}"`;
+export * as ${name} from "./${name}"`;
       })
       .join("\n\n") + "\n"
+  );
+}
+
+function updateVscodeIgnore() {
+  const settings = readJson(".vscode/settings.json");
+  settings["files.exclude"] = Glob.sync("packages/*/package.json")
+    .map((file) => [Path.dirname(file), readJson(file)])
+    .flatMap(([dir, pkg]) => pkg.files.map((_) => [dir, _]) ?? [])
+    .reduce((acc, [dir, file]) => {
+      acc[Path.join(dir, file)] = true;
+      return acc;
+    }, {});
+  writeJson(".vscode/settings.json", settings);
+}
+
+function readJson(file) {
+  return JSON.parse(Fs.readFileSync(file, "utf8"));
+}
+
+function writeJson(file, content) {
+  Fs.writeFileSync(file, JSON.stringify(content, null, 2) + "\n");
+}
+
+function writeGitignore(pkg, files) {
+  Fs.writeFileSync(
+    `${pkg}/.gitignore`,
+    `coverage/
+*.tsbuildinfo
+node_modules/
+yarn-error.log
+.ultra.cache.json
+.DS_Store
+tmp/
+build/
+dist/
+.direnv/
+
+# files
+${files.map((_) => `/${_}`).join("\n")}
+`
   );
 }

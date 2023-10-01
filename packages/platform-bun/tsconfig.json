@@ -1,5 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": {},
-  "include": ["./src/**/*", "test/**/*", "examples/**/*"]
+  "compilerOptions": {
+    "outDir": "build",
+    "types": ["bun-types"]
+  },
+  "include": ["./src/**/*", "test/**/*", "examples/**/*"],
+  "references": [{ "path": "../platform" }, { "path": "../platform-node" }]
 }

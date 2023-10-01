@@ -43,7 +43,7 @@
     "effect": "2.0.0-next.40"
   },
   "peerDependencies": {
-    "effect": "^2.0.0-next.39"
+    "effect": "^2.0.0-next.40"
   },
   "dependencies": {
     "@effect/platform": "workspace:^",

@@ -14,7 +14,7 @@
     "clean": "node scripts/clean.mjs && rimraf tsconfig.tsbuildinfo",
     "build": "pnpm gen && preconstruct fix && preconstruct build && pnpm gen",
     "gen": "node scripts/gen.mjs",
-    "circular": "madge --ts-config ./tsconfig.madge.json --circular --no-color --no-spinner --warning packages/*/build/esm",
+    "circular": "madge --ts-config ./tsconfig.json --circular --no-color --no-spinner --warning packages/**/*.esm.js",
     "test": "vitest",
     "autofix": "ultra -r autofix",
     "docs": "ultra -r docs && pnpm docs-cp",
