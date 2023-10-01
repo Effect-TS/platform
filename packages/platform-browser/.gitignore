@@ -1,0 +1,22 @@
+coverage/
+*.tsbuildinfo
+node_modules/
+yarn-error.log
+.ultra.cache.json
+.DS_Store
+tmp/
+build/
+dist/
+.direnv/
+
+# files
+/src
+/dist
+/internal
+/Clipboard
+/Effectify
+/Error
+/HttpClient
+/KeyValueStore
+/Path
+/Runtime

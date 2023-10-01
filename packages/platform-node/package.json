@@ -2,9 +2,20 @@
   "name": "@effect/platform-node",
   "version": "0.19.2",
   "description": "Unified interfaces for common platform-specific services",
+  "main": "dist/effect-platform-node.cjs.js",
+  "module": "dist/effect-platform-node.esm.js",
+  "preconstruct": {
+    "entrypoints": [
+      "*.ts",
+      "Http/*.ts"
+    ],
+    "distFilenameStrategy": "full",
+    "exports": {
+      "importConditionDefaultExport": "default"
+    }
+  },
   "publishConfig": {
-    "access": "public",
-    "directory": "dist"
+    "access": "public"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -14,14 +25,6 @@
     "url": "https://github.com/effect-ts/platform.git"
   },
   "homepage": "https://github.com/effect-ts/platform",
-  "exports": {
-    ".": {
-      "require": "./build/cjs/index.js"
-    },
-    "./*": {
-      "require": "./build/cjs/*.js"
-    }
-  },
   "scripts": {
     "example": "ts-node --project tsconfig.examples.json",
     "version": "changeset version && pnpm install --no-frozen-lockfile && pnpm run docs-update",
@@ -45,7 +48,7 @@
   "keywords": [],
   "author": "Effect contributors",
   "license": "MIT",
-  "sideEffects": [],
+  "sideEffects": false,
   "devDependencies": {
     "@effect/schema": "^0.39.1",
     "@types/busboy": "^1.5.1",
@@ -59,5 +62,122 @@
     "@effect/platform": "workspace:^",
     "busboy": "^1.6.0",
     "mime": "^3.0.0"
+  },
+  "files": [
+    "src",
+    "dist",
+    "internal",
+    "Command",
+    "CommandExecutor",
+    "Effectify",
+    "Error",
+    "FileSystem",
+    "Http",
+    "HttpClient",
+    "HttpServer",
+    "KeyValueStore",
+    "NodeContext",
+    "Path",
+    "Runtime",
+    "Sink",
+    "Stream"
+  ],
+  "exports": {
+    "./Path": {
+      "module": "./Path/dist/effect-platform-node-Path.esm.js",
+      "import": "./Path/dist/effect-platform-node-Path.cjs.mjs",
+      "default": "./Path/dist/effect-platform-node-Path.cjs.js"
+    },
+    "./Sink": {
+      "module": "./Sink/dist/effect-platform-node-Sink.esm.js",
+      "import": "./Sink/dist/effect-platform-node-Sink.cjs.mjs",
+      "default": "./Sink/dist/effect-platform-node-Sink.cjs.js"
+    },
+    "./Error": {
+      "module": "./Error/dist/effect-platform-node-Error.esm.js",
+      "import": "./Error/dist/effect-platform-node-Error.cjs.mjs",
+      "default": "./Error/dist/effect-platform-node-Error.cjs.js"
+    },
+    ".": {
+      "module": "./dist/effect-platform-node.esm.js",
+      "import": "./dist/effect-platform-node.cjs.mjs",
+      "default": "./dist/effect-platform-node.cjs.js"
+    },
+    "./Stream": {
+      "module": "./Stream/dist/effect-platform-node-Stream.esm.js",
+      "import": "./Stream/dist/effect-platform-node-Stream.cjs.mjs",
+      "default": "./Stream/dist/effect-platform-node-Stream.cjs.js"
+    },
+    "./Command": {
+      "module": "./Command/dist/effect-platform-node-Command.esm.js",
+      "import": "./Command/dist/effect-platform-node-Command.cjs.mjs",
+      "default": "./Command/dist/effect-platform-node-Command.cjs.js"
+    },
+    "./Runtime": {
+      "module": "./Runtime/dist/effect-platform-node-Runtime.esm.js",
+      "import": "./Runtime/dist/effect-platform-node-Runtime.cjs.mjs",
+      "default": "./Runtime/dist/effect-platform-node-Runtime.cjs.js"
+    },
+    "./Effectify": {
+      "module": "./Effectify/dist/effect-platform-node-Effectify.esm.js",
+      "import": "./Effectify/dist/effect-platform-node-Effectify.cjs.mjs",
+      "default": "./Effectify/dist/effect-platform-node-Effectify.cjs.js"
+    },
+    "./Http/Etag": {
+      "module": "./Http/Etag/dist/effect-platform-node-Http-Etag.esm.js",
+      "import": "./Http/Etag/dist/effect-platform-node-Http-Etag.cjs.mjs",
+      "default": "./Http/Etag/dist/effect-platform-node-Http-Etag.cjs.js"
+    },
+    "./FileSystem": {
+      "module": "./FileSystem/dist/effect-platform-node-FileSystem.esm.js",
+      "import": "./FileSystem/dist/effect-platform-node-FileSystem.cjs.mjs",
+      "default": "./FileSystem/dist/effect-platform-node-FileSystem.cjs.js"
+    },
+    "./HttpClient": {
+      "module": "./HttpClient/dist/effect-platform-node-HttpClient.esm.js",
+      "import": "./HttpClient/dist/effect-platform-node-HttpClient.cjs.mjs",
+      "default": "./HttpClient/dist/effect-platform-node-HttpClient.cjs.js"
+    },
+    "./HttpServer": {
+      "module": "./HttpServer/dist/effect-platform-node-HttpServer.esm.js",
+      "import": "./HttpServer/dist/effect-platform-node-HttpServer.cjs.mjs",
+      "default": "./HttpServer/dist/effect-platform-node-HttpServer.cjs.js"
+    },
+    "./Http/Server": {
+      "module": "./Http/Server/dist/effect-platform-node-Http-Server.esm.js",
+      "import": "./Http/Server/dist/effect-platform-node-Http-Server.cjs.mjs",
+      "default": "./Http/Server/dist/effect-platform-node-Http-Server.cjs.js"
+    },
+    "./NodeContext": {
+      "module": "./NodeContext/dist/effect-platform-node-NodeContext.esm.js",
+      "import": "./NodeContext/dist/effect-platform-node-NodeContext.cjs.mjs",
+      "default": "./NodeContext/dist/effect-platform-node-NodeContext.cjs.js"
+    },
+    "./Http/FormData": {
+      "module": "./Http/FormData/dist/effect-platform-node-Http-FormData.esm.js",
+      "import": "./Http/FormData/dist/effect-platform-node-Http-FormData.cjs.mjs",
+      "default": "./Http/FormData/dist/effect-platform-node-Http-FormData.cjs.js"
+    },
+    "./Http/Platform": {
+      "module": "./Http/Platform/dist/effect-platform-node-Http-Platform.esm.js",
+      "import": "./Http/Platform/dist/effect-platform-node-Http-Platform.cjs.mjs",
+      "default": "./Http/Platform/dist/effect-platform-node-Http-Platform.cjs.js"
+    },
+    "./KeyValueStore": {
+      "module": "./KeyValueStore/dist/effect-platform-node-KeyValueStore.esm.js",
+      "import": "./KeyValueStore/dist/effect-platform-node-KeyValueStore.cjs.mjs",
+      "default": "./KeyValueStore/dist/effect-platform-node-KeyValueStore.cjs.js"
+    },
+    "./CommandExecutor": {
+      "module": "./CommandExecutor/dist/effect-platform-node-CommandExecutor.esm.js",
+      "import": "./CommandExecutor/dist/effect-platform-node-CommandExecutor.cjs.mjs",
+      "default": "./CommandExecutor/dist/effect-platform-node-CommandExecutor.cjs.js"
+    },
+    "./Http/NodeClient": {
+      "module": "./Http/NodeClient/dist/effect-platform-node-Http-NodeClient.esm.js",
+      "import": "./Http/NodeClient/dist/effect-platform-node-Http-NodeClient.cjs.mjs",
+      "default": "./Http/NodeClient/dist/effect-platform-node-Http-NodeClient.cjs.js"
+    },
+    "./package.json": "./package.json"
   }
 }

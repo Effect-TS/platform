@@ -2,23 +2,25 @@
   "name": "@effect/platform-browser",
   "version": "0.7.2",
   "description": "Unified interfaces for common platform-specific services",
+  "main": "dist/effect-platform-browser.cjs.js",
+  "module": "dist/effect-platform-browser.esm.js",
+  "preconstruct": {
+    "entrypoints": [
+      "*.ts"
+    ],
+    "distFilenameStrategy": "full",
+    "exports": {
+      "importConditionDefaultExport": "default"
+    }
+  },
   "publishConfig": {
-    "access": "public",
-    "directory": "dist"
+    "access": "public"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/effect-ts/platform.git"
   },
   "homepage": "https://github.com/effect-ts/platform",
-  "exports": {
-    ".": {
-      "require": "./build/cjs/index.js"
-    },
-    "./*": {
-      "require": "./build/cjs/*.js"
-    }
-  },
   "scripts": {
     "example": "ts-node --project tsconfig.examples.json",
     "version": "changeset version && pnpm install --no-frozen-lockfile && pnpm run docs-update",
@@ -42,7 +44,7 @@
   "keywords": [],
   "author": "Effect contributors",
   "license": "MIT",
-  "sideEffects": [],
+  "sideEffects": false,
   "dependencies": {
     "@effect/platform": "workspace:^"
   },
@@ -52,5 +54,60 @@
   },
   "peerDependencies": {
     "effect": "^2.0.0-next.39"
+  },
+  "files": [
+    "src",
+    "dist",
+    "internal",
+    "Clipboard",
+    "Effectify",
+    "Error",
+    "HttpClient",
+    "KeyValueStore",
+    "Path",
+    "Runtime"
+  ],
+  "exports": {
+    "./Path": {
+      "module": "./Path/dist/effect-platform-browser-Path.esm.js",
+      "import": "./Path/dist/effect-platform-browser-Path.cjs.mjs",
+      "default": "./Path/dist/effect-platform-browser-Path.cjs.js"
+    },
+    "./Error": {
+      "module": "./Error/dist/effect-platform-browser-Error.esm.js",
+      "import": "./Error/dist/effect-platform-browser-Error.cjs.mjs",
+      "default": "./Error/dist/effect-platform-browser-Error.cjs.js"
+    },
+    ".": {
+      "module": "./dist/effect-platform-browser.esm.js",
+      "import": "./dist/effect-platform-browser.cjs.mjs",
+      "default": "./dist/effect-platform-browser.cjs.js"
+    },
+    "./Runtime": {
+      "module": "./Runtime/dist/effect-platform-browser-Runtime.esm.js",
+      "import": "./Runtime/dist/effect-platform-browser-Runtime.cjs.mjs",
+      "default": "./Runtime/dist/effect-platform-browser-Runtime.cjs.js"
+    },
+    "./Clipboard": {
+      "module": "./Clipboard/dist/effect-platform-browser-Clipboard.esm.js",
+      "import": "./Clipboard/dist/effect-platform-browser-Clipboard.cjs.mjs",
+      "default": "./Clipboard/dist/effect-platform-browser-Clipboard.cjs.js"
+    },
+    "./Effectify": {
+      "module": "./Effectify/dist/effect-platform-browser-Effectify.esm.js",
+      "import": "./Effectify/dist/effect-platform-browser-Effectify.cjs.mjs",
+      "default": "./Effectify/dist/effect-platform-browser-Effectify.cjs.js"
+    },
+    "./HttpClient": {
+      "module": "./HttpClient/dist/effect-platform-browser-HttpClient.esm.js",
+      "import": "./HttpClient/dist/effect-platform-browser-HttpClient.cjs.mjs",
+      "default": "./HttpClient/dist/effect-platform-browser-HttpClient.cjs.js"
+    },
+    "./KeyValueStore": {
+      "module": "./KeyValueStore/dist/effect-platform-browser-KeyValueStore.esm.js",
+      "import": "./KeyValueStore/dist/effect-platform-browser-KeyValueStore.cjs.mjs",
+      "default": "./KeyValueStore/dist/effect-platform-browser-KeyValueStore.cjs.js"
+    },
+    "./package.json": "./package.json"
   }
 }
