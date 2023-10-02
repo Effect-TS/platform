@@ -17,7 +17,7 @@
     "circular": "madge --ts-config ./tsconfig.json --circular --no-color --no-spinner packages/*",
     "test": "vitest",
     "autofix": "ultra -r autofix",
-    "docs": "ultra -r docs && pnpm docs-cp",
+    "docs": "ultra -r docgen && pnpm docs-cp",
     "docs-cp": "node scripts/docs-cp.js",
     "lint": "ultra -r lint",
     "version": "changeset version && pnpm install --no-frozen-lockfile"

@@ -13,178 +13,178 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [exports](#exports)
-  - [From "@effect/platform-bun/BunContext"](#from-effectplatform-bunbuncontext)
-  - [From "@effect/platform-bun/Command"](#from-effectplatform-buncommand)
-  - [From "@effect/platform-bun/CommandExecutor"](#from-effectplatform-buncommandexecutor)
-  - [From "@effect/platform-bun/Effectify"](#from-effectplatform-buneffectify)
-  - [From "@effect/platform-bun/Error"](#from-effectplatform-bunerror)
-  - [From "@effect/platform-bun/FileSystem"](#from-effectplatform-bunfilesystem)
-  - [From "@effect/platform-bun/HttpClient"](#from-effectplatform-bunhttpclient)
-  - [From "@effect/platform-bun/HttpServer"](#from-effectplatform-bunhttpserver)
-  - [From "@effect/platform-bun/KeyValueStore"](#from-effectplatform-bunkeyvaluestore)
-  - [From "@effect/platform-bun/Path"](#from-effectplatform-bunpath)
-  - [From "@effect/platform-bun/Runtime"](#from-effectplatform-bunruntime)
-  - [From "@effect/platform-bun/Sink"](#from-effectplatform-bunsink)
-  - [From "@effect/platform-bun/Stream"](#from-effectplatform-bunstream)
+  - [From "./BunContext"](#from-buncontext)
+  - [From "./Command"](#from-command)
+  - [From "./CommandExecutor"](#from-commandexecutor)
+  - [From "./Effectify"](#from-effectify)
+  - [From "./Error"](#from-error)
+  - [From "./FileSystem"](#from-filesystem)
+  - [From "./HttpClient"](#from-httpclient)
+  - [From "./HttpServer"](#from-httpserver)
+  - [From "./KeyValueStore"](#from-keyvaluestore)
+  - [From "./Path"](#from-path)
+  - [From "./Runtime"](#from-runtime)
+  - [From "./Sink"](#from-sink)
+  - [From "./Stream"](#from-stream)
 
 ---
 
 # exports
 
-## From "@effect/platform-bun/BunContext"
+## From "./BunContext"
 
-Re-exports all named exports from the "@effect/platform-bun/BunContext" module.
+Re-exports all named exports from the "./BunContext" module as "BunContext".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-bun/BunContext'
+export * as BunContext from './BunContext'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/Command"
+## From "./Command"
 
-Re-exports all named exports from the "@effect/platform-bun/Command" module.
+Re-exports all named exports from the "./Command" module as "Command".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-bun/Command'
+export * as Command from './Command'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/CommandExecutor"
+## From "./CommandExecutor"
 
-Re-exports all named exports from the "@effect/platform-bun/CommandExecutor" module.
+Re-exports all named exports from the "./CommandExecutor" module as "CommandExecutor".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-bun/CommandExecutor'
+export * as CommandExecutor from './CommandExecutor'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/Effectify"
+## From "./Effectify"
 
-Re-exports all named exports from the "@effect/platform-bun/Effectify" module.
+Re-exports all named exports from the "./Effectify" module as "Effectify".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-bun/Effectify'
+export * as Effectify from './Effectify'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/Error"
+## From "./Error"
 
-Re-exports all named exports from the "@effect/platform-bun/Error" module.
+Re-exports all named exports from the "./Error" module as "Error".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-bun/Error'
+export * as Error from './Error'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/FileSystem"
+## From "./FileSystem"
 
-Re-exports all named exports from the "@effect/platform-bun/FileSystem" module.
+Re-exports all named exports from the "./FileSystem" module as "FileSystem".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-bun/FileSystem'
+export * as FileSystem from './FileSystem'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/HttpClient"
+## From "./HttpClient"
 
-Re-exports all named exports from the "@effect/platform-bun/HttpClient" module.
+Re-exports all named exports from the "./HttpClient" module as "HttpClient".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-bun/HttpClient'
+export * as HttpClient from './HttpClient'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/HttpServer"
+## From "./HttpServer"
 
-Re-exports all named exports from the "@effect/platform-bun/HttpServer" module.
+Re-exports all named exports from the "./HttpServer" module as "HttpServer".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-bun/HttpServer'
+export * as HttpServer from './HttpServer'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/KeyValueStore"
+## From "./KeyValueStore"
 
-Re-exports all named exports from the "@effect/platform-bun/KeyValueStore" module.
+Re-exports all named exports from the "./KeyValueStore" module as "KeyValueStore".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-bun/KeyValueStore'
+export * as KeyValueStore from './KeyValueStore'
 ```
 
 Added in v1.0.0
 
 Also includes exports from [`@effect/platform/KeyValueStore`](https://effect-ts.github.io/platform/platform/KeyValueStore.ts.html).
 
-## From "@effect/platform-bun/Path"
+## From "./Path"
 
-Re-exports all named exports from the "@effect/platform-bun/Path" module.
+Re-exports all named exports from the "./Path" module as "Path".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-bun/Path'
+export * as Path from './Path'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/Runtime"
+## From "./Runtime"
 
-Re-exports all named exports from the "@effect/platform-bun/Runtime" module.
+Re-exports all named exports from the "./Runtime" module as "Runtime".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-bun/Runtime'
+export * as Runtime from './Runtime'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/Sink"
+## From "./Sink"
 
-Re-exports all named exports from the "@effect/platform-bun/Sink" module.
+Re-exports all named exports from the "./Sink" module as "Sink".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-bun/Sink'
+export * as Sink from './Sink'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/Stream"
+## From "./Stream"
 
-Re-exports all named exports from the "@effect/platform-bun/Stream" module.
+Re-exports all named exports from the "./Stream" module as "Stream".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-bun/Stream'
+export * as Stream from './Stream'
 ```
 
 Added in v1.0.0

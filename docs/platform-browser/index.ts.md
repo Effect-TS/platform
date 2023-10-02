@@ -13,102 +13,102 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [exports](#exports)
-  - [From "@effect/platform-browser/Clipboard"](#from-effectplatform-browserclipboard)
-  - [From "@effect/platform-browser/Effectify"](#from-effectplatform-browsereffectify)
-  - [From "@effect/platform-browser/Error"](#from-effectplatform-browsererror)
-  - [From "@effect/platform-browser/HttpClient"](#from-effectplatform-browserhttpclient)
-  - [From "@effect/platform-browser/KeyValueStore"](#from-effectplatform-browserkeyvaluestore)
-  - [From "@effect/platform-browser/Path"](#from-effectplatform-browserpath)
-  - [From "@effect/platform-browser/Runtime"](#from-effectplatform-browserruntime)
+  - [From "./Clipboard"](#from-clipboard)
+  - [From "./Effectify"](#from-effectify)
+  - [From "./Error"](#from-error)
+  - [From "./HttpClient"](#from-httpclient)
+  - [From "./KeyValueStore"](#from-keyvaluestore)
+  - [From "./Path"](#from-path)
+  - [From "./Runtime"](#from-runtime)
 
 ---
 
 # exports
 
-## From "@effect/platform-browser/Clipboard"
+## From "./Clipboard"
 
-Re-exports all named exports from the "@effect/platform-browser/Clipboard" module.
+Re-exports all named exports from the "./Clipboard" module as "Clipboard".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-browser/Clipboard'
+export * as Clipboard from './Clipboard'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-browser/Effectify"
+## From "./Effectify"
 
-Re-exports all named exports from the "@effect/platform-browser/Effectify" module.
+Re-exports all named exports from the "./Effectify" module as "Effectify".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-browser/Effectify'
+export * as Effectify from './Effectify'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-browser/Error"
+## From "./Error"
 
-Re-exports all named exports from the "@effect/platform-browser/Error" module.
+Re-exports all named exports from the "./Error" module as "Error".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-browser/Error'
+export * as Error from './Error'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-browser/HttpClient"
+## From "./HttpClient"
 
-Re-exports all named exports from the "@effect/platform-browser/HttpClient" module.
+Re-exports all named exports from the "./HttpClient" module as "HttpClient".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-browser/HttpClient'
+export * as HttpClient from './HttpClient'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-browser/KeyValueStore"
+## From "./KeyValueStore"
 
-Re-exports all named exports from the "@effect/platform-browser/KeyValueStore" module.
+Re-exports all named exports from the "./KeyValueStore" module as "KeyValueStore".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-browser/KeyValueStore'
+export * as KeyValueStore from './KeyValueStore'
 ```
 
 Added in v1.0.0
 
 Also includes exports from [`@effect/platform/KeyValueStore`](https://effect-ts.github.io/platform/platform/KeyValueStore.ts.html).
 
-## From "@effect/platform-browser/Path"
+## From "./Path"
 
-Re-exports all named exports from the "@effect/platform-browser/Path" module.
+Re-exports all named exports from the "./Path" module as "Path".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-browser/Path'
+export * as Path from './Path'
 ```
 
 Added in v1.0.0
 
 Also includes exports from [`@effect/platform/Path`](https://effect-ts.github.io/platform/platform/Path.ts.html).
 
-## From "@effect/platform-browser/Runtime"
+## From "./Runtime"
 
-Re-exports all named exports from the "@effect/platform-browser/Runtime" module.
+Re-exports all named exports from the "./Runtime" module as "Runtime".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-browser/Runtime'
+export * as Runtime from './Runtime'
 ```
 
 Added in v1.0.0
