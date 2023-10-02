@@ -1,11 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "build/tsbuildinfo/tsconfig.tsbuildinfo"
+    "outDir": "build",
+    "types": ["bun-types"]
   },
-  "references": [
-    { "path": "./tsconfig.build.json" },
-    { "path": "./tsconfig.test.json" },
-    { "path": "./tsconfig.examples.json" }
-  ]
+  "include": ["./src/**/*", "test/**/*", "examples/**/*"],
+  "references": [{ "path": "../platform" }, { "path": "../platform-node" }]
 }

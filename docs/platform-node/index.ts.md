@@ -13,178 +13,178 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [exports](#exports)
-  - [From "@effect/platform-node/Command"](#from-effectplatform-nodecommand)
-  - [From "@effect/platform-node/CommandExecutor"](#from-effectplatform-nodecommandexecutor)
-  - [From "@effect/platform-node/Effectify"](#from-effectplatform-nodeeffectify)
-  - [From "@effect/platform-node/Error"](#from-effectplatform-nodeerror)
-  - [From "@effect/platform-node/FileSystem"](#from-effectplatform-nodefilesystem)
-  - [From "@effect/platform-node/HttpClient"](#from-effectplatform-nodehttpclient)
-  - [From "@effect/platform-node/HttpServer"](#from-effectplatform-nodehttpserver)
-  - [From "@effect/platform-node/KeyValueStore"](#from-effectplatform-nodekeyvaluestore)
-  - [From "@effect/platform-node/NodeContext"](#from-effectplatform-nodenodecontext)
-  - [From "@effect/platform-node/Path"](#from-effectplatform-nodepath)
-  - [From "@effect/platform-node/Runtime"](#from-effectplatform-noderuntime)
-  - [From "@effect/platform-node/Sink"](#from-effectplatform-nodesink)
-  - [From "@effect/platform-node/Stream"](#from-effectplatform-nodestream)
+  - [From "./Command"](#from-command)
+  - [From "./CommandExecutor"](#from-commandexecutor)
+  - [From "./Effectify"](#from-effectify)
+  - [From "./Error"](#from-error)
+  - [From "./FileSystem"](#from-filesystem)
+  - [From "./HttpClient"](#from-httpclient)
+  - [From "./HttpServer"](#from-httpserver)
+  - [From "./KeyValueStore"](#from-keyvaluestore)
+  - [From "./NodeContext"](#from-nodecontext)
+  - [From "./Path"](#from-path)
+  - [From "./Runtime"](#from-runtime)
+  - [From "./Sink"](#from-sink)
+  - [From "./Stream"](#from-stream)
 
 ---
 
 # exports
 
-## From "@effect/platform-node/Command"
+## From "./Command"
 
-Re-exports all named exports from the "@effect/platform-node/Command" module.
+Re-exports all named exports from the "./Command" module as "Command".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-node/Command'
+export * as Command from './Command'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-node/CommandExecutor"
+## From "./CommandExecutor"
 
-Re-exports all named exports from the "@effect/platform-node/CommandExecutor" module.
+Re-exports all named exports from the "./CommandExecutor" module as "CommandExecutor".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-node/CommandExecutor'
+export * as CommandExecutor from './CommandExecutor'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-node/Effectify"
+## From "./Effectify"
 
-Re-exports all named exports from the "@effect/platform-node/Effectify" module.
+Re-exports all named exports from the "./Effectify" module as "Effectify".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-node/Effectify'
+export * as Effectify from './Effectify'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-node/Error"
+## From "./Error"
 
-Re-exports all named exports from the "@effect/platform-node/Error" module.
+Re-exports all named exports from the "./Error" module as "Error".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-node/Error'
+export * as Error from './Error'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-node/FileSystem"
+## From "./FileSystem"
 
-Re-exports all named exports from the "@effect/platform-node/FileSystem" module.
+Re-exports all named exports from the "./FileSystem" module as "FileSystem".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-node/FileSystem'
+export * as FileSystem from './FileSystem'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-node/HttpClient"
+## From "./HttpClient"
 
-Re-exports all named exports from the "@effect/platform-node/HttpClient" module.
+Re-exports all named exports from the "./HttpClient" module as "HttpClient".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-node/HttpClient'
+export * as HttpClient from './HttpClient'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-node/HttpServer"
+## From "./HttpServer"
 
-Re-exports all named exports from the "@effect/platform-node/HttpServer" module.
+Re-exports all named exports from the "./HttpServer" module as "HttpServer".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-node/HttpServer'
+export * as HttpServer from './HttpServer'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-node/KeyValueStore"
+## From "./KeyValueStore"
 
-Re-exports all named exports from the "@effect/platform-node/KeyValueStore" module.
+Re-exports all named exports from the "./KeyValueStore" module as "KeyValueStore".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-node/KeyValueStore'
+export * as KeyValueStore from './KeyValueStore'
 ```
 
 Added in v1.0.0
 
 Also includes exports from [`@effect/platform/KeyValueStore`](https://effect-ts.github.io/platform/platform/KeyValueStore.ts.html).
 
-## From "@effect/platform-node/NodeContext"
+## From "./NodeContext"
 
-Re-exports all named exports from the "@effect/platform-node/NodeContext" module.
+Re-exports all named exports from the "./NodeContext" module as "NodeContext".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-node/NodeContext'
+export * as NodeContext from './NodeContext'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-node/Path"
+## From "./Path"
 
-Re-exports all named exports from the "@effect/platform-node/Path" module.
+Re-exports all named exports from the "./Path" module as "Path".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-node/Path'
+export * as Path from './Path'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-node/Runtime"
+## From "./Runtime"
 
-Re-exports all named exports from the "@effect/platform-node/Runtime" module.
+Re-exports all named exports from the "./Runtime" module as "Runtime".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-node/Runtime'
+export * as Runtime from './Runtime'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-node/Sink"
+## From "./Sink"
 
-Re-exports all named exports from the "@effect/platform-node/Sink" module.
+Re-exports all named exports from the "./Sink" module as "Sink".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-node/Sink'
+export * as Sink from './Sink'
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-node/Stream"
+## From "./Stream"
 
-Re-exports all named exports from the "@effect/platform-node/Stream" module.
+Re-exports all named exports from the "./Stream" module as "Stream".
 
 **Signature**
 
 ```ts
-export * from '@effect/platform-node/Stream'
+export * as Stream from './Stream'
 ```
 
 Added in v1.0.0
