@@ -31,7 +31,6 @@ packages.forEach((pkg) => {
     files,
   });
   Fs.writeFileSync(`${pkg}/src/index.ts`, indexTs);
-  fixNested(pkg, modules);
 });
 
 updateVscodeIgnore();
@@ -63,7 +62,6 @@ function genFiles(modules) {
   return [
     "src",
     "dist",
-    "internal",
     ...modules
       .reduce((acc, file) => {
         const topLevel = file.split("/")[0];
@@ -131,25 +129,4 @@ dist/
 ${files.map((_) => `/${_}`).join("\n")}
 `
   );
-}
-
-// TODO: remove this once preconstruct supports nested entrypoints
-function fixNested(dir, modules) {
-  modules
-    .filter((_) => _.includes("/"))
-    .reduce((acc, _) => {
-      const topLevel = _.split("/")[0];
-      if (!acc.includes(topLevel)) {
-        acc.push(topLevel);
-      }
-      return acc;
-    }, [])
-    .forEach((module) => {
-      Glob.sync(`${dir}/${module}/${module}/**/*`, { nodir: true }).forEach(
-        (file) => {
-          Fs.renameSync(file, file.replace(`${module}/${module}`, module));
-        }
-      );
-      Fs.rmSync(`${dir}/${module}/${module}`, { recursive: true, force: true });
-    });
 }
