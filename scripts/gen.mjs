@@ -28,7 +28,7 @@ packages.forEach((pkg) => {
   writeJson(`${pkg}/package.json`, {
     ...pkgJson,
     exports,
-    files,
+    files: ["src", ...files],
   });
   Fs.writeFileSync(`${pkg}/src/index.ts`, indexTs);
 });
@@ -60,7 +60,6 @@ function genExports(topName, pkgDir, modules) {
 
 function genFiles(modules) {
   return [
-    "src",
     "dist",
     ...modules
       .reduce((acc, file) => {
@@ -95,7 +94,10 @@ function updateVscodeIgnore() {
   const settings = readJson(".vscode/settings.json");
   settings["files.exclude"] = Glob.sync("packages/*/package.json")
     .map((file) => [Path.dirname(file), readJson(file)])
-    .flatMap(([dir, pkg]) => pkg.files.map((_) => [dir, _]) ?? [])
+    .flatMap(
+      ([dir, pkg]) =>
+        pkg.files.filter((_) => _ !== "src").map((_) => [dir, _]) ?? []
+    )
     .reduce((acc, [dir, file]) => {
       acc[Path.join(dir, file)] = true;
       return acc;
