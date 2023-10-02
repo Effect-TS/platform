@@ -60,8 +60,7 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "@changesets/assemble-release-plan@5.2.4": "patches/@changesets__assemble-release-plan@5.2.4.patch",
-      "@preconstruct/cli@2.8.1": "patches/@preconstruct__cli@2.8.1.patch"
+      "@changesets/assemble-release-plan@5.2.4": "patches/@changesets__assemble-release-plan@5.2.4.patch"
     }
   },
   "preconstruct": {
