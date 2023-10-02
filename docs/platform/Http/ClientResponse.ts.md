@@ -21,6 +21,7 @@ Added in v1.0.0
   - [schemaBodyUrlParams](#schemabodyurlparams)
   - [schemaHeaders](#schemaheaders)
   - [schemaJson](#schemajson)
+  - [schemaNoBody](#schemanobody)
 - [type ids](#type-ids)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
@@ -108,6 +109,21 @@ export declare const schemaJson: <
 >(
   schema: Schema.Schema<I, A>
 ) => (self: ClientResponse) => Effect.Effect<never, ParseResult.ParseError | Error.ResponseError, A>
+```
+
+Added in v1.0.0
+
+## schemaNoBody
+
+**Signature**
+
+```ts
+export declare const schemaNoBody: <
+  I extends { readonly status?: number | undefined; readonly headers?: Headers.Headers | undefined },
+  A
+>(
+  schema: Schema.Schema<I, A>
+) => (self: ClientResponse) => Effect.Effect<never, ParseResult.ParseError, A>
 ```
 
 Added in v1.0.0
