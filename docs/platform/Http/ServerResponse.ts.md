@@ -240,7 +240,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface ServerResponse extends Pipeable {
+export interface ServerResponse extends Effect.Effect<never, never, ServerResponse> {
   readonly [TypeId]: TypeId
   readonly status: number
   readonly statusText?: string

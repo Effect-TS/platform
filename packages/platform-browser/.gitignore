@@ -10,7 +10,6 @@ dist/
 .direnv/
 
 # files
-/src
 /dist
 /Clipboard
 /Effectify
