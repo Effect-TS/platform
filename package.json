@@ -55,7 +55,7 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
     "ultra-runner": "^3.10.5",
-    "vite": "^4.4.9",
+    "vite": "^4.4.10",
     "vitest": "0.34.6"
   },
   "pnpm": {

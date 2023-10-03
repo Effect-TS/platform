@@ -14,9 +14,9 @@ Added in v1.0.0
 
 - [error](#error)
   - [BadArgument](#badargument)
-  - [PlatformError](#platformerror)
   - [SystemError](#systemerror)
 - [model](#model)
+  - [PlatformError](#platformerror)
   - [SystemErrorReason](#systemerrorreason)
 - [type id](#type-id)
   - [PlatformErrorTypeId](#platformerrortypeid)
@@ -35,16 +35,6 @@ export declare const BadArgument: (props: Omit<BadArgument, PlatformError.Provid
 
 Added in v1.0.0
 
-## PlatformError
-
-**Signature**
-
-```ts
-export declare const PlatformError: any
-```
-
-Added in v1.0.0
-
 ## SystemError
 
 **Signature**
@@ -57,12 +47,22 @@ Added in v1.0.0
 
 # model
 
+## PlatformError
+
+**Signature**
+
+```ts
+export declare const PlatformError: PlatformError
+```
+
+Added in v1.0.0
+
 ## SystemErrorReason
 
 **Signature**
 
 ```ts
-export declare const SystemErrorReason: any
+export declare const SystemErrorReason: SystemErrorReason
 ```
 
 Added in v1.0.0
