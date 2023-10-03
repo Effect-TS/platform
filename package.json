@@ -13,7 +13,7 @@
   "scripts": {
     "clean": "node scripts/clean.mjs && rimraf tsconfig.tsbuildinfo",
     "build": "pnpm gen && preconstruct fix && preconstruct build && pnpm gen",
-    "gen": "node scripts/gen.mjs",
+    "gen": "build-utils prepare-v1",
     "circular": "madge --ts-config ./tsconfig.json --circular --no-color --no-spinner packages/*",
     "test": "vitest",
     "autofix": "ultra -r autofix",
@@ -28,7 +28,7 @@
     "@babel/preset-typescript": "^7.23.0",
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.2",
-    "@effect/build-utils": "^0.1.4",
+    "@effect/build-utils": "^0.1.5",
     "@effect/docgen": "^0.1.8",
     "@effect/eslint-plugin": "^0.1.2",
     "@effect/language-service": "0.0.21",
