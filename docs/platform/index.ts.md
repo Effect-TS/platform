@@ -13,137 +13,137 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [exports](#exports)
-  - [From "./Command"](#from-command)
-  - [From "./CommandExecutor"](#from-commandexecutor)
-  - [From "./Effectify"](#from-effectify)
-  - [From "./Error"](#from-error)
-  - [From "./FileSystem"](#from-filesystem)
-  - [From "./HttpClient"](#from-httpclient)
-  - [From "./HttpServer"](#from-httpserver)
-  - [From "./KeyValueStore"](#from-keyvaluestore)
-  - [From "./Path"](#from-path)
-  - [From "./Runtime"](#from-runtime)
+  - [From "@effect/platform/Command"](#from-effectplatformcommand)
+  - [From "@effect/platform/CommandExecutor"](#from-effectplatformcommandexecutor)
+  - [From "@effect/platform/Effectify"](#from-effectplatformeffectify)
+  - [From "@effect/platform/Error"](#from-effectplatformerror)
+  - [From "@effect/platform/FileSystem"](#from-effectplatformfilesystem)
+  - [From "@effect/platform/HttpClient"](#from-effectplatformhttpclient)
+  - [From "@effect/platform/HttpServer"](#from-effectplatformhttpserver)
+  - [From "@effect/platform/KeyValueStore"](#from-effectplatformkeyvaluestore)
+  - [From "@effect/platform/Path"](#from-effectplatformpath)
+  - [From "@effect/platform/Runtime"](#from-effectplatformruntime)
 
 ---
 
 # exports
 
-## From "./Command"
+## From "@effect/platform/Command"
 
-Re-exports all named exports from the "./Command" module as "Command".
+Re-exports all named exports from the "@effect/platform/Command" module as "Command".
 
 **Signature**
 
 ```ts
-export * as Command from './Command'
+export * as Command from '@effect/platform/Command'
 ```
 
 Added in v1.0.0
 
-## From "./CommandExecutor"
+## From "@effect/platform/CommandExecutor"
 
-Re-exports all named exports from the "./CommandExecutor" module as "CommandExecutor".
+Re-exports all named exports from the "@effect/platform/CommandExecutor" module as "CommandExecutor".
 
 **Signature**
 
 ```ts
-export * as CommandExecutor from './CommandExecutor'
+export * as CommandExecutor from '@effect/platform/CommandExecutor'
 ```
 
 Added in v1.0.0
 
-## From "./Effectify"
+## From "@effect/platform/Effectify"
 
-Re-exports all named exports from the "./Effectify" module as "Effectify".
+Re-exports all named exports from the "@effect/platform/Effectify" module as "Effectify".
 
 **Signature**
 
 ```ts
-export * as Effectify from './Effectify'
+export * as Effectify from '@effect/platform/Effectify'
 ```
 
 Added in v1.0.0
 
-## From "./Error"
+## From "@effect/platform/Error"
 
-Re-exports all named exports from the "./Error" module as "Error".
+Re-exports all named exports from the "@effect/platform/Error" module as "Error".
 
 **Signature**
 
 ```ts
-export * as Error from './Error'
+export * as Error from '@effect/platform/Error'
 ```
 
 Added in v1.0.0
 
-## From "./FileSystem"
+## From "@effect/platform/FileSystem"
 
-Re-exports all named exports from the "./FileSystem" module as "FileSystem".
+Re-exports all named exports from the "@effect/platform/FileSystem" module as "FileSystem".
 
 **Signature**
 
 ```ts
-export * as FileSystem from './FileSystem'
+export * as FileSystem from '@effect/platform/FileSystem'
 ```
 
 Added in v1.0.0
 
-## From "./HttpClient"
+## From "@effect/platform/HttpClient"
 
-Re-exports all named exports from the "./HttpClient" module as "HttpClient".
+Re-exports all named exports from the "@effect/platform/HttpClient" module as "HttpClient".
 
 **Signature**
 
 ```ts
-export * as HttpClient from './HttpClient'
+export * as HttpClient from '@effect/platform/HttpClient'
 ```
 
 Added in v1.0.0
 
-## From "./HttpServer"
+## From "@effect/platform/HttpServer"
 
-Re-exports all named exports from the "./HttpServer" module as "HttpServer".
+Re-exports all named exports from the "@effect/platform/HttpServer" module as "HttpServer".
 
 **Signature**
 
 ```ts
-export * as HttpServer from './HttpServer'
+export * as HttpServer from '@effect/platform/HttpServer'
 ```
 
 Added in v1.0.0
 
-## From "./KeyValueStore"
+## From "@effect/platform/KeyValueStore"
 
-Re-exports all named exports from the "./KeyValueStore" module as "KeyValueStore".
+Re-exports all named exports from the "@effect/platform/KeyValueStore" module as "KeyValueStore".
 
 **Signature**
 
 ```ts
-export * as KeyValueStore from './KeyValueStore'
+export * as KeyValueStore from '@effect/platform/KeyValueStore'
 ```
 
 Added in v1.0.0
 
-## From "./Path"
+## From "@effect/platform/Path"
 
-Re-exports all named exports from the "./Path" module as "Path".
+Re-exports all named exports from the "@effect/platform/Path" module as "Path".
 
 **Signature**
 
 ```ts
-export * as Path from './Path'
+export * as Path from '@effect/platform/Path'
 ```
 
 Added in v1.0.0
 
-## From "./Runtime"
+## From "@effect/platform/Runtime"
 
-Re-exports all named exports from the "./Runtime" module as "Runtime".
+Re-exports all named exports from the "@effect/platform/Runtime" module as "Runtime".
 
 **Signature**
 
 ```ts
-export * as Runtime from './Runtime'
+export * as Runtime from '@effect/platform/Runtime'
 ```
 
 Added in v1.0.0
