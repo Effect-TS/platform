@@ -8,12 +8,13 @@ import * as Glob from "glob";
   [
     ".ultra.cache.json",
     "build",
+    "tsconfig.tsbuildinfo",
     "coverage",
     ...(pkg === "." ? [] : ["docs"]),
     ...files,
   ]
     .filter((_) => _ !== "src")
     .forEach((file) => {
-      Fs.rmSync(`${pkg}/${file}`, { recursive: true, force: true });
+      Fs.rm(`${pkg}/${file}`, { recursive: true, force: true }, () => {});
     });
 });

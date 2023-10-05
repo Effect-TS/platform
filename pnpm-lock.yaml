@@ -26,8 +26,8 @@ importers:
         specifier: ^2.26.2
         version: 2.26.2
       '@effect/build-utils':
-        specifier: ^0.1.5
-        version: 0.1.5
+        specifier: ^0.1.6
+        version: 0.1.6
       '@effect/docgen':
         specifier: ^0.1.8
         version: 0.1.8(@types/node@20.8.2)(typescript@5.2.2)
@@ -123,14 +123,14 @@ importers:
         version: 1.0.1
     devDependencies:
       '@effect/schema':
-        specifier: ^0.39.2
-        version: 0.39.2(effect@2.0.0-next.44)
+        specifier: ^0.40.0
+        version: 0.40.0(effect@2.0.0-next.45)
       '@types/path-browserify':
         specifier: ^1.0.0
         version: 1.0.0
       effect:
-        specifier: 2.0.0-next.44
-        version: 2.0.0-next.44
+        specifier: 2.0.0-next.45
+        version: 2.0.0-next.45
 
   packages/platform-browser:
     dependencies:
@@ -139,8 +139,8 @@ importers:
         version: link:../platform
     devDependencies:
       effect:
-        specifier: 2.0.0-next.44
-        version: 2.0.0-next.44
+        specifier: 2.0.0-next.45
+        version: 2.0.0-next.45
       vitest-localstorage-mock:
         specifier: ^0.0.1
         version: 0.0.1(vitest@0.34.6)
@@ -155,14 +155,14 @@ importers:
         version: link:../platform-node
     devDependencies:
       '@effect/schema':
-        specifier: ^0.39.2
-        version: 0.39.2(effect@2.0.0-next.44)
+        specifier: ^0.40.0
+        version: 0.40.0(effect@2.0.0-next.45)
       bun-types:
         specifier: ^1.0.3
         version: 1.0.3
       effect:
-        specifier: 2.0.0-next.44
-        version: 2.0.0-next.44
+        specifier: 2.0.0-next.45
+        version: 2.0.0-next.45
 
   packages/platform-node:
     dependencies:
@@ -177,8 +177,8 @@ importers:
         version: 3.0.0
     devDependencies:
       '@effect/schema':
-        specifier: ^0.39.2
-        version: 0.39.2(effect@2.0.0-next.44)
+        specifier: ^0.40.0
+        version: 0.40.0(effect@2.0.0-next.45)
       '@types/busboy':
         specifier: ^1.5.1
         version: 1.5.1
@@ -186,8 +186,8 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
       effect:
-        specifier: 2.0.0-next.44
-        version: 2.0.0-next.44
+        specifier: 2.0.0-next.45
+        version: 2.0.0-next.45
 
 packages:
 
@@ -783,8 +783,8 @@ packages:
     resolution: {integrity: sha512-rPwwm/RrFIolz6xHa8Kzpshuwpe+xu/XcEw9iUmRF2tnyIwxxaW7XoFKaQ+GfPju81cKpH4vJeq7/2IizKvyjg==}
     dev: true
 
-  /@effect/build-utils@0.1.5:
-    resolution: {integrity: sha512-j1ggCQnhIQ4TZaEAc2xyQXC2ChWsbIziwxDwKqBH6xL2VZDCEpxkNKPhN66QLJFVOuv/POUI9mzOKRZVde6LVQ==}
+  /@effect/build-utils@0.1.6:
+    resolution: {integrity: sha512-WOtpszUuQiTJsO4x+9ek28I99qvCdLsp6em75KWJXt4kRb41/1F3UsljZ+F0BGsCQWlPINw0nDTRSd6LRRWlMw==}
     engines: {node: '>=16.17.1'}
     hasBin: true
     dev: true
@@ -824,12 +824,12 @@ packages:
     resolution: {integrity: sha512-e8vfKbjnbYiyneBincEFS0tzXluopGK77OkVFbPRtUbNDS5tJfb+jiwOQEiqASDsadcZmd+9J9+Q6v/z7GuN2g==}
     dev: true
 
-  /@effect/schema@0.39.2(effect@2.0.0-next.44):
-    resolution: {integrity: sha512-UolykyRtrg+JHflZBfHK2p+w8IgP8u6kSkTq9VIggure12/2CFvlib9vphw4fJCN8cRd3gZo4LevU4FfS+ZLxw==}
+  /@effect/schema@0.40.0(effect@2.0.0-next.45):
+    resolution: {integrity: sha512-0ZXO1Tv3EkjlEnMjtbVaihObmbbENwpvWICo8kC8p9dGuPLvS3EXAPY3IBMM5ag4WscsBrgTLvOHbt4+UuvBSA==}
     peerDependencies:
-      effect: ^2.0.0-next.39
+      effect: ^2.0.0-next.45
     dependencies:
-      effect: 2.0.0-next.44
+      effect: 2.0.0-next.45
       fast-check: 3.13.1
     dev: true
 
@@ -2729,8 +2729,8 @@ packages:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: true
 
-  /effect@2.0.0-next.44:
-    resolution: {integrity: sha512-0oBnoqWW5u1b0AhmDiGZ/TX8La697YcCrTacEBU7v+gKZeH+bbVJwPEqesGagot0sErBrvyE0H9h7Si4lHhkuA==}
+  /effect@2.0.0-next.45:
+    resolution: {integrity: sha512-cSapc9midRXsOJUx8o9lIzTPJW2NSviQ1jjHlSZM8UJbteLLqcb02ung+4pLjGyouP2AMQlgo02F7b2MvTWxcQ==}
     dev: true
 
   /electron-to-chromium@1.4.537:
