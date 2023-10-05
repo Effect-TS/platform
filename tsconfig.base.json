@@ -51,7 +51,5 @@
     },
     "types": ["vitest/globals", "node"],
     "plugins": [{ "name": "@effect/language-service" }]
-  },
-  "include": [],
-  "exclude": ["node_modules", "build", "lib"]
+  }
 }

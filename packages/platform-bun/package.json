@@ -15,7 +15,7 @@
     }
   },
   "effect": {
-    "generateIndex": false
+    "generateIndex": true
   },
   "publishConfig": {
     "access": "public"
