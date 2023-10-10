@@ -10,6 +10,7 @@ import * as Glob from "glob";
     "build",
     "tsconfig.tsbuildinfo",
     "coverage",
+    "src/tsconfig.json",
     ...(pkg === "." ? [] : ["docs"]),
     ...files,
   ]
