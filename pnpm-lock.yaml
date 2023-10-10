@@ -106,6 +106,9 @@ importers:
       ultra-runner:
         specifier: ^3.10.5
         version: 3.10.5
+      undici-types:
+        specifier: ^5.25.3
+        version: 5.25.3
       vite:
         specifier: ^4.4.11
         version: 4.4.11(@types/node@20.8.4)
@@ -158,8 +161,8 @@ importers:
         specifier: ^0.43.0
         version: 0.43.0(effect@2.0.0-next.48)(fast-check@3.13.1)
       bun-types:
-        specifier: 1.0.0
-        version: 1.0.0
+        specifier: 1.0.5-canary.20231009T140142
+        version: 1.0.5-canary.20231009T140142
       effect:
         specifier: 2.0.0-next.48
         version: 2.0.0-next.48
@@ -2132,8 +2135,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /bun-types@1.0.0:
-    resolution: {integrity: sha512-Ozs85sjq1yn0sgqjehmSC3X7wIz0EqpPM+JVY7VgMACyAzSQyFvvNhZTnpg/hI0MUEZvlIXgV67oySsq8upXEg==}
+  /bun-types@1.0.5-canary.20231009T140142:
+    resolution: {integrity: sha512-5hT8WBXZ2ozdJt6s0nnnh4iQXn6xp9a7spbRYjapNxKjR3ckS5U2V347H3+XpaMVzc/a7D2I2KnKqIPO1R82kg==}
     dev: true
 
   /busboy@1.6.0:
