@@ -50,7 +50,9 @@ export type PlatformBackingWorkerTypeId = typeof PlatformBackingWorkerTypeId
  */
 export interface PlatformBackingWorker {
   readonly [PlatformBackingWorkerTypeId]: PlatformBackingWorkerTypeId
-  readonly spawn: <I, O>() => Effect.Effect<Scope.Scope, WorkerError, BackingWorker<I, O>>
+  readonly spawn: <I, O>(
+    evaluate: Effect.Effect<never, WorkerError, unknown>
+  ) => Effect.Effect<Scope.Scope, WorkerError, BackingWorker<I, O>>
 }
 
 /**
@@ -78,8 +80,8 @@ export declare namespace Worker {
    * @since 1.0.0
    * @category models
    */
-  export interface Options<I, E, O> {
-    readonly process: (message: I) => Stream.Stream<never, E, O>
+  export interface Options<I> {
+    readonly spawn: (id: number) => Effect.Effect<never, WorkerError, unknown>
     readonly transfers?: (message: I) => ReadonlyArray<unknown>
     readonly permits?: number
     readonly queue?: WorkerQueue<I>
@@ -129,7 +131,7 @@ export type WorkerManagerTypeId = typeof WorkerManagerTypeId
 export interface WorkerManager {
   readonly [WorkerManagerTypeId]: WorkerManagerTypeId
   readonly spawn: <I, E, O>(
-    options: Worker.Options<I, E, O>
+    options: Worker.Options<I>
   ) => Effect.Effect<Scope.Scope, WorkerError, Worker<I, E, O>>
 }
 
