@@ -14,8 +14,6 @@ Added in v1.0.0
 
 - [constructor](#constructor)
   - [fromWritable](#fromwritable)
-- [model](#model)
-  - [FromWritableOptions (interface)](#fromwritableoptions-interface)
 
 ---
 
@@ -31,21 +29,6 @@ export declare const fromWritable: <E, A>(
   onError: (error: unknown) => E,
   options?: FromWritableOptions
 ) => Sink<never, E, A, never, void>
-```
-
-Added in v1.0.0
-
-# model
-
-## FromWritableOptions (interface)
-
-**Signature**
-
-```ts
-export interface FromWritableOptions {
-  readonly endOnClose?: boolean
-  readonly encoding?: BufferEncoding
-}
 ```
 
 Added in v1.0.0

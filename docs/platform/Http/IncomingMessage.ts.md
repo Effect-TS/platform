@@ -107,7 +107,7 @@ Added in v1.0.0
 ```ts
 export declare const schemaExternalSpan: <E>(
   self: IncomingMessage<E>
-) => Effect.Effect<never, ParseResult.ParseError, ExternalSpan>
+) => Effect.Effect<never, ParseResult.ParseError, Tracer.ExternalSpan>
 ```
 
 Added in v1.0.0

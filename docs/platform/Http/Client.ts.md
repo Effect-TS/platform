@@ -62,7 +62,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fetch: (options?: any) => Client.Default
+export declare const fetch: (options?: RequestInit) => Client.Default
 ```
 
 Added in v1.0.0
@@ -72,7 +72,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fetchOk: (options?: any) => Client.Default
+export declare const fetchOk: (options?: RequestInit) => Client.Default
 ```
 
 Added in v1.0.0

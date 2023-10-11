@@ -2,10 +2,12 @@
  * @since 1.0.0
  */
 import type { SizeInput } from "@effect/platform/FileSystem"
+import type { Channel } from "effect/Channel"
+import type { Chunk } from "effect/Chunk"
 import type { Effect } from "effect/Effect"
 import type { LazyArg } from "effect/Function"
 import type { Stream } from "effect/Stream"
-import type { Readable } from "stream"
+import type { Duplex, Readable } from "stream"
 import * as internal from "./internal/stream"
 
 /**
@@ -18,14 +20,51 @@ export interface FromReadableOptions {
 }
 
 /**
+ * @category model
+ * @since 1.0.0
+ */
+export interface FromWritableOptions {
+  readonly endOnDone?: boolean
+  readonly encoding?: BufferEncoding
+}
+
+/**
  * @category constructors
  * @since 1.0.0
  */
-export const fromReadable: <E, A>(
+export const fromReadable: <E, A = Uint8Array>(
   evaluate: LazyArg<Readable>,
   onError: (error: unknown) => E,
-  options?: FromReadableOptions
+  { chunkSize }?: FromReadableOptions
 ) => Stream<never, E, A> = internal.fromReadable
+
+/**
+ * @category constructors
+ * @since 1.0.0
+ */
+export const fromDuplex: <IE, E, I = Uint8Array, O = Uint8Array>(
+  evaluate: LazyArg<Duplex>,
+  onError: (error: unknown) => E,
+  options?: FromReadableOptions & FromWritableOptions
+) => Channel<never, IE, Chunk<I>, unknown, IE | E, Chunk<O>, void> = internal.fromDuplex
+
+/**
+ * @category combinators
+ * @since 1.0.0
+ */
+export const pipeThroughDuplex: {
+  <E2, B = Uint8Array>(
+    duplex: LazyArg<Duplex>,
+    onError: (error: unknown) => E2,
+    options?: FromReadableOptions & FromWritableOptions
+  ): <R, E, A>(self: Stream<R, E, A>) => Stream<R, E2 | E, B>
+  <R, E, A, E2, B = Uint8Array>(
+    self: Stream<R, E, A>,
+    duplex: LazyArg<Duplex>,
+    onError: (error: unknown) => E2,
+    options?: FromReadableOptions & FromWritableOptions
+  ): Stream<R, E | E2, B>
+} = internal.pipeThroughDuplex
 
 /**
  * @since 1.0.0
