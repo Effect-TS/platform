@@ -4,6 +4,7 @@
 import type { Effect } from "effect"
 import type * as Context from "effect/Context"
 import type * as Data from "effect/Data"
+import type * as Fiber from "effect/Fiber"
 import type * as Queue from "effect/Queue"
 import type * as Scope from "effect/Scope"
 import type * as Stream from "effect/Stream"
@@ -14,6 +15,7 @@ import * as internal from "./internal/worker"
  * @category models
  */
 export interface BackingWorker<I, O> {
+  readonly fiber: Fiber.Fiber<WorkerError, never>
   readonly send: (message: I, transfers?: ReadonlyArray<unknown>) => Effect.Effect<never, never, void>
   readonly queue: Queue.Dequeue<BackingWorker.Message<O>>
 }
@@ -27,7 +29,7 @@ export declare namespace BackingWorker {
    * @since 1.0.0
    * @category models
    */
-  export type Message<O> = readonly [ready: 0] | readonly [error: 1, WorkerError] | readonly [message: 2, O]
+  export type Message<O> = readonly [ready: 0] | readonly [error: 1, unknown] | readonly [message: 2, O]
 }
 
 /**
