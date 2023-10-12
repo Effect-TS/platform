@@ -14,8 +14,6 @@ Added in v1.0.0
 
 - [constructor](#constructor)
   - [fromWritable](#fromwritable)
-- [model](#model)
-  - [FromWritableOptions](#fromwritableoptions)
 
 ---
 
@@ -31,18 +29,6 @@ export declare const fromWritable: <E, A>(
   onError: (error: unknown) => E,
   options?: FromWritableOptions | undefined
 ) => Sink<never, E, A, never, void>
-```
-
-Added in v1.0.0
-
-# model
-
-## FromWritableOptions
-
-**Signature**
-
-```ts
-export declare const FromWritableOptions: FromWritableOptions
 ```
 
 Added in v1.0.0
