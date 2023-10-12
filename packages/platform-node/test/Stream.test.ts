@@ -1,8 +1,9 @@
 import * as NodeStream from "@effect/platform-node/Stream"
-import { Chunk, Stream } from "effect"
+import { Channel, Chunk, Stream } from "effect"
 import * as Effect from "effect/Effect"
 import { Duplex, Readable, Transform } from "stream"
 import { describe, it } from "vitest"
+import { createGzip, createUnzip } from "zlib"
 
 describe("Stream", () => {
   it("should read a stream", () =>
@@ -129,5 +130,24 @@ describe("Stream", () => {
         Chunk.toReadonlyArray(result),
         ["ABC"]
       )
+    }).pipe(Effect.runPromise))
+
+  it("fromDuplex should work with node:zlib", () =>
+    Effect.gen(function*(_) {
+      const text = "abcdefg1234567890"
+      const encoder = new TextEncoder()
+      const input = encoder.encode(text)
+      const stream = NodeStream.fromReadable<"error", Uint8Array>(() => Readable.from([input]), () => "error")
+      const deflate = NodeStream.fromDuplex<"error", "error", Uint8Array>(() => createGzip(), () => "error")
+      const inflate = NodeStream.fromDuplex<never, "error", Uint8Array>(() => createUnzip(), () => "error")
+      const channel = Channel.pipeToOrFail(deflate, inflate)
+      const items = yield* _(
+        stream,
+        Stream.pipeThroughChannelOrFail(channel),
+        Stream.decodeText(),
+        Stream.mkString,
+        Stream.runCollect
+      )
+      assert.deepEqual(Chunk.toReadonlyArray(items), [text])
     }).pipe(Effect.runPromise))
 })
