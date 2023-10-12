@@ -160,31 +160,9 @@ const readChannel = <E, A = Uint8Array>(
   onError: (error: unknown) => E,
   chunkSize: number | undefined
 ): Channel.Channel<never, unknown, unknown, unknown, E, Chunk.Chunk<A>, void> =>
-  pipe(
-    Effect.acquireRelease(
-      Queue.unbounded<Exit.Exit<E, Readable>>(),
-      (queue) => Queue.shutdown(queue)
-    ),
-    Effect.tap((queue) =>
-      Effect.sync(() => {
-        readable.on("readable", () => {
-          const size = queue.unsafeSize()
-          if (size._tag === "Some" && size.value <= 0) {
-            queue.unsafeOffer(Exit.succeed(readable))
-          }
-        })
-        readable.on("error", (err) => {
-          queue.unsafeOffer(Exit.fail(onError(err)))
-        })
-        readable.on("end", () => {
-          queue.unsafeOffer(Exit.failCause(Cause.empty))
-        })
-        if (readable.readable) {
-          queue.unsafeOffer(Exit.succeed(readable))
-        }
-      })
-    ),
-    Effect.map((queue) => {
+  Channel.acquireUseRelease(
+    Queue.unbounded<Exit.Exit<E, Readable>>(),
+    (queue) => {
       const loop: Channel.Channel<never, unknown, unknown, unknown, E, Chunk.Chunk<A>, void> = pipe(
         Queue.take(queue),
         Effect.map(Exit.match({
@@ -193,25 +171,45 @@ const readChannel = <E, A = Uint8Array>(
         })),
         Channel.unwrap
       )
-      return loop
-    }),
-    Channel.unwrapScoped
+      return Channel.zipRight(
+        Channel.sync(() => {
+          readable.on("readable", () => {
+            const size = queue.unsafeSize()
+            if (size._tag === "Some" && size.value <= 0) {
+              queue.unsafeOffer(Exit.succeed(readable))
+            }
+          })
+          readable.on("error", (err) => {
+            queue.unsafeOffer(Exit.fail(onError(err)))
+          })
+          readable.on("end", () => {
+            queue.unsafeOffer(Exit.failCause(Cause.empty))
+          })
+          if (readable.readable) {
+            queue.unsafeOffer(Exit.succeed(readable))
+          }
+        }),
+        loop
+      )
+    },
+    (queue) => Queue.shutdown(queue)
   )
 
 const readChannelChunk = <A>(
   readable: Readable,
   chunkSize: number | undefined
 ): Channel.Channel<never, unknown, unknown, unknown, never, Chunk.Chunk<A>, void> =>
-  Channel.unwrap(
-    Effect.sync(() => {
+  Channel.flatMap(
+    Channel.sync(() => {
       const arr: Array<A> = []
       let chunk = readable.read(chunkSize)
       while (chunk !== null) {
         arr.push(chunk)
         chunk = readable.read(chunkSize)
       }
-      return Channel.write(Chunk.unsafeFromArray(arr))
-    })
+      return Chunk.unsafeFromArray(arr)
+    }),
+    Channel.write
   )
 
 /** @internal */
