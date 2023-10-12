@@ -20,17 +20,7 @@ export const fromReadable = <E, A = Uint8Array>(
   { chunkSize }: FromReadableOptions = {}
 ): Stream.Stream<never, E, A> =>
   Stream.fromChannel(
-    Channel.acquireUseRelease(
-      Effect.sync(evaluate),
-      (readable) => readChannel<E, A>(readable, onError, chunkSize ? Number(chunkSize) : undefined),
-      (readable) =>
-        Effect.sync(() => {
-          readable.removeAllListeners()
-          if (!readable.closed) {
-            readable.destroy()
-          }
-        })
-    )
+    readChannel<E, A>(evaluate, onError, chunkSize ? Number(chunkSize) : undefined)
   )
 
 /** @internal */
@@ -195,17 +185,29 @@ export const pipeThroughSimple = dual<
 )
 
 const readChannel = <E, A = Uint8Array>(
-  readable: Readable,
+  evaluate: LazyArg<Readable>,
   onError: (error: unknown) => E,
   chunkSize: number | undefined
 ): Channel.Channel<never, unknown, unknown, unknown, E, Chunk.Chunk<A>, void> =>
   Channel.acquireUseRelease(
     Effect.tap(
-      Queue.unbounded<Either.Either<Exit.Exit<E, void>, void>>(),
-      (queue) => readableOffer(readable, queue, onError)
+      Effect.zip(
+        Effect.sync(evaluate),
+        Queue.unbounded<Either.Either<Exit.Exit<E, void>, void>>()
+      ),
+      ([readable, queue]) => readableOffer(readable, queue, onError)
     ),
-    (queue) => readableTake(readable, queue, chunkSize),
-    (queue) => Queue.shutdown(queue)
+    ([readable, queue]) => readableTake(readable, queue, chunkSize),
+    ([readable, queue]) =>
+      Effect.zipRight(
+        Effect.sync(() => {
+          readable.removeAllListeners()
+          if (!readable.closed) {
+            readable.destroy()
+          }
+        }),
+        Queue.shutdown(queue)
+      )
   )
 
 const writeInput = <IE, E, A>(

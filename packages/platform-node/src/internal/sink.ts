@@ -21,20 +21,21 @@ const writeChannel = <IE, OE, A>(
   { encoding, endOnDone = true }: FromWritableOptions = {}
 ): Channel.Channel<never, IE, Chunk.Chunk<A>, unknown, IE | OE, Chunk.Chunk<never>, void> => {
   const write = writeEffect(writable, onError, encoding)
+  const close = endOnDone ?
+    Effect.async<never, never, void>((resume) => {
+      if (writable.closed) {
+        resume(Effect.unit)
+      } else {
+        writable.end(() => resume(Effect.unit))
+      }
+    }) :
+    Channel.unit
+
   const loop: Channel.Channel<never, IE, Chunk.Chunk<A>, unknown, OE | IE, Chunk.Chunk<never>, void> = Channel
     .readWithCause({
       onInput: (chunk: Chunk.Chunk<A>) => Channel.flatMap(Channel.fromEffect(write(chunk)), () => loop),
-      onFailure: Channel.failCause,
-      onDone: (_done) =>
-        endOnDone ?
-          Channel.fromEffect(Effect.async<never, never, void>((resume) => {
-            if (writable.closed) {
-              resume(Effect.unit)
-            } else {
-              writable.end(() => resume(Effect.unit))
-            }
-          })) :
-          Channel.unit
+      onFailure: (cause) => Channel.zipRight(close, Channel.failCause(cause)),
+      onDone: (_done) => close
     })
   return loop
 }

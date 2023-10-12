@@ -31,6 +31,33 @@ describe("Sink", () => {
       assert.strictEqual(destroyed, true)
     }).pipe(Effect.runPromise))
 
+  it("write error", () =>
+    Effect.gen(function*(_) {
+      const items: Array<string> = []
+      let destroyed = false
+      const sink = NodeSink.fromWritable(
+        () =>
+          new Writable({
+            construct(callback) {
+              callback()
+            },
+            write(chunk, _encoding, callback) {
+              items.push(chunk.toString())
+              callback()
+            },
+            destroy(_error, callback) {
+              destroyed = true
+              callback(null)
+            }
+          }),
+        () => "error"
+      )
+      const result = yield* _(Stream.fail("a"), Stream.run(sink), Effect.flip)
+      assert.deepEqual(items, [])
+      assert.strictEqual(result, "a")
+      assert.strictEqual(destroyed, true)
+    }).pipe(Effect.runPromise))
+
   it("endOnClose false", () =>
     Effect.gen(function*(_) {
       const items: Array<string> = []
