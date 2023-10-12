@@ -1,11 +1,12 @@
 import type { SizeInput } from "@effect/platform/FileSystem"
 import * as Cause from "effect/Cause"
 import * as Channel from "effect/Channel"
+import type * as AsyncInput from "effect/ChannelSingleProducerAsyncInput"
 import * as Chunk from "effect/Chunk"
 import * as Effect from "effect/Effect"
 import * as Exit from "effect/Exit"
 import type { LazyArg } from "effect/Function"
-import { dual, pipe } from "effect/Function"
+import { dual } from "effect/Function"
 import * as Queue from "effect/Queue"
 import * as Stream from "effect/Stream"
 import type { Duplex, Readable, Writable } from "node:stream"
@@ -122,20 +123,34 @@ export const fromDuplex = <IE, E, I = Uint8Array, O = Uint8Array>(
   options: FromReadableOptions & FromWritableOptions = {}
 ): Channel.Channel<never, IE, Chunk.Chunk<I>, unknown, IE | E, Chunk.Chunk<O>, void> =>
   Channel.acquireUseRelease(
-    Effect.sync(evaluate),
-    (duplex) =>
-      Channel.zipRight(
-        writeChannel<IE, E, I>(duplex, onError, options),
-        readChannel<E, O>(duplex, onError, options.chunkSize ? Number(options.chunkSize) : undefined),
-        { concurrent: true }
+    Effect.zip(
+      Effect.sync(evaluate),
+      Queue.unbounded<Exit.Exit<IE | E, void>>()
+    ),
+    ([duplex, queue]) =>
+      Channel.flatMap(
+        readInput<IE | E, O>(
+          duplex,
+          queue,
+          onError,
+          options.chunkSize ? Number(options.chunkSize) : undefined
+        ),
+        (read) =>
+          Channel.embedInput(
+            Channel.fromInput(read),
+            writeInput(duplex, queue, onError, options)
+          )
       ),
-    (duplex) =>
-      Effect.sync(() => {
-        duplex.removeAllListeners()
-        if (!duplex.closed) {
-          duplex.destroy()
-        }
-      })
+    ([duplex, queue]) =>
+      Effect.zipRight(
+        Effect.sync(() => {
+          duplex.removeAllListeners()
+          if (!duplex.closed) {
+            duplex.destroy()
+          }
+        }),
+        Queue.shutdown(queue)
+      )
   )
 
 /** @internal */
@@ -153,7 +168,11 @@ export const pipeThroughDuplex = dual<
   ) => Stream.Stream<R, E | E2, B>
 >(
   (args) => Stream.StreamTypeId in args[0],
-  (self, duplex, onError, options) => Stream.pipeThroughChannelOrFail(self, fromDuplex(duplex, onError, options))
+  (self, duplex, onError, options) =>
+    Stream.pipeThroughChannelOrFail(
+      self,
+      fromDuplex(duplex, onError, options)
+    )
 )
 
 /** @internal */
@@ -187,83 +206,99 @@ const readChannel = <E, A = Uint8Array>(
   chunkSize: number | undefined
 ): Channel.Channel<never, unknown, unknown, unknown, E, Chunk.Chunk<A>, void> =>
   Channel.acquireUseRelease(
-    Queue.unbounded<Exit.Exit<E, Readable>>(),
-    (queue) => {
-      const loop: Channel.Channel<never, unknown, unknown, unknown, E, Chunk.Chunk<A>, void> = pipe(
-        Queue.take(queue),
-        Effect.map(Exit.match({
-          onFailure: (cause) => Cause.isEmpty(cause) ? Channel.unit : Channel.failCause(cause),
-          onSuccess: (readable) => Channel.flatMap(readChannelChunk<A>(readable, chunkSize), () => loop)
-        })),
-        Channel.unwrap
-      )
-      return Channel.zipRight(
-        Channel.sync(() => {
-          readable.on("readable", () => {
-            const size = queue.unsafeSize()
-            if (size._tag === "Some" && size.value <= 0) {
-              queue.unsafeOffer(Exit.succeed(readable))
-            }
-          })
-          readable.on("error", (err) => {
-            queue.unsafeOffer(Exit.fail(onError(err)))
-          })
-          readable.on("end", () => {
-            queue.unsafeOffer(Exit.failCause(Cause.empty))
-          })
-          if (readable.readable) {
-            queue.unsafeOffer(Exit.succeed(readable))
-          }
-        }),
-        loop
-      )
-    },
+    Queue.unbounded<Exit.Exit<E, void>>(),
+    (queue) =>
+      Channel.flatMap(
+        readInput<E, A>(readable, queue, onError, chunkSize),
+        Channel.fromInput
+      ),
     (queue) => Queue.shutdown(queue)
   )
 
-const readChannelChunk = <A>(
+const readInput = <E, A>(
+  readable: Readable,
+  queue: Queue.Queue<Exit.Exit<E, void>>,
+  onError: (error: unknown) => E,
+  chunkSize: number | undefined
+) =>
+  Channel.sync((): AsyncInput.AsyncInputConsumer<E, Chunk.Chunk<A>, void> => {
+    readable.on("readable", () => {
+      const size = queue.unsafeSize()
+      if (size._tag === "Some" && size.value <= 0) {
+        queue.unsafeOffer(Exit.unit)
+      }
+    })
+    readable.on("error", (err) => {
+      queue.unsafeOffer(Exit.fail(onError(err)))
+    })
+    readable.on("end", () => {
+      queue.unsafeOffer(Exit.failCause(Cause.empty))
+    })
+    if (readable.readable) {
+      queue.unsafeOffer(Exit.unit)
+    }
+
+    const read = readChunkEffect<A>(readable, chunkSize)
+    return {
+      takeWith: (onError, onElement, onDone) =>
+        Effect.flatMap(
+          Queue.take(queue),
+          Exit.match({
+            onFailure: (cause) => Effect.succeed(Cause.isEmpty(cause) ? onDone(void 0) : onError(cause)),
+            onSuccess: (_readable) => Effect.map(read, onElement)
+          })
+        )
+    }
+  })
+
+const readChunkEffect = <A>(
   readable: Readable,
   chunkSize: number | undefined
-): Channel.Channel<never, unknown, unknown, unknown, never, Chunk.Chunk<A>, void> =>
-  Channel.flatMap(
-    Channel.sync(() => {
-      const arr: Array<A> = []
-      let chunk = readable.read(chunkSize)
-      while (chunk !== null) {
-        arr.push(chunk)
-        chunk = readable.read(chunkSize)
-      }
-      return Chunk.unsafeFromArray(arr)
-    }),
-    Channel.write
-  )
+) =>
+  Effect.sync(() => {
+    const arr: Array<A> = []
+    let chunk = readable.read(chunkSize)
+    while (chunk !== null) {
+      arr.push(chunk)
+      chunk = readable.read(chunkSize)
+    }
+    return Chunk.unsafeFromArray(arr)
+  })
 
-/** @internal */
-export const writeChannel = <IE, OE, A>(
+const writeInput = <IE, E, A>(
   writable: Writable,
-  onError: (error: unknown) => OE,
+  queue: Queue.Queue<Exit.Exit<IE | E, void>>,
+  onError: (error: unknown) => E,
   { encoding, endOnDone = true }: FromWritableOptions = {}
-): Channel.Channel<never, IE, Chunk.Chunk<A>, unknown, IE | OE, Chunk.Chunk<never>, void> => {
+): AsyncInput.AsyncInputProducer<IE, Chunk.Chunk<A>, unknown> => {
   const write = writeEffect(writable, onError, encoding)
-  const loop: Channel.Channel<never, IE, Chunk.Chunk<A>, unknown, OE | IE, Chunk.Chunk<never>, void> = Channel
-    .readWithCause({
-      onInput: (chunk: Chunk.Chunk<A>) => Channel.flatMap(Channel.fromEffect(write(chunk)), () => loop),
-      onFailure: Channel.failCause,
-      onDone: () =>
-        endOnDone ?
-          Channel.fromEffect(Effect.async<never, never, void>((resume) => {
-            if (writable.closed) {
-              resume(Effect.unit)
-            } else {
-              writable.end(() => resume(Effect.unit))
-            }
-          })) :
-          Channel.unit
-    })
-  return loop
+  const close = endOnDone ?
+    Effect.async<never, never, void>((resume) => {
+      if (writable.closed) {
+        resume(Effect.unit)
+      } else {
+        writable.end(() => resume(Effect.unit))
+      }
+    }) :
+    Effect.unit
+  return {
+    awaitRead: () => Effect.unit,
+    emit: (chunk) =>
+      Effect.catchAllCause(
+        write(chunk),
+        (cause) => Queue.offer(queue, Exit.failCause(cause))
+      ),
+    error: (cause) =>
+      Effect.zipRight(
+        close,
+        Queue.offer(queue, Exit.failCause(cause))
+      ),
+    done: (_) => close
+  }
 }
 
-const writeEffect =
+/** @internal */
+export const writeEffect =
   <E, A>(writable: Writable, onError: (error: unknown) => E, encoding?: BufferEncoding) => (chunk: Chunk.Chunk<A>) =>
     Effect.async<never, E, void>((resume) => {
       const iterator = chunk[Symbol.iterator]()

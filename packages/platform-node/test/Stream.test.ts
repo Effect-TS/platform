@@ -1,7 +1,7 @@
 import * as NodeStream from "@effect/platform-node/Stream"
 import { Chunk, Stream } from "effect"
 import * as Effect from "effect/Effect"
-import { Readable, Transform } from "stream"
+import { Duplex, Readable, Transform } from "stream"
 import { describe, it } from "vitest"
 
 describe("Stream", () => {
@@ -85,6 +85,27 @@ describe("Stream", () => {
         Chunk.toReadonlyArray(result),
         ["ABC"]
       )
+    }).pipe(Effect.runPromise))
+
+  it("pipeThroughDuplex write error", () =>
+    Effect.gen(function*(_) {
+      const result = yield* _(
+        Stream.make("a", "b", "c"),
+        NodeStream.pipeThroughDuplex(
+          () =>
+            new Duplex({
+              read() {},
+              write(_chunk, _encoding, callback) {
+                callback(new Error())
+              }
+            }),
+          () => "error" as const
+        ),
+        Stream.runDrain,
+        Effect.flip
+      )
+
+      assert.strictEqual(result, "error")
     }).pipe(Effect.runPromise))
 
   it("pipeThroughSimple", () =>
