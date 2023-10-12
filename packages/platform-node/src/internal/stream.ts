@@ -1,4 +1,5 @@
 import type { SizeInput } from "@effect/platform/FileSystem"
+import type { Cause } from "effect"
 import * as Channel from "effect/Channel"
 import type * as AsyncInput from "effect/ChannelSingleProducerAsyncInput"
 import * as Chunk from "effect/Chunk"
@@ -123,7 +124,11 @@ export const fromDuplex = <IE, E, I = Uint8Array, O = Uint8Array>(
     ([duplex, queue]) =>
       Channel.embedInput(
         readableTake(duplex, queue, options.chunkSize ? Number(options.chunkSize) : undefined),
-        writeInput(duplex, queue, onError, options)
+        writeInput(
+          duplex,
+          (cause) => Queue.offer(queue, Either.left(Exit.failCause(cause))),
+          options
+        )
       ),
     ([duplex, queue]) =>
       Effect.zipRight(
@@ -210,58 +215,55 @@ const readChannel = <E, A = Uint8Array>(
       )
   )
 
-const writeInput = <IE, E, A>(
+/** @internal */
+export const writeInput = <IE, A>(
   writable: Writable,
-  queue: Queue.Queue<Either.Either<Exit.Exit<IE | E, void>, void>>,
-  onError: (error: unknown) => E,
-  { encoding, endOnDone = true }: FromWritableOptions = {}
+  onFailure: (cause: Cause.Cause<IE>) => Effect.Effect<never, never, void>,
+  { encoding, endOnDone = true }: FromWritableOptions,
+  onDone = Effect.unit
 ): AsyncInput.AsyncInputProducer<IE, Chunk.Chunk<A>, unknown> => {
-  const write = writeEffect(writable, onError, encoding)
-  const close = endOnDone ?
-    Effect.async<never, never, void>((resume) => {
+  const write = writeEffect(writable, encoding)
+  const close = endOnDone
+    ? Effect.async<never, never, void>((resume) => {
       if (writable.closed) {
         resume(Effect.unit)
       } else {
-        writable.end(() => resume(Effect.unit))
+        writable.once("finish", () => resume(Effect.unit))
+        writable.end()
       }
-    }) :
-    Effect.unit
+    })
+    : Effect.unit
   return {
     awaitRead: () => Effect.unit,
-    emit: (chunk) =>
-      Effect.catchAllCause(
-        write(chunk),
-        (cause) => Queue.offer(queue, Either.left(Exit.failCause(cause)))
-      ),
-    error: (cause) =>
-      Effect.zipRight(
-        close,
-        Queue.offer(queue, Either.left(Exit.failCause(cause)))
-      ),
-    done: (_) => close
+    emit: write,
+    error: (cause) => Effect.zipRight(close, onFailure(cause)),
+    done: (_) => Effect.zipRight(close, onDone)
   }
 }
 
 /** @internal */
-export const writeEffect =
-  <E, A>(writable: Writable, onError: (error: unknown) => E, encoding?: BufferEncoding) => (chunk: Chunk.Chunk<A>) =>
-    Effect.async<never, E, void>((resume) => {
+export const writeEffect = <A>(
+  writable: Writable,
+  encoding?: BufferEncoding
+) =>
+(chunk: Chunk.Chunk<A>) =>
+  chunk.length === 0 ?
+    Effect.unit :
+    Effect.async<never, never, void>((resume) => {
       const iterator = chunk[Symbol.iterator]()
+      let next = iterator.next()
       function loop() {
-        const item = iterator.next()
-        if (item.done) {
+        const item = next
+        next = iterator.next()
+        const success = encoding
+          ? writable.write(item.value, encoding)
+          : writable.write(item.value)
+        if (next.done) {
           resume(Effect.unit)
-        } else if (encoding) {
-          writable.write(item.value, encoding, onDone)
-        } else {
-          writable.write(item.value, onDone)
-        }
-      }
-      function onDone(err: unknown) {
-        if (err) {
-          resume(Effect.fail(onError(err)))
-        } else {
+        } else if (success) {
           loop()
+        } else {
+          writable.once("drain", loop)
         }
       }
       loop()

@@ -81,6 +81,7 @@ describe("Sink", () => {
         { endOnDone: false }
       )
       yield* _(Stream.make("a", "b", "c"), Stream.run(sink))
+      yield* _(Effect.sleep(0))
       assert.deepEqual(items, ["a", "b", "c"])
       assert.strictEqual(destroyed, false)
     }).pipe(Effect.runPromise))
