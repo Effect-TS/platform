@@ -2,4 +2,4 @@
 "@effect/platform-node": patch
 ---
 
-add Stream.fromDuplex & pipeThroughDuplex
+add Stream.fromDuplex & pipeThroughDuplex/Simple

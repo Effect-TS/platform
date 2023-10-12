@@ -9,6 +9,7 @@ import { dual, pipe } from "effect/Function"
 import * as Queue from "effect/Queue"
 import * as Stream from "effect/Stream"
 import type { Duplex, Readable, Writable } from "node:stream"
+import { type PlatformError, SystemError } from "../Error"
 import type { FromReadableOptions, FromWritableOptions } from "../Stream"
 
 /** @internal */
@@ -153,6 +154,31 @@ export const pipeThroughDuplex = dual<
 >(
   (args) => Stream.StreamTypeId in args[0],
   (self, duplex, onError, options) => Stream.pipeThroughChannelOrFail(self, fromDuplex(duplex, onError, options))
+)
+
+/** @internal */
+export const pipeThroughSimple = dual<
+  (
+    duplex: LazyArg<Duplex>
+  ) => <R, E>(self: Stream.Stream<R, E, string | Uint8Array>) => Stream.Stream<R, E | PlatformError, Uint8Array>,
+  <R, E>(
+    self: Stream.Stream<R, E, string | Uint8Array>,
+    duplex: LazyArg<Duplex>
+  ) => Stream.Stream<R, E | PlatformError, Uint8Array>
+>(
+  2,
+  (self, duplex) =>
+    Stream.pipeThroughChannelOrFail(
+      self,
+      fromDuplex(duplex, (error) =>
+        SystemError({
+          module: "Stream",
+          method: "pipeThroughSimple",
+          pathOrDescriptor: "",
+          reason: "Unknown",
+          message: String(error)
+        }))
+    )
 )
 
 const readChannel = <E, A = Uint8Array>(

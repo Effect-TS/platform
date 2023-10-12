@@ -8,6 +8,7 @@ import type { Effect } from "effect/Effect"
 import type { LazyArg } from "effect/Function"
 import type { Stream } from "effect/Stream"
 import type { Duplex, Readable } from "stream"
+import type { PlatformError } from "./Error"
 import * as internal from "./internal/stream"
 
 /**
@@ -65,6 +66,15 @@ export const pipeThroughDuplex: {
     options?: FromReadableOptions & FromWritableOptions
   ): Stream<R, E | E2, B>
 } = internal.pipeThroughDuplex
+
+/**
+ * @category combinators
+ * @since 1.0.0
+ */
+export const pipeThroughSimple: {
+  (duplex: LazyArg<Duplex>): <R, E>(self: Stream<R, E, string | Uint8Array>) => Stream<R, E | PlatformError, Uint8Array>
+  <R, E>(self: Stream<R, E, string | Uint8Array>, duplex: LazyArg<Duplex>): Stream<R, PlatformError | E, Uint8Array>
+} = internal.pipeThroughSimple
 
 /**
  * @since 1.0.0

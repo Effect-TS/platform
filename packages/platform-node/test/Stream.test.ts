@@ -86,4 +86,27 @@ describe("Stream", () => {
         ["ABC"]
       )
     }).pipe(Effect.runPromise))
+
+  it("pipeThroughSimple", () =>
+    Effect.gen(function*(_) {
+      const result = yield* _(
+        Stream.make("a", Buffer.from("b"), "c"),
+        NodeStream.pipeThroughSimple(
+          () =>
+            new Transform({
+              transform(chunk, _encoding, callback) {
+                callback(null, chunk.toString().toUpperCase())
+              }
+            })
+        ),
+        Stream.decodeText(),
+        Stream.mkString,
+        Stream.runCollect
+      )
+
+      assert.deepEqual(
+        Chunk.toReadonlyArray(result),
+        ["ABC"]
+      )
+    }).pipe(Effect.runPromise))
 })

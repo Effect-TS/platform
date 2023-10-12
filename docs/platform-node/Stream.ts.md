@@ -14,6 +14,7 @@ Added in v1.0.0
 
 - [combinators](#combinators)
   - [pipeThroughDuplex](#pipethroughduplex)
+  - [pipeThroughSimple](#pipethroughsimple)
 - [constructors](#constructors)
   - [fromDuplex](#fromduplex)
   - [fromReadable](#fromreadable)
@@ -46,6 +47,19 @@ export declare const pipeThroughDuplex: {
     onError: (error: unknown) => E2,
     options?: FromReadableOptions & FromWritableOptions
   ): Stream<R, E | E2, B>
+}
+```
+
+Added in v1.0.0
+
+## pipeThroughSimple
+
+**Signature**
+
+```ts
+export declare const pipeThroughSimple: {
+  (duplex: LazyArg<Duplex>): <R, E>(self: Stream<R, E, string | Uint8Array>) => Stream<R, E | PlatformError, Uint8Array>
+  <R, E>(self: Stream<R, E, string | Uint8Array>, duplex: LazyArg<Duplex>): Stream<R, E | PlatformError, Uint8Array>
 }
 ```
 
