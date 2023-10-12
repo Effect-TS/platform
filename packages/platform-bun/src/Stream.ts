@@ -32,6 +32,11 @@ export {
    */
   pipeThroughDuplex,
   /**
+   * @category combinators
+   * @since 1.0.0
+   */
+  pipeThroughSimple,
+  /**
    * @since 1.0.0
    * @category conversions
    */
