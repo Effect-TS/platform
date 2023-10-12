@@ -223,11 +223,7 @@ export const writeChannel = <IE, OE, A>(
   const write = writeEffect(writable, onError, encoding)
   const loop: Channel.Channel<never, IE, Chunk.Chunk<A>, unknown, OE | IE, Chunk.Chunk<never>, void> = Channel
     .readWithCause({
-      onInput: (chunk: Chunk.Chunk<A>) =>
-        Channel.flatMap(
-          Channel.fromEffect(Effect.forEach(chunk, write, { discard: true })),
-          () => loop
-        ),
+      onInput: (chunk: Chunk.Chunk<A>) => Channel.flatMap(Channel.fromEffect(write(chunk)), () => loop),
       onFailure: Channel.failCause,
       onDone: () =>
         endOnDone ?
@@ -244,18 +240,25 @@ export const writeChannel = <IE, OE, A>(
 }
 
 const writeEffect =
-  <E, A>(writable: Writable, onError: (error: unknown) => E, encoding?: BufferEncoding) => (item: A) =>
+  <E, A>(writable: Writable, onError: (error: unknown) => E, encoding?: BufferEncoding) => (chunk: Chunk.Chunk<A>) =>
     Effect.async<never, E, void>((resume) => {
+      const iterator = chunk[Symbol.iterator]()
+      function loop() {
+        const item = iterator.next()
+        if (item.done) {
+          resume(Effect.unit)
+        } else if (encoding) {
+          writable.write(item.value, encoding, onDone)
+        } else {
+          writable.write(item.value, onDone)
+        }
+      }
       function onDone(err: unknown) {
         if (err) {
           resume(Effect.fail(onError(err)))
         } else {
-          resume(Effect.unit)
+          loop()
         }
       }
-      if (encoding) {
-        writable.write(item, encoding, onDone)
-      } else {
-        writable.write(item, onDone)
-      }
+      loop()
     })

@@ -31,12 +31,13 @@ describe("Stream", () => {
         Stream.make("a", "b", "c"),
         Stream.pipeThroughChannelOrFail(channel),
         Stream.decodeText(),
+        Stream.mkString,
         Stream.runCollect
       )
 
       assert.deepEqual(
         Chunk.toReadonlyArray(items),
-        ["A", "B", "C"]
+        ["ABC"]
       )
     }).pipe(Effect.runPromise))
 
@@ -76,12 +77,13 @@ describe("Stream", () => {
           () => "error" as const
         ),
         Stream.decodeText(),
+        Stream.mkString,
         Stream.runCollect
       )
 
       assert.deepEqual(
         Chunk.toReadonlyArray(result),
-        ["A", "B", "C"]
+        ["ABC"]
       )
     }).pipe(Effect.runPromise))
 })
