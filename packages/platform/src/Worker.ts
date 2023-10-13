@@ -29,7 +29,7 @@ export declare namespace BackingWorker {
    * @since 1.0.0
    * @category models
    */
-  export type Message<O> = readonly [ready: 0] | readonly [error: 1, unknown] | readonly [message: 2, O]
+  export type Message<O> = readonly [ready: 0] | readonly [error: 1, O]
 }
 
 /**

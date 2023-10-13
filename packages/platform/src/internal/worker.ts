@@ -64,7 +64,6 @@ export const makeManager = Effect.gen(function*(_) {
       return Effect.gen(function*(_) {
         let requestIdCounter = 0
         const readyLatch = yield* _(Deferred.make<never, void>())
-        const errorDeferred = yield* _(Deferred.make<Worker.WorkerError, never>())
         const outbound = queue ?? (yield* _(defaultQueue<I>()))
         const semaphore = yield* _(Effect.makeSemaphore(permits))
         const requestMap = new Map<number, readonly [Queue.Queue<Exit.Exit<E, O>>, Deferred.Deferred<never, void>]>()
@@ -88,9 +87,6 @@ export const makeManager = Effect.gen(function*(_) {
                 return Deferred.complete(readyLatch, Effect.unit)
               }
               case 1: {
-                return Deferred.fail(errorDeferred, WorkerError("unknown", msg[1]))
-              }
-              case 2: {
                 const response = msg[1]
                 const queue = requestMap.get(response[0])
                 if (!queue) return Effect.unit
