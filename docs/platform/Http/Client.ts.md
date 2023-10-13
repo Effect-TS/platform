@@ -16,6 +16,7 @@ Added in v1.0.0
   - [fetch](#fetch)
   - [fetchOk](#fetchok)
   - [make](#make)
+  - [makeDefault](#makedefault)
 - [error handling](#error-handling)
   - [catchAll](#catchall)
   - [catchTag](#catchtag)
@@ -43,8 +44,6 @@ Added in v1.0.0
   - [schemaFunction](#schemafunction)
 - [tags](#tags)
   - [Client](#client)
-- [tracing](#tracing)
-  - [withB3Propagation](#withb3propagation)
 - [type ids](#type-ids)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
@@ -85,6 +84,20 @@ Added in v1.0.0
 export declare const make: <R, E, A>(
   f: (request: ClientRequest.ClientRequest) => Effect.Effect<R, E, A>
 ) => Client<R, E, A>
+```
+
+Added in v1.0.0
+
+## makeDefault
+
+**Signature**
+
+```ts
+export declare const makeDefault: (
+  f: (
+    request: ClientRequest.ClientRequest
+  ) => Effect.Effect<never, Error.HttpClientError, ClientResponse.ClientResponse>
+) => Client.Default
 ```
 
 Added in v1.0.0
@@ -440,20 +453,6 @@ Added in v1.0.0
 
 ```ts
 export declare const Client: Context.Tag<Client.Default, Client.Default>
-```
-
-Added in v1.0.0
-
-# tracing
-
-## withB3Propagation
-
-**Signature**
-
-```ts
-export declare const withB3Propagation: <R, E>(
-  self: Client.WithResponse<R, E>
-) => Client.WithResponse<Scope.Scope | R, E>
 ```
 
 Added in v1.0.0
