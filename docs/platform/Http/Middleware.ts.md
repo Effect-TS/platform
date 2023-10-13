@@ -14,9 +14,7 @@ Added in v1.0.0
 
 - [constructors](#constructors)
   - [logger](#logger)
-  - [loggerTracer](#loggertracer)
   - [make](#make)
-  - [tracer](#tracer)
   - [xForwardedHeaders](#xforwardedheaders)
 - [models](#models)
   - [Middleware (interface)](#middleware-interface)
@@ -38,32 +36,12 @@ export declare const logger: <R, E>(httpApp: App.Default<R, E>) => App.Default<R
 
 Added in v1.0.0
 
-## loggerTracer
-
-**Signature**
-
-```ts
-export declare const loggerTracer: <R, E>(httpApp: App.Default<R, E>) => App.Default<R, E>
-```
-
-Added in v1.0.0
-
 ## make
 
 **Signature**
 
 ```ts
 export declare const make: <M extends Middleware>(middleware: M) => M
-```
-
-Added in v1.0.0
-
-## tracer
-
-**Signature**
-
-```ts
-export declare const tracer: <R, E>(httpApp: App.Default<R, E>) => App.Default<R, E>
 ```
 
 Added in v1.0.0

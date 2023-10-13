@@ -12,6 +12,8 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [combinators](#combinators)
+  - [withDefaultMiddleware](#withdefaultmiddleware)
 - [fiber refs](#fiber-refs)
   - [appendPreResponseHandler](#appendpreresponsehandler)
   - [currentPreResponseHandlers](#currentpreresponsehandlers)
@@ -23,6 +25,18 @@ Added in v1.0.0
   - [PreResponseHandler (type alias)](#preresponsehandler-type-alias)
 
 ---
+
+# combinators
+
+## withDefaultMiddleware
+
+**Signature**
+
+```ts
+export declare const withDefaultMiddleware: <R, E>(self: Default<R, E>) => Default<R, E>
+```
+
+Added in v1.0.0
 
 # fiber refs
 
