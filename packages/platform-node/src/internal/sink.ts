@@ -9,15 +9,15 @@ import type { FromWritableOptions } from "../Stream"
 import { writeInput } from "./stream"
 
 /** @internal */
-export const fromWritable = <E, A = Uint8Array>(
-  evaluate: LazyArg<Writable>,
+export const fromWritable = <E, A = Uint8Array | string>(
+  evaluate: LazyArg<Writable | NodeJS.WritableStream>,
   onError: (error: unknown) => E,
   options: FromWritableOptions = {}
 ): Sink.Sink<never, E, A, never, void> =>
   Sink.suspend(() => Sink.fromChannel(writeChannel(evaluate(), onError, options)))
 
 const writeChannel = <IE, OE, A>(
-  writable: Writable,
+  writable: Writable | NodeJS.WritableStream,
   onError: (error: unknown) => OE,
   options: FromWritableOptions = {}
 ): Channel.Channel<never, IE, Chunk.Chunk<A>, unknown, IE | OE, Chunk.Chunk<never>, void> =>
@@ -38,7 +38,7 @@ const writeChannel = <IE, OE, A>(
   )
 
 const writableOutput = <IE, E>(
-  writable: Writable,
+  writable: Writable | NodeJS.WritableStream,
   deferred: Deferred.Deferred<IE, void>,
   onError: (error: unknown) => E
 ) =>
