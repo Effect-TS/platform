@@ -36,20 +36,20 @@ export declare namespace BackingWorker {
  * @since 1.0.0
  * @category type ids
  */
-export const PlatformBackingWorkerTypeId: unique symbol = internal.PlatformBackingWorkerTypeId
+export const BackingWorkerPlatformTypeId: unique symbol = internal.BackingWorkerPlatformTypeId
 
 /**
  * @since 1.0.0
  * @category type ids
  */
-export type PlatformBackingWorkerTypeId = typeof PlatformBackingWorkerTypeId
+export type BackingWorkerPlatformTypeId = typeof BackingWorkerPlatformTypeId
 
 /**
  * @since 1.0.0
  * @category models
  */
-export interface PlatformBackingWorker {
-  readonly [PlatformBackingWorkerTypeId]: PlatformBackingWorkerTypeId
+export interface BackingWorkerPlatform {
+  readonly [BackingWorkerPlatformTypeId]: BackingWorkerPlatformTypeId
   readonly spawn: <I, O>(
     evaluate: Effect.Effect<never, WorkerError, unknown>
   ) => Effect.Effect<Scope.Scope, WorkerError, BackingWorker<I, O>>
@@ -59,15 +59,15 @@ export interface PlatformBackingWorker {
  * @since 1.0.0
  * @category tags
  */
-export const PlatformBackingWorker: Context.Tag<PlatformBackingWorker, PlatformBackingWorker> =
-  internal.PlatformBackingWorker
+export const PlatformBackingWorker: Context.Tag<BackingWorkerPlatform, BackingWorkerPlatform> =
+  internal.BackingWorkerPlatform
 
 /**
  * @since 1.0.0
  * @category models
  */
 export interface Worker<I, E, O> {
-  readonly backing: BackingWorker<Worker.Request<I>, Worker.Response<E, O>>
+  readonly fiber: Fiber.Fiber<WorkerError, never>
   readonly execute: (message: I) => Stream.Stream<never, E, O>
 }
 
@@ -100,7 +100,7 @@ export declare namespace Worker {
   export type Response<E, O> =
     | readonly [id: number, error: 0, E]
     | readonly [id: number, data: 1, O]
-    | readonly [id: number, end: 2, data?: O]
+    | readonly [id: number, end: 2]
 }
 
 /**
@@ -108,8 +108,8 @@ export declare namespace Worker {
  * @since 1.0.0
  */
 export interface WorkerQueue<I> {
-  readonly offer: (item: I) => Effect.Effect<never, never, void>
-  readonly take: Effect.Effect<never, never, I>
+  readonly offer: (id: number, item: I) => Effect.Effect<never, never, void>
+  readonly take: Effect.Effect<never, never, readonly [id: number, item: I]>
 }
 
 /**
