@@ -37,20 +37,20 @@ export declare namespace BackingWorker {
  * @since 1.0.0
  * @category type ids
  */
-export const BackingWorkerPlatformTypeId: unique symbol = internal.BackingWorkerPlatformTypeId
+export const PlatformWorkerTypeId: unique symbol = internal.PlatformWorkerTypeId
 
 /**
  * @since 1.0.0
  * @category type ids
  */
-export type BackingWorkerPlatformTypeId = typeof BackingWorkerPlatformTypeId
+export type PlatformWorkerTypeId = typeof PlatformWorkerTypeId
 
 /**
  * @since 1.0.0
  * @category models
  */
-export interface BackingWorkerPlatform {
-  readonly [BackingWorkerPlatformTypeId]: BackingWorkerPlatformTypeId
+export interface PlatformWorker {
+  readonly [PlatformWorkerTypeId]: PlatformWorkerTypeId
   readonly spawn: <I, O>(
     evaluate: Effect.Effect<never, WorkerError, unknown>
   ) => Effect.Effect<Scope.Scope, WorkerError, BackingWorker<I, O>>
@@ -60,8 +60,7 @@ export interface BackingWorkerPlatform {
  * @since 1.0.0
  * @category tags
  */
-export const PlatformBackingWorker: Context.Tag<BackingWorkerPlatform, BackingWorkerPlatform> =
-  internal.BackingWorkerPlatform
+export const PlatformWorker: Context.Tag<PlatformWorker, PlatformWorker> = internal.PlatformWorker
 
 /**
  * @since 1.0.0
@@ -70,7 +69,7 @@ export const PlatformBackingWorker: Context.Tag<BackingWorkerPlatform, BackingWo
 export interface BackingRunner<I, O> {
   readonly fiber: Fiber.Fiber<WorkerError, void>
   readonly queue: Queue.Dequeue<BackingRunner.Message<I>>
-  readonly reply: (message: O, transfers?: ReadonlyArray<unknown>) => Effect.Effect<never, never, void>
+  readonly send: (message: O, transfers?: ReadonlyArray<unknown>) => Effect.Effect<never, never, void>
 }
 
 /**
@@ -89,20 +88,20 @@ export declare namespace BackingRunner {
  * @since 1.0.0
  * @category type ids
  */
-export const BackingRunnerPlatformTypeId: unique symbol = internal.BackingRunnerPlatformTypeId
+export const PlatformRunnerTypeId: unique symbol = internal.PlatformRunnerTypeId
 
 /**
  * @since 1.0.0
  * @category type ids
  */
-export type BackingRunnerPlatformTypeId = typeof BackingRunnerPlatformTypeId
+export type PlatformRunnerTypeId = typeof PlatformRunnerTypeId
 
 /**
  * @since 1.0.0
  * @category models
  */
-export interface BackingRunnerPlatform {
-  readonly [BackingRunnerPlatformTypeId]: BackingRunnerPlatformTypeId
+export interface PlatformRunner {
+  readonly [PlatformRunnerTypeId]: PlatformRunnerTypeId
   readonly start: <I, O>() => Effect.Effect<Scope.Scope, WorkerError, BackingRunner<I, O>>
 }
 
@@ -110,8 +109,7 @@ export interface BackingRunnerPlatform {
  * @since 1.0.0
  * @category tags
  */
-export const PlatformBackingRunner: Context.Tag<BackingRunnerPlatform, BackingRunnerPlatform> =
-  internal.BackingRunnerPlatform
+export const PlatformRunner: Context.Tag<PlatformRunner, PlatformRunner> = internal.PlatformRunner
 
 /**
  * @since 1.0.0
@@ -157,6 +155,20 @@ export declare namespace Worker {
 }
 
 /**
+ * @since 1.0.0
+ * @category models
+ */
+export declare namespace Runner {
+  /**
+   * @since 1.0.0
+   * @category models
+   */
+  export interface Options<O> {
+    readonly transfers?: (message: O) => ReadonlyArray<unknown>
+  }
+}
+
+/**
  * @category models
  * @since 1.0.0
  */
@@ -198,13 +210,13 @@ export const WorkerManager: Context.Tag<WorkerManager, WorkerManager> = internal
  * @since 1.0.0
  * @category constructors
  */
-export const makeManager: Effect.Effect<BackingWorkerPlatform, never, WorkerManager> = internal.makeManager
+export const makeManager: Effect.Effect<PlatformWorker, never, WorkerManager> = internal.makeManager
 
 /**
  * @since 1.0.0
  * @category layers
  */
-export const layerManager: Layer.Layer<BackingWorkerPlatform, never, WorkerManager> = internal.layerManager
+export const layerManager: Layer.Layer<PlatformWorker, never, WorkerManager> = internal.layerManager
 
 /**
  * @since 1.0.0
@@ -212,7 +224,7 @@ export const layerManager: Layer.Layer<BackingWorkerPlatform, never, WorkerManag
  */
 export const makeRunner: <I, E, O>(
   process: (request: I) => Stream.Stream<never, E, O>
-) => Effect.Effect<Scope.Scope | BackingRunnerPlatform, WorkerError, void> = internal.makeRunner
+) => Effect.Effect<Scope.Scope | PlatformRunner, WorkerError, void> = internal.makeRunner
 
 /**
  * @since 1.0.0

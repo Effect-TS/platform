@@ -37,23 +37,23 @@ export const defaultQueue = <I>() =>
   )
 
 /** @internal */
-export const BackingWorkerPlatformTypeId: Worker.BackingWorkerPlatformTypeId = Symbol.for(
-  "@effect/platform/Worker/PlatformBackingWorker"
-) as Worker.BackingWorkerPlatformTypeId
+export const PlatformWorkerTypeId: Worker.PlatformWorkerTypeId = Symbol.for(
+  "@effect/platform/Worker/PlatformWorker"
+) as Worker.PlatformWorkerTypeId
 
 /** @internal */
-export const BackingWorkerPlatform = Context.Tag<Worker.BackingWorkerPlatform>(
-  BackingWorkerPlatformTypeId
+export const PlatformWorker = Context.Tag<Worker.PlatformWorker>(
+  PlatformWorkerTypeId
 )
 
 /** @internal */
-export const BackingRunnerPlatformTypeId: Worker.BackingRunnerPlatformTypeId = Symbol.for(
-  "@effect/platform/Runner/PlatformBackingRunner"
-) as Worker.BackingRunnerPlatformTypeId
+export const PlatformRunnerTypeId: Worker.PlatformRunnerTypeId = Symbol.for(
+  "@effect/platform/Runner/PlatformRunner"
+) as Worker.PlatformRunnerTypeId
 
 /** @internal */
-export const BackingRunnerPlatform = Context.Tag<Worker.BackingRunnerPlatform>(
-  BackingRunnerPlatformTypeId
+export const PlatformRunner = Context.Tag<Worker.PlatformRunner>(
+  PlatformRunnerTypeId
 )
 
 /** @internal */
@@ -68,7 +68,7 @@ export const WorkerManager = Context.Tag<Worker.WorkerManager>(
 
 /** @internal */
 export const makeManager = Effect.gen(function*(_) {
-  const platform = yield* _(BackingWorkerPlatform)
+  const platform = yield* _(PlatformWorker)
   let idCounter = 0
   return WorkerManager.of({
     [WorkerManagerTypeId]: WorkerManagerTypeId,
@@ -128,33 +128,38 @@ export const makeManager = Effect.gen(function*(_) {
             }
           })
 
-        const postMessages = pipe(
+        const postMessages = Effect.zipRight(
           Deferred.await(readyLatch),
-          Effect.zipRight(semaphore.take(1)),
-          Effect.zipRight(outbound.take),
-          Effect.flatMap(([id, request]) =>
-            Effect.suspend(() => {
-              const result = requestMap.get(id)
-              if (!result) return Effect.unit
-              const transferables = transfers(request)
-              return Effect.zipRight(
-                backing.send([id, request], transferables),
-                Deferred.await(result[1])
-              )
-            })
-          ),
-          Effect.ensuring(semaphore.release(1)),
-          Effect.forever
+          pipe(
+            semaphore.take(1),
+            Effect.zipRight(outbound.take),
+            Effect.flatMap(([id, request]) =>
+              Effect.suspend(() => {
+                const result = requestMap.get(id)
+                if (!result) return Effect.unit
+                const transferables = transfers(request)
+                return Effect.zipRight(
+                  backing.send([id, request], transferables),
+                  Deferred.await(result[1])
+                )
+              })
+            ),
+            Effect.ensuring(semaphore.release(1)),
+            Effect.forever
+          )
         )
 
         const execute = (request: I) =>
           Stream.flatMap(
             Stream.acquireRelease(
-              Effect.all([
-                Effect.sync(() => requestIdCounter++),
-                Queue.unbounded<Exit.Exit<E, O>>(),
-                Deferred.make<never, void>()
-              ]),
+              Effect.tap(
+                Effect.all([
+                  Effect.sync(() => requestIdCounter++),
+                  Queue.unbounded<Exit.Exit<E, O>>(),
+                  Deferred.make<never, void>()
+                ]),
+                ([id, queue, deferred]) => Effect.sync(() => requestMap.set(id, [queue, deferred]))
+              ),
               ([id, queue, deferred]) =>
                 Effect.zipRight(
                   Effect.zipRight(
@@ -164,20 +169,17 @@ export const makeManager = Effect.gen(function*(_) {
                   Effect.sync(() => requestMap.delete(id))
                 )
             ),
-            ([id, queue, deferred]) =>
-              Stream.suspend(() => {
-                requestMap.set(id, [queue, deferred])
-                return pipe(
-                  outbound.offer(id, request),
-                  Stream.zipRight(Stream.flatMap(
-                    Stream.fromQueue(queue),
-                    Exit.match({
-                      onFailure: (cause) => Cause.isEmpty(cause) ? Stream.empty : Stream.failCause(cause),
-                      onSuccess: Stream.succeed
-                    })
-                  ))
-                )
-              })
+            ([id, queue]) =>
+              pipe(
+                outbound.offer(id, request),
+                Stream.zipRight(Stream.flatMap(
+                  Stream.fromQueue(queue),
+                  Exit.match({
+                    onFailure: (cause) => Cause.isEmpty(cause) ? Stream.empty : Stream.failCause(cause),
+                    onSuccess: Stream.succeed
+                  })
+                ))
+              )
           )
 
         const handleMessages = pipe(
@@ -206,10 +208,11 @@ export const layerManager = Layer.effect(WorkerManager, makeManager)
 
 /** @internal */
 export const makeRunner = <I, E, O>(
-  process: (request: I) => Stream.Stream<never, E, O>
+  process: (request: I) => Stream.Stream<never, E, O>,
+  options?: Worker.Runner.Options<O>
 ) =>
   Effect.gen(function*(_) {
-    const platform = yield* _(BackingRunnerPlatform)
+    const platform = yield* _(PlatformRunner)
     const backing = yield* _(platform.start<Worker.Worker.Request<I>, Worker.Worker.Response<E, O>>())
 
     const handleRequests = pipe(
@@ -221,15 +224,15 @@ export const makeRunner = <I, E, O>(
         const [id, data] = request[1]
         return pipe(
           process(data),
-          Stream.tap((item) => backing.reply([id, 0, item])),
+          Stream.tap((item) => backing.send([id, 0, item], options?.transfers ? options.transfers(item) : undefined)),
           Stream.runDrain,
           Effect.matchCauseEffect({
             onFailure: (cause) =>
               Either.match(Cause.failureOrCause(cause), {
-                onLeft: (error) => backing.reply([id, 2, error]),
-                onRight: (cause) => backing.reply([id, 3, Cause.squash(cause)])
+                onLeft: (error) => backing.send([id, 2, error]),
+                onRight: (cause) => backing.send([id, 3, Cause.squash(cause)])
               }),
-            onSuccess: () => backing.reply([id, 1])
+            onSuccess: () => backing.send([id, 1])
           })
         )
       }),
