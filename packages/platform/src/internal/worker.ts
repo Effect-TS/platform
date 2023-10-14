@@ -111,15 +111,20 @@ export const makeManager = Effect.gen(function*(_) {
                     return Queue.offer(queue[0], Exit.succeed(response[2]))
                   }
                   // end
-                  case 1:
+                  case 1: {
+                    return Queue.shutdown(queue[0])
+                  }
+                  // error / defect
                   case 2:
-                  // defect
                   case 3: {
-                    return response[1] === 1 ? Queue.shutdown(queue[0]) : Queue.offer(
-                      queue[0],
-                      response[1] === 2
-                        ? Exit.fail(response[2])
-                        : Exit.die(response[2])
+                    return Effect.zipRight(
+                      Queue.offer(
+                        queue[0],
+                        response[1] === 2
+                          ? Exit.fail(response[2])
+                          : Exit.die(response[2])
+                      ),
+                      Queue.shutdown(queue[0])
                     )
                   }
                 }
@@ -159,19 +164,18 @@ export const makeManager = Effect.gen(function*(_) {
                 ]),
                 ([id, queue, deferred]) => Effect.sync(() => requestMap.set(id, [queue, deferred]))
               ),
-              ([id, queue, deferred]) =>
+              ([id, , deferred]) =>
                 Effect.zipRight(
-                  Effect.zipRight(
-                    Deferred.complete(deferred, Effect.unit),
-                    Queue.shutdown(queue)
-                  ),
+                  Deferred.complete(deferred, Effect.unit),
                   Effect.sync(() => requestMap.delete(id))
                 )
             ),
             ([id, queue]) =>
-              Stream.flatMap(
-                outbound.offer(id, request),
-                () => Stream.flatten(Stream.fromQueue(queue))
+              Stream.unwrap(
+                Effect.as(
+                  outbound.offer(id, request),
+                  Stream.flatten(Stream.fromQueue(queue))
+                )
               )
           )
 
