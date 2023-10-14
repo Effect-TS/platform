@@ -151,7 +151,7 @@ export declare namespace Worker {
    * @since 1.0.0
    * @category models
    */
-  export type Request<I> = readonly [id: number, data: I]
+  export type Request<I> = readonly [id: number, data: 0, I] | readonly [id: number, interrupt: 1]
 
   /**
    * @since 1.0.0
@@ -160,6 +160,7 @@ export declare namespace Worker {
   export type Response<E, O> =
     | readonly [id: number, data: 0, O]
     | readonly [id: number, end: 1]
+    | readonly [id: number, end: 1, O]
     | readonly [id: number, error: 2, E]
     | readonly [id: number, defect: 3, unknown]
 }

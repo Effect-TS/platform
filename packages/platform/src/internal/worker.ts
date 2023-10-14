@@ -112,7 +112,12 @@ export const makeManager = Effect.gen(function*(_) {
                   }
                   // end
                   case 1: {
-                    return Queue.shutdown(queue[0])
+                    return response.length === 2 ?
+                      Queue.shutdown(queue[0]) :
+                      Effect.zipRight(
+                        Queue.offer(queue[0], Exit.succeed(response[2])),
+                        Queue.shutdown(queue[0])
+                      )
                   }
                   // error / defect
                   case 2:
@@ -143,7 +148,7 @@ export const makeManager = Effect.gen(function*(_) {
                 if (!result) return Effect.unit
                 const transferables = transfers(request)
                 return Effect.zipRight(
-                  backing.send([id, request], transferables),
+                  backing.send([id, 0, request], transferables),
                   Deferred.await(result[1])
                 )
               })
@@ -153,30 +158,50 @@ export const makeManager = Effect.gen(function*(_) {
           )
         )
 
+        const executeAcquire = (request: I) =>
+          Effect.tap(
+            Effect.all([
+              Effect.sync(() => requestIdCounter++),
+              Queue.unbounded<Exit.Exit<E, O>>(),
+              Deferred.make<never, void>()
+            ]),
+            ([id, queue, deferred]) =>
+              Effect.suspend(() => {
+                requestMap.set(id, [queue, deferred])
+                return outbound.offer(id, request)
+              })
+          )
+
+        const executeRelease = (
+          [id, , deferred]: [number, Queue.Queue<Exit.Exit<E, O>>, Deferred.Deferred<never, void>],
+          exit: Exit.Exit<unknown, unknown>
+        ) => {
+          const release = Effect.zipRight(
+            Deferred.complete(deferred, Effect.unit),
+            Effect.sync(() => requestMap.delete(id))
+          )
+          return Exit.isInterrupted(exit) ?
+            Effect.zipRight(
+              backing.send([id, 1]),
+              release
+            ) :
+            release
+        }
+
         const execute = (request: I) =>
           Stream.flatMap(
             Stream.acquireRelease(
-              Effect.tap(
-                Effect.all([
-                  Effect.sync(() => requestIdCounter++),
-                  Queue.unbounded<Exit.Exit<E, O>>(),
-                  Deferred.make<never, void>()
-                ]),
-                ([id, queue, deferred]) => Effect.sync(() => requestMap.set(id, [queue, deferred]))
-              ),
-              ([id, , deferred]) =>
-                Effect.zipRight(
-                  Deferred.complete(deferred, Effect.unit),
-                  Effect.sync(() => requestMap.delete(id))
-                )
+              executeAcquire(request),
+              executeRelease
             ),
-            ([id, queue]) =>
-              Stream.unwrap(
-                Effect.as(
-                  outbound.offer(id, request),
-                  Stream.flatten(Stream.fromQueue(queue))
-                )
-              )
+            ([, queue]) => Stream.flatten(Stream.fromQueue(queue))
+          )
+
+        const executeEffect = (request: I) =>
+          Effect.acquireUseRelease(
+            executeAcquire(request),
+            ([, queue]) => Effect.flatten(Queue.take(queue)),
+            executeRelease
           )
 
         const handleMessages = pipe(
@@ -194,7 +219,7 @@ export const makeManager = Effect.gen(function*(_) {
           Effect.forkScoped
         )
 
-        return { id, fiber, execute }
+        return { id, fiber, execute, executeEffect }
       })
     }
   })
@@ -211,24 +236,50 @@ export const makeRunner = <I, R, E, O>(
   Effect.gen(function*(_) {
     const platform = yield* _(PlatformRunner)
     const backing = yield* _(platform.start<Worker.Worker.Request<I>, Worker.Worker.Response<E, O>>())
+    const fiberMap = new Map<number, Fiber.Fiber<never, void>>()
 
     const handleRequests = pipe(
       Queue.take(backing.queue),
-      Effect.tap(([id, data]) =>
-        pipe(
-          process(data),
-          Stream.tap((item) => backing.send([id, 0, item], options?.transfers ? options.transfers(item) : undefined)),
-          Stream.runDrain,
-          Effect.matchCauseEffect({
+      Effect.tap((req) => {
+        const id = req[0]
+        if (req[1] === 1) {
+          const fiber = fiberMap.get(id)
+          if (!fiber) return Effect.unit
+          return Fiber.interrupt(fiber)
+        }
+
+        const stream = process(req[2])
+
+        const effect = Effect.isEffect(stream) ?
+          Effect.matchCauseEffect(stream as Effect.Effect<R, E, O>, {
             onFailure: (cause) =>
               Either.match(Cause.failureOrCause(cause), {
                 onLeft: (error) => backing.send([id, 2, error]),
                 onRight: (cause) => backing.send([id, 3, Cause.squash(cause)])
               }),
-            onSuccess: () => backing.send([id, 1])
-          })
+            onSuccess: (data) => backing.send([id, 1, data])
+          }) :
+          pipe(
+            stream,
+            Stream.tap((item) => backing.send([id, 0, item], options?.transfers ? options.transfers(item) : undefined)),
+            Stream.runDrain,
+            Effect.matchCauseEffect({
+              onFailure: (cause) =>
+                Either.match(Cause.failureOrCause(cause), {
+                  onLeft: (error) => backing.send([id, 2, error]),
+                  onRight: (cause) => backing.send([id, 3, Cause.squash(cause)])
+                }),
+              onSuccess: () => backing.send([id, 1])
+            })
+          )
+
+        return pipe(
+          effect,
+          Effect.ensuring(Effect.sync(() => fiberMap.delete(id))),
+          Effect.forkScoped,
+          Effect.tap((fiber) => Effect.sync(() => fiberMap.set(id, fiber)))
         )
-      ),
+      }),
       Effect.forever
     )
 
