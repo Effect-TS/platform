@@ -3,9 +3,11 @@ import * as Context from "effect/Context"
 import * as Data from "effect/Data"
 import * as Deferred from "effect/Deferred"
 import * as Effect from "effect/Effect"
+import * as Either from "effect/Either"
 import * as Exit from "effect/Exit"
 import * as Fiber from "effect/Fiber"
 import { pipe } from "effect/Function"
+import * as Layer from "effect/Layer"
 import * as Queue from "effect/Queue"
 import * as Stream from "effect/Stream"
 import type * as Worker from "../Worker"
@@ -45,6 +47,16 @@ export const BackingWorkerPlatform = Context.Tag<Worker.BackingWorkerPlatform>(
 )
 
 /** @internal */
+export const BackingRunnerPlatformTypeId: Worker.BackingRunnerPlatformTypeId = Symbol.for(
+  "@effect/platform/Runner/PlatformBackingRunner"
+) as Worker.BackingRunnerPlatformTypeId
+
+/** @internal */
+export const BackingRunnerPlatform = Context.Tag<Worker.BackingRunnerPlatform>(
+  BackingRunnerPlatformTypeId
+)
+
+/** @internal */
 export const WorkerManagerTypeId: Worker.WorkerManagerTypeId = Symbol.for(
   "@effect/platform/Worker/WorkerManager"
 ) as Worker.WorkerManagerTypeId
@@ -62,6 +74,7 @@ export const makeManager = Effect.gen(function*(_) {
     [WorkerManagerTypeId]: WorkerManagerTypeId,
     spawn<I, E, O>({ permits = 1, queue, spawn, transfers = (_) => [] }: Worker.Worker.Options<I>) {
       return Effect.gen(function*(_) {
+        const id = idCounter++
         let requestIdCounter = 0
         const readyLatch = yield* _(Deferred.make<never, void>())
         const outbound = queue ?? (yield* _(defaultQueue<I>()))
@@ -69,7 +82,7 @@ export const makeManager = Effect.gen(function*(_) {
         const requestMap = new Map<number, readonly [Queue.Queue<Exit.Exit<E, O>>, Deferred.Deferred<never, void>]>()
 
         const backing = yield* _(
-          platform.spawn<Worker.Worker.Request<I>, Worker.Worker.Response<E, O>>(spawn(idCounter++))
+          platform.spawn<Worker.Worker.Request<I>, Worker.Worker.Response<E, O>>(spawn(id))
         )
 
         const handleExit = (exit: Exit.Exit<E, never>) =>
@@ -93,16 +106,21 @@ export const makeManager = Effect.gen(function*(_) {
 
                 switch (response[1]) {
                   // data
-                  case 1: {
+                  case 0: {
                     return Queue.offer(queue[0], Exit.succeed(response[2]))
                   }
-                  // error
-                  case 0:
                   // end
-                  case 2: {
+                  case 1:
+                  case 2:
+                  // defect
+                  case 3: {
                     return Queue.offer(
                       queue[0],
-                      response[1] === 0 ? Exit.fail(response[2]) : Exit.failCause(Cause.empty)
+                      response[1] === 2
+                        ? Exit.fail(response[2])
+                        : response[1] === 3
+                        ? Exit.die(response[2])
+                        : Exit.failCause(Cause.empty)
                     )
                   }
                 }
@@ -177,8 +195,52 @@ export const makeManager = Effect.gen(function*(_) {
           Effect.forkScoped
         )
 
-        return { fiber, execute }
+        return { id, fiber, execute }
       })
     }
   })
 })
+
+/** @internal */
+export const layerManager = Layer.effect(WorkerManager, makeManager)
+
+/** @internal */
+export const makeRunner = <I, E, O>(
+  process: (request: I) => Stream.Stream<never, E, O>
+) =>
+  Effect.gen(function*(_) {
+    const platform = yield* _(BackingRunnerPlatform)
+    const backing = yield* _(platform.start<Worker.Worker.Request<I>, Worker.Worker.Response<E, O>>())
+
+    const handleRequests = pipe(
+      Queue.take(backing.queue),
+      Effect.tap((request) => {
+        if (request[0] === 1) {
+          return Effect.failCause(Cause.empty)
+        }
+        const [id, data] = request[1]
+        return pipe(
+          process(data),
+          Stream.tap((item) => backing.reply([id, 0, item])),
+          Stream.runDrain,
+          Effect.matchCauseEffect({
+            onFailure: (cause) =>
+              Either.match(Cause.failureOrCause(cause), {
+                onLeft: (error) => backing.reply([id, 2, error]),
+                onRight: (cause) => backing.reply([id, 3, Cause.squash(cause)])
+              }),
+            onSuccess: () => backing.reply([id, 1])
+          })
+        )
+      }),
+      Effect.forever
+    )
+
+    return yield* _(
+      Effect.all([
+        handleRequests,
+        Fiber.join(backing.fiber)
+      ], { concurrency: "unbounded", discard: true }),
+      Effect.catchAllCause((cause) => Cause.isEmpty(cause) ? Effect.unit : Effect.failCause(cause))
+    )
+  })
