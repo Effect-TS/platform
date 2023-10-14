@@ -4,8 +4,10 @@
 import type { Effect } from "effect"
 import type * as Context from "effect/Context"
 import type * as Data from "effect/Data"
+import type * as Duration from "effect/Duration"
 import type * as Fiber from "effect/Fiber"
 import type * as Layer from "effect/Layer"
+import type * as Pool from "effect/Pool"
 import type * as Queue from "effect/Queue"
 import type * as Scope from "effect/Scope"
 import type * as Stream from "effect/Stream"
@@ -30,7 +32,7 @@ export declare namespace BackingWorker {
    * @since 1.0.0
    * @category models
    */
-  export type Message<O> = readonly [ready: 0] | readonly [error: 1, O]
+  export type Message<O> = readonly [ready: 0] | readonly [data: 1, O]
 }
 
 /**
@@ -51,9 +53,7 @@ export type PlatformWorkerTypeId = typeof PlatformWorkerTypeId
  */
 export interface PlatformWorker {
   readonly [PlatformWorkerTypeId]: PlatformWorkerTypeId
-  readonly spawn: <I, O>(
-    evaluate: Effect.Effect<never, WorkerError, unknown>
-  ) => Effect.Effect<Scope.Scope, WorkerError, BackingWorker<I, O>>
+  readonly spawn: <I, O>(worker: unknown) => Effect.Effect<Scope.Scope, WorkerError, BackingWorker<I, O>>
 }
 
 /**
@@ -68,7 +68,7 @@ export const PlatformWorker: Context.Tag<PlatformWorker, PlatformWorker> = inter
  */
 export interface BackingRunner<I, O> {
   readonly fiber: Fiber.Fiber<WorkerError, void>
-  readonly queue: Queue.Dequeue<BackingRunner.Message<I>>
+  readonly queue: Queue.Dequeue<I>
   readonly send: (message: O, transfers?: ReadonlyArray<unknown>) => Effect.Effect<never, never, void>
 }
 
@@ -130,11 +130,21 @@ export declare namespace Worker {
    * @since 1.0.0
    * @category models
    */
-  export interface Options<I> {
-    readonly spawn: (id: number) => Effect.Effect<never, WorkerError, unknown>
+  export interface Options<I, W = unknown> {
+    readonly spawn: (id: number) => W
     readonly transfers?: (message: I) => ReadonlyArray<unknown>
     readonly permits?: number
     readonly queue?: WorkerQueue<I>
+  }
+
+  /**
+   * @since 1.0.0
+   * @category models
+   */
+  export interface PoolOptions<I, W = unknown> extends Options<I, W> {
+    readonly minSize?: number
+    readonly size: number
+    readonly timeToLive?: Duration.DurationInput
   }
 
   /**
@@ -222,9 +232,10 @@ export const layerManager: Layer.Layer<PlatformWorker, never, WorkerManager> = i
  * @since 1.0.0
  * @category constructors
  */
-export const makeRunner: <I, E, O>(
-  process: (request: I) => Stream.Stream<never, E, O>
-) => Effect.Effect<Scope.Scope | PlatformRunner, WorkerError, void> = internal.makeRunner
+export const makeRunner: <I, R, E, O>(
+  process: (request: I) => Stream.Stream<R, E, O>,
+  options?: Runner.Options<O> | undefined
+) => Effect.Effect<Scope.Scope | R | PlatformRunner, WorkerError, void> = internal.makeRunner
 
 /**
  * @since 1.0.0
@@ -245,6 +256,20 @@ export type WorkerErrorTypeId = typeof WorkerErrorTypeId
 export interface WorkerError extends Data.Case {
   readonly [WorkerErrorTypeId]: WorkerErrorTypeId
   readonly _tag: "WorkerError"
-  readonly reason: "spawn" | "unknown"
+  readonly reason: "spawn" | "decode" | "unknown"
   readonly error: unknown
 }
+
+/**
+ * @since 1.0.0
+ * @category errors
+ */
+export const WorkerError: (reason: "spawn" | "decode" | "unknown", error: unknown) => WorkerError = internal.WorkerError
+
+/**
+ * @since 1.0.0
+ * @category constructors
+ */
+export const makePool: <W>() => <I, E, O>(
+  options: Worker.PoolOptions<I, W>
+) => Effect.Effect<WorkerManager | Scope.Scope, never, Pool.Pool<WorkerError, Worker<I, E, O>>> = internal.makePool

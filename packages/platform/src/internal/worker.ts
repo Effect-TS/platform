@@ -8,6 +8,7 @@ import * as Exit from "effect/Exit"
 import * as Fiber from "effect/Fiber"
 import { pipe } from "effect/Function"
 import * as Layer from "effect/Layer"
+import * as Pool from "effect/Pool"
 import * as Queue from "effect/Queue"
 import * as Stream from "effect/Stream"
 import type * as Worker from "../Worker"
@@ -114,13 +115,11 @@ export const makeManager = Effect.gen(function*(_) {
                   case 2:
                   // defect
                   case 3: {
-                    return Queue.offer(
+                    return response[1] === 1 ? Queue.shutdown(queue[0]) : Queue.offer(
                       queue[0],
                       response[1] === 2
                         ? Exit.fail(response[2])
-                        : response[1] === 3
-                        ? Exit.die(response[2])
-                        : Exit.failCause(Cause.empty)
+                        : Exit.die(response[2])
                     )
                   }
                 }
@@ -170,15 +169,9 @@ export const makeManager = Effect.gen(function*(_) {
                 )
             ),
             ([id, queue]) =>
-              pipe(
+              Stream.flatMap(
                 outbound.offer(id, request),
-                Stream.zipRight(Stream.flatMap(
-                  Stream.fromQueue(queue),
-                  Exit.match({
-                    onFailure: (cause) => Cause.isEmpty(cause) ? Stream.empty : Stream.failCause(cause),
-                    onSuccess: Stream.succeed
-                  })
-                ))
+                () => Stream.flatten(Stream.fromQueue(queue))
               )
           )
 
@@ -207,8 +200,8 @@ export const makeManager = Effect.gen(function*(_) {
 export const layerManager = Layer.effect(WorkerManager, makeManager)
 
 /** @internal */
-export const makeRunner = <I, E, O>(
-  process: (request: I) => Stream.Stream<never, E, O>,
+export const makeRunner = <I, R, E, O>(
+  process: (request: I) => Stream.Stream<R, E, O>,
   options?: Worker.Runner.Options<O>
 ) =>
   Effect.gen(function*(_) {
@@ -217,12 +210,8 @@ export const makeRunner = <I, E, O>(
 
     const handleRequests = pipe(
       Queue.take(backing.queue),
-      Effect.tap((request) => {
-        if (request[0] === 1) {
-          return Effect.failCause(Cause.empty)
-        }
-        const [id, data] = request[1]
-        return pipe(
+      Effect.tap(([id, data]) =>
+        pipe(
           process(data),
           Stream.tap((item) => backing.send([id, 0, item], options?.transfers ? options.transfers(item) : undefined)),
           Stream.runDrain,
@@ -235,7 +224,7 @@ export const makeRunner = <I, E, O>(
             onSuccess: () => backing.send([id, 1])
           })
         )
-      }),
+      ),
       Effect.forever
     )
 
@@ -243,7 +232,22 @@ export const makeRunner = <I, E, O>(
       Effect.all([
         handleRequests,
         Fiber.join(backing.fiber)
-      ], { concurrency: "unbounded", discard: true }),
-      Effect.catchAllCause((cause) => Cause.isEmpty(cause) ? Effect.unit : Effect.failCause(cause))
+      ], { concurrency: "unbounded", discard: true })
     )
   })
+
+/** @internal */
+export const makePool = <W>() =>
+<I, E, O>(
+  options: Worker.Worker.PoolOptions<I, W>
+) =>
+  Effect.flatMap(
+    WorkerManager,
+    (manager) =>
+      Pool.makeWithTTL({
+        acquire: manager.spawn<I, E, O>(options),
+        min: options.minSize ?? options.size,
+        max: options.size,
+        timeToLive: options.timeToLive ?? "30 minutes"
+      })
+  )

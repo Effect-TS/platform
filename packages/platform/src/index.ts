@@ -47,3 +47,8 @@ export * as Path from "@effect/platform/Path"
  * @since 1.0.0
  */
 export * as Runtime from "@effect/platform/Runtime"
+
+/**
+ * @since 1.0.0
+ */
+export * as Worker from "@effect/platform/Worker"
