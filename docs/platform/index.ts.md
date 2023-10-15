@@ -23,6 +23,7 @@ Added in v1.0.0
   - [From "@effect/platform/KeyValueStore"](#from-effectplatformkeyvaluestore)
   - [From "@effect/platform/Path"](#from-effectplatformpath)
   - [From "@effect/platform/Runtime"](#from-effectplatformruntime)
+  - [From "@effect/platform/Worker"](#from-effectplatformworker)
 
 ---
 
@@ -144,6 +145,18 @@ Re-exports all named exports from the "@effect/platform/Runtime" module as "Runt
 
 ```ts
 export * as Runtime from '@effect/platform/Runtime'
+```
+
+Added in v1.0.0
+
+## From "@effect/platform/Worker"
+
+Re-exports all named exports from the "@effect/platform/Worker" module as "Worker".
+
+**Signature**
+
+```ts
+export * as Worker from '@effect/platform/Worker'
 ```
 
 Added in v1.0.0

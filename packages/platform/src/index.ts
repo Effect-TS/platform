@@ -52,3 +52,13 @@ export * as Runtime from "@effect/platform/Runtime"
  * @since 1.0.0
  */
 export * as Worker from "@effect/platform/Worker"
+
+/**
+ * @since 1.0.0
+ */
+export * as WorkerError from "@effect/platform/WorkerError"
+
+/**
+ * @since 1.0.0
+ */
+export * as WorkerRunner from "@effect/platform/WorkerRunner"

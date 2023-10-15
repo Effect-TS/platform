@@ -1,4 +1,5 @@
 import * as Worker from "@effect/platform-node/Worker"
+import * as Runner from "@effect/platform-node/WorkerRunner"
 import { Console, Effect, Stream } from "effect"
 import * as WT from "node:worker_threads"
 
@@ -9,16 +10,13 @@ if (WT.isMainThread) {
       size: 2
     }))
     yield* _(
-      Effect.scoped(pool.get()),
-      Effect.flatMap((_) =>
-        _.execute(1).pipe(
-          Stream.runForEach(Console.log)
-        )
+      pool.execute(5).pipe(
+        Stream.runForEach(Console.log)
       )
     )
   }).pipe(Effect.scoped, Effect.runPromise)
 } else {
-  Worker.makeRunner((n: number) => Stream.range(0, n)).pipe(
+  Runner.make((n: number) => Stream.range(0, n)).pipe(
     Effect.scoped,
     Effect.runPromise
   )

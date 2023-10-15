@@ -67,6 +67,7 @@
     "packages/platform-node/Sink": true,
     "packages/platform-node/Stream": true,
     "packages/platform-node/Worker": true,
+    "packages/platform-node/WorkerRunner": true,
     "packages/platform-bun/dist": true,
     "packages/platform-bun/BunContext": true,
     "packages/platform-bun/Command": true,
@@ -90,6 +91,8 @@
     "packages/platform-browser/KeyValueStore": true,
     "packages/platform-browser/Path": true,
     "packages/platform-browser/Runtime": true,
+    "packages/platform-browser/Worker": true,
+    "packages/platform-browser/WorkerRunner": true,
     "packages/platform/dist": true,
     "packages/platform/Command": true,
     "packages/platform/CommandExecutor": true,
@@ -102,6 +105,8 @@
     "packages/platform/KeyValueStore": true,
     "packages/platform/Path": true,
     "packages/platform/Runtime": true,
-    "packages/platform/Worker": true
+    "packages/platform/Worker": true,
+    "packages/platform/WorkerError": true,
+    "packages/platform/WorkerRunner": true
   }
 }

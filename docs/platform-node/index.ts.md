@@ -26,6 +26,7 @@ Added in v1.0.0
   - [From "@effect/platform-node/Runtime"](#from-effectplatform-noderuntime)
   - [From "@effect/platform-node/Sink"](#from-effectplatform-nodesink)
   - [From "@effect/platform-node/Stream"](#from-effectplatform-nodestream)
+  - [From "@effect/platform-node/Worker"](#from-effectplatform-nodeworker)
 
 ---
 
@@ -188,3 +189,17 @@ export * as Stream from '@effect/platform-node/Stream'
 ```
 
 Added in v1.0.0
+
+## From "@effect/platform-node/Worker"
+
+Re-exports all named exports from the "@effect/platform-node/Worker" module as "Worker".
+
+**Signature**
+
+```ts
+export * as Worker from '@effect/platform-node/Worker'
+```
+
+Added in v1.0.0
+
+Also includes exports from [`@effect/platform/Worker`](https://effect-ts.github.io/platform/platform/Worker.ts.html).

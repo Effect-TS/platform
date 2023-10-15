@@ -1,9 +1,7 @@
 import * as Cause from "effect/Cause"
 import * as Context from "effect/Context"
-import * as Data from "effect/Data"
 import * as Deferred from "effect/Deferred"
 import * as Effect from "effect/Effect"
-import * as Either from "effect/Either"
 import * as Exit from "effect/Exit"
 import * as Fiber from "effect/Fiber"
 import { pipe } from "effect/Function"
@@ -12,20 +10,7 @@ import * as Pool from "effect/Pool"
 import * as Queue from "effect/Queue"
 import * as Stream from "effect/Stream"
 import type * as Worker from "../Worker"
-
-/** @internal */
-export const WorkerErrorTypeId: Worker.WorkerErrorTypeId = Symbol.for(
-  "@effect-ts/platform/Worker/WorkerError"
-) as Worker.WorkerErrorTypeId
-
-/** @internal */
-export const WorkerError = (reason: Worker.WorkerError["reason"], error: unknown): Worker.WorkerError =>
-  Data.struct({
-    [WorkerErrorTypeId]: WorkerErrorTypeId,
-    _tag: "WorkerError",
-    reason,
-    error
-  })
+import type { WorkerError } from "../WorkerError"
 
 /** @internal */
 export const defaultQueue = <I>() =>
@@ -45,16 +30,6 @@ export const PlatformWorkerTypeId: Worker.PlatformWorkerTypeId = Symbol.for(
 /** @internal */
 export const PlatformWorker = Context.Tag<Worker.PlatformWorker>(
   PlatformWorkerTypeId
-)
-
-/** @internal */
-export const PlatformRunnerTypeId: Worker.PlatformRunnerTypeId = Symbol.for(
-  "@effect/platform/Runner/PlatformRunner"
-) as Worker.PlatformRunnerTypeId
-
-/** @internal */
-export const PlatformRunner = Context.Tag<Worker.PlatformRunner>(
-  PlatformRunnerTypeId
 )
 
 /** @internal */
@@ -215,7 +190,7 @@ export const makeManager = Effect.gen(function*(_) {
             handleMessages,
             postMessages,
             Fiber.join(backing.fiber)
-          ], { concurrency: "unbounded", discard: true }) as Effect.Effect<never, Worker.WorkerError, never>,
+          ], { concurrency: "unbounded", discard: true }) as Effect.Effect<never, WorkerError, never>,
           Effect.forkScoped
         )
 
@@ -229,80 +204,40 @@ export const makeManager = Effect.gen(function*(_) {
 export const layerManager = Layer.effect(WorkerManager, makeManager)
 
 /** @internal */
-export const makeRunner = <I, R, E, O>(
-  process: (request: I) => Stream.Stream<R, E, O>,
-  options?: Worker.Runner.Options<O>
-) =>
-  Effect.gen(function*(_) {
-    const platform = yield* _(PlatformRunner)
-    const backing = yield* _(platform.start<Worker.Worker.Request<I>, Worker.Worker.Response<E, O>>())
-    const fiberMap = new Map<number, Fiber.Fiber<never, void>>()
-
-    const handleRequests = pipe(
-      Queue.take(backing.queue),
-      Effect.tap((req) => {
-        const id = req[0]
-        if (req[1] === 1) {
-          const fiber = fiberMap.get(id)
-          if (!fiber) return Effect.unit
-          return Fiber.interrupt(fiber)
-        }
-
-        const stream = process(req[2])
-
-        const effect = Effect.isEffect(stream) ?
-          Effect.matchCauseEffect(stream as Effect.Effect<R, E, O>, {
-            onFailure: (cause) =>
-              Either.match(Cause.failureOrCause(cause), {
-                onLeft: (error) => backing.send([id, 2, error]),
-                onRight: (cause) => backing.send([id, 3, Cause.squash(cause)])
-              }),
-            onSuccess: (data) => backing.send([id, 1, data])
-          }) :
-          pipe(
-            stream,
-            Stream.tap((item) => backing.send([id, 0, item], options?.transfers ? options.transfers(item) : undefined)),
-            Stream.runDrain,
-            Effect.matchCauseEffect({
-              onFailure: (cause) =>
-                Either.match(Cause.failureOrCause(cause), {
-                  onLeft: (error) => backing.send([id, 2, error]),
-                  onRight: (cause) => backing.send([id, 3, Cause.squash(cause)])
-                }),
-              onSuccess: () => backing.send([id, 1])
-            })
-          )
-
-        return pipe(
-          effect,
-          Effect.ensuring(Effect.sync(() => fiberMap.delete(id))),
-          Effect.forkScoped,
-          Effect.tap((fiber) => Effect.sync(() => fiberMap.set(id, fiber)))
-        )
-      }),
-      Effect.forever
-    )
-
-    return yield* _(
-      Effect.all([
-        handleRequests,
-        Fiber.join(backing.fiber)
-      ], { concurrency: "unbounded", discard: true })
-    )
-  })
-
-/** @internal */
 export const makePool = <W>() =>
 <I, E, O>(
-  options: Worker.Worker.PoolOptions<I, W>
+  options: Worker.WorkerPool.Options<I, W>
 ) =>
-  Effect.flatMap(
-    WorkerManager,
-    (manager) =>
-      Pool.makeWithTTL({
-        acquire: manager.spawn<I, E, O>(options),
-        min: options.minSize ?? options.size,
-        max: options.size,
-        timeToLive: options.timeToLive ?? "30 minutes"
-      })
-  )
+  Effect.gen(function*(_) {
+    const manager = yield* _(WorkerManager)
+    const backing = yield* _(
+      "timeToLive" in options ?
+        Pool.makeWithTTL({
+          acquire: manager.spawn<I, E, O>(options),
+          min: options.minSize,
+          max: options.maxSize,
+          timeToLive: options.timeToLive
+        }) :
+        Pool.make({
+          acquire: manager.spawn<I, E, O>(options),
+          size: options.size
+        })
+    )
+    const pool: Worker.WorkerPool<I, E, O> = {
+      backing,
+      execute: (message: I) =>
+        Stream.unwrap(
+          Effect.map(
+            Effect.scoped(backing.get()),
+            (worker) => worker.execute(message)
+          )
+        ),
+      executeEffect: (message: I) =>
+        Effect.flatMap(
+          Effect.scoped(backing.get()),
+          (worker) => worker.executeEffect(message)
+        )
+    }
+
+    return pool
+  })
