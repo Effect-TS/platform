@@ -83,6 +83,8 @@
     "packages/platform-bun/Runtime": true,
     "packages/platform-bun/Sink": true,
     "packages/platform-bun/Stream": true,
+    "packages/platform-bun/Worker": true,
+    "packages/platform-bun/WorkerRunner": true,
     "packages/platform-browser/dist": true,
     "packages/platform-browser/Clipboard": true,
     "packages/platform-browser/Effectify": true,

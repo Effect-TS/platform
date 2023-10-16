@@ -9,14 +9,7 @@ const platformWorkerImpl = Worker.PlatformWorker.of({
   [Worker.PlatformWorkerTypeId]: Worker.PlatformWorkerTypeId,
   spawn<I, O>(worker_: unknown) {
     return Effect.gen(function*(_) {
-      const worker = worker_ as globalThis.SharedWorker | globalThis.Worker
-      let port: globalThis.Worker | MessagePort
-      if ("port" in worker) {
-        port = worker.port
-        port.start()
-      } else {
-        port = worker
-      }
+      const port = worker_ as globalThis.Worker
 
       yield* _(Effect.addFinalizer(() => Effect.sync(() => port.postMessage([1]))))
 
@@ -26,10 +19,10 @@ const platformWorkerImpl = Worker.PlatformWorker.of({
       const fiber = yield* _(
         Effect.async<never, WorkerError, never>((resume, signal) => {
           port.addEventListener("message", function(event) {
-            queue.unsafeOffer((event as MessageEvent).data)
+            queue.unsafeOffer(event.data)
           }, { signal })
           port.addEventListener("error", function(event) {
-            resume(Effect.fail(WorkerError("unknown", (event as ErrorEvent).message)))
+            resume(Effect.fail(WorkerError("unknown", event.message)))
           }, { signal })
         }),
         Effect.forkDaemon
@@ -52,7 +45,7 @@ export const layerWorker = Layer.succeed(Worker.PlatformWorker, platformWorkerIm
 export const layerManager = Layer.provide(layerWorker, Worker.layerManager)
 
 /** @internal */
-export const makePool = Worker.makePool<globalThis.Worker | globalThis.SharedWorker>()
+export const makePool = Worker.makePool<globalThis.Worker>()
 
 /** @internal */
-export const makePoolLayer = Worker.makePoolLayer<globalThis.Worker | globalThis.SharedWorker>(layerManager)
+export const makePoolLayer = Worker.makePoolLayer<globalThis.Worker>(layerManager)
