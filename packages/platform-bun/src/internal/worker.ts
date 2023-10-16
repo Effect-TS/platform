@@ -11,7 +11,12 @@ const platformWorkerImpl = Worker.PlatformWorker.of({
     return Effect.gen(function*(_) {
       const port = worker_ as globalThis.Worker
 
-      yield* _(Effect.addFinalizer(() => Effect.sync(() => port.postMessage([1]))))
+      yield* _(Effect.addFinalizer(() =>
+        Effect.async<never, never, void>((resume) => {
+          port.addEventListener("close", () => resume(Effect.unit), { once: true })
+          port.postMessage([1])
+        })
+      ))
 
       const fiberId = yield* _(Effect.fiberId)
       const queue = yield* _(Queue.unbounded<Worker.BackingWorker.Message<O>>())
