@@ -20,6 +20,8 @@ Added in v1.0.0
   - [From "@effect/platform-browser/KeyValueStore"](#from-effectplatform-browserkeyvaluestore)
   - [From "@effect/platform-browser/Path"](#from-effectplatform-browserpath)
   - [From "@effect/platform-browser/Runtime"](#from-effectplatform-browserruntime)
+  - [From "@effect/platform-browser/Worker"](#from-effectplatform-browserworker)
+  - [From "@effect/platform-browser/WorkerRunner"](#from-effectplatform-browserworkerrunner)
 
 ---
 
@@ -112,3 +114,31 @@ export * as Runtime from '@effect/platform-browser/Runtime'
 ```
 
 Added in v1.0.0
+
+## From "@effect/platform-browser/Worker"
+
+Re-exports all named exports from the "@effect/platform-browser/Worker" module as "Worker".
+
+**Signature**
+
+```ts
+export * as Worker from '@effect/platform-browser/Worker'
+```
+
+Added in v1.0.0
+
+Also includes exports from [`@effect/platform/Worker`](https://effect-ts.github.io/platform/platform/Worker.ts.html).
+
+## From "@effect/platform-browser/WorkerRunner"
+
+Re-exports all named exports from the "@effect/platform-browser/WorkerRunner" module as "WorkerRunner".
+
+**Signature**
+
+```ts
+export * as WorkerRunner from '@effect/platform-browser/WorkerRunner'
+```
+
+Added in v1.0.0
+
+Also includes exports from [`@effect/platform/WorkerRunner`](https://effect-ts.github.io/platform/platform/WorkerRunner.ts.html).

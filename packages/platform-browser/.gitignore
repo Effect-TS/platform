@@ -18,3 +18,5 @@ dist/
 /KeyValueStore
 /Path
 /Runtime
+/Worker
+/WorkerRunner

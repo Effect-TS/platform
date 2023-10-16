@@ -26,6 +26,8 @@ Added in v1.0.0
   - [From "@effect/platform-bun/Runtime"](#from-effectplatform-bunruntime)
   - [From "@effect/platform-bun/Sink"](#from-effectplatform-bunsink)
   - [From "@effect/platform-bun/Stream"](#from-effectplatform-bunstream)
+  - [From "@effect/platform-bun/Worker"](#from-effectplatform-bunworker)
+  - [From "@effect/platform-bun/WorkerRunner"](#from-effectplatform-bunworkerrunner)
 
 ---
 
@@ -188,3 +190,31 @@ export * as Stream from '@effect/platform-bun/Stream'
 ```
 
 Added in v1.0.0
+
+## From "@effect/platform-bun/Worker"
+
+Re-exports all named exports from the "@effect/platform-bun/Worker" module as "Worker".
+
+**Signature**
+
+```ts
+export * as Worker from '@effect/platform-bun/Worker'
+```
+
+Added in v1.0.0
+
+Also includes exports from [`@effect/platform/Worker`](https://effect-ts.github.io/platform/platform/Worker.ts.html).
+
+## From "@effect/platform-bun/WorkerRunner"
+
+Re-exports all named exports from the "@effect/platform-bun/WorkerRunner" module as "WorkerRunner".
+
+**Signature**
+
+```ts
+export * as WorkerRunner from '@effect/platform-bun/WorkerRunner'
+```
+
+Added in v1.0.0
+
+Also includes exports from [`@effect/platform/WorkerRunner`](https://effect-ts.github.io/platform/platform/WorkerRunner.ts.html).

@@ -22,3 +22,6 @@ dist/
 /KeyValueStore
 /Path
 /Runtime
+/Worker
+/WorkerError
+/WorkerRunner
