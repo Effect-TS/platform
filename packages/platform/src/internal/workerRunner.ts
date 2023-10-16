@@ -67,7 +67,7 @@ export const make = <I, R, E, O>(
         return pipe(
           effect,
           Effect.ensuring(Effect.sync(() => fiberMap.delete(id))),
-          Effect.forkScoped,
+          Effect.fork,
           Effect.tap((fiber) => Effect.sync(() => fiberMap.set(id, fiber)))
         )
       }),
