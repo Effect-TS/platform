@@ -40,7 +40,7 @@
   "license": "MIT",
   "sideEffects": false,
   "devDependencies": {
-    "@effect/schema": "^0.43.0",
+    "@effect/schema": "^0.43.2",
     "@types/busboy": "^1.5.1",
     "@types/mime": "^3.0.2",
     "@types/tar": "^6.1.6",
