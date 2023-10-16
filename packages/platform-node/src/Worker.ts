@@ -5,6 +5,7 @@
  */
 import type * as Worker from "@effect/platform/Worker"
 import type { Effect } from "effect"
+import type * as Context from "effect/Context"
 import type * as Layer from "effect/Layer"
 import type * as Scope from "effect/Scope"
 import type * as WorkerThreads from "node:worker_threads"
@@ -21,7 +22,16 @@ export * from "@effect/platform/Worker"
  */
 export const makePool: <I, E, O>(
   options: Worker.WorkerPool.Options<I, WorkerThreads.Worker>
-) => Effect.Effect<Scope.Scope, never, Worker.WorkerPool<I, E, O>> = internal.makePool
+) => Effect.Effect<Worker.WorkerManager | Scope.Scope, never, Worker.WorkerPool<I, E, O>> = internal.makePool
+
+/**
+ * @since 1.0.0
+ * @category constructors
+ */
+export const makePoolLayer: <Tag, I, E, O>(
+  tag: Context.Tag<Tag, Worker.WorkerPool<I, E, O>>,
+  options: Worker.WorkerPool.Options<I, WorkerThreads.Worker>
+) => Layer.Layer<never, never, Tag> = internal.makePoolLayer
 
 /**
  * @since 1.0.0

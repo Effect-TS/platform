@@ -1,6 +1,7 @@
 import * as Worker from "@effect/platform/Worker"
 import { WorkerError } from "@effect/platform/WorkerError"
 import * as Effect from "effect/Effect"
+import * as Fiber from "effect/Fiber"
 import * as Layer from "effect/Layer"
 import * as Queue from "effect/Queue"
 import type * as WorkerThreads from "node:worker_threads"
@@ -10,8 +11,19 @@ const platformWorkerImpl = Worker.PlatformWorker.of({
   spawn<I, O>(worker_: unknown) {
     return Effect.gen(function*(_) {
       const worker = worker_ as WorkerThreads.Worker
-      yield* _(Effect.addFinalizer(() => Effect.sync(() => worker.postMessage([1]))))
+      yield* _(Effect.addFinalizer(() =>
+        Effect.suspend(() => {
+          worker.postMessage([1])
+          return Effect.async<never, never, void>((resume) => {
+            worker.once("exit", () => {
+              resume(Effect.unit)
+            })
+          })
+        })
+      ))
+      const fiberId = yield* _(Effect.fiberId)
       const queue = yield* _(Queue.unbounded<Worker.BackingWorker.Message<O>>())
+      yield* _(Effect.addFinalizer(() => Queue.shutdown(queue)))
       const fiber = yield* _(
         Effect.async<never, WorkerError, never>((resume) => {
           worker.on("message", (message: Worker.BackingWorker.Message<O>) => {
@@ -23,15 +35,17 @@ const platformWorkerImpl = Worker.PlatformWorker.of({
           worker.on("error", (error) => {
             resume(Effect.fail(WorkerError("unknown", error)))
           })
-          return Effect.sync(() => {
-            worker.removeAllListeners()
+          worker.on("exit", (code) => {
+            resume(Effect.fail(WorkerError("unknown", new Error(`exited with code ${code}`))))
           })
         }),
-        Effect.forkScoped
+        Effect.forkDaemon
       )
+      yield* _(Effect.addFinalizer(() => fiber.interruptAsFork(fiberId)))
+      const join = Fiber.join(fiber)
       const send = (message: I, transfers?: ReadonlyArray<unknown>) =>
         Effect.sync(() => worker.postMessage([0, message], transfers as any))
-      return { fiber, queue, send }
+      return { join, queue, send }
     })
   }
 })
@@ -43,8 +57,7 @@ export const layerWorker = Layer.succeed(Worker.PlatformWorker, platformWorkerIm
 export const layerManager = Layer.provide(layerWorker, Worker.layerManager)
 
 /** @internal */
-export const makePool = <I, E, O>(options: Worker.WorkerPool.Options<I, WorkerThreads.Worker>) =>
-  Effect.provide(
-    Worker.makePool<WorkerThreads.Worker>()<I, E, O>(options),
-    layerManager
-  )
+export const makePool = Worker.makePool<WorkerThreads.Worker>()
+
+/** @internal */
+export const makePoolLayer = Worker.makePoolLayer<WorkerThreads.Worker>(layerManager)

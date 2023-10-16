@@ -1,5 +1,6 @@
 import * as Worker from "@effect/platform/Worker"
 import { WorkerError } from "@effect/platform/WorkerError"
+import { Fiber } from "effect"
 import * as Effect from "effect/Effect"
 import * as Layer from "effect/Layer"
 import * as Queue from "effect/Queue"
@@ -18,7 +19,10 @@ const platformWorkerImpl = Worker.PlatformWorker.of({
       }
 
       yield* _(Effect.addFinalizer(() => Effect.sync(() => port.postMessage([1]))))
+
+      const fiberId = yield* _(Effect.fiberId)
       const queue = yield* _(Queue.unbounded<Worker.BackingWorker.Message<O>>())
+
       const fiber = yield* _(
         Effect.async<never, WorkerError, never>((resume, signal) => {
           port.addEventListener("message", function(event) {
@@ -31,11 +35,15 @@ const platformWorkerImpl = Worker.PlatformWorker.of({
             resume(Effect.fail(WorkerError("unknown", (event as ErrorEvent).message)))
           }, { signal })
         }),
-        Effect.forkScoped
+        Effect.forkDaemon
       )
+      yield* _(Effect.addFinalizer(() => fiber.interruptAsFork(fiberId)))
+      const join = Fiber.join(fiber)
+
       const send = (message: I, transfers?: ReadonlyArray<unknown>) =>
         Effect.sync(() => port.postMessage([0, message], transfers as any))
-      return { fiber, queue, send }
+
+      return { join, queue, send }
     })
   }
 })
@@ -47,8 +55,7 @@ export const layerWorker = Layer.succeed(Worker.PlatformWorker, platformWorkerIm
 export const layerManager = Layer.provide(layerWorker, Worker.layerManager)
 
 /** @internal */
-export const makePool = <I, E, O>(options: Worker.WorkerPool.Options<I, globalThis.Worker | globalThis.SharedWorker>) =>
-  Effect.provide(
-    Worker.makePool<globalThis.Worker | globalThis.SharedWorker>()<I, E, O>(options),
-    layerManager
-  )
+export const makePool = Worker.makePool<globalThis.Worker | globalThis.SharedWorker>()
+
+/** @internal */
+export const makePoolLayer = Worker.makePoolLayer<globalThis.Worker | globalThis.SharedWorker>(layerManager)

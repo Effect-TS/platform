@@ -15,6 +15,7 @@ Added in v1.0.0
 - [constructors](#constructors)
   - [makeManager](#makemanager)
   - [makePool](#makepool)
+  - [makePoolLayer](#makepoollayer)
 - [layers](#layers)
   - [layerManager](#layermanager)
 - [models](#models)
@@ -67,6 +68,21 @@ export declare const makePool: <W>() => <I, E, O>(
 
 Added in v1.0.0
 
+## makePoolLayer
+
+**Signature**
+
+```ts
+export declare const makePoolLayer: <W>(
+  managerLayer: Layer.Layer<never, never, WorkerManager>
+) => <Tag, I, E, O>(
+  tag: Context.Tag<Tag, WorkerPool<I, E, O>>,
+  options: WorkerPool.Options<I, W>
+) => Layer.Layer<never, never, Tag>
+```
+
+Added in v1.0.0
+
 # layers
 
 ## layerManager
@@ -87,7 +103,7 @@ Added in v1.0.0
 
 ```ts
 export interface BackingWorker<I, O> {
-  readonly fiber: Fiber.Fiber<WorkerError, never>
+  readonly join: Effect.Effect<never, WorkerError, never>
   readonly send: (message: I, transfers?: ReadonlyArray<unknown>) => Effect.Effect<never, never, void>
   readonly queue: Queue.Dequeue<BackingWorker.Message<O>>
 }
@@ -129,7 +145,7 @@ Added in v1.0.0
 ```ts
 export interface Worker<I, E, O> {
   readonly id: number
-  readonly fiber: Fiber.Fiber<WorkerError, never>
+  readonly join: Effect.Effect<never, WorkerError, never>
   readonly execute: (message: I) => Stream.Stream<never, E, O>
   readonly executeEffect: (message: I) => Effect.Effect<never, E, O>
 }
@@ -240,6 +256,7 @@ Added in v1.0.0
 export interface WorkerQueue<I> {
   readonly offer: (id: number, item: I) => Effect.Effect<never, never, void>
   readonly take: Effect.Effect<never, never, readonly [id: number, item: I]>
+  readonly shutdown: Effect.Effect<never, never, void>
 }
 ```
 

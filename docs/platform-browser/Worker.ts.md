@@ -16,6 +16,7 @@ Also includes exports from [`@effect/platform/Worker`](https://effect-ts.github.
 
 - [constructors](#constructors)
   - [makePool](#makepool)
+  - [makePoolLayer](#makepoollayer)
 - [exports](#exports)
   - [From "@effect/platform/Worker"](#from-effectplatformworker)
 - [layers](#layers)
@@ -33,7 +34,20 @@ Also includes exports from [`@effect/platform/Worker`](https://effect-ts.github.
 ```ts
 export declare const makePool: <I, E, O>(
   options: Worker.WorkerPool.Options<I, any>
-) => Effect.Effect<Scope.Scope, never, Worker.WorkerPool<I, E, O>>
+) => Effect.Effect<Scope.Scope | Worker.WorkerManager, never, Worker.WorkerPool<I, E, O>>
+```
+
+Added in v1.0.0
+
+## makePoolLayer
+
+**Signature**
+
+```ts
+export declare const makePoolLayer: <Tag, I, E, O>(
+  tag: Context.Tag<Tag, Worker.WorkerPool<I, E, O>>,
+  options: Worker.WorkerPool.Options<I, any>
+) => Layer.Layer<never, never, Tag>
 ```
 
 Added in v1.0.0

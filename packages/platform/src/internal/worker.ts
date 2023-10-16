@@ -1,4 +1,3 @@
-import * as Cause from "effect/Cause"
 import * as Context from "effect/Context"
 import * as Deferred from "effect/Deferred"
 import * as Effect from "effect/Effect"
@@ -18,7 +17,8 @@ export const defaultQueue = <I>() =>
     Queue.unbounded<readonly [id: number, item: I]>(),
     (queue): Worker.WorkerQueue<I> => ({
       offer: (id, item) => Queue.offer(queue, [id, item]),
-      take: Queue.take(queue)
+      take: Queue.take(queue),
+      shutdown: Queue.shutdown(queue)
     })
   )
 
@@ -51,23 +51,25 @@ export const makeManager = Effect.gen(function*(_) {
     spawn<I, E, O>({ permits = 1, queue, spawn, transfers = (_) => [] }: Worker.Worker.Options<I>) {
       return Effect.gen(function*(_) {
         const id = idCounter++
+        const fiberId = yield* _(Effect.fiberId)
         let requestIdCounter = 0
         const readyLatch = yield* _(Deferred.make<never, void>())
-        const outbound = queue ?? (yield* _(defaultQueue<I>()))
         const semaphore = yield* _(Effect.makeSemaphore(permits))
         const requestMap = new Map<number, readonly [Queue.Queue<Exit.Exit<E, O>>, Deferred.Deferred<never, void>]>()
+
+        const outbound = queue ?? (yield* _(defaultQueue<I>()))
+        yield* _(Effect.addFinalizer(() => outbound.shutdown))
 
         const backing = yield* _(
           platform.spawn<Worker.Worker.Request<I>, Worker.Worker.Response<E, O>>(spawn(id))
         )
 
-        const handleExit = (exit: Exit.Exit<E, never>) =>
+        yield* _(Effect.addFinalizer(() =>
           Effect.zipRight(
-            Effect.forEach(requestMap.values(), ([queue]) => Queue.offer(queue, exit), { discard: true }),
+            Effect.forEach(requestMap.values(), ([queue]) => Queue.shutdown(queue), { discard: true }),
             Effect.sync(() => requestMap.clear())
           )
-
-        yield* _(Effect.addFinalizer(() => handleExit(Exit.failCause(Cause.empty))))
+        ))
 
         const handleMessage = (msg: Worker.BackingWorker.Message<Worker.Worker.Response<E, O>>) =>
           Effect.suspend(() => {
@@ -111,27 +113,6 @@ export const makeManager = Effect.gen(function*(_) {
               }
             }
           })
-
-        const postMessages = Effect.zipRight(
-          Deferred.await(readyLatch),
-          pipe(
-            semaphore.take(1),
-            Effect.zipRight(outbound.take),
-            Effect.flatMap(([id, request]) =>
-              Effect.suspend(() => {
-                const result = requestMap.get(id)
-                if (!result) return Effect.unit
-                const transferables = transfers(request)
-                return Effect.zipRight(
-                  backing.send([id, 0, request], transferables),
-                  Deferred.await(result[1])
-                )
-              })
-            ),
-            Effect.ensuring(semaphore.release(1)),
-            Effect.forever
-          )
-        )
 
         const executeAcquire = (request: I) =>
           Effect.tap(
@@ -179,22 +160,46 @@ export const makeManager = Effect.gen(function*(_) {
             executeRelease
           )
 
-        const handleMessages = pipe(
+        const handleMessages = yield* _(
           Queue.take(backing.queue),
           Effect.flatMap(handleMessage),
-          Effect.forever
+          Effect.forever,
+          Effect.forkDaemon
         )
+        yield* _(Effect.addFinalizer(() => handleMessages.interruptAsFork(fiberId)))
 
-        const fiber = yield* _(
-          Effect.all([
+        const postMessages = yield* _(
+          semaphore.take(1),
+          Effect.zipRight(outbound.take),
+          Effect.flatMap(([id, request]) =>
+            pipe(
+              Effect.suspend(() => {
+                const result = requestMap.get(id)
+                if (!result) return Effect.unit
+                const transferables = transfers(request)
+                return Effect.zipRight(
+                  backing.send([id, 0, request], transferables),
+                  Deferred.await(result[1])
+                )
+              }),
+              Effect.ensuring(semaphore.release(1)),
+              Effect.fork
+            )
+          ),
+          Effect.forever,
+          Effect.forkDaemon
+        )
+        yield* _(Effect.addFinalizer(() => postMessages.interruptAsFork(fiberId)))
+
+        const join = Effect.race(
+          Fiber.joinAll([
             handleMessages,
-            postMessages,
-            Fiber.join(backing.fiber)
-          ], { concurrency: "unbounded", discard: true }) as Effect.Effect<never, WorkerError, never>,
-          Effect.forkScoped
-        )
+            postMessages
+          ]),
+          backing.join
+        ) as Effect.Effect<never, WorkerError, never>
 
-        return { id, fiber, execute, executeEffect }
+        return { id, join, execute, executeEffect }
       })
     }
   })
@@ -241,3 +246,17 @@ export const makePool = <W>() =>
 
     return pool
   })
+
+/** @internal */
+export const makePoolLayer = <W>(managerLayer: Layer.Layer<never, never, Worker.WorkerManager>) =>
+<Tag, I, E, O>(
+  tag: Context.Tag<Tag, Worker.WorkerPool<I, E, O>>,
+  options: Worker.WorkerPool.Options<I, W>
+) =>
+  Layer.provide(
+    managerLayer,
+    Layer.scoped(
+      tag,
+      makePool<W>()(options)
+    )
+  )

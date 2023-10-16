@@ -13,7 +13,7 @@ describe("Worker", () => {
       }))
       const items = yield* _(pool.execute(99), Stream.runCollect)
       assert.strictEqual(items.length, 100)
-    }).pipe(Effect.scoped, Effect.runPromise))
+    }).pipe(Effect.scoped, Effect.provide(Worker.layerManager), Effect.runPromise))
 
   it("SharedWorker", () =>
     Effect.gen(function*(_) {
@@ -23,5 +23,5 @@ describe("Worker", () => {
       }))
       const items = yield* _(pool.execute(99), Stream.runCollect)
       assert.strictEqual(items.length, 100)
-    }).pipe(Effect.scoped, Effect.runPromise))
+    }).pipe(Effect.scoped, Effect.provide(Worker.layerManager), Effect.runPromise))
 })

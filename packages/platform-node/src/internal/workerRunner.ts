@@ -15,7 +15,6 @@ const platformRunnerImpl = Runner.PlatformRunner.of({
         return yield* _(Effect.fail(WorkerError("spawn", "not in worker")))
       }
       const port = WorkerThreads.parentPort
-      yield* _(Effect.addFinalizer(() => Effect.sync(() => port.unref())))
       const queue = yield* _(Queue.unbounded<I>())
       const fiber = yield* _(
         Effect.async<never, WorkerError, never>((resume) => {
@@ -31,9 +30,6 @@ const platformRunnerImpl = Runner.PlatformRunner.of({
           })
           port.on("error", (error) => {
             resume(Effect.fail(WorkerError("unknown", error)))
-          })
-          return Effect.sync(() => {
-            port.removeAllListeners()
           })
         }),
         Effect.forkScoped

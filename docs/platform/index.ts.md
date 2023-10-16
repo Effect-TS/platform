@@ -24,6 +24,8 @@ Added in v1.0.0
   - [From "@effect/platform/Path"](#from-effectplatformpath)
   - [From "@effect/platform/Runtime"](#from-effectplatformruntime)
   - [From "@effect/platform/Worker"](#from-effectplatformworker)
+  - [From "@effect/platform/WorkerError"](#from-effectplatformworkererror)
+  - [From "@effect/platform/WorkerRunner"](#from-effectplatformworkerrunner)
 
 ---
 
@@ -157,6 +159,30 @@ Re-exports all named exports from the "@effect/platform/Worker" module as "Worke
 
 ```ts
 export * as Worker from '@effect/platform/Worker'
+```
+
+Added in v1.0.0
+
+## From "@effect/platform/WorkerError"
+
+Re-exports all named exports from the "@effect/platform/WorkerError" module as "WorkerError".
+
+**Signature**
+
+```ts
+export * as WorkerError from '@effect/platform/WorkerError'
+```
+
+Added in v1.0.0
+
+## From "@effect/platform/WorkerRunner"
+
+Re-exports all named exports from the "@effect/platform/WorkerRunner" module as "WorkerRunner".
+
+**Signature**
+
+```ts
+export * as WorkerRunner from '@effect/platform/WorkerRunner'
 ```
 
 Added in v1.0.0

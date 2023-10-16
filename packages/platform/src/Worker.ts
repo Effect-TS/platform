@@ -4,7 +4,6 @@
 import type { Effect } from "effect"
 import type * as Context from "effect/Context"
 import type * as Duration from "effect/Duration"
-import type * as Fiber from "effect/Fiber"
 import type * as Layer from "effect/Layer"
 import type * as Pool from "effect/Pool"
 import type * as Queue from "effect/Queue"
@@ -18,7 +17,7 @@ import type { WorkerError } from "./WorkerError"
  * @category models
  */
 export interface BackingWorker<I, O> {
-  readonly fiber: Fiber.Fiber<WorkerError, never>
+  readonly join: Effect.Effect<never, WorkerError, never>
   readonly send: (message: I, transfers?: ReadonlyArray<unknown>) => Effect.Effect<never, never, void>
   readonly queue: Queue.Dequeue<BackingWorker.Message<O>>
 }
@@ -68,7 +67,7 @@ export const PlatformWorker: Context.Tag<PlatformWorker, PlatformWorker> = inter
  */
 export interface Worker<I, E, O> {
   readonly id: number
-  readonly fiber: Fiber.Fiber<WorkerError, never>
+  readonly join: Effect.Effect<never, WorkerError, never>
   readonly execute: (message: I) => Stream.Stream<never, E, O>
   readonly executeEffect: (message: I) => Effect.Effect<never, E, O>
 }
@@ -144,6 +143,7 @@ export declare namespace WorkerPool {
 export interface WorkerQueue<I> {
   readonly offer: (id: number, item: I) => Effect.Effect<never, never, void>
   readonly take: Effect.Effect<never, never, readonly [id: number, item: I]>
+  readonly shutdown: Effect.Effect<never, never, void>
 }
 
 /**
@@ -194,3 +194,14 @@ export const layerManager: Layer.Layer<PlatformWorker, never, WorkerManager> = i
 export const makePool: <W>() => <I, E, O>(
   options: WorkerPool.Options<I, W>
 ) => Effect.Effect<WorkerManager | Scope.Scope, never, WorkerPool<I, E, O>> = internal.makePool
+
+/**
+ * @since 1.0.0
+ * @category constructors
+ */
+export const makePoolLayer: <W>(
+  managerLayer: Layer.Layer<never, never, WorkerManager>
+) => <Tag, I, E, O>(
+  tag: Context.Tag<Tag, WorkerPool<I, E, O>>,
+  options: WorkerPool.Options<I, W>
+) => Layer.Layer<never, never, Tag> = internal.makePoolLayer
