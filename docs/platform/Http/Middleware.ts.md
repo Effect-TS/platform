@@ -16,6 +16,9 @@ Added in v1.0.0
   - [logger](#logger)
   - [make](#make)
   - [xForwardedHeaders](#xforwardedheaders)
+- [fiber refs](#fiber-refs)
+  - [loggerDisabled](#loggerdisabled)
+  - [withLoggerDisabled](#withloggerdisabled)
 - [models](#models)
   - [Middleware (interface)](#middleware-interface)
 - [utils](#utils)
@@ -52,6 +55,28 @@ Added in v1.0.0
 
 ```ts
 export declare const xForwardedHeaders: <R, E>(httpApp: App.Default<R, E>) => App.Default<R, E>
+```
+
+Added in v1.0.0
+
+# fiber refs
+
+## loggerDisabled
+
+**Signature**
+
+```ts
+export declare const loggerDisabled: FiberRef.FiberRef<boolean>
+```
+
+Added in v1.0.0
+
+## withLoggerDisabled
+
+**Signature**
+
+```ts
+export declare const withLoggerDisabled: <R, E, A>(self: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
 ```
 
 Added in v1.0.0

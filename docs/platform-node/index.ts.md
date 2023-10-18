@@ -35,7 +35,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-node/Command"
 
-Re-exports all named exports from the "@effect/platform-node/Command" module as "Command".
+Re-exports all named exports from the "@effect/platform-node/Command" module as `Command`.
 
 **Signature**
 
@@ -47,7 +47,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-node/CommandExecutor"
 
-Re-exports all named exports from the "@effect/platform-node/CommandExecutor" module as "CommandExecutor".
+Re-exports all named exports from the "@effect/platform-node/CommandExecutor" module as `CommandExecutor`.
 
 **Signature**
 
@@ -59,7 +59,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-node/Effectify"
 
-Re-exports all named exports from the "@effect/platform-node/Effectify" module as "Effectify".
+Re-exports all named exports from the "@effect/platform-node/Effectify" module as `Effectify`.
 
 **Signature**
 
@@ -71,7 +71,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-node/Error"
 
-Re-exports all named exports from the "@effect/platform-node/Error" module as "Error".
+Re-exports all named exports from the "@effect/platform-node/Error" module as `Error`.
 
 **Signature**
 
@@ -83,7 +83,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-node/FileSystem"
 
-Re-exports all named exports from the "@effect/platform-node/FileSystem" module as "FileSystem".
+Re-exports all named exports from the "@effect/platform-node/FileSystem" module as `FileSystem`.
 
 **Signature**
 
@@ -95,7 +95,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-node/HttpClient"
 
-Re-exports all named exports from the "@effect/platform-node/HttpClient" module as "HttpClient".
+Re-exports all named exports from the "@effect/platform-node/HttpClient" module as `HttpClient`.
 
 **Signature**
 
@@ -107,7 +107,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-node/HttpServer"
 
-Re-exports all named exports from the "@effect/platform-node/HttpServer" module as "HttpServer".
+Re-exports all named exports from the "@effect/platform-node/HttpServer" module as `HttpServer`.
 
 **Signature**
 
@@ -119,7 +119,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-node/KeyValueStore"
 
-Re-exports all named exports from the "@effect/platform-node/KeyValueStore" module as "KeyValueStore".
+Re-exports all named exports from the "@effect/platform-node/KeyValueStore" module as `KeyValueStore`.
 
 **Signature**
 
@@ -133,7 +133,7 @@ Also includes exports from [`@effect/platform/KeyValueStore`](https://effect-ts.
 
 ## From "@effect/platform-node/NodeContext"
 
-Re-exports all named exports from the "@effect/platform-node/NodeContext" module as "NodeContext".
+Re-exports all named exports from the "@effect/platform-node/NodeContext" module as `NodeContext`.
 
 **Signature**
 
@@ -145,7 +145,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-node/Path"
 
-Re-exports all named exports from the "@effect/platform-node/Path" module as "Path".
+Re-exports all named exports from the "@effect/platform-node/Path" module as `Path`.
 
 **Signature**
 
@@ -157,7 +157,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-node/Runtime"
 
-Re-exports all named exports from the "@effect/platform-node/Runtime" module as "Runtime".
+Re-exports all named exports from the "@effect/platform-node/Runtime" module as `Runtime`.
 
 **Signature**
 
@@ -169,7 +169,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-node/Sink"
 
-Re-exports all named exports from the "@effect/platform-node/Sink" module as "Sink".
+Re-exports all named exports from the "@effect/platform-node/Sink" module as `Sink`.
 
 **Signature**
 
@@ -181,7 +181,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-node/Stream"
 
-Re-exports all named exports from the "@effect/platform-node/Stream" module as "Stream".
+Re-exports all named exports from the "@effect/platform-node/Stream" module as `Stream`.
 
 **Signature**
 
@@ -193,7 +193,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-node/Worker"
 
-Re-exports all named exports from the "@effect/platform-node/Worker" module as "Worker".
+Re-exports all named exports from the "@effect/platform-node/Worker" module as `Worker`.
 
 **Signature**
 
@@ -207,7 +207,7 @@ Also includes exports from [`@effect/platform/Worker`](https://effect-ts.github.
 
 ## From "@effect/platform-node/WorkerRunner"
 
-Re-exports all named exports from the "@effect/platform-node/WorkerRunner" module as "WorkerRunner".
+Re-exports all named exports from the "@effect/platform-node/WorkerRunner" module as `WorkerRunner`.
 
 **Signature**
 

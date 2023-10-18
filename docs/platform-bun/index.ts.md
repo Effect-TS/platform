@@ -35,7 +35,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-bun/BunContext"
 
-Re-exports all named exports from the "@effect/platform-bun/BunContext" module as "BunContext".
+Re-exports all named exports from the "@effect/platform-bun/BunContext" module as `BunContext`.
 
 **Signature**
 
@@ -47,7 +47,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-bun/Command"
 
-Re-exports all named exports from the "@effect/platform-bun/Command" module as "Command".
+Re-exports all named exports from the "@effect/platform-bun/Command" module as `Command`.
 
 **Signature**
 
@@ -59,7 +59,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-bun/CommandExecutor"
 
-Re-exports all named exports from the "@effect/platform-bun/CommandExecutor" module as "CommandExecutor".
+Re-exports all named exports from the "@effect/platform-bun/CommandExecutor" module as `CommandExecutor`.
 
 **Signature**
 
@@ -71,7 +71,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-bun/Effectify"
 
-Re-exports all named exports from the "@effect/platform-bun/Effectify" module as "Effectify".
+Re-exports all named exports from the "@effect/platform-bun/Effectify" module as `Effectify`.
 
 **Signature**
 
@@ -83,7 +83,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-bun/Error"
 
-Re-exports all named exports from the "@effect/platform-bun/Error" module as "Error".
+Re-exports all named exports from the "@effect/platform-bun/Error" module as `Error`.
 
 **Signature**
 
@@ -95,7 +95,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-bun/FileSystem"
 
-Re-exports all named exports from the "@effect/platform-bun/FileSystem" module as "FileSystem".
+Re-exports all named exports from the "@effect/platform-bun/FileSystem" module as `FileSystem`.
 
 **Signature**
 
@@ -107,7 +107,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-bun/HttpClient"
 
-Re-exports all named exports from the "@effect/platform-bun/HttpClient" module as "HttpClient".
+Re-exports all named exports from the "@effect/platform-bun/HttpClient" module as `HttpClient`.
 
 **Signature**
 
@@ -119,7 +119,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-bun/HttpServer"
 
-Re-exports all named exports from the "@effect/platform-bun/HttpServer" module as "HttpServer".
+Re-exports all named exports from the "@effect/platform-bun/HttpServer" module as `HttpServer`.
 
 **Signature**
 
@@ -131,7 +131,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-bun/KeyValueStore"
 
-Re-exports all named exports from the "@effect/platform-bun/KeyValueStore" module as "KeyValueStore".
+Re-exports all named exports from the "@effect/platform-bun/KeyValueStore" module as `KeyValueStore`.
 
 **Signature**
 
@@ -145,7 +145,7 @@ Also includes exports from [`@effect/platform/KeyValueStore`](https://effect-ts.
 
 ## From "@effect/platform-bun/Path"
 
-Re-exports all named exports from the "@effect/platform-bun/Path" module as "Path".
+Re-exports all named exports from the "@effect/platform-bun/Path" module as `Path`.
 
 **Signature**
 
@@ -157,7 +157,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-bun/Runtime"
 
-Re-exports all named exports from the "@effect/platform-bun/Runtime" module as "Runtime".
+Re-exports all named exports from the "@effect/platform-bun/Runtime" module as `Runtime`.
 
 **Signature**
 
@@ -169,7 +169,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-bun/Sink"
 
-Re-exports all named exports from the "@effect/platform-bun/Sink" module as "Sink".
+Re-exports all named exports from the "@effect/platform-bun/Sink" module as `Sink`.
 
 **Signature**
 
@@ -181,7 +181,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-bun/Stream"
 
-Re-exports all named exports from the "@effect/platform-bun/Stream" module as "Stream".
+Re-exports all named exports from the "@effect/platform-bun/Stream" module as `Stream`.
 
 **Signature**
 
@@ -193,7 +193,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-bun/Worker"
 
-Re-exports all named exports from the "@effect/platform-bun/Worker" module as "Worker".
+Re-exports all named exports from the "@effect/platform-bun/Worker" module as `Worker`.
 
 **Signature**
 
@@ -207,7 +207,7 @@ Also includes exports from [`@effect/platform/Worker`](https://effect-ts.github.
 
 ## From "@effect/platform-bun/WorkerRunner"
 
-Re-exports all named exports from the "@effect/platform-bun/WorkerRunner" module as "WorkerRunner".
+Re-exports all named exports from the "@effect/platform-bun/WorkerRunner" module as `WorkerRunner`.
 
 **Signature**
 

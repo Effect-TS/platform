@@ -29,7 +29,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-browser/Clipboard"
 
-Re-exports all named exports from the "@effect/platform-browser/Clipboard" module as "Clipboard".
+Re-exports all named exports from the "@effect/platform-browser/Clipboard" module as `Clipboard`.
 
 **Signature**
 
@@ -41,7 +41,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-browser/Effectify"
 
-Re-exports all named exports from the "@effect/platform-browser/Effectify" module as "Effectify".
+Re-exports all named exports from the "@effect/platform-browser/Effectify" module as `Effectify`.
 
 **Signature**
 
@@ -53,7 +53,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-browser/Error"
 
-Re-exports all named exports from the "@effect/platform-browser/Error" module as "Error".
+Re-exports all named exports from the "@effect/platform-browser/Error" module as `Error`.
 
 **Signature**
 
@@ -65,7 +65,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-browser/HttpClient"
 
-Re-exports all named exports from the "@effect/platform-browser/HttpClient" module as "HttpClient".
+Re-exports all named exports from the "@effect/platform-browser/HttpClient" module as `HttpClient`.
 
 **Signature**
 
@@ -77,7 +77,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-browser/KeyValueStore"
 
-Re-exports all named exports from the "@effect/platform-browser/KeyValueStore" module as "KeyValueStore".
+Re-exports all named exports from the "@effect/platform-browser/KeyValueStore" module as `KeyValueStore`.
 
 **Signature**
 
@@ -91,7 +91,7 @@ Also includes exports from [`@effect/platform/KeyValueStore`](https://effect-ts.
 
 ## From "@effect/platform-browser/Path"
 
-Re-exports all named exports from the "@effect/platform-browser/Path" module as "Path".
+Re-exports all named exports from the "@effect/platform-browser/Path" module as `Path`.
 
 **Signature**
 
@@ -105,7 +105,7 @@ Also includes exports from [`@effect/platform/Path`](https://effect-ts.github.io
 
 ## From "@effect/platform-browser/Runtime"
 
-Re-exports all named exports from the "@effect/platform-browser/Runtime" module as "Runtime".
+Re-exports all named exports from the "@effect/platform-browser/Runtime" module as `Runtime`.
 
 **Signature**
 
@@ -117,7 +117,7 @@ Added in v1.0.0
 
 ## From "@effect/platform-browser/Worker"
 
-Re-exports all named exports from the "@effect/platform-browser/Worker" module as "Worker".
+Re-exports all named exports from the "@effect/platform-browser/Worker" module as `Worker`.
 
 **Signature**
 
@@ -131,7 +131,7 @@ Also includes exports from [`@effect/platform/Worker`](https://effect-ts.github.
 
 ## From "@effect/platform-browser/WorkerRunner"
 
-Re-exports all named exports from the "@effect/platform-browser/WorkerRunner" module as "WorkerRunner".
+Re-exports all named exports from the "@effect/platform-browser/WorkerRunner" module as `WorkerRunner`.
 
 **Signature**
 
