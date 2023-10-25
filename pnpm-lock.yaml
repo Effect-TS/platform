@@ -129,14 +129,14 @@ importers:
         version: 1.0.1
     devDependencies:
       '@effect/schema':
-        specifier: ^0.46.0
-        version: 0.46.0(effect@2.0.0-next.51)(fast-check@3.13.2)
+        specifier: ^0.46.1
+        version: 0.46.1(effect@2.0.0-next.52)(fast-check@3.13.2)
       '@types/path-browserify':
         specifier: ^1.0.1
         version: 1.0.1
       effect:
-        specifier: 2.0.0-next.51
-        version: 2.0.0-next.51
+        specifier: 2.0.0-next.52
+        version: 2.0.0-next.52
 
   packages/platform-browser:
     dependencies:
@@ -145,8 +145,8 @@ importers:
         version: link:../platform
     devDependencies:
       effect:
-        specifier: 2.0.0-next.51
-        version: 2.0.0-next.51
+        specifier: 2.0.0-next.52
+        version: 2.0.0-next.52
       happy-dom:
         specifier: ^12.9.1
         version: 12.9.1
@@ -164,14 +164,14 @@ importers:
         version: link:../platform-node
     devDependencies:
       '@effect/schema':
-        specifier: ^0.46.0
-        version: 0.46.0(effect@2.0.0-next.51)(fast-check@3.13.2)
+        specifier: ^0.46.1
+        version: 0.46.1(effect@2.0.0-next.52)(fast-check@3.13.2)
       bun-types:
         specifier: 1.0.7
         version: 1.0.7
       effect:
-        specifier: 2.0.0-next.51
-        version: 2.0.0-next.51
+        specifier: 2.0.0-next.52
+        version: 2.0.0-next.52
 
   packages/platform-node:
     dependencies:
@@ -186,8 +186,8 @@ importers:
         version: 3.0.0
     devDependencies:
       '@effect/schema':
-        specifier: ^0.46.0
-        version: 0.46.0(effect@2.0.0-next.51)(fast-check@3.13.2)
+        specifier: ^0.46.1
+        version: 0.46.1(effect@2.0.0-next.52)(fast-check@3.13.2)
       '@types/busboy':
         specifier: ^1.5.2
         version: 1.5.2
@@ -198,8 +198,8 @@ importers:
         specifier: ^6.1.7
         version: 6.1.7
       effect:
-        specifier: 2.0.0-next.51
-        version: 2.0.0-next.51
+        specifier: 2.0.0-next.52
+        version: 2.0.0-next.52
       tar:
         specifier: ^6.2.0
         version: 6.2.0
@@ -863,13 +863,13 @@ packages:
     resolution: {integrity: sha512-e8vfKbjnbYiyneBincEFS0tzXluopGK77OkVFbPRtUbNDS5tJfb+jiwOQEiqASDsadcZmd+9J9+Q6v/z7GuN2g==}
     dev: true
 
-  /@effect/schema@0.46.0(effect@2.0.0-next.51)(fast-check@3.13.2):
-    resolution: {integrity: sha512-CrdKErEVy9Hp/p4q94yfmT7oK2hIht2LQzwWKMJQtRxh7IDvjw8ZO5rqqRiqdRLJ52iL+ryCr9JUnO+hJrA8DQ==}
+  /@effect/schema@0.46.1(effect@2.0.0-next.52)(fast-check@3.13.2):
+    resolution: {integrity: sha512-+uaJy6vn2wd5cuYzeCZ68EMPcwNran5/JPL0+MUlRL8x23Bp15YCiT9oqOPH+Bo9+JPVuS7BOPQD3tj/MNLzWQ==}
     peerDependencies:
-      effect: 2.0.0-next.51
+      effect: 2.0.0-next.52
       fast-check: ^3.13.2
     dependencies:
-      effect: 2.0.0-next.51
+      effect: 2.0.0-next.52
       fast-check: 3.13.2
     dev: true
 
@@ -1448,8 +1448,8 @@ packages:
       '@types/node': 20.8.9
     dev: true
 
-  /@types/chai-subset@1.3.3:
-    resolution: {integrity: sha512-frBecisrNGz+F4T6bcc+NLeolfiojh5FxW2klu669+8BARtyQv2C/GkNW6FUodVe4BroGMP/wER/YDGc7rEllw==}
+  /@types/chai-subset@1.3.4:
+    resolution: {integrity: sha512-CCWNXrJYSUIojZ1149ksLl3AN9cmZ5djf+yUoVVV+NuYrtydItQVlL2ZDqyC6M6O9LWRnVf8yYDxbXHO2TfQZg==}
     dependencies:
       '@types/chai': 4.3.9
     dev: true
@@ -1881,7 +1881,7 @@ packages:
   /@vitest/snapshot@0.34.6:
     resolution: {integrity: sha512-B3OZqYn6k4VaN011D+ve+AA4whM4QkcwcrwaKwAbyyvS/NB1hCWjFIBQxAQQSQir9/RtyAAGuq+4RJmbn2dH4w==}
     dependencies:
-      magic-string: 0.30.4
+      magic-string: 0.30.5
       pathe: 1.1.1
       pretty-format: 29.7.0
     dev: true
@@ -1889,14 +1889,14 @@ packages:
   /@vitest/spy@0.34.6:
     resolution: {integrity: sha512-xaCvneSaeBw/cz8ySmF7ZwGvL0lBjfvqc1LpQ/vcdHEvpLn3Ff1vAvjw+CoGn0802l++5L/pxb7whwcWAw+DUQ==}
     dependencies:
-      tinyspy: 2.1.1
+      tinyspy: 2.2.0
     dev: true
 
   /@vitest/utils@0.34.6:
     resolution: {integrity: sha512-IG5aDD8S6zlvloDsnzHw0Ut5xczlF+kv2BOTo+iXfPr54Yhi5qbVOgGB1hZaVq4iJ4C/MZ2J0y15IlsV/ZcI0A==}
     dependencies:
       diff-sequences: 29.6.3
-      loupe: 2.3.6
+      loupe: 2.3.7
       pretty-format: 29.7.0
     dev: true
 
@@ -2263,7 +2263,7 @@ packages:
       check-error: 1.0.3
       deep-eql: 4.1.3
       get-func-name: 2.0.2
-      loupe: 2.3.6
+      loupe: 2.3.7
       pathval: 1.1.1
       type-detect: 4.0.8
     dev: true
@@ -2813,8 +2813,8 @@ packages:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: true
 
-  /effect@2.0.0-next.51:
-    resolution: {integrity: sha512-FUqLrZI8GK+6f6bTKD9qlW1iG0DKKDXG1vzsDfl5LhTe1dCur/UD1nj/HI/OjC0/8zwy+K/ZxTBYxj999/CUEg==}
+  /effect@2.0.0-next.52:
+    resolution: {integrity: sha512-6VmmfS6xyOZsJRT0hcEsMx03HxXSeG/VmcniDvVw0nzBudlu+4qUvj8GBGYVFVgJfKcISSRey0tzfO9HXIzApg==}
     dev: true
 
   /electron-to-chromium@1.4.554:
@@ -4525,8 +4525,8 @@ packages:
       is-unicode-supported: 0.1.0
     dev: true
 
-  /loupe@2.3.6:
-    resolution: {integrity: sha512-RaPMZKiMy8/JruncMU5Bt6na1eftNoo++R4Y+N2FrxkDVTrGvcyzFTsaGif4QTeKESheMGegbhw6iUAq+5A8zA==}
+  /loupe@2.3.7:
+    resolution: {integrity: sha512-zSMINGVYkdpYSOBmLi0D1Uo7JU9nVdQKrHxC8eYlV+9YKK9WePqAlL7lSlorG/U2Fw1w0hTBmaa/jrQ3UbPHtA==}
     dependencies:
       get-func-name: 2.0.2
     dev: true
@@ -4601,6 +4601,13 @@ packages:
 
   /magic-string@0.30.4:
     resolution: {integrity: sha512-Q/TKtsC5BPm0kGqgBIF9oXAs/xEf2vRKiIB4wCRQTJOQIByZ1d+NnUOotvJOvNpi5RNIgVOMC3pOuaP1ZTDlVg==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.4.15
+    dev: true
+
+  /magic-string@0.30.5:
+    resolution: {integrity: sha512-7xlpfBaQaP/T6Vh8MO/EqXSW5En6INHEvEXQiuff7Gku0PWjU3uf6w/j9o7O+SpB5fOAkrI5HeoNgwjEO0pFsA==}
     engines: {node: '>=12'}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
@@ -6095,8 +6102,8 @@ packages:
     engines: {node: '>=14.0.0'}
     dev: true
 
-  /tinyspy@2.1.1:
-    resolution: {integrity: sha512-XPJL2uSzcOyBMky6OFrusqWlzfFrXtE0hPuMgW8A2HmaqrPo4ZQHRN/V0QXN3FSjKxpsbRrFc5LI7KOwBsT1/w==}
+  /tinyspy@2.2.0:
+    resolution: {integrity: sha512-d2eda04AN/cPOR89F7Xv5bK/jrQEhmcLFe6HFldoeO9AJtps+fqEnh486vnT/8y4bw38pSyxDcTCAq+Ks2aJTg==}
     engines: {node: '>=14.0.0'}
     dev: true
 
@@ -6567,7 +6574,7 @@ packages:
         optional: true
     dependencies:
       '@types/chai': 4.3.9
-      '@types/chai-subset': 1.3.3
+      '@types/chai-subset': 1.3.4
       '@types/node': 20.8.9
       '@vitest/expect': 0.34.6
       '@vitest/runner': 0.34.6
@@ -6581,7 +6588,7 @@ packages:
       debug: 4.3.4
       happy-dom: 12.9.1
       local-pkg: 0.4.3
-      magic-string: 0.30.4
+      magic-string: 0.30.5
       pathe: 1.1.1
       picocolors: 1.0.0
       std-env: 3.4.3
