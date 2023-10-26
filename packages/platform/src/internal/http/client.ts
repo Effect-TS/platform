@@ -138,6 +138,24 @@ export const fetchOk = (
 export const layer = Layer.succeed(tag, fetch())
 
 /** @internal */
+export const transform = dual<
+  <R, E, A, R1, E1, A1>(
+    f: (effect: Effect.Effect<R, E, A>, request: ClientRequest.ClientRequest) => Effect.Effect<R1, E1, A1>
+  ) => (self: Client.Client<R, E, A>) => Client.Client<R | R1, E | E1, A1>,
+  <R, E, A, R1, E1, A1>(
+    self: Client.Client<R, E, A>,
+    f: (effect: Effect.Effect<R, E, A>, request: ClientRequest.ClientRequest) => Effect.Effect<R1, E1, A1>
+  ) => Client.Client<R | R1, E | E1, A1>
+>(
+  2,
+  (self, f) =>
+    make(
+      Effect.flatMap((request) => f(self.execute(Effect.succeed(request)), request)),
+      self.preprocess
+    )
+)
+
+/** @internal */
 export const transformResponse = dual<
   <R, E, A, R1, E1, A1>(
     f: (effect: Effect.Effect<R, E, A>) => Effect.Effect<R1, E1, A1>
@@ -330,22 +348,18 @@ export const filterStatus = dual<
 >(
   2,
   (self, f) =>
-    make((request) =>
-      Effect.flatMap(
-        request,
-        (request) =>
-          Effect.filterOrFail(
-            self.execute(Effect.succeed(request)),
-            (response) => f(response.status),
-            (response) =>
-              internalError.responseError({
-                request,
-                response,
-                reason: "StatusCode",
-                error: "non 2xx status code"
-              })
-          )
-      ), self.preprocess)
+    transform(self, (effect, request) =>
+      Effect.filterOrFail(
+        effect,
+        (response) => f(response.status),
+        (response) =>
+          internalError.responseError({
+            request,
+            response,
+            reason: "StatusCode",
+            error: "non 2xx status code"
+          })
+      ))
 )
 
 /** @internal */
