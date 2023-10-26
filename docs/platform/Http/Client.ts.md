@@ -36,7 +36,6 @@ Added in v1.0.0
   - [mapRequestEffect](#maprequesteffect)
   - [tap](#tap)
   - [tapRequest](#taprequest)
-  - [transform](#transform)
   - [transformResponse](#transformresponse)
 - [models](#models)
   - [Client (interface)](#client-interface)
@@ -50,6 +49,8 @@ Added in v1.0.0
 - [utils](#utils)
   - [Client (namespace)](#client-namespace)
     - [Default (type alias)](#default-type-alias)
+    - [Execute (type alias)](#execute-type-alias)
+    - [Preprocess (type alias)](#preprocess-type-alias)
     - [WithResponse (type alias)](#withresponse-type-alias)
 
 ---
@@ -81,8 +82,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: <R, E, A>(
-  f: (request: ClientRequest.ClientRequest) => Effect.Effect<R, E, A>
+export declare const make: <R, E, A, R2, E2>(
+  execute: (request: Effect.Effect<R2, E2, ClientRequest.ClientRequest>) => Effect.Effect<R, E, A>,
+  preprocess: Client.Preprocess<R2, E2>
 ) => Client<R, E, A>
 ```
 
@@ -373,24 +375,6 @@ export declare const tapRequest: {
 
 Added in v1.0.0
 
-## transform
-
-**Signature**
-
-```ts
-export declare const transform: {
-  <R, E, A, R1, E1, A1>(
-    f: (client: Client<R, E, A>) => (request: ClientRequest.ClientRequest) => Effect.Effect<R1, E1, A1>
-  ): (self: Client<R, E, A>) => Client<R1, E1, A1>
-  <R, E, A, R1, E1, A1>(
-    self: Client<R, E, A>,
-    f: (client: Client<R, E, A>) => (request: ClientRequest.ClientRequest) => Effect.Effect<R1, E1, A1>
-  ): Client<R1, E1, A1>
-}
-```
-
-Added in v1.0.0
-
 ## transformResponse
 
 **Signature**
@@ -417,8 +401,10 @@ Added in v1.0.0
 
 ```ts
 export interface Client<R, E, A> extends Pipeable {
-  readonly [TypeId]: TypeId
   (request: ClientRequest.ClientRequest): Effect.Effect<R, E, A>
+  readonly [TypeId]: TypeId
+  readonly preprocess: Client.Preprocess<R, E>
+  readonly execute: Client.Execute<R, E, A>
 }
 ```
 
@@ -491,6 +477,28 @@ Added in v1.0.0
 
 ```ts
 export type Default = WithResponse<never, Error.HttpClientError>
+```
+
+Added in v1.0.0
+
+### Execute (type alias)
+
+**Signature**
+
+```ts
+export type Execute<R, E, A> = (request: Effect.Effect<R, E, ClientRequest.ClientRequest>) => Effect.Effect<R, E, A>
+```
+
+Added in v1.0.0
+
+### Preprocess (type alias)
+
+**Signature**
+
+```ts
+export type Preprocess<R, E> = (
+  request: ClientRequest.ClientRequest
+) => Effect.Effect<R, E, ClientRequest.ClientRequest>
 ```
 
 Added in v1.0.0
