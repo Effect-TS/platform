@@ -36,6 +36,7 @@ Added in v1.0.0
   - [mapRequestEffect](#maprequesteffect)
   - [tap](#tap)
   - [tapRequest](#taprequest)
+  - [transform](#transform)
   - [transformResponse](#transformresponse)
 - [models](#models)
   - [Client (interface)](#client-interface)
@@ -370,6 +371,24 @@ export declare const tapRequest: {
     E | E2,
     A
   >
+}
+```
+
+Added in v1.0.0
+
+## transform
+
+**Signature**
+
+```ts
+export declare const transform: {
+  <R, E, A, R1, E1, A1>(
+    f: (effect: Effect.Effect<R, E, A>, request: ClientRequest.ClientRequest) => Effect.Effect<R1, E1, A1>
+  ): (self: Client<R, E, A>) => Client<R | R1, E | E1, A1>
+  <R, E, A, R1, E1, A1>(
+    self: Client<R, E, A>,
+    f: (effect: Effect.Effect<R, E, A>, request: ClientRequest.ClientRequest) => Effect.Effect<R1, E1, A1>
+  ): Client<R | R1, E | E1, A1>
 }
 ```
 
