@@ -18,6 +18,8 @@ Also includes exports from [`@effect/platform/WorkerRunner`](https://effect-ts.g
   - [make](#make)
 - [exports](#exports)
   - [From "@effect/platform/WorkerRunner"](#from-effectplatformworkerrunner)
+- [layers](#layers)
+  - [layer](#layer)
 
 ---
 
@@ -46,6 +48,18 @@ Re-exports all named exports from the "@effect/platform/WorkerRunner" module.
 
 ```ts
 export * from '@effect/platform/WorkerRunner'
+```
+
+Added in v1.0.0
+
+# layers
+
+## layer
+
+**Signature**
+
+```ts
+export declare const layer: Layer.Layer<never, never, Runner.PlatformRunner>
 ```
 
 Added in v1.0.0
