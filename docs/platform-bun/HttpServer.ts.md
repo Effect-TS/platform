@@ -1,6 +1,6 @@
 ---
 title: HttpServer.ts
-nav_order: 10
+nav_order: 11
 parent: "@effect/platform-bun"
 ---
 
@@ -131,8 +131,8 @@ export declare const request: typeof request
 
 Added in v1.0.0
 
-- Docs: [Http/ServerRequest](https://effect-ts.github.io/platform/platform/Http/ServerRequest.ts.html)
-- Module: `@effect/platform/Http/ServerRequest`
+- Docs: [Http/ServerRequest](https://effect-ts.github.io/platform/platform-bun/Http/ServerRequest.ts.html)
+- Module: `@effect/platform-bun/Http/ServerRequest`
 
 ## response
 

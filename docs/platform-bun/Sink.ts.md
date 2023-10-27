@@ -1,6 +1,6 @@
 ---
 title: Sink.ts
-nav_order: 15
+nav_order: 16
 parent: "@effect/platform-bun"
 ---
 
@@ -25,7 +25,7 @@ Added in v1.0.0
 
 ```ts
 export declare const fromWritable: <E, A = string | Uint8Array>(
-  evaluate: LazyArg<Writable | NodeJS.WritableStream>,
+  evaluate: LazyArg<Writable<any> | NodeJS.WritableStream>,
   onError: (error: unknown) => E,
   options?: FromWritableOptions | undefined
 ) => Sink<never, E, A, never, void>

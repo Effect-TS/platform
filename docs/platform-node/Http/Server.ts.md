@@ -16,6 +16,7 @@ Also includes exports from [`@effect/platform/Http/Server`](https://effect-ts.gi
 
 - [constructors](#constructors)
   - [make](#make)
+  - [makeHandler](#makehandler)
 - [exports](#exports)
   - [From "@effect/platform/Http/Server"](#from-effectplatformhttpserver)
 - [layers](#layers)
@@ -35,6 +36,30 @@ export declare const make: (
   evaluate: LazyArg<Http.Server>,
   options: Net.ListenOptions
 ) => Effect.Effect<Scope.Scope, never, Server.Server>
+```
+
+Added in v1.0.0
+
+## makeHandler
+
+**Signature**
+
+```ts
+export declare const makeHandler: {
+  <R, E>(httpApp: App.Default<R, E>): Effect.Effect<
+    Exclude<R, ServerRequest.ServerRequest>,
+    never,
+    (nodeRequest: Http.IncomingMessage, nodeResponse: Http.ServerResponse<Http.IncomingMessage>) => void
+  >
+  <R, E, App extends App.Default<any, any>>(
+    httpApp: App.Default<R, E>,
+    middleware: Middleware.Middleware.Applied<R, E, App>
+  ): Effect.Effect<
+    Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>,
+    never,
+    (nodeRequest: Http.IncomingMessage, nodeResponse: Http.ServerResponse<Http.IncomingMessage>) => void
+  >
+}
 ```
 
 Added in v1.0.0
