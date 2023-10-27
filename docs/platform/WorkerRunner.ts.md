@@ -97,6 +97,7 @@ Added in v1.0.0
 
 ```ts
 export interface Options<O> {
+  readonly encode?: (message: O) => unknown
   readonly transfers?: (message: O) => ReadonlyArray<unknown>
 }
 ```
