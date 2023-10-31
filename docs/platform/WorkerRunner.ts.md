@@ -39,7 +39,7 @@ Added in v1.0.0
 export declare const make: <I, R, E, O>(
   process: (request: I) => Stream.Stream<R, E, O> | Effect.Effect<R, E, O>,
   options?: Runner.Options<O> | undefined
-) => Effect.Effect<PlatformRunner | R | Scope.Scope, WorkerError, void>
+) => Effect.Effect<PlatformRunner | R | Scope.Scope, WorkerError, never>
 ```
 
 Added in v1.0.0
@@ -52,7 +52,7 @@ Added in v1.0.0
 
 ```ts
 export interface BackingRunner<I, O> {
-  readonly fiber: Fiber.Fiber<WorkerError, void>
+  readonly fiber: Fiber.Fiber<WorkerError, never>
   readonly queue: Queue.Dequeue<I>
   readonly send: (message: O, transfers?: ReadonlyArray<unknown>) => Effect.Effect<never, never, void>
 }

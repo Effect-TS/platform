@@ -234,17 +234,13 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type Options<I, W = unknown> = Worker.Options<I, W> &
-  (
-    | {
-        readonly size: number
-      }
-    | {
-        readonly minSize: number
-        readonly maxSize: number
-        readonly timeToLive: Duration.DurationInput
-      }
-  )
+export type Options<I, W = unknown> = Worker.Options<I, W> & {
+  readonly size: number
+  // } | {
+  //   readonly minSize: number
+  //   readonly maxSize: number
+  //   readonly timeToLive: Duration.DurationInput
+}
 ```
 
 Added in v1.0.0
