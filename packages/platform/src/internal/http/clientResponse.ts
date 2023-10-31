@@ -74,21 +74,20 @@ class ClientResponseImpl implements ClientResponse.ClientResponse {
     })
   }
 
-  get text(): Effect.Effect<never, Error.ResponseError, string> {
-    return Effect.tryPromise({
-      try: () => this.source.text(),
-      catch: (_) =>
-        internalError.responseError({
-          request: this.request,
-          response: this,
-          reason: "Decode",
-          error: _
-        })
-    })
-  }
+  readonly text: Effect.Effect<never, Error.ResponseError, string> = Effect.tryPromise({
+    try: () => this.source.text(),
+    catch: (_) =>
+      internalError.responseError({
+        request: this.request,
+        response: this,
+        reason: "Decode",
+        error: _
+      })
+  }).pipe(Effect.cached, Effect.flatten)
 
-  get urlParamsBody(): Effect.Effect<never, Error.ResponseError, UrlParams.UrlParams> {
-    return Effect.flatMap(this.text, (_) =>
+  readonly urlParamsBody: Effect.Effect<never, Error.ResponseError, UrlParams.UrlParams> = Effect.flatMap(
+    this.text,
+    (_) =>
       Effect.try({
         try: () => UrlParams.fromInput(new URLSearchParams(_)),
         catch: (_) =>
@@ -98,34 +97,30 @@ class ClientResponseImpl implements ClientResponse.ClientResponse {
             reason: "Decode",
             error: _
           })
-      }))
-  }
+      })
+  ).pipe(Effect.cached, Effect.flatten)
 
-  get formData(): Effect.Effect<never, Error.ResponseError, FormData> {
-    return Effect.tryPromise({
-      try: () => this.source.formData(),
-      catch: (_) =>
-        internalError.responseError({
-          request: this.request,
-          response: this,
-          reason: "Decode",
-          error: _
-        })
-    })
-  }
+  readonly formData: Effect.Effect<never, Error.ResponseError, FormData> = Effect.tryPromise({
+    try: () => this.source.formData(),
+    catch: (_) =>
+      internalError.responseError({
+        request: this.request,
+        response: this,
+        reason: "Decode",
+        error: _
+      })
+  }).pipe(Effect.cached, Effect.flatten)
 
-  get arrayBuffer(): Effect.Effect<never, Error.ResponseError, ArrayBuffer> {
-    return Effect.tryPromise({
-      try: () => this.source.arrayBuffer(),
-      catch: (_) =>
-        internalError.responseError({
-          request: this.request,
-          response: this,
-          reason: "Decode",
-          error: _
-        })
-    })
-  }
+  readonly arrayBuffer: Effect.Effect<never, Error.ResponseError, ArrayBuffer> = Effect.tryPromise({
+    try: () => this.source.arrayBuffer(),
+    catch: (_) =>
+      internalError.responseError({
+        request: this.request,
+        response: this,
+        reason: "Decode",
+        error: _
+      })
+  }).pipe(Effect.cached, Effect.flatten)
 }
 
 /** @internal */
