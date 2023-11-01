@@ -218,6 +218,7 @@ Added in v1.0.0
 ```ts
 export interface WorkerPool<I, E, O> {
   readonly backing: Pool.Pool<WorkerError, Worker<I, E, O>>
+  readonly broadcast: (message: I) => Effect.Effect<never, E | WorkerError, void>
   readonly execute: (message: I) => Stream.Stream<never, E | WorkerError, O>
   readonly executeEffect: (message: I) => Effect.Effect<never, E | WorkerError, O>
 }
@@ -235,6 +236,7 @@ Added in v1.0.0
 
 ```ts
 export type Options<I, W = unknown> = Worker.Options<I, W> & {
+  readonly onCreate?: (worker: Worker<I, unknown, unknown>) => Effect.Effect<never, WorkerError, void>
   readonly size: number
   // } | {
   //   readonly minSize: number
