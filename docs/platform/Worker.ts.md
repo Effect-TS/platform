@@ -103,7 +103,7 @@ Added in v1.0.0
 
 ```ts
 export interface BackingWorker<I, O> {
-  readonly join: Effect.Effect<never, WorkerError, never>
+  readonly run: Effect.Effect<never, WorkerError, never>
   readonly send: (message: I, transfers?: ReadonlyArray<unknown>) => Effect.Effect<never, never, void>
   readonly queue: Queue.Dequeue<BackingWorker.Message<O>>
 }
@@ -235,14 +235,19 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type Options<I, W = unknown> = Worker.Options<I, W> & {
-  readonly onCreate?: (worker: Worker<I, unknown, unknown>) => Effect.Effect<never, WorkerError, void>
-  readonly size: number
-  // } | {
-  //   readonly minSize: number
-  //   readonly maxSize: number
-  //   readonly timeToLive: Duration.DurationInput
-}
+export type Options<I, W = unknown> = Worker.Options<I, W> &
+  (
+    | {
+        readonly onCreate?: (worker: Worker<I, unknown, unknown>) => Effect.Effect<never, WorkerError, void>
+        readonly size: number
+      }
+    | {
+        readonly onCreate?: (worker: Worker<I, unknown, unknown>) => Effect.Effect<never, WorkerError, void>
+        readonly minSize: number
+        readonly maxSize: number
+        readonly timeToLive: Duration.DurationInput
+      }
+  )
 ```
 
 Added in v1.0.0
