@@ -129,14 +129,14 @@ importers:
         version: 1.0.1
     devDependencies:
       '@effect/schema':
-        specifier: ^0.47.0
-        version: 0.47.0(effect@2.0.0-next.53)(fast-check@3.13.2)
+        specifier: ^0.47.1
+        version: 0.47.1(effect@2.0.0-next.54)(fast-check@3.13.2)
       '@types/path-browserify':
         specifier: ^1.0.1
         version: 1.0.1
       effect:
-        specifier: 2.0.0-next.53
-        version: 2.0.0-next.53
+        specifier: 2.0.0-next.54
+        version: 2.0.0-next.54
 
   packages/platform-browser:
     dependencies:
@@ -145,8 +145,8 @@ importers:
         version: link:../platform
     devDependencies:
       effect:
-        specifier: 2.0.0-next.53
-        version: 2.0.0-next.53
+        specifier: 2.0.0-next.54
+        version: 2.0.0-next.54
       happy-dom:
         specifier: ^12.10.3
         version: 12.10.3
@@ -164,14 +164,14 @@ importers:
         version: link:../platform-node
     devDependencies:
       '@effect/schema':
-        specifier: ^0.47.0
-        version: 0.47.0(effect@2.0.0-next.53)(fast-check@3.13.2)
+        specifier: ^0.47.1
+        version: 0.47.1(effect@2.0.0-next.54)(fast-check@3.13.2)
       bun-types:
         specifier: 1.0.7
         version: 1.0.7
       effect:
-        specifier: 2.0.0-next.53
-        version: 2.0.0-next.53
+        specifier: 2.0.0-next.54
+        version: 2.0.0-next.54
 
   packages/platform-node:
     dependencies:
@@ -186,8 +186,8 @@ importers:
         version: 3.0.0
     devDependencies:
       '@effect/schema':
-        specifier: ^0.47.0
-        version: 0.47.0(effect@2.0.0-next.53)(fast-check@3.13.2)
+        specifier: ^0.47.1
+        version: 0.47.1(effect@2.0.0-next.54)(fast-check@3.13.2)
       '@types/busboy':
         specifier: ^1.5.2
         version: 1.5.2
@@ -198,8 +198,8 @@ importers:
         specifier: ^6.1.7
         version: 6.1.7
       effect:
-        specifier: 2.0.0-next.53
-        version: 2.0.0-next.53
+        specifier: 2.0.0-next.54
+        version: 2.0.0-next.54
       tar:
         specifier: ^6.2.0
         version: 6.2.0
@@ -839,13 +839,13 @@ packages:
     resolution: {integrity: sha512-e8vfKbjnbYiyneBincEFS0tzXluopGK77OkVFbPRtUbNDS5tJfb+jiwOQEiqASDsadcZmd+9J9+Q6v/z7GuN2g==}
     dev: true
 
-  /@effect/schema@0.47.0(effect@2.0.0-next.53)(fast-check@3.13.2):
-    resolution: {integrity: sha512-MQJtXXXVgR4wGCi+SPiqqlbErH3T8h4wotI0sbm5p5G+LjcP4BeZBX2pvITFpUYqvTmAiJvgc5H2uPeQWpeJaw==}
+  /@effect/schema@0.47.1(effect@2.0.0-next.54)(fast-check@3.13.2):
+    resolution: {integrity: sha512-aqh6U1Faqqi+iMENdCt3Wp/sYZH9QJLJPKUycOllzcjFmOnNlb9Yiw58LNhzLSoAqNOTUtHjx31EHk/P7h8tuQ==}
     peerDependencies:
-      effect: 2.0.0-next.53
+      effect: 2.0.0-next.54
       fast-check: ^3.13.2
     dependencies:
-      effect: 2.0.0-next.53
+      effect: 2.0.0-next.54
       fast-check: 3.13.2
     dev: true
 
@@ -2087,7 +2087,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001559
-      electron-to-chromium: 1.4.574
+      electron-to-chromium: 1.4.575
       node-releases: 2.0.13
       update-browserslist-db: 1.0.13(browserslist@4.22.1)
     dev: true
@@ -2709,12 +2709,12 @@ packages:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: true
 
-  /effect@2.0.0-next.53:
-    resolution: {integrity: sha512-WQQ0Ha1Hn8x1adOWfcpUPu/xRlekwSY39pCbsZ/Gu3nSdLocY8rQiKmHNRTrMG8xoGoZmh5MKhUPdcsbrpSKAA==}
+  /effect@2.0.0-next.54:
+    resolution: {integrity: sha512-qROhKMxlm6fpa90YRfWSgKeelDfhaDq2igPK+pIKupGehiCnZH4vd2qrY71HVZ10qZgXxh0VXpGyDQxJC+EQqw==}
     dev: true
 
-  /electron-to-chromium@1.4.574:
-    resolution: {integrity: sha512-bg1m8L0n02xRzx4LsTTMbBPiUd9yIR+74iPtS/Ao65CuXvhVZHP0ym1kSdDG3yHFDXqHQQBKujlN1AQ8qZnyFg==}
+  /electron-to-chromium@1.4.575:
+    resolution: {integrity: sha512-kY2BGyvgAHiX899oF6xLXSIf99bAvvdPhDoJwG77nxCSyWYuRH6e9a9a3gpXBvCs6lj4dQZJkfnW2hdKWHEISg==}
     dev: true
 
   /emoji-regex@8.0.0:
