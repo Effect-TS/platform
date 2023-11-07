@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import * as request from "@effect/platform-bun/Http/ServerRequest"
+import * as request from "./Http/ServerRequest.js"
 import * as etag from "@effect/platform-node/Http/Etag"
 import * as formData from "@effect/platform-node/Http/FormData"
 import * as app from "@effect/platform/Http/App"
