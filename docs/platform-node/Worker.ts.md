@@ -61,7 +61,7 @@ Re-exports all named exports from the "@effect/platform/Worker" module.
 **Signature**
 
 ```ts
-export * from '@effect/platform/Worker'
+export * from "@effect/platform/Worker"
 ```
 
 Added in v1.0.0

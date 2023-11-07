@@ -31,7 +31,7 @@ Re-exports all named exports from the "@effect/platform/Http/Etag" module.
 **Signature**
 
 ```ts
-export * from '@effect/platform/Http/Etag'
+export * from "@effect/platform/Http/Etag"
 ```
 
 Added in v1.0.0

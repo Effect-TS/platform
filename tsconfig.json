@@ -1,9 +1,17 @@
 {
   "extends": "./tsconfig.base.json",
   "references": [
-    { "path": "packages/platform" },
-    { "path": "packages/platform-bun" },
-    { "path": "packages/platform-browser" },
-    { "path": "packages/platform-node" }
+    {
+      "path": "packages/platform"
+    },
+    {
+      "path": "packages/platform-bun"
+    },
+    {
+      "path": "packages/platform-browser"
+    },
+    {
+      "path": "packages/platform-node"
+    }
   ]
 }

@@ -28,7 +28,7 @@ Re-exports all named exports from the "@effect/platform/Path" module.
 **Signature**
 
 ```ts
-export * from '@effect/platform/Path'
+export * from "@effect/platform/Path"
 ```
 
 Added in v1.0.0

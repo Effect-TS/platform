@@ -115,7 +115,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type ExitCode = Brand.Branded<number, 'ExitCode'>
+export type ExitCode = Brand.Branded<number, "ExitCode">
 ```
 
 Added in v1.0.0
@@ -168,7 +168,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type ProcessId = Brand.Branded<number, 'ProcessId'>
+export type ProcessId = Brand.Branded<number, "ProcessId">
 ```
 
 Added in v1.0.0
@@ -179,43 +179,43 @@ Added in v1.0.0
 
 ```ts
 export type Signal =
-  | 'SIGABRT'
-  | 'SIGALRM'
-  | 'SIGBUS'
-  | 'SIGCHLD'
-  | 'SIGCONT'
-  | 'SIGFPE'
-  | 'SIGHUP'
-  | 'SIGILL'
-  | 'SIGINT'
-  | 'SIGIO'
-  | 'SIGIOT'
-  | 'SIGKILL'
-  | 'SIGPIPE'
-  | 'SIGPOLL'
-  | 'SIGPROF'
-  | 'SIGPWR'
-  | 'SIGQUIT'
-  | 'SIGSEGV'
-  | 'SIGSTKFLT'
-  | 'SIGSTOP'
-  | 'SIGSYS'
-  | 'SIGTERM'
-  | 'SIGTRAP'
-  | 'SIGTSTP'
-  | 'SIGTTIN'
-  | 'SIGTTOU'
-  | 'SIGUNUSED'
-  | 'SIGURG'
-  | 'SIGUSR1'
-  | 'SIGUSR2'
-  | 'SIGVTALRM'
-  | 'SIGWINCH'
-  | 'SIGXCPU'
-  | 'SIGXFSZ'
-  | 'SIGBREAK'
-  | 'SIGLOST'
-  | 'SIGINFO'
+  | "SIGABRT"
+  | "SIGALRM"
+  | "SIGBUS"
+  | "SIGCHLD"
+  | "SIGCONT"
+  | "SIGFPE"
+  | "SIGHUP"
+  | "SIGILL"
+  | "SIGINT"
+  | "SIGIO"
+  | "SIGIOT"
+  | "SIGKILL"
+  | "SIGPIPE"
+  | "SIGPOLL"
+  | "SIGPROF"
+  | "SIGPWR"
+  | "SIGQUIT"
+  | "SIGSEGV"
+  | "SIGSTKFLT"
+  | "SIGSTOP"
+  | "SIGSYS"
+  | "SIGTERM"
+  | "SIGTRAP"
+  | "SIGTSTP"
+  | "SIGTTIN"
+  | "SIGTTOU"
+  | "SIGUNUSED"
+  | "SIGURG"
+  | "SIGUSR1"
+  | "SIGUSR2"
+  | "SIGVTALRM"
+  | "SIGWINCH"
+  | "SIGXCPU"
+  | "SIGXFSZ"
+  | "SIGBREAK"
+  | "SIGLOST"
+  | "SIGINFO"
 ```
 
 Added in v1.0.0

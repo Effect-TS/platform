@@ -49,7 +49,7 @@ Added in v1.0.0
 
 ```ts
 export interface BadArgument extends PlatformError.Base {
-  readonly _tag: 'BadArgument'
+  readonly _tag: "BadArgument"
 }
 ```
 
@@ -83,17 +83,17 @@ Added in v1.0.0
 
 ```ts
 export type SystemErrorReason =
-  | 'AlreadyExists'
-  | 'BadResource'
-  | 'Busy'
-  | 'InvalidData'
-  | 'NotFound'
-  | 'PermissionDenied'
-  | 'TimedOut'
-  | 'UnexpectedEof'
-  | 'Unknown'
-  | 'WouldBlock'
-  | 'WriteZero'
+  | "AlreadyExists"
+  | "BadResource"
+  | "Busy"
+  | "InvalidData"
+  | "NotFound"
+  | "PermissionDenied"
+  | "TimedOut"
+  | "UnexpectedEof"
+  | "Unknown"
+  | "WouldBlock"
+  | "WriteZero"
 ```
 
 Added in v1.0.0
@@ -106,7 +106,7 @@ Added in v1.0.0
 
 ```ts
 export interface SystemError extends PlatformError.Base {
-  readonly _tag: 'SystemError'
+  readonly _tag: "SystemError"
   readonly reason: SystemErrorReason
   readonly syscall?: string
   readonly pathOrDescriptor: string | number
@@ -151,7 +151,7 @@ Added in v1.0.0
 export interface Base extends Data.Case {
   readonly [PlatformErrorTypeId]: typeof PlatformErrorTypeId
   readonly _tag: string
-  readonly module: 'Command' | 'FileSystem' | 'Path' | 'KeyValueStore' | 'Clipboard' | 'Stream'
+  readonly module: "Command" | "FileSystem" | "Path" | "KeyValueStore" | "Clipboard" | "Stream"
   readonly method: string
   readonly message: string
 }
@@ -164,7 +164,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type ProvidedFields = PlatformErrorTypeId | '_tag' | keyof Data.Case
+export type ProvidedFields = PlatformErrorTypeId | "_tag" | keyof Data.Case
 ```
 
 Added in v1.0.0

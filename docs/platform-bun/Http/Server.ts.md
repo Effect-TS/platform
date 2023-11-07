@@ -32,7 +32,7 @@ Also includes exports from [`@effect/platform/Http/Server`](https://effect-ts.gi
 
 ```ts
 export declare const make: (
-  options: Omit<ServeOptions, 'fetch' | 'error'>
+  options: Omit<ServeOptions, "fetch" | "error">
 ) => Effect.Effect<Scope.Scope, never, Server.Server>
 ```
 
@@ -47,7 +47,7 @@ Re-exports all named exports from the "@effect/platform/Http/Server" module.
 **Signature**
 
 ```ts
-export * from '@effect/platform/Http/Server'
+export * from "@effect/platform/Http/Server"
 ```
 
 Added in v1.0.0
@@ -60,7 +60,7 @@ Added in v1.0.0
 
 ```ts
 export declare const layer: (
-  options: Omit<ServeOptions, 'fetch' | 'error'>
+  options: Omit<ServeOptions, "fetch" | "error">
 ) => Layer.Layer<never, never, Server.Server | Platform.Platform>
 ```
 
@@ -72,7 +72,7 @@ Added in v1.0.0
 
 ```ts
 export declare const layerConfig: (
-  options: Config.Config.Wrap<Omit<ServeOptions, 'fetch' | 'error'>>
+  options: Config.Config.Wrap<Omit<ServeOptions, "fetch" | "error">>
 ) => Layer.Layer<never, ConfigError.ConfigError, Server.Server | Platform.Platform>
 ```
 

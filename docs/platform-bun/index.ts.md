@@ -13,206 +13,206 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [exports](#exports)
-  - [From "@effect/platform-bun/BunContext"](#from-effectplatform-bunbuncontext)
-  - [From "@effect/platform-bun/Command"](#from-effectplatform-buncommand)
-  - [From "@effect/platform-bun/CommandExecutor"](#from-effectplatform-buncommandexecutor)
-  - [From "@effect/platform-bun/Effectify"](#from-effectplatform-buneffectify)
-  - [From "@effect/platform-bun/Error"](#from-effectplatform-bunerror)
-  - [From "@effect/platform-bun/FileSystem"](#from-effectplatform-bunfilesystem)
-  - [From "@effect/platform-bun/HttpClient"](#from-effectplatform-bunhttpclient)
-  - [From "@effect/platform-bun/HttpServer"](#from-effectplatform-bunhttpserver)
-  - [From "@effect/platform-bun/KeyValueStore"](#from-effectplatform-bunkeyvaluestore)
-  - [From "@effect/platform-bun/Path"](#from-effectplatform-bunpath)
-  - [From "@effect/platform-bun/Runtime"](#from-effectplatform-bunruntime)
-  - [From "@effect/platform-bun/Sink"](#from-effectplatform-bunsink)
-  - [From "@effect/platform-bun/Stream"](#from-effectplatform-bunstream)
-  - [From "@effect/platform-bun/Worker"](#from-effectplatform-bunworker)
-  - [From "@effect/platform-bun/WorkerRunner"](#from-effectplatform-bunworkerrunner)
+  - [From "./BunContext.js"](#from-buncontextjs)
+  - [From "./Command.js"](#from-commandjs)
+  - [From "./CommandExecutor.js"](#from-commandexecutorjs)
+  - [From "./Effectify.js"](#from-effectifyjs)
+  - [From "./Error.js"](#from-errorjs)
+  - [From "./FileSystem.js"](#from-filesystemjs)
+  - [From "./HttpClient.js"](#from-httpclientjs)
+  - [From "./HttpServer.js"](#from-httpserverjs)
+  - [From "./KeyValueStore.js"](#from-keyvaluestorejs)
+  - [From "./Path.js"](#from-pathjs)
+  - [From "./Runtime.js"](#from-runtimejs)
+  - [From "./Sink.js"](#from-sinkjs)
+  - [From "./Stream.js"](#from-streamjs)
+  - [From "./Worker.js"](#from-workerjs)
+  - [From "./WorkerRunner.js"](#from-workerrunnerjs)
 
 ---
 
 # exports
 
-## From "@effect/platform-bun/BunContext"
+## From "./BunContext.js"
 
-Re-exports all named exports from the "@effect/platform-bun/BunContext" module as `BunContext`.
+Re-exports all named exports from the "./BunContext.js" module as `BunContext`.
 
 **Signature**
 
 ```ts
-export * as BunContext from '@effect/platform-bun/BunContext'
+export * as BunContext from "./BunContext.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/Command"
+## From "./Command.js"
 
-Re-exports all named exports from the "@effect/platform-bun/Command" module as `Command`.
+Re-exports all named exports from the "./Command.js" module as `Command`.
 
 **Signature**
 
 ```ts
-export * as Command from '@effect/platform-bun/Command'
+export * as Command from "./Command.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/CommandExecutor"
+## From "./CommandExecutor.js"
 
-Re-exports all named exports from the "@effect/platform-bun/CommandExecutor" module as `CommandExecutor`.
+Re-exports all named exports from the "./CommandExecutor.js" module as `CommandExecutor`.
 
 **Signature**
 
 ```ts
-export * as CommandExecutor from '@effect/platform-bun/CommandExecutor'
+export * as CommandExecutor from "./CommandExecutor.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/Effectify"
+## From "./Effectify.js"
 
-Re-exports all named exports from the "@effect/platform-bun/Effectify" module as `Effectify`.
+Re-exports all named exports from the "./Effectify.js" module as `Effectify`.
 
 **Signature**
 
 ```ts
-export * as Effectify from '@effect/platform-bun/Effectify'
+export * as Effectify from "./Effectify.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/Error"
+## From "./Error.js"
 
-Re-exports all named exports from the "@effect/platform-bun/Error" module as `Error`.
+Re-exports all named exports from the "./Error.js" module as `Error`.
 
 **Signature**
 
 ```ts
-export * as Error from '@effect/platform-bun/Error'
+export * as Error from "./Error.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/FileSystem"
+## From "./FileSystem.js"
 
-Re-exports all named exports from the "@effect/platform-bun/FileSystem" module as `FileSystem`.
+Re-exports all named exports from the "./FileSystem.js" module as `FileSystem`.
 
 **Signature**
 
 ```ts
-export * as FileSystem from '@effect/platform-bun/FileSystem'
+export * as FileSystem from "./FileSystem.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/HttpClient"
+## From "./HttpClient.js"
 
-Re-exports all named exports from the "@effect/platform-bun/HttpClient" module as `HttpClient`.
+Re-exports all named exports from the "./HttpClient.js" module as `HttpClient`.
 
 **Signature**
 
 ```ts
-export * as HttpClient from '@effect/platform-bun/HttpClient'
+export * as HttpClient from "./HttpClient.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/HttpServer"
+## From "./HttpServer.js"
 
-Re-exports all named exports from the "@effect/platform-bun/HttpServer" module as `HttpServer`.
+Re-exports all named exports from the "./HttpServer.js" module as `HttpServer`.
 
 **Signature**
 
 ```ts
-export * as HttpServer from '@effect/platform-bun/HttpServer'
+export * as HttpServer from "./HttpServer.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/KeyValueStore"
+## From "./KeyValueStore.js"
 
-Re-exports all named exports from the "@effect/platform-bun/KeyValueStore" module as `KeyValueStore`.
+Re-exports all named exports from the "./KeyValueStore.js" module as `KeyValueStore`.
 
 **Signature**
 
 ```ts
-export * as KeyValueStore from '@effect/platform-bun/KeyValueStore'
+export * as KeyValueStore from "./KeyValueStore.js"
 ```
 
 Added in v1.0.0
 
 Also includes exports from [`@effect/platform/KeyValueStore`](https://effect-ts.github.io/platform/platform/KeyValueStore.ts.html).
 
-## From "@effect/platform-bun/Path"
+## From "./Path.js"
 
-Re-exports all named exports from the "@effect/platform-bun/Path" module as `Path`.
+Re-exports all named exports from the "./Path.js" module as `Path`.
 
 **Signature**
 
 ```ts
-export * as Path from '@effect/platform-bun/Path'
+export * as Path from "./Path.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/Runtime"
+## From "./Runtime.js"
 
-Re-exports all named exports from the "@effect/platform-bun/Runtime" module as `Runtime`.
+Re-exports all named exports from the "./Runtime.js" module as `Runtime`.
 
 **Signature**
 
 ```ts
-export * as Runtime from '@effect/platform-bun/Runtime'
+export * as Runtime from "./Runtime.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/Sink"
+## From "./Sink.js"
 
-Re-exports all named exports from the "@effect/platform-bun/Sink" module as `Sink`.
+Re-exports all named exports from the "./Sink.js" module as `Sink`.
 
 **Signature**
 
 ```ts
-export * as Sink from '@effect/platform-bun/Sink'
+export * as Sink from "./Sink.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/Stream"
+## From "./Stream.js"
 
-Re-exports all named exports from the "@effect/platform-bun/Stream" module as `Stream`.
+Re-exports all named exports from the "./Stream.js" module as `Stream`.
 
 **Signature**
 
 ```ts
-export * as Stream from '@effect/platform-bun/Stream'
+export * as Stream from "./Stream.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform-bun/Worker"
+## From "./Worker.js"
 
-Re-exports all named exports from the "@effect/platform-bun/Worker" module as `Worker`.
+Re-exports all named exports from the "./Worker.js" module as `Worker`.
 
 **Signature**
 
 ```ts
-export * as Worker from '@effect/platform-bun/Worker'
+export * as Worker from "./Worker.js"
 ```
 
 Added in v1.0.0
 
 Also includes exports from [`@effect/platform/Worker`](https://effect-ts.github.io/platform/platform/Worker.ts.html).
 
-## From "@effect/platform-bun/WorkerRunner"
+## From "./WorkerRunner.js"
 
-Re-exports all named exports from the "@effect/platform-bun/WorkerRunner" module as `WorkerRunner`.
+Re-exports all named exports from the "./WorkerRunner.js" module as `WorkerRunner`.
 
 **Signature**
 
 ```ts
-export * as WorkerRunner from '@effect/platform-bun/WorkerRunner'
+export * as WorkerRunner from "./WorkerRunner.js"
 ```
 
 Added in v1.0.0

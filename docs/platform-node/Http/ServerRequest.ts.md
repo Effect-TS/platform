@@ -42,7 +42,7 @@ Re-exports all named exports from the "@effect/platform/Http/ServerRequest" modu
 **Signature**
 
 ```ts
-export * from '@effect/platform/Http/ServerRequest'
+export * from "@effect/platform/Http/ServerRequest"
 ```
 
 Added in v1.0.0

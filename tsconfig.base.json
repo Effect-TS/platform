@@ -1,55 +1,73 @@
 {
+  "include": [],
   "compilerOptions": {
+    "strict": true,
     "moduleDetection": "force",
     "composite": true,
     "downlevelIteration": true,
     "resolveJsonModule": true,
-    "esModuleInterop": true,
+    "esModuleInterop": false,
     "declaration": true,
     "skipLibCheck": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "preserveSymlinks": true,
     "moduleResolution": "NodeNext",
-    "lib": ["ES2021", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "isolatedModules": true,
     "sourceMap": true,
     "declarationMap": true,
-    "strict": true,
     "noImplicitReturns": false,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "noEmitOnError": false,
-    "noErrorTruncation": true,
+    "noErrorTruncation": false,
     "allowJs": false,
     "checkJs": false,
     "forceConsistentCasingInFileNames": true,
-    "stripInternal": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
     "noUncheckedIndexedAccess": false,
     "strictNullChecks": true,
-    "target": "ES2021",
+    "baseUrl": ".",
+    "target": "ES2022",
     "module": "NodeNext",
     "incremental": true,
     "removeComments": false,
-    "baseUrl": ".",
     "paths": {
-      "@effect/platform/test/*": ["./packages/platform/test/*"],
-      "@effect/platform/*": ["./packages/platform/src/*.ts"],
-
-      "@effect/platform-bun/test/*": ["./packages/platform-bun/test/*.ts"],
-      "@effect/platform-bun/*": ["./packages/platform-bun/src/*.ts"],
-
-      "@effect/platform-browser/test/*": [
-        "./packages/platform-browser/test/*.ts"
+      "@effect/platform/test/*": [
+        "./packages/platform/test/*.js"
       ],
-      "@effect/platform-browser/*": ["./packages/platform-browser/src/*.ts"],
-
-      "@effect/platform-node/test/*": ["./packages/platform-node/test/*.ts"],
-      "@effect/platform-node/*": ["./packages/platform-node/src/*.ts"]
+      "@effect/platform/*": [
+        "./packages/platform/src/*.js"
+      ],
+      "@effect/platform-bun/test/*": [
+        "./packages/platform-bun/test/*.js"
+      ],
+      "@effect/platform-bun/*": [
+        "./packages/platform-bun/src/*.js"
+      ],
+      "@effect/platform-browser/test/*": [
+        "./packages/platform-browser/test/*.js"
+      ],
+      "@effect/platform-browser/*": [
+        "./packages/platform-browser/src/*.js"
+      ],
+      "@effect/platform-node/test/*": [
+        "./packages/platform-node/test/*.js"
+      ],
+      "@effect/platform-node/*": [
+        "./packages/platform-node/src/*.js"
+      ]
     },
-    "types": ["vitest/globals"],
-    "plugins": [{ "name": "@effect/language-service" }]
+    "plugins": [
+      {
+        "name": "@effect/language-service"
+      }
+    ]
   }
 }

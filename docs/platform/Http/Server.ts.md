@@ -40,18 +40,18 @@ export declare const serve: {
   (): <R, E>(
     httpApp: App.Default<R, E>
   ) => Effect.Effect<Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
-  <R, E, App extends App.Default<any, any>>(middleware: Middleware.Middleware.Applied<R, E, App>): (
+  <R, E, App extends App.Default<any, any>>(
+    middleware: Middleware.Middleware.Applied<R, E, App>
+  ): (
     httpApp: App.Default<R, E>
   ) => Effect.Effect<
     Scope.Scope | Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>,
     Error.ServeError,
     never
   >
-  <R, E>(httpApp: App.Default<R, E>): Effect.Effect<
-    Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>,
-    Error.ServeError,
-    never
-  >
+  <R, E>(
+    httpApp: App.Default<R, E>
+  ): Effect.Effect<Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
   <R, E, App extends App.Default<any, any>>(
     httpApp: App.Default<R, E>,
     middleware: Middleware.Middleware.Applied<R, E, App>
@@ -125,11 +125,9 @@ Added in v1.0.0
 export interface Server {
   readonly [TypeId]: TypeId
   readonly serve: {
-    <R, E>(httpApp: App.Default<R, E>): Effect.Effect<
-      Exclude<R, ServerRequest.ServerRequest> | Scope.Scope,
-      Error.ServeError,
-      never
-    >
+    <R, E>(
+      httpApp: App.Default<R, E>
+    ): Effect.Effect<Exclude<R, ServerRequest.ServerRequest> | Scope.Scope, Error.ServeError, never>
     <R, E, App extends App.Default<any, any>>(
       httpApp: App.Default<R, E>,
       middleware: Middleware.Middleware.Applied<R, E, App>
@@ -151,7 +149,7 @@ Added in v1.0.0
 
 ```ts
 export interface TcpAddress {
-  readonly _tag: 'TcpAddress'
+  readonly _tag: "TcpAddress"
   readonly hostname: string
   readonly port: number
 }
@@ -165,7 +163,7 @@ Added in v1.0.0
 
 ```ts
 export interface UnixAddress {
-  readonly _tag: 'UnixAddress'
+  readonly _tag: "UnixAddress"
   readonly path: string
 }
 ```

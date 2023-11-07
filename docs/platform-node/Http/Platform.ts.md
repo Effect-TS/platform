@@ -44,7 +44,7 @@ Re-exports all named exports from the "@effect/platform/Http/Platform" module.
 **Signature**
 
 ```ts
-export * from '@effect/platform/Http/Platform'
+export * from "@effect/platform/Http/Platform"
 ```
 
 Added in v1.0.0

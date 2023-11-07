@@ -28,7 +28,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const WorkerError: (reason: 'spawn' | 'decode' | 'unknown', error: unknown) => WorkerError
+export declare const WorkerError: (reason: "spawn" | "decode" | "unknown", error: unknown) => WorkerError
 ```
 
 Added in v1.0.0
@@ -40,8 +40,8 @@ Added in v1.0.0
 ```ts
 export interface WorkerError extends Data.Case {
   readonly [WorkerErrorTypeId]: WorkerErrorTypeId
-  readonly _tag: 'WorkerError'
-  readonly reason: 'spawn' | 'decode' | 'unknown'
+  readonly _tag: "WorkerError"
+  readonly reason: "spawn" | "decode" | "unknown"
   readonly error: unknown
 }
 ```

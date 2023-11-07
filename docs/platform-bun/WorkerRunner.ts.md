@@ -47,7 +47,7 @@ Re-exports all named exports from the "@effect/platform/WorkerRunner" module.
 **Signature**
 
 ```ts
-export * from '@effect/platform/WorkerRunner'
+export * from "@effect/platform/WorkerRunner"
 ```
 
 Added in v1.0.0

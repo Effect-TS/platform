@@ -126,11 +126,11 @@ Added in v1.0.0
 
 ```ts
 export declare const catchTag: {
-  <E extends { _tag: string }, K extends E['_tag'] & string, R1, E1, A1>(
+  <E extends { _tag: string }, K extends E["_tag"] & string, R1, E1, A1>(
     tag: K,
     f: (e: Extract<E, { _tag: K }>) => Effect.Effect<R1, E1, A1>
   ): <R, A>(self: Client<R, E, A>) => Client<R1 | R, E1 | Exclude<E, { _tag: K }>, A1 | A>
-  <R, E extends { _tag: string }, A, K extends E['_tag'] & string, E1, R1, A1>(
+  <R, E extends { _tag: string }, A, K extends E["_tag"] & string, E1, R1, A1>(
     self: Client<R, E, A>,
     tag: K,
     f: (e: Extract<E, { _tag: K }>) => Effect.Effect<R1, E1, A1>
@@ -148,7 +148,7 @@ Added in v1.0.0
 export declare const catchTags: {
   <
     E extends { _tag: string },
-    Cases extends { [K in E['_tag']]+?: ((error: Extract<E, { _tag: K }>) => Effect.Effect<any, any, any>) | undefined }
+    Cases extends { [K in E["_tag"]]+?: ((error: Extract<E, { _tag: K }>) => Effect.Effect<any, any, any>) | undefined }
   >(
     cases: Cases
   ): <R, A>(
@@ -171,7 +171,7 @@ export declare const catchTags: {
     R,
     E extends { _tag: string },
     A,
-    Cases extends { [K in E['_tag']]+?: ((error: Extract<E, { _tag: K }>) => Effect.Effect<any, any, any>) | undefined }
+    Cases extends { [K in E["_tag"]]+?: ((error: Extract<E, { _tag: K }>) => Effect.Effect<any, any, any>) | undefined }
   >(
     self: Client<R, E, A>,
     cases: Cases
@@ -215,9 +215,10 @@ Added in v1.0.0
 
 ```ts
 export declare const filterOrElse: {
-  <A, R2, E2, B>(f: Predicate.Predicate<A>, orElse: (a: A) => Effect.Effect<R2, E2, B>): <R, E>(
-    self: Client<R, E, A>
-  ) => Client<R2 | R, E2 | E, A | B>
+  <A, R2, E2, B>(
+    f: Predicate.Predicate<A>,
+    orElse: (a: A) => Effect.Effect<R2, E2, B>
+  ): <R, E>(self: Client<R, E, A>) => Client<R2 | R, E2 | E, A | B>
   <R, E, A, R2, E2, B>(
     self: Client<R, E, A>,
     f: Predicate.Predicate<A>,
@@ -247,13 +248,13 @@ Added in v1.0.0
 
 ```ts
 export declare const filterStatus: {
-  (f: (status: number) => boolean): <R, E>(
-    self: Client.WithResponse<R, E>
-  ) => Client.WithResponse<R, Error.ResponseError | E>
-  <R, E>(self: Client.WithResponse<R, E>, f: (status: number) => boolean): Client.WithResponse<
-    R,
-    Error.ResponseError | E
-  >
+  (
+    f: (status: number) => boolean
+  ): <R, E>(self: Client.WithResponse<R, E>) => Client.WithResponse<R, Error.ResponseError | E>
+  <R, E>(
+    self: Client.WithResponse<R, E>,
+    f: (status: number) => boolean
+  ): Client.WithResponse<R, Error.ResponseError | E>
 }
 ```
 
@@ -317,9 +318,9 @@ Added in v1.0.0
 
 ```ts
 export declare const mapRequest: {
-  (f: (a: ClientRequest.ClientRequest) => ClientRequest.ClientRequest): <R, E, A>(
-    self: Client<R, E, A>
-  ) => Client<R, E, A>
+  (
+    f: (a: ClientRequest.ClientRequest) => ClientRequest.ClientRequest
+  ): <R, E, A>(self: Client<R, E, A>) => Client<R, E, A>
   <R, E, A>(self: Client<R, E, A>, f: (a: ClientRequest.ClientRequest) => ClientRequest.ClientRequest): Client<R, E, A>
 }
 ```
@@ -332,9 +333,9 @@ Added in v1.0.0
 
 ```ts
 export declare const mapRequestEffect: {
-  <R2, E2>(f: (a: ClientRequest.ClientRequest) => Effect.Effect<R2, E2, ClientRequest.ClientRequest>): <R, E, A>(
-    self: Client<R, E, A>
-  ) => Client<R2 | R, E2 | E, A>
+  <R2, E2>(
+    f: (a: ClientRequest.ClientRequest) => Effect.Effect<R2, E2, ClientRequest.ClientRequest>
+  ): <R, E, A>(self: Client<R, E, A>) => Client<R2 | R, E2 | E, A>
   <R, E, A, R2, E2>(
     self: Client<R, E, A>,
     f: (a: ClientRequest.ClientRequest) => Effect.Effect<R2, E2, ClientRequest.ClientRequest>
@@ -363,14 +364,13 @@ Added in v1.0.0
 
 ```ts
 export declare const tapRequest: {
-  <R2, E2, _>(f: (a: ClientRequest.ClientRequest) => Effect.Effect<R2, E2, _>): <R, E, A>(
-    self: Client<R, E, A>
-  ) => Client<R2 | R, E2 | E, A>
-  <R, E, A, R2, E2, _>(self: Client<R, E, A>, f: (a: ClientRequest.ClientRequest) => Effect.Effect<R2, E2, _>): Client<
-    R | R2,
-    E | E2,
-    A
-  >
+  <R2, E2, _>(
+    f: (a: ClientRequest.ClientRequest) => Effect.Effect<R2, E2, _>
+  ): <R, E, A>(self: Client<R, E, A>) => Client<R2 | R, E2 | E, A>
+  <R, E, A, R2, E2, _>(
+    self: Client<R, E, A>,
+    f: (a: ClientRequest.ClientRequest) => Effect.Effect<R2, E2, _>
+  ): Client<R | R2, E | E2, A>
 }
 ```
 
@@ -400,9 +400,9 @@ Added in v1.0.0
 
 ```ts
 export declare const transformResponse: {
-  <R, E, A, R1, E1, A1>(f: (effect: Effect.Effect<R, E, A>) => Effect.Effect<R1, E1, A1>): (
-    self: Client<R, E, A>
-  ) => Client<R1, E1, A1>
+  <R, E, A, R1, E1, A1>(
+    f: (effect: Effect.Effect<R, E, A>) => Effect.Effect<R1, E1, A1>
+  ): (self: Client<R, E, A>) => Client<R1, E1, A1>
   <R, E, A, R1, E1, A1>(
     self: Client<R, E, A>,
     f: (effect: Effect.Effect<R, E, A>) => Effect.Effect<R1, E1, A1>
@@ -437,12 +437,17 @@ Added in v1.0.0
 
 ```ts
 export declare const schemaFunction: {
-  <SI, SA>(schema: Schema.Schema<SI, SA>): <R, E, A>(
+  <SI, SA>(
+    schema: Schema.Schema<SI, SA>
+  ): <R, E, A>(
     self: Client<R, E, A>
   ) => (
     request: ClientRequest.ClientRequest
   ) => (a: SA) => Effect.Effect<R, ParseResult.ParseError | Error.RequestError | E, A>
-  <R, E, A, SI, SA>(self: Client<R, E, A>, schema: Schema.Schema<SI, SA>): (
+  <R, E, A, SI, SA>(
+    self: Client<R, E, A>,
+    schema: Schema.Schema<SI, SA>
+  ): (
     request: ClientRequest.ClientRequest
   ) => (a: SA) => Effect.Effect<R, ParseResult.ParseError | Error.RequestError | E, A>
 }

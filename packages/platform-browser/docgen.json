@@ -1,28 +1,21 @@
 {
   "exclude": ["src/internal/**/*.ts"],
-  "theme": "mikearnaldi/just-the-docs",
   "parseCompilerOptions": {
-    "noEmit": true,
     "strict": true,
-    "target": "es2015",
-    "lib": ["es2015"],
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
     "paths": {
-      "@effect/platform": ["../platform/src/index.ts"],
-      "@effect/platform/*": ["../platform/src/*"],
-      "@effect/platform-browser": ["./src/index.ts"],
-      "@effect/platform-browser/*": ["./src/*"]
+      "@effect/platform": ["../platform/src/index.js"],
+      "@effect/platform/*": ["../platform/src/*.js"]
     }
   },
   "examplesCompilerOptions": {
-    "noEmit": true,
     "strict": true,
-    "target": "es2015",
-    "lib": ["es2015"],
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
     "paths": {
-      "@effect/platform": ["../platform/src/index.ts"],
-      "@effect/platform/*": ["../platform/src/*"],
-      "@effect/platform-browser": ["./src/index.ts"],
-      "@effect/platform-browser/*": ["./src/*"]
+      "@effect/platform": ["../platform/src/index.js"],
+      "@effect/platform/*": ["../platform/src/*.js"]
     }
   }
 }

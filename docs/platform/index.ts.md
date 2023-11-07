@@ -13,176 +13,176 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [exports](#exports)
-  - [From "@effect/platform/Command"](#from-effectplatformcommand)
-  - [From "@effect/platform/CommandExecutor"](#from-effectplatformcommandexecutor)
-  - [From "@effect/platform/Effectify"](#from-effectplatformeffectify)
-  - [From "@effect/platform/Error"](#from-effectplatformerror)
-  - [From "@effect/platform/FileSystem"](#from-effectplatformfilesystem)
-  - [From "@effect/platform/HttpClient"](#from-effectplatformhttpclient)
-  - [From "@effect/platform/HttpServer"](#from-effectplatformhttpserver)
-  - [From "@effect/platform/KeyValueStore"](#from-effectplatformkeyvaluestore)
-  - [From "@effect/platform/Path"](#from-effectplatformpath)
-  - [From "@effect/platform/Runtime"](#from-effectplatformruntime)
-  - [From "@effect/platform/Worker"](#from-effectplatformworker)
-  - [From "@effect/platform/WorkerError"](#from-effectplatformworkererror)
-  - [From "@effect/platform/WorkerRunner"](#from-effectplatformworkerrunner)
+  - [From "./Command.js"](#from-commandjs)
+  - [From "./CommandExecutor.js"](#from-commandexecutorjs)
+  - [From "./Effectify.js"](#from-effectifyjs)
+  - [From "./Error.js"](#from-errorjs)
+  - [From "./FileSystem.js"](#from-filesystemjs)
+  - [From "./HttpClient.js"](#from-httpclientjs)
+  - [From "./HttpServer.js"](#from-httpserverjs)
+  - [From "./KeyValueStore.js"](#from-keyvaluestorejs)
+  - [From "./Path.js"](#from-pathjs)
+  - [From "./Runtime.js"](#from-runtimejs)
+  - [From "./Worker.js"](#from-workerjs)
+  - [From "./WorkerError.js"](#from-workererrorjs)
+  - [From "./WorkerRunner.js"](#from-workerrunnerjs)
 
 ---
 
 # exports
 
-## From "@effect/platform/Command"
+## From "./Command.js"
 
-Re-exports all named exports from the "@effect/platform/Command" module as `Command`.
+Re-exports all named exports from the "./Command.js" module as `Command`.
 
 **Signature**
 
 ```ts
-export * as Command from '@effect/platform/Command'
+export * as Command from "./Command.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform/CommandExecutor"
+## From "./CommandExecutor.js"
 
-Re-exports all named exports from the "@effect/platform/CommandExecutor" module as `CommandExecutor`.
+Re-exports all named exports from the "./CommandExecutor.js" module as `CommandExecutor`.
 
 **Signature**
 
 ```ts
-export * as CommandExecutor from '@effect/platform/CommandExecutor'
+export * as CommandExecutor from "./CommandExecutor.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform/Effectify"
+## From "./Effectify.js"
 
-Re-exports all named exports from the "@effect/platform/Effectify" module as `Effectify`.
+Re-exports all named exports from the "./Effectify.js" module as `Effectify`.
 
 **Signature**
 
 ```ts
-export * as Effectify from '@effect/platform/Effectify'
+export * as Effectify from "./Effectify.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform/Error"
+## From "./Error.js"
 
-Re-exports all named exports from the "@effect/platform/Error" module as `Error`.
+Re-exports all named exports from the "./Error.js" module as `Error`.
 
 **Signature**
 
 ```ts
-export * as Error from '@effect/platform/Error'
+export * as Error from "./Error.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform/FileSystem"
+## From "./FileSystem.js"
 
-Re-exports all named exports from the "@effect/platform/FileSystem" module as `FileSystem`.
+Re-exports all named exports from the "./FileSystem.js" module as `FileSystem`.
 
 **Signature**
 
 ```ts
-export * as FileSystem from '@effect/platform/FileSystem'
+export * as FileSystem from "./FileSystem.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform/HttpClient"
+## From "./HttpClient.js"
 
-Re-exports all named exports from the "@effect/platform/HttpClient" module as `HttpClient`.
+Re-exports all named exports from the "./HttpClient.js" module as `HttpClient`.
 
 **Signature**
 
 ```ts
-export * as HttpClient from '@effect/platform/HttpClient'
+export * as HttpClient from "./HttpClient.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform/HttpServer"
+## From "./HttpServer.js"
 
-Re-exports all named exports from the "@effect/platform/HttpServer" module as `HttpServer`.
+Re-exports all named exports from the "./HttpServer.js" module as `HttpServer`.
 
 **Signature**
 
 ```ts
-export * as HttpServer from '@effect/platform/HttpServer'
+export * as HttpServer from "./HttpServer.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform/KeyValueStore"
+## From "./KeyValueStore.js"
 
-Re-exports all named exports from the "@effect/platform/KeyValueStore" module as `KeyValueStore`.
+Re-exports all named exports from the "./KeyValueStore.js" module as `KeyValueStore`.
 
 **Signature**
 
 ```ts
-export * as KeyValueStore from '@effect/platform/KeyValueStore'
+export * as KeyValueStore from "./KeyValueStore.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform/Path"
+## From "./Path.js"
 
-Re-exports all named exports from the "@effect/platform/Path" module as `Path`.
+Re-exports all named exports from the "./Path.js" module as `Path`.
 
 **Signature**
 
 ```ts
-export * as Path from '@effect/platform/Path'
+export * as Path from "./Path.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform/Runtime"
+## From "./Runtime.js"
 
-Re-exports all named exports from the "@effect/platform/Runtime" module as `Runtime`.
+Re-exports all named exports from the "./Runtime.js" module as `Runtime`.
 
 **Signature**
 
 ```ts
-export * as Runtime from '@effect/platform/Runtime'
+export * as Runtime from "./Runtime.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform/Worker"
+## From "./Worker.js"
 
-Re-exports all named exports from the "@effect/platform/Worker" module as `Worker`.
+Re-exports all named exports from the "./Worker.js" module as `Worker`.
 
 **Signature**
 
 ```ts
-export * as Worker from '@effect/platform/Worker'
+export * as Worker from "./Worker.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform/WorkerError"
+## From "./WorkerError.js"
 
-Re-exports all named exports from the "@effect/platform/WorkerError" module as `WorkerError`.
+Re-exports all named exports from the "./WorkerError.js" module as `WorkerError`.
 
 **Signature**
 
 ```ts
-export * as WorkerError from '@effect/platform/WorkerError'
+export * as WorkerError from "./WorkerError.js"
 ```
 
 Added in v1.0.0
 
-## From "@effect/platform/WorkerRunner"
+## From "./WorkerRunner.js"
 
-Re-exports all named exports from the "@effect/platform/WorkerRunner" module as `WorkerRunner`.
+Re-exports all named exports from the "./WorkerRunner.js" module as `WorkerRunner`.
 
 **Signature**
 
 ```ts
-export * as WorkerRunner from '@effect/platform/WorkerRunner'
+export * as WorkerRunner from "./WorkerRunner.js"
 ```
 
 Added in v1.0.0

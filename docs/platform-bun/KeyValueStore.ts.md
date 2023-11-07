@@ -30,7 +30,7 @@ Re-exports all named exports from the "@effect/platform/KeyValueStore" module.
 **Signature**
 
 ```ts
-export * from '@effect/platform/KeyValueStore'
+export * from "@effect/platform/KeyValueStore"
 ```
 
 Added in v1.0.0

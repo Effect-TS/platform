@@ -154,9 +154,10 @@ Added in v1.0.0
 
 ```ts
 export declare const fileBody: {
-  (path: string, options?: FileSystem.StreamOptions & { readonly contentType?: string }): (
-    self: ClientRequest
-  ) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, ClientRequest>
+  (
+    path: string,
+    options?: FileSystem.StreamOptions & { readonly contentType?: string }
+  ): (self: ClientRequest) => Effect.Effect<FileSystem.FileSystem, PlatformError.PlatformError, ClientRequest>
   (
     self: ClientRequest,
     path: string,
@@ -457,8 +458,8 @@ Added in v1.0.0
 
 ```ts
 export declare const make: {
-  (method: 'GET' | 'HEAD'): (url: string, options?: Options.NoBody) => ClientRequest
-  (method: Exclude<Method, 'GET' | 'HEAD'>): (url: string, options?: Options.NoUrl) => ClientRequest
+  (method: "GET" | "HEAD"): (url: string, options?: Options.NoBody) => ClientRequest
+  (method: Exclude<Method, "GET" | "HEAD">): (url: string, options?: Options.NoUrl) => ClientRequest
 }
 ```
 
@@ -574,7 +575,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface NoBody extends Omit<Options, 'method' | 'url' | 'body'> {}
+export interface NoBody extends Omit<Options, "method" | "url" | "body"> {}
 ```
 
 Added in v1.0.0
@@ -584,7 +585,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface NoUrl extends Omit<Options, 'method' | 'url'> {}
+export interface NoUrl extends Omit<Options, "method" | "url"> {}
 ```
 
 Added in v1.0.0
