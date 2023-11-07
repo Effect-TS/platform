@@ -103,7 +103,7 @@ Added in v1.0.0
 
 ```ts
 export interface BackingWorker<I, O> {
-  readonly run: Effect.Effect<never, WorkerError, never>
+  readonly fiber: Fiber.Fiber<WorkerError, never>
   readonly send: (message: I, transfers?: ReadonlyArray<unknown>) => Effect.Effect<never, never, void>
   readonly queue: Queue.Dequeue<BackingWorker.Message<O>>
 }
