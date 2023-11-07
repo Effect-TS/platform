@@ -62,16 +62,14 @@ export const preResponseHandler: Effect.Effect<never, never, PreResponseHandler>
   (handlers): PreResponseHandler =>
     handlers.length === 0 ?
       noopHandler :
-      handlers.reduce((acc, handler) =>
-        (function(request, response) {
-          return Effect.flatMap(
-            acc(request, response),
-            function(response) {
-              return handler(request, response)
-            }
-          )
-        })
-      )
+      handlers.reduce((acc, handler) => (function(request, response) {
+        return Effect.flatMap(
+          acc(request, response),
+          function(response) {
+            return handler(request, response)
+          }
+        )
+      }))
 )
 
 /**

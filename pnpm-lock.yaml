@@ -68,8 +68,8 @@ importers:
         specifier: ^3.6.1
         version: 3.6.1(@typescript-eslint/parser@6.10.0)(eslint-plugin-import@2.29.0)(eslint@8.53.0)
       eslint-plugin-codegen:
-        specifier: 0.18.0
-        version: 0.18.0
+        specifier: ^0.17.0
+        version: 0.17.0
       eslint-plugin-deprecation:
         specifier: ^2.0.0
         version: 2.0.0(eslint@8.53.0)(typescript@5.2.2)
@@ -94,9 +94,6 @@ importers:
       prettier:
         specifier: ^3.0.3
         version: 3.0.3
-      rimraf:
-        specifier: ^5.0.5
-        version: 5.0.5
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -2720,9 +2717,8 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-plugin-codegen@0.18.0:
-    resolution: {integrity: sha512-AK7cVIcPK8LXAclA9rtZq4/Pk0qP7yYWCkvfbdF2t7efgyaKEP/qsOmLzuYSKBQ7msmk/g1hfoBKQ79HjuV37A==}
-    engines: {node: '>=12.0.0'}
+  /eslint-plugin-codegen@0.17.0:
+    resolution: {integrity: sha512-6DDDob+7PjyNJyy9ynHFFsLp0+aUtWbXiiT/SfU161NCxo1zevewq7VvtDiJh15gMBvVZSFs6hXqYJWT3NUZvA==}
     dependencies:
       '@babel/core': 7.23.2
       '@babel/generator': 7.12.17
@@ -2730,7 +2726,7 @@ packages:
       '@babel/traverse': 7.23.2
       expect: 26.6.2
       fp-ts: 2.16.1
-      glob: 10.3.10
+      glob: 7.2.3
       io-ts: 2.2.20(fp-ts@2.16.1)
       io-ts-extra: 0.11.6
       js-yaml: 3.14.1
@@ -5029,14 +5025,6 @@ packages:
     hasBin: true
     dependencies:
       glob: 7.2.3
-    dev: true
-
-  /rimraf@5.0.5:
-    resolution: {integrity: sha512-CqDakW+hMe/Bz202FPEymy68P+G50RfMQK+Qo5YUqc9SPipvbGjCGKd0RSKEelbsfQuw3g5NZDSrlZZAJurH1A==}
-    engines: {node: '>=14'}
-    hasBin: true
-    dependencies:
-      glob: 10.3.10
     dev: true
 
   /rollup@3.29.4:
