@@ -16,7 +16,7 @@
     "docgen-cp": "node scripts/docs-cp.js",
     "lint": "eslint packages/*/{src,test,examples}",
     "lint-fix": "eslint packages/*/{src,test,examples} --fix",
-    "version": "changeset version && pnpm install --no-frozen-lockfile"
+    "update-version": "changeset version && pnpm install --no-frozen-lockfile"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.0",
