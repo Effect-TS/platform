@@ -52,6 +52,7 @@ jobs:
       - run: pnpm run check
       - run: pnpm run build
       - run: pnpm run circular
+      - run: pnpx playwright install --with-deps chromium
       - run: pnpm run coverage
       - run: pnpm run lint
       - run: pnpm run docgen
