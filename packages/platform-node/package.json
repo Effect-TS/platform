@@ -18,9 +18,6 @@
   "author": "Effect contributors",
   "license": "MIT",
   "sideEffects": false,
-  "scripts": {
-    "docgen": "docgen"
-  },
   "dependencies": {
     "@effect/platform": "workspace:*",
     "busboy": "^1.6.0",

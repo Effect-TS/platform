@@ -15,9 +15,6 @@
   "author": "Effect contributors",
   "license": "MIT",
   "sideEffects": false,
-  "scripts": {
-    "docgen": "docgen"
-  },
   "dependencies": {
     "@effect/platform": "workspace:*",
     "@effect/platform-node": "workspace:*"

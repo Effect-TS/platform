@@ -11,7 +11,8 @@
     "test": "vitest",
     "coverage": "vitest --coverage",
     "check": "tsc -b tsconfig.json",
-    "docgen": "pnpm run -r docgen && pnpm docgen-cp",
+    "indexgen": "pnpm -r exec build-utils prepare-v2",
+    "docgen": "pnpm -r exec docgen && pnpm docgen-cp",
     "docgen-cp": "node scripts/docs-cp.js",
     "lint": "eslint packages/*/{src,test,examples}",
     "version": "changeset version && pnpm install --no-frozen-lockfile"

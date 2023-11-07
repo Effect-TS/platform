@@ -15,9 +15,6 @@
   "author": "Effect contributors",
   "license": "MIT",
   "sideEffects": false,
-  "scripts": {
-    "docgen": "docgen"
-  },
   "dependencies": {
     "find-my-way": "^7.7.0",
     "path-browserify": "^1.0.1"
