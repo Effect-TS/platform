@@ -46,7 +46,9 @@ Added in v1.0.0
 
 ```ts
 export declare const makeHandler: {
-  <R, E>(httpApp: App.Default<R, E>): Effect.Effect<
+  <R, E>(
+    httpApp: App.Default<R, E>
+  ): Effect.Effect<
     Exclude<R, ServerRequest.ServerRequest>,
     never,
     (nodeRequest: Http.IncomingMessage, nodeResponse: Http.ServerResponse<Http.IncomingMessage>) => void
@@ -73,7 +75,7 @@ Re-exports all named exports from the "@effect/platform/Http/Server" module.
 **Signature**
 
 ```ts
-export * from '@effect/platform/Http/Server'
+export * from "@effect/platform/Http/Server"
 ```
 
 Added in v1.0.0

@@ -30,7 +30,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: (impl: Omit<Clipboard, 'clear' | 'writeBlob'>) => Clipboard
+export declare const make: (impl: Omit<Clipboard, "clear" | "writeBlob">) => Clipboard
 ```
 
 Added in v1.0.0

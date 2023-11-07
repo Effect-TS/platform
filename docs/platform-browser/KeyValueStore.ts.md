@@ -31,7 +31,7 @@ Re-exports all named exports from the "@effect/platform/KeyValueStore" module.
 **Signature**
 
 ```ts
-export * from '@effect/platform/KeyValueStore'
+export * from "@effect/platform/KeyValueStore"
 ```
 
 Added in v1.0.0
@@ -45,7 +45,7 @@ Creates a KeyValueStore layer that uses the browser's localStorage api. Values a
 **Signature**
 
 ```ts
-export declare const layerLocalStorage: Layer<never, never, KeyValueStore>
+export declare const layerLocalStorage: Layer<never, never, any>
 ```
 
 Added in v1.0.0
@@ -57,7 +57,7 @@ Creates a KeyValueStore layer that uses the browser's sessionStorage api. Values
 **Signature**
 
 ```ts
-export declare const layerSessionStorage: Layer<never, never, KeyValueStore>
+export declare const layerSessionStorage: Layer<never, never, any>
 ```
 
 Added in v1.0.0

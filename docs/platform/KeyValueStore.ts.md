@@ -59,7 +59,7 @@ Added in v1.0.0
 
 ```ts
 export declare const make: (
-  impl: Omit<KeyValueStore, typeof TypeId | 'has' | 'modify' | 'isEmpty' | 'forSchema'> & Partial<KeyValueStore>
+  impl: Omit<KeyValueStore, typeof TypeId | "has" | "modify" | "isEmpty" | "forSchema"> & Partial<KeyValueStore>
 ) => KeyValueStore
 ```
 

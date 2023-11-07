@@ -1,11 +1,10 @@
 /// <reference types="vitest" />
 import * as path from "path"
-import { defineConfig } from "vite"
+import { defineProject } from "vitest/config"
 
-export default defineConfig({
+export default defineProject({
   test: {
-    include: ["./test/**/*.test.ts"],
-    globals: true
+    include: ["./test/**/*.test.ts"]
   },
   resolve: {
     alias: {

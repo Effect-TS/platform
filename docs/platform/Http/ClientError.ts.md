@@ -56,9 +56,9 @@ Added in v1.0.0
 
 ```ts
 export interface RequestError extends HttpError.Proto {
-  readonly _tag: 'RequestError'
+  readonly _tag: "RequestError"
   readonly request: ClientRequest.ClientRequest
-  readonly reason: 'Transport' | 'Encode' | 'InvalidUrl'
+  readonly reason: "Transport" | "Encode" | "InvalidUrl"
   readonly error: unknown
 }
 ```
@@ -81,10 +81,10 @@ Added in v1.0.0
 
 ```ts
 export interface ResponseError extends HttpError.Proto {
-  readonly _tag: 'ResponseError'
+  readonly _tag: "ResponseError"
   readonly request: ClientRequest.ClientRequest
   readonly response: ClientResponse.ClientResponse
-  readonly reason: 'StatusCode' | 'Decode' | 'EmptyBody'
+  readonly reason: "StatusCode" | "Decode" | "EmptyBody"
   readonly error: unknown
 }
 ```
@@ -137,7 +137,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type ProvidedFields = TypeId | '_tag' | keyof Data.Case
+export type ProvidedFields = TypeId | "_tag" | keyof Data.Case
 ```
 
 Added in v1.0.0

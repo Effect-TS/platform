@@ -27,18 +27,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const effectify: {
-  <F extends (...args: any[]) => any>(fn: F): Effectify<F, EffectifyError<F>>
-  <F extends (...args: any[]) => any, E>(
-    fn: F,
-    onError: (error: EffectifyError<F>, args: Parameters<F>) => E
-  ): Effectify<F, E>
-  <F extends (...args: any[]) => any, E, E2>(
-    fn: F,
-    onError: (error: EffectifyError<F>, args: Parameters<F>) => E,
-    onSyncError: (error: unknown, args: Parameters<F>) => E2
-  ): Effectify<F, E | E2>
-}
+export declare const effectify: any
 ```
 
 Added in v1.0.0
@@ -50,7 +39,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Effectify: Effectify<T, E>
+export declare const Effectify: any
 ```
 
 Added in v1.0.0
@@ -60,7 +49,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const EffectifyError: EffectifyError<T>
+export declare const EffectifyError: any
 ```
 
 Added in v1.0.0

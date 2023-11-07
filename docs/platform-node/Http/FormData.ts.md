@@ -59,7 +59,7 @@ Re-exports all named exports from the "@effect/platform/Http/FormData" module.
 **Signature**
 
 ```ts
-export * from '@effect/platform/Http/FormData'
+export * from "@effect/platform/Http/FormData"
 ```
 
 Added in v1.0.0

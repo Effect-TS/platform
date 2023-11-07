@@ -60,7 +60,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Path: Tag<Path, Path>
+export declare const Path: any
 ```
 
 Added in v1.0.0

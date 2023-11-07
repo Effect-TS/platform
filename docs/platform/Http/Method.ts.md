@@ -26,7 +26,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS'
+export type Method = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS"
 ```
 
 Added in v1.0.0

@@ -24,11 +24,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fromWritable: <E, A = string | Uint8Array>(
-  evaluate: LazyArg<Writable<any> | NodeJS.WritableStream>,
-  onError: (error: unknown) => E,
-  options?: FromWritableOptions | undefined
-) => Sink<never, E, A, never, void>
+export declare const fromWritable: any
 ```
 
 Added in v1.0.0

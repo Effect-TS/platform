@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.base.json",
+  "references": [
+    {
+      "path": "packages/platform/tsconfig.build.json"
+    },
+    {
+      "path": "packages/platform-bun/tsconfig.build.json"
+    },
+    {
+      "path": "packages/platform-browser/tsconfig.build.json"
+    },
+    {
+      "path": "packages/platform-node/tsconfig.build.json"
+    }
+  ]
+}

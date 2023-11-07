@@ -32,7 +32,7 @@ Also includes exports from [`@effect/platform/WorkerRunner`](https://effect-ts.g
 ```ts
 export declare const make: <I, R, E, O>(
   process: (request: I) => Stream.Stream<R, E, O>,
-  options?: Runner.Runner.Options<O> | undefined
+  options?: any
 ) => Effect.Effect<R | Scope.Scope, WorkerError, void>
 ```
 
@@ -47,7 +47,7 @@ Re-exports all named exports from the "@effect/platform/WorkerRunner" module.
 **Signature**
 
 ```ts
-export * from '@effect/platform/WorkerRunner'
+export * from "@effect/platform/WorkerRunner"
 ```
 
 Added in v1.0.0

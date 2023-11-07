@@ -34,7 +34,7 @@ Re-exports all named exports from the "@effect/platform-browser/Clipboard" modul
 **Signature**
 
 ```ts
-export * as Clipboard from '@effect/platform-browser/Clipboard'
+export * as Clipboard from "@effect/platform-browser/Clipboard"
 ```
 
 Added in v1.0.0
@@ -46,7 +46,7 @@ Re-exports all named exports from the "@effect/platform-browser/Effectify" modul
 **Signature**
 
 ```ts
-export * as Effectify from '@effect/platform-browser/Effectify'
+export * as Effectify from "@effect/platform-browser/Effectify"
 ```
 
 Added in v1.0.0
@@ -58,7 +58,7 @@ Re-exports all named exports from the "@effect/platform-browser/Error" module as
 **Signature**
 
 ```ts
-export * as Error from '@effect/platform-browser/Error'
+export * as Error from "@effect/platform-browser/Error"
 ```
 
 Added in v1.0.0
@@ -70,7 +70,7 @@ Re-exports all named exports from the "@effect/platform-browser/HttpClient" modu
 **Signature**
 
 ```ts
-export * as HttpClient from '@effect/platform-browser/HttpClient'
+export * as HttpClient from "@effect/platform-browser/HttpClient"
 ```
 
 Added in v1.0.0
@@ -82,7 +82,7 @@ Re-exports all named exports from the "@effect/platform-browser/KeyValueStore" m
 **Signature**
 
 ```ts
-export * as KeyValueStore from '@effect/platform-browser/KeyValueStore'
+export * as KeyValueStore from "@effect/platform-browser/KeyValueStore"
 ```
 
 Added in v1.0.0
@@ -96,7 +96,7 @@ Re-exports all named exports from the "@effect/platform-browser/Path" module as 
 **Signature**
 
 ```ts
-export * as Path from '@effect/platform-browser/Path'
+export * as Path from "@effect/platform-browser/Path"
 ```
 
 Added in v1.0.0
@@ -110,7 +110,7 @@ Re-exports all named exports from the "@effect/platform-browser/Runtime" module 
 **Signature**
 
 ```ts
-export * as Runtime from '@effect/platform-browser/Runtime'
+export * as Runtime from "@effect/platform-browser/Runtime"
 ```
 
 Added in v1.0.0
@@ -122,7 +122,7 @@ Re-exports all named exports from the "@effect/platform-browser/Worker" module a
 **Signature**
 
 ```ts
-export * as Worker from '@effect/platform-browser/Worker'
+export * as Worker from "@effect/platform-browser/Worker"
 ```
 
 Added in v1.0.0
@@ -136,7 +136,7 @@ Re-exports all named exports from the "@effect/platform-browser/WorkerRunner" mo
 **Signature**
 
 ```ts
-export * as WorkerRunner from '@effect/platform-browser/WorkerRunner'
+export * as WorkerRunner from "@effect/platform-browser/WorkerRunner"
 ```
 
 Added in v1.0.0

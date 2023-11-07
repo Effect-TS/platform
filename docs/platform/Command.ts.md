@@ -308,7 +308,7 @@ processes `stderr` and `stdout` streams.
 **Signature**
 
 ```ts
-export type CommandOutput = 'inherit' | 'pipe' | Sink<never, never, Uint8Array, never, Uint8Array>
+export type CommandOutput = "inherit" | "pipe" | Sink<never, never, Uint8Array, never, Uint8Array>
 ```
 
 Added in v1.0.0
@@ -319,7 +319,7 @@ Added in v1.0.0
 
 ```ts
 export interface PipedCommand extends Command.Proto, Pipeable {
-  readonly _tag: 'PipedCommand'
+  readonly _tag: "PipedCommand"
   readonly left: Command
   readonly right: Command
 }
@@ -333,7 +333,7 @@ Added in v1.0.0
 
 ```ts
 export interface StandardCommand extends Command.Proto, Pipeable {
-  readonly _tag: 'StandardCommand'
+  readonly _tag: "StandardCommand"
   readonly command: string
   readonly args: ReadonlyArray<string>
   readonly env: HashMap<string, string>

@@ -30,7 +30,7 @@ Also includes exports from [`@effect/platform/Http/Platform`](https://effect-ts.
 **Signature**
 
 ```ts
-export declare const make: Effect.Effect<FileSystem.FileSystem | Etag.Generator, never, Platform.Platform>
+export declare const make: Effect.Effect<any, never, Platform.Platform>
 ```
 
 Added in v1.0.0
@@ -44,7 +44,7 @@ Re-exports all named exports from the "@effect/platform/Http/Platform" module.
 **Signature**
 
 ```ts
-export * from '@effect/platform/Http/Platform'
+export * from "@effect/platform/Http/Platform"
 ```
 
 Added in v1.0.0

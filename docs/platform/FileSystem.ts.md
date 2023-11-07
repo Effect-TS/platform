@@ -75,7 +75,7 @@ Added in v1.0.0
 
 ```ts
 export declare const make: (
-  impl: Omit<FileSystem, 'exists' | 'readFileString' | 'stream' | 'sink' | 'writeFileString'>
+  impl: Omit<FileSystem, "exists" | "readFileString" | "stream" | "sink" | "writeFileString">
 ) => FileSystem
 ```
 
@@ -295,7 +295,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type OpenFlag = 'r' | 'r+' | 'w' | 'wx' | 'w+' | 'wx+' | 'a' | 'ax' | 'a+' | 'ax+'
+export type OpenFlag = "r" | "r+" | "w" | "wx" | "w+" | "wx+" | "a" | "ax" | "a+" | "ax+"
 ```
 
 Added in v1.0.0
@@ -305,7 +305,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type SeekMode = 'start' | 'current'
+export type SeekMode = "start" | "current"
 ```
 
 Added in v1.0.0
@@ -525,7 +525,7 @@ Represents a size in bytes.
 **Signature**
 
 ```ts
-export type Size = Brand.Branded<bigint, 'Size'>
+export type Size = Brand.Branded<bigint, "Size">
 ```
 
 Added in v1.0.0
@@ -622,7 +622,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type Descriptor = Brand.Branded<number, 'FileDescriptor'>
+export type Descriptor = Brand.Branded<number, "FileDescriptor">
 ```
 
 Added in v1.0.0
@@ -633,14 +633,14 @@ Added in v1.0.0
 
 ```ts
 export type Type =
-  | 'File'
-  | 'Directory'
-  | 'SymbolicLink'
-  | 'BlockDevice'
-  | 'CharacterDevice'
-  | 'FIFO'
-  | 'Socket'
-  | 'Unknown'
+  | "File"
+  | "Directory"
+  | "SymbolicLink"
+  | "BlockDevice"
+  | "CharacterDevice"
+  | "FIFO"
+  | "Socket"
+  | "Unknown"
 ```
 
 Added in v1.0.0

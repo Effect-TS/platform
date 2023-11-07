@@ -34,19 +34,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const pipeThroughDuplex: {
-  <E2, B = Uint8Array>(
-    duplex: LazyArg<Duplex>,
-    onError: (error: unknown) => E2,
-    options?: (FromReadableOptions & FromWritableOptions) | undefined
-  ): <R, E, A>(self: Stream<R, E, A>) => Stream<R, E2 | E, B>
-  <R, E, A, E2, B = Uint8Array>(
-    self: Stream<R, E, A>,
-    duplex: LazyArg<Duplex>,
-    onError: (error: unknown) => E2,
-    options?: (FromReadableOptions & FromWritableOptions) | undefined
-  ): Stream<R, E | E2, B>
-}
+export declare const pipeThroughDuplex: any
 ```
 
 Added in v1.0.0
@@ -56,10 +44,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const pipeThroughSimple: {
-  (duplex: LazyArg<Duplex>): <R, E>(self: Stream<R, E, string | Uint8Array>) => Stream<R, E | PlatformError, Uint8Array>
-  <R, E>(self: Stream<R, E, string | Uint8Array>, duplex: LazyArg<Duplex>): Stream<R, E | PlatformError, Uint8Array>
-}
+export declare const pipeThroughSimple: any
 ```
 
 Added in v1.0.0
@@ -71,11 +56,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fromDuplex: <IE, E, I = Uint8Array, O = Uint8Array>(
-  evaluate: LazyArg<Duplex>,
-  onError: (error: unknown) => E,
-  options?: (FromReadableOptions & FromWritableOptions) | undefined
-) => Channel<never, IE, Chunk<I>, unknown, IE | E, Chunk<O>, void>
+export declare const fromDuplex: any
 ```
 
 Added in v1.0.0
@@ -85,11 +66,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fromReadable: <E, A = Uint8Array>(
-  evaluate: LazyArg<Readable<any> | NodeJS.ReadableStream>,
-  onError: (error: unknown) => E,
-  { chunkSize }?: FromReadableOptions | undefined
-) => Stream<never, E, A>
+export declare const fromReadable: any
 ```
 
 Added in v1.0.0
@@ -101,14 +78,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const toString: <E>(
-  readable: LazyArg<Readable<any> | NodeJS.ReadableStream>,
-  options: {
-    readonly onFailure: (error: unknown) => E
-    readonly encoding?: BufferEncoding | undefined
-    readonly maxBytes?: SizeInput | undefined
-  }
-) => Effect<never, E, string>
+export declare const toString: any
 ```
 
 Added in v1.0.0
@@ -118,10 +88,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const toUint8Array: <E>(
-  readable: LazyArg<Readable<any> | NodeJS.ReadableStream>,
-  options: { readonly onFailure: (error: unknown) => E; readonly maxBytes?: SizeInput | undefined }
-) => Effect<never, E, Uint8Array>
+export declare const toUint8Array: any
 ```
 
 Added in v1.0.0
@@ -133,7 +100,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const FromReadableOptions: FromReadableOptions
+export declare const FromReadableOptions: any
 ```
 
 Added in v1.0.0
@@ -143,7 +110,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const FromWritableOptions: FromWritableOptions
+export declare const FromWritableOptions: any
 ```
 
 Added in v1.0.0

@@ -30,7 +30,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const body: typeof body
+export declare const body: any
 ```
 
 Added in v1.0.0
@@ -43,7 +43,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const client: typeof client
+export declare const client: any
 ```
 
 Added in v1.0.0
@@ -56,7 +56,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const error: typeof error
+export declare const error: any
 ```
 
 Added in v1.0.0
@@ -69,7 +69,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const headers: typeof headers
+export declare const headers: any
 ```
 
 Added in v1.0.0
@@ -82,7 +82,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const request: typeof request
+export declare const request: any
 ```
 
 Added in v1.0.0
@@ -95,7 +95,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const response: typeof response
+export declare const response: any
 ```
 
 Added in v1.0.0
@@ -108,7 +108,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const urlParams: typeof urlParams
+export declare const urlParams: any
 ```
 
 Added in v1.0.0

@@ -12,7 +12,7 @@ import * as router from "@effect/platform/Http/Router"
 import * as error from "@effect/platform/Http/ServerError"
 import * as response from "@effect/platform/Http/ServerResponse"
 import * as urlParams from "@effect/platform/Http/UrlParams"
-import * as server from "./Http/Server"
+import * as server from "./Http/Server.js"
 
 export {
   /**

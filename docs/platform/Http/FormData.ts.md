@@ -68,7 +68,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const FormDataError: (reason: FormDataError['reason'], error: unknown) => FormDataError
+export declare const FormDataError: (reason: FormDataError["reason"], error: unknown) => FormDataError
 ```
 
 Added in v1.0.0
@@ -80,8 +80,8 @@ Added in v1.0.0
 ```ts
 export interface FormDataError extends Data.Case {
   readonly [ErrorTypeId]: ErrorTypeId
-  readonly _tag: 'FormDataError'
-  readonly reason: 'FileTooLarge' | 'FieldTooLarge' | 'InternalError' | 'Parse'
+  readonly _tag: "FormDataError"
+  readonly reason: "FileTooLarge" | "FieldTooLarge" | "InternalError" | "Parse"
   readonly error: unknown
 }
 ```
@@ -236,7 +236,7 @@ Added in v1.0.0
 
 ```ts
 export interface Field extends Part.Proto {
-  readonly _tag: 'Field'
+  readonly _tag: "Field"
   readonly key: string
   readonly contentType: string
   readonly value: string
@@ -251,7 +251,7 @@ Added in v1.0.0
 
 ```ts
 export interface File extends Part.Proto {
-  readonly _tag: 'File'
+  readonly _tag: "File"
   readonly key: string
   readonly name: string
   readonly contentType: string

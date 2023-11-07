@@ -284,7 +284,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface WithContent extends Omit<Options, 'contentType' | 'contentLength'> {}
+export interface WithContent extends Omit<Options, "contentType" | "contentLength"> {}
 ```
 
 Added in v1.0.0
@@ -294,7 +294,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface WithContentType extends Omit<Options, 'contentLength'> {}
+export interface WithContentType extends Omit<Options, "contentLength"> {}
 ```
 
 Added in v1.0.0

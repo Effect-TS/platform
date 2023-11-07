@@ -39,7 +39,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Size: (bytes: SizeInput) => Size
+export declare const Size: any
 ```
 
 Added in v1.0.0
@@ -51,7 +51,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const layer: Layer<never, never, FileSystem>
+export declare const layer: any
 ```
 
 Added in v1.0.0
@@ -63,7 +63,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const MakeDirectoryOptions: MakeDirectoryOptions
+export declare const MakeDirectoryOptions: any
 ```
 
 Added in v1.0.0
@@ -73,7 +73,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const MakeTempDirectoryOptions: MakeTempDirectoryOptions
+export declare const MakeTempDirectoryOptions: any
 ```
 
 Added in v1.0.0
@@ -83,7 +83,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const MakeTempFileOptions: MakeTempFileOptions
+export declare const MakeTempFileOptions: any
 ```
 
 Added in v1.0.0
@@ -93,7 +93,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const OpenFileOptions: OpenFileOptions
+export declare const OpenFileOptions: any
 ```
 
 Added in v1.0.0
@@ -103,7 +103,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const ReadDirectoryOptions: ReadDirectoryOptions
+export declare const ReadDirectoryOptions: any
 ```
 
 Added in v1.0.0
@@ -113,7 +113,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const RemoveOptions: RemoveOptions
+export declare const RemoveOptions: any
 ```
 
 Added in v1.0.0
@@ -123,7 +123,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SeekMode: SeekMode
+export declare const SeekMode: any
 ```
 
 Added in v1.0.0
@@ -133,7 +133,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SinkOptions: SinkOptions
+export declare const SinkOptions: any
 ```
 
 Added in v1.0.0
@@ -143,7 +143,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const StreamOptions: StreamOptions
+export declare const StreamOptions: any
 ```
 
 Added in v1.0.0
@@ -153,7 +153,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const WriteFileOptions: WriteFileOptions
+export declare const WriteFileOptions: any
 ```
 
 Added in v1.0.0
@@ -165,7 +165,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const FileSystem: Tag<FileSystem, FileSystem>
+export declare const FileSystem: any
 ```
 
 Added in v1.0.0

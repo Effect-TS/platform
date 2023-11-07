@@ -60,9 +60,9 @@ Added in v1.0.0
 
 ```ts
 export interface RequestError extends HttpError.Proto {
-  readonly _tag: 'RequestError'
+  readonly _tag: "RequestError"
   readonly request: ServerRequest.ServerRequest
-  readonly reason: 'Transport' | 'Decode'
+  readonly reason: "Transport" | "Decode"
   readonly error: unknown
 }
 ```
@@ -85,10 +85,10 @@ Added in v1.0.0
 
 ```ts
 export interface ResponseError extends HttpError.Proto {
-  readonly _tag: 'ResponseError'
+  readonly _tag: "ResponseError"
   readonly request: ServerRequest.ServerRequest
   readonly response: ServerResponse.ServerResponse
-  readonly reason: 'Decode'
+  readonly reason: "Decode"
   readonly error: unknown
 }
 ```
@@ -111,7 +111,7 @@ Added in v1.0.0
 
 ```ts
 export interface RouteNotFound extends HttpError.Proto {
-  readonly _tag: 'RouteNotFound'
+  readonly _tag: "RouteNotFound"
   readonly request: ServerRequest.ServerRequest
 }
 ```
@@ -134,7 +134,7 @@ Added in v1.0.0
 
 ```ts
 export interface ServeError extends HttpError.Proto {
-  readonly _tag: 'ServeError'
+  readonly _tag: "ServeError"
   readonly error: unknown
 }
 ```
@@ -187,7 +187,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type ProvidedFields = TypeId | '_tag' | keyof Data.Case
+export type ProvidedFields = TypeId | "_tag" | keyof Data.Case
 ```
 
 Added in v1.0.0

@@ -203,7 +203,7 @@ Added in v1.0.0
 ```ts
 export interface BodyError extends Data.Case {
   readonly [ErrorTypeId]: ErrorTypeId
-  readonly _tag: 'BodyError'
+  readonly _tag: "BodyError"
   readonly reason: BodyErrorReason
 }
 ```
@@ -217,11 +217,11 @@ Added in v1.0.0
 ```ts
 export type BodyErrorReason =
   | {
-      readonly _tag: 'JsonError'
+      readonly _tag: "JsonError"
       readonly error: unknown
     }
   | {
-      readonly _tag: 'SchemaError'
+      readonly _tag: "SchemaError"
       readonly error: ParseResult.ParseError
     }
 ```
@@ -246,7 +246,7 @@ Added in v1.0.0
 
 ```ts
 export interface Empty extends Body.Proto {
-  readonly _tag: 'Empty'
+  readonly _tag: "Empty"
 }
 ```
 
@@ -258,7 +258,7 @@ Added in v1.0.0
 
 ```ts
 export interface FormData extends Body.Proto {
-  readonly _tag: 'FormData'
+  readonly _tag: "FormData"
   readonly formData: globalThis.FormData
 }
 ```
@@ -271,7 +271,7 @@ Added in v1.0.0
 
 ```ts
 export interface Raw extends Body.Proto {
-  readonly _tag: 'Raw'
+  readonly _tag: "Raw"
   readonly body: unknown
 }
 ```
@@ -284,7 +284,7 @@ Added in v1.0.0
 
 ```ts
 export interface Stream extends Body.Proto {
-  readonly _tag: 'Stream'
+  readonly _tag: "Stream"
   readonly stream: Stream_.Stream<never, unknown, globalThis.Uint8Array>
   readonly contentType: string
   readonly contentLength?: number
@@ -299,7 +299,7 @@ Added in v1.0.0
 
 ```ts
 export interface Uint8Array extends Body.Proto {
-  readonly _tag: 'Uint8Array'
+  readonly _tag: "Uint8Array"
   readonly body: globalThis.Uint8Array
   readonly contentType: string
   readonly contentLength: number

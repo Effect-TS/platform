@@ -35,7 +35,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const app: typeof app
+export declare const app: any
 ```
 
 Added in v1.0.0
@@ -48,7 +48,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const body: typeof body
+export declare const body: any
 ```
 
 Added in v1.0.0
@@ -61,7 +61,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const error: typeof error
+export declare const error: any
 ```
 
 Added in v1.0.0
@@ -74,7 +74,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const etag: typeof etag
+export declare const etag: any
 ```
 
 Added in v1.0.0
@@ -87,7 +87,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const formData: typeof formData
+export declare const formData: any
 ```
 
 Added in v1.0.0
@@ -100,7 +100,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const headers: typeof headers
+export declare const headers: any
 ```
 
 Added in v1.0.0
@@ -113,7 +113,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const middleware: typeof middleware
+export declare const middleware: any
 ```
 
 Added in v1.0.0
@@ -126,7 +126,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const request: typeof request
+export declare const request: any
 ```
 
 Added in v1.0.0
@@ -139,7 +139,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const response: typeof response
+export declare const response: any
 ```
 
 Added in v1.0.0
@@ -152,7 +152,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const router: typeof router
+export declare const router: any
 ```
 
 Added in v1.0.0
@@ -178,7 +178,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const urlParams: typeof urlParams
+export declare const urlParams: any
 ```
 
 Added in v1.0.0

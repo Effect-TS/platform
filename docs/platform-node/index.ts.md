@@ -40,7 +40,7 @@ Re-exports all named exports from the "@effect/platform-node/Command" module as 
 **Signature**
 
 ```ts
-export * as Command from '@effect/platform-node/Command'
+export * as Command from "@effect/platform-node/Command"
 ```
 
 Added in v1.0.0
@@ -52,7 +52,7 @@ Re-exports all named exports from the "@effect/platform-node/CommandExecutor" mo
 **Signature**
 
 ```ts
-export * as CommandExecutor from '@effect/platform-node/CommandExecutor'
+export * as CommandExecutor from "@effect/platform-node/CommandExecutor"
 ```
 
 Added in v1.0.0
@@ -64,7 +64,7 @@ Re-exports all named exports from the "@effect/platform-node/Effectify" module a
 **Signature**
 
 ```ts
-export * as Effectify from '@effect/platform-node/Effectify'
+export * as Effectify from "@effect/platform-node/Effectify"
 ```
 
 Added in v1.0.0
@@ -76,7 +76,7 @@ Re-exports all named exports from the "@effect/platform-node/Error" module as `E
 **Signature**
 
 ```ts
-export * as Error from '@effect/platform-node/Error'
+export * as Error from "@effect/platform-node/Error"
 ```
 
 Added in v1.0.0
@@ -88,7 +88,7 @@ Re-exports all named exports from the "@effect/platform-node/FileSystem" module 
 **Signature**
 
 ```ts
-export * as FileSystem from '@effect/platform-node/FileSystem'
+export * as FileSystem from "@effect/platform-node/FileSystem"
 ```
 
 Added in v1.0.0
@@ -100,7 +100,7 @@ Re-exports all named exports from the "@effect/platform-node/HttpClient" module 
 **Signature**
 
 ```ts
-export * as HttpClient from '@effect/platform-node/HttpClient'
+export * as HttpClient from "@effect/platform-node/HttpClient"
 ```
 
 Added in v1.0.0
@@ -112,7 +112,7 @@ Re-exports all named exports from the "@effect/platform-node/HttpServer" module 
 **Signature**
 
 ```ts
-export * as HttpServer from '@effect/platform-node/HttpServer'
+export * as HttpServer from "@effect/platform-node/HttpServer"
 ```
 
 Added in v1.0.0
@@ -124,7 +124,7 @@ Re-exports all named exports from the "@effect/platform-node/KeyValueStore" modu
 **Signature**
 
 ```ts
-export * as KeyValueStore from '@effect/platform-node/KeyValueStore'
+export * as KeyValueStore from "@effect/platform-node/KeyValueStore"
 ```
 
 Added in v1.0.0
@@ -138,7 +138,7 @@ Re-exports all named exports from the "@effect/platform-node/NodeContext" module
 **Signature**
 
 ```ts
-export * as NodeContext from '@effect/platform-node/NodeContext'
+export * as NodeContext from "@effect/platform-node/NodeContext"
 ```
 
 Added in v1.0.0
@@ -150,7 +150,7 @@ Re-exports all named exports from the "@effect/platform-node/Path" module as `Pa
 **Signature**
 
 ```ts
-export * as Path from '@effect/platform-node/Path'
+export * as Path from "@effect/platform-node/Path"
 ```
 
 Added in v1.0.0
@@ -162,7 +162,7 @@ Re-exports all named exports from the "@effect/platform-node/Runtime" module as 
 **Signature**
 
 ```ts
-export * as Runtime from '@effect/platform-node/Runtime'
+export * as Runtime from "@effect/platform-node/Runtime"
 ```
 
 Added in v1.0.0
@@ -174,7 +174,7 @@ Re-exports all named exports from the "@effect/platform-node/Sink" module as `Si
 **Signature**
 
 ```ts
-export * as Sink from '@effect/platform-node/Sink'
+export * as Sink from "@effect/platform-node/Sink"
 ```
 
 Added in v1.0.0
@@ -186,7 +186,7 @@ Re-exports all named exports from the "@effect/platform-node/Stream" module as `
 **Signature**
 
 ```ts
-export * as Stream from '@effect/platform-node/Stream'
+export * as Stream from "@effect/platform-node/Stream"
 ```
 
 Added in v1.0.0
@@ -198,7 +198,7 @@ Re-exports all named exports from the "@effect/platform-node/Worker" module as `
 **Signature**
 
 ```ts
-export * as Worker from '@effect/platform-node/Worker'
+export * as Worker from "@effect/platform-node/Worker"
 ```
 
 Added in v1.0.0
@@ -212,7 +212,7 @@ Re-exports all named exports from the "@effect/platform-node/WorkerRunner" modul
 **Signature**
 
 ```ts
-export * as WorkerRunner from '@effect/platform-node/WorkerRunner'
+export * as WorkerRunner from "@effect/platform-node/WorkerRunner"
 ```
 
 Added in v1.0.0

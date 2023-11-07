@@ -71,7 +71,7 @@ Added in v1.0.0
 
 ```ts
 export interface Strong {
-  readonly _tag: 'Strong'
+  readonly _tag: "Strong"
   readonly value: string
 }
 ```
@@ -84,7 +84,7 @@ Added in v1.0.0
 
 ```ts
 export interface Weak {
-  readonly _tag: 'Weak'
+  readonly _tag: "Weak"
   readonly value: string
 }
 ```

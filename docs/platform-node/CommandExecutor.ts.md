@@ -45,7 +45,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const ExitCode: ExitCode
+export declare const ExitCode: any
 ```
 
 Added in v1.0.0
@@ -55,7 +55,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Process: Process
+export declare const Process: any
 ```
 
 Added in v1.0.0
@@ -65,7 +65,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const ProcessId: ProcessId
+export declare const ProcessId: any
 ```
 
 Added in v1.0.0
@@ -75,7 +75,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Signal: Signal
+export declare const Signal: any
 ```
 
 Added in v1.0.0
@@ -87,7 +87,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const ProcessTypeId: typeof ProcessTypeId
+export declare const ProcessTypeId: any
 ```
 
 Added in v1.0.0
@@ -99,7 +99,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const CommandExecutor: Tag<CommandExecutor, CommandExecutor>
+export declare const CommandExecutor: any
 ```
 
 Added in v1.0.0

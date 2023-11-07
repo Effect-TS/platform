@@ -40,7 +40,7 @@ Re-exports all named exports from the "@effect/platform-bun/BunContext" module a
 **Signature**
 
 ```ts
-export * as BunContext from '@effect/platform-bun/BunContext'
+export * as BunContext from "@effect/platform-bun/BunContext"
 ```
 
 Added in v1.0.0
@@ -52,7 +52,7 @@ Re-exports all named exports from the "@effect/platform-bun/Command" module as `
 **Signature**
 
 ```ts
-export * as Command from '@effect/platform-bun/Command'
+export * as Command from "@effect/platform-bun/Command"
 ```
 
 Added in v1.0.0
@@ -64,7 +64,7 @@ Re-exports all named exports from the "@effect/platform-bun/CommandExecutor" mod
 **Signature**
 
 ```ts
-export * as CommandExecutor from '@effect/platform-bun/CommandExecutor'
+export * as CommandExecutor from "@effect/platform-bun/CommandExecutor"
 ```
 
 Added in v1.0.0
@@ -76,7 +76,7 @@ Re-exports all named exports from the "@effect/platform-bun/Effectify" module as
 **Signature**
 
 ```ts
-export * as Effectify from '@effect/platform-bun/Effectify'
+export * as Effectify from "@effect/platform-bun/Effectify"
 ```
 
 Added in v1.0.0
@@ -88,7 +88,7 @@ Re-exports all named exports from the "@effect/platform-bun/Error" module as `Er
 **Signature**
 
 ```ts
-export * as Error from '@effect/platform-bun/Error'
+export * as Error from "@effect/platform-bun/Error"
 ```
 
 Added in v1.0.0
@@ -100,7 +100,7 @@ Re-exports all named exports from the "@effect/platform-bun/FileSystem" module a
 **Signature**
 
 ```ts
-export * as FileSystem from '@effect/platform-bun/FileSystem'
+export * as FileSystem from "@effect/platform-bun/FileSystem"
 ```
 
 Added in v1.0.0
@@ -112,7 +112,7 @@ Re-exports all named exports from the "@effect/platform-bun/HttpClient" module a
 **Signature**
 
 ```ts
-export * as HttpClient from '@effect/platform-bun/HttpClient'
+export * as HttpClient from "@effect/platform-bun/HttpClient"
 ```
 
 Added in v1.0.0
@@ -124,7 +124,7 @@ Re-exports all named exports from the "@effect/platform-bun/HttpServer" module a
 **Signature**
 
 ```ts
-export * as HttpServer from '@effect/platform-bun/HttpServer'
+export * as HttpServer from "@effect/platform-bun/HttpServer"
 ```
 
 Added in v1.0.0
@@ -136,7 +136,7 @@ Re-exports all named exports from the "@effect/platform-bun/KeyValueStore" modul
 **Signature**
 
 ```ts
-export * as KeyValueStore from '@effect/platform-bun/KeyValueStore'
+export * as KeyValueStore from "@effect/platform-bun/KeyValueStore"
 ```
 
 Added in v1.0.0
@@ -150,7 +150,7 @@ Re-exports all named exports from the "@effect/platform-bun/Path" module as `Pat
 **Signature**
 
 ```ts
-export * as Path from '@effect/platform-bun/Path'
+export * as Path from "@effect/platform-bun/Path"
 ```
 
 Added in v1.0.0
@@ -162,7 +162,7 @@ Re-exports all named exports from the "@effect/platform-bun/Runtime" module as `
 **Signature**
 
 ```ts
-export * as Runtime from '@effect/platform-bun/Runtime'
+export * as Runtime from "@effect/platform-bun/Runtime"
 ```
 
 Added in v1.0.0
@@ -174,7 +174,7 @@ Re-exports all named exports from the "@effect/platform-bun/Sink" module as `Sin
 **Signature**
 
 ```ts
-export * as Sink from '@effect/platform-bun/Sink'
+export * as Sink from "@effect/platform-bun/Sink"
 ```
 
 Added in v1.0.0
@@ -186,7 +186,7 @@ Re-exports all named exports from the "@effect/platform-bun/Stream" module as `S
 **Signature**
 
 ```ts
-export * as Stream from '@effect/platform-bun/Stream'
+export * as Stream from "@effect/platform-bun/Stream"
 ```
 
 Added in v1.0.0
@@ -198,7 +198,7 @@ Re-exports all named exports from the "@effect/platform-bun/Worker" module as `W
 **Signature**
 
 ```ts
-export * as Worker from '@effect/platform-bun/Worker'
+export * as Worker from "@effect/platform-bun/Worker"
 ```
 
 Added in v1.0.0
@@ -212,7 +212,7 @@ Re-exports all named exports from the "@effect/platform-bun/WorkerRunner" module
 **Signature**
 
 ```ts
-export * as WorkerRunner from '@effect/platform-bun/WorkerRunner'
+export * as WorkerRunner from "@effect/platform-bun/WorkerRunner"
 ```
 
 Added in v1.0.0

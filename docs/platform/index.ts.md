@@ -38,7 +38,7 @@ Re-exports all named exports from the "@effect/platform/Command" module as `Comm
 **Signature**
 
 ```ts
-export * as Command from '@effect/platform/Command'
+export * as Command from "@effect/platform/Command"
 ```
 
 Added in v1.0.0
@@ -50,7 +50,7 @@ Re-exports all named exports from the "@effect/platform/CommandExecutor" module 
 **Signature**
 
 ```ts
-export * as CommandExecutor from '@effect/platform/CommandExecutor'
+export * as CommandExecutor from "@effect/platform/CommandExecutor"
 ```
 
 Added in v1.0.0
@@ -62,7 +62,7 @@ Re-exports all named exports from the "@effect/platform/Effectify" module as `Ef
 **Signature**
 
 ```ts
-export * as Effectify from '@effect/platform/Effectify'
+export * as Effectify from "@effect/platform/Effectify"
 ```
 
 Added in v1.0.0
@@ -74,7 +74,7 @@ Re-exports all named exports from the "@effect/platform/Error" module as `Error`
 **Signature**
 
 ```ts
-export * as Error from '@effect/platform/Error'
+export * as Error from "@effect/platform/Error"
 ```
 
 Added in v1.0.0
@@ -86,7 +86,7 @@ Re-exports all named exports from the "@effect/platform/FileSystem" module as `F
 **Signature**
 
 ```ts
-export * as FileSystem from '@effect/platform/FileSystem'
+export * as FileSystem from "@effect/platform/FileSystem"
 ```
 
 Added in v1.0.0
@@ -98,7 +98,7 @@ Re-exports all named exports from the "@effect/platform/HttpClient" module as `H
 **Signature**
 
 ```ts
-export * as HttpClient from '@effect/platform/HttpClient'
+export * as HttpClient from "@effect/platform/HttpClient"
 ```
 
 Added in v1.0.0
@@ -110,7 +110,7 @@ Re-exports all named exports from the "@effect/platform/HttpServer" module as `H
 **Signature**
 
 ```ts
-export * as HttpServer from '@effect/platform/HttpServer'
+export * as HttpServer from "@effect/platform/HttpServer"
 ```
 
 Added in v1.0.0
@@ -122,7 +122,7 @@ Re-exports all named exports from the "@effect/platform/KeyValueStore" module as
 **Signature**
 
 ```ts
-export * as KeyValueStore from '@effect/platform/KeyValueStore'
+export * as KeyValueStore from "@effect/platform/KeyValueStore"
 ```
 
 Added in v1.0.0
@@ -134,7 +134,7 @@ Re-exports all named exports from the "@effect/platform/Path" module as `Path`.
 **Signature**
 
 ```ts
-export * as Path from '@effect/platform/Path'
+export * as Path from "@effect/platform/Path"
 ```
 
 Added in v1.0.0
@@ -146,7 +146,7 @@ Re-exports all named exports from the "@effect/platform/Runtime" module as `Runt
 **Signature**
 
 ```ts
-export * as Runtime from '@effect/platform/Runtime'
+export * as Runtime from "@effect/platform/Runtime"
 ```
 
 Added in v1.0.0
@@ -158,7 +158,7 @@ Re-exports all named exports from the "@effect/platform/Worker" module as `Worke
 **Signature**
 
 ```ts
-export * as Worker from '@effect/platform/Worker'
+export * as Worker from "@effect/platform/Worker"
 ```
 
 Added in v1.0.0
@@ -170,7 +170,7 @@ Re-exports all named exports from the "@effect/platform/WorkerError" module as `
 **Signature**
 
 ```ts
-export * as WorkerError from '@effect/platform/WorkerError'
+export * as WorkerError from "@effect/platform/WorkerError"
 ```
 
 Added in v1.0.0
@@ -182,7 +182,7 @@ Re-exports all named exports from the "@effect/platform/WorkerRunner" module as 
 **Signature**
 
 ```ts
-export * as WorkerRunner from '@effect/platform/WorkerRunner'
+export * as WorkerRunner from "@effect/platform/WorkerRunner"
 ```
 
 Added in v1.0.0
