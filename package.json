@@ -14,8 +14,8 @@
     "indexgen": "pnpm -r exec build-utils prepare-v2",
     "docgen": "pnpm -r exec docgen && pnpm docgen-cp",
     "docgen-cp": "node scripts/docs-cp.js",
-    "lint": "eslint packages/*/{src,test,examples}",
-    "lint-fix": "eslint packages/*/{src,test,examples} --fix",
+    "lint": "eslint \"packages/*/{src,test,examples}/**/*.ts\"",
+    "lint-fix": "pnpm lint --fix",
     "update-version": "changeset version && pnpm install --no-frozen-lockfile"
   },
   "devDependencies": {
