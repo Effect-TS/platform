@@ -7,8 +7,7 @@
     "lib": ["ES2022", "DOM"],
     "paths": {
       "@effect/platform": ["../platform/src/index.js"],
-      "@effect/platform/*": ["../platform/src/*.js"],
-      "@effect/platform-*": ["../platform-*.js", "../platform-*/index.js"]
+      "@effect/platform/*": ["../platform/src/*.js"]
     }
   },
   "examplesCompilerOptions": {
@@ -18,8 +17,7 @@
     "lib": ["ES2022", "DOM"],
     "paths": {
       "@effect/platform": ["../platform/src/index.js"],
-      "@effect/platform/*": ["../platform/src/*.js"],
-      "@effect/platform-*": ["../platform-*.js", "../platform-*/index.js"]
+      "@effect/platform/*": ["../platform/src/*.js"]
     }
   }
 }

@@ -26,7 +26,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const layer: Layer.Layer<never, never, any>
+export declare const layer: Layer.Layer<never, never, BunContext>
 ```
 
 Added in v1.0.0

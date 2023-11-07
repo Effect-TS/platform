@@ -51,7 +51,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const runMain: any
+export declare const runMain: RunMain
 ```
 
 Added in v1.0.0
@@ -63,7 +63,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const defaultTeardown: any
+export declare const defaultTeardown: Teardown
 ```
 
 Added in v1.0.0

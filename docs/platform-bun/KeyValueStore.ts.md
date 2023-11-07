@@ -44,7 +44,7 @@ Also includes exports from [`@effect/platform/KeyValueStore`](https://effect-ts.
 **Signature**
 
 ```ts
-export declare const layerFileSystem: any
+export declare const layerFileSystem: (directory: string) => Layer<never, PlatformError, KeyValueStore>
 ```
 
 Added in v1.0.0

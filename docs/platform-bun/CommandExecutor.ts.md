@@ -33,7 +33,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const layer: any
+export declare const layer: Layer<FileSystem, never, CommandExecutor>
 ```
 
 Added in v1.0.0
@@ -99,7 +99,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const CommandExecutor: any
+export declare const CommandExecutor: Tag<CommandExecutor, CommandExecutor>
 ```
 
 Added in v1.0.0

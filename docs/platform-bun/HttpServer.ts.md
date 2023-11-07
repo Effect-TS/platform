@@ -74,7 +74,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const etag: any
+export declare const etag: typeof etag
 ```
 
 Added in v1.0.0
@@ -87,7 +87,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const formData: any
+export declare const formData: typeof formData
 ```
 
 Added in v1.0.0

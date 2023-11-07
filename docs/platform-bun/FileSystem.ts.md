@@ -39,7 +39,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Size: any
+export declare const Size: (bytes: SizeInput) => Size
 ```
 
 Added in v1.0.0
@@ -51,7 +51,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const layer: any
+export declare const layer: Layer<never, never, FileSystem>
 ```
 
 Added in v1.0.0
@@ -165,7 +165,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const FileSystem: any
+export declare const FileSystem: Tag<FileSystem, FileSystem>
 ```
 
 Added in v1.0.0

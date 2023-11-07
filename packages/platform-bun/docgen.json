@@ -1,25 +1,25 @@
 {
   "exclude": ["src/internal/**/*.ts"],
   "parseCompilerOptions": {
-    "noEmit": true,
     "strict": true,
     "target": "ES2022",
     "lib": ["ES2022", "DOM"],
     "paths": {
       "@effect/platform": ["../platform/src/index.js"],
       "@effect/platform/*": ["../platform/src/*.js"],
-      "@effect/platform-*": ["../platform-*.js", "../platform-*/index.js"]
+      "@effect/platform-node": ["../platform-node/src/index.js"],
+      "@effect/platform-node/*": ["../platform-node/src/*.js"]
     }
   },
   "examplesCompilerOptions": {
-    "noEmit": true,
     "strict": true,
     "target": "ES2022",
     "lib": ["ES2022", "DOM"],
     "paths": {
       "@effect/platform": ["../platform/src/index.js"],
       "@effect/platform/*": ["../platform/src/*.js"],
-      "@effect/platform-*": ["../platform-*.js", "../platform-*/index.js"]
+      "@effect/platform-node": ["../platform-node/src/index.js"],
+      "@effect/platform-node/*": ["../platform-node/src/*.js"]
     }
   }
 }

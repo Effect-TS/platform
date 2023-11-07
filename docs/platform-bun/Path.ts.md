@@ -28,7 +28,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const layer: any
+export declare const layer: Layer<never, never, Path>
 ```
 
 Added in v1.0.0
@@ -38,7 +38,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const layerPosix: any
+export declare const layerPosix: Layer<never, never, Path>
 ```
 
 Added in v1.0.0
@@ -48,7 +48,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const layerWin32: any
+export declare const layerWin32: Layer<never, never, Path>
 ```
 
 Added in v1.0.0
@@ -60,7 +60,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Path: any
+export declare const Path: Tag<Path, Path>
 ```
 
 Added in v1.0.0
