@@ -45,7 +45,7 @@ Creates a KeyValueStore layer that uses the browser's localStorage api. Values a
 **Signature**
 
 ```ts
-export declare const layerLocalStorage: Layer<never, never, any>
+export declare const layerLocalStorage: Layer<never, never, KeyValueStore>
 ```
 
 Added in v1.0.0
@@ -57,7 +57,7 @@ Creates a KeyValueStore layer that uses the browser's sessionStorage api. Values
 **Signature**
 
 ```ts
-export declare const layerSessionStorage: Layer<never, never, any>
+export declare const layerSessionStorage: Layer<never, never, KeyValueStore>
 ```
 
 Added in v1.0.0

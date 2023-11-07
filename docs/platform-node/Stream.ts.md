@@ -58,8 +58,8 @@ Added in v1.0.0
 
 ```ts
 export declare const pipeThroughSimple: {
-  (duplex: LazyArg<Duplex>): <R, E>(self: Stream<R, E, string | Uint8Array>) => Stream<R, any, Uint8Array>
-  <R, E>(self: Stream<R, E, string | Uint8Array>, duplex: LazyArg<Duplex>): Stream<R, any, Uint8Array>
+  (duplex: LazyArg<Duplex>): <R, E>(self: Stream<R, E, string | Uint8Array>) => Stream<R, E | PlatformError, Uint8Array>
+  <R, E>(self: Stream<R, E, string | Uint8Array>, duplex: LazyArg<Duplex>): Stream<R, E | PlatformError, Uint8Array>
 }
 ```
 

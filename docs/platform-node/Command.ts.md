@@ -48,7 +48,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const env: any
+export declare const env: {
+  (environment: Record<string, string>): (self: Command) => Command
+  (self: Command, environment: Record<string, string>): Command
+}
 ```
 
 Added in v1.0.0
@@ -58,7 +61,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const feed: any
+export declare const feed: { (input: string): (self: Command) => Command; (self: Command, input: string): Command }
 ```
 
 Added in v1.0.0
@@ -68,7 +71,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flatten: any
+export declare const flatten: (self: Command) => readonly [StandardCommand, ...StandardCommand[]]
 ```
 
 Added in v1.0.0
@@ -78,7 +81,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const pipeTo: any
+export declare const pipeTo: { (into: Command): (self: Command) => Command; (self: Command, into: Command): Command }
 ```
 
 Added in v1.0.0
@@ -88,7 +91,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const stderr: any
+export declare const stderr: {
+  (stderr: CommandOutput): (self: Command) => Command
+  (self: Command, stderr: CommandOutput): Command
+}
 ```
 
 Added in v1.0.0
@@ -98,7 +104,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const stdin: any
+export declare const stdin: {
+  (stdin: CommandInput): (self: Command) => Command
+  (self: Command, stdin: CommandInput): Command
+}
 ```
 
 Added in v1.0.0
@@ -108,7 +117,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const stdout: any
+export declare const stdout: {
+  (stdout: CommandOutput): (self: Command) => Command
+  (self: Command, stdout: CommandOutput): Command
+}
 ```
 
 Added in v1.0.0
@@ -118,7 +130,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const workingDirectory: any
+export declare const workingDirectory: {
+  (cwd: string): (self: Command) => Command
+  (self: Command, cwd: string): Command
+}
 ```
 
 Added in v1.0.0
@@ -130,7 +145,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: any
+export declare const make: (command: string, ...args: string[]) => Command
 ```
 
 Added in v1.0.0
@@ -142,7 +157,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const exitCode: any
+export declare const exitCode: (self: Command) => Effect<CommandExecutor, PlatformError, ExitCode>
 ```
 
 Added in v1.0.0
@@ -152,7 +167,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const lines: any
+export declare const lines: (
+  command: Command,
+  encoding?: string | undefined
+) => Effect<CommandExecutor, PlatformError, readonly string[]>
 ```
 
 Added in v1.0.0
@@ -162,7 +180,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const start: any
+export declare const start: (command: Command) => Effect<CommandExecutor, PlatformError, Process>
 ```
 
 Added in v1.0.0
@@ -172,7 +190,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const stream: any
+export declare const stream: (command: Command) => Stream<CommandExecutor, PlatformError, Uint8Array>
 ```
 
 Added in v1.0.0
@@ -182,7 +200,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const streamLines: any
+export declare const streamLines: (command: Command) => Stream<CommandExecutor, PlatformError, string>
 ```
 
 Added in v1.0.0
@@ -192,7 +210,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const string: any
+export declare const string: {
+  (encoding?: string | undefined): (command: Command) => Effect<CommandExecutor, PlatformError, string>
+  (command: Command, encoding?: string | undefined): Effect<CommandExecutor, PlatformError, string>
+}
 ```
 
 Added in v1.0.0
@@ -204,7 +225,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Command: any
+export declare const Command: Command
 ```
 
 Added in v1.0.0
@@ -214,7 +235,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const CommandInput: any
+export declare const CommandInput: CommandInput
 ```
 
 Added in v1.0.0
@@ -224,7 +245,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const CommandOutput: any
+export declare const CommandOutput: CommandOutput
 ```
 
 Added in v1.0.0
@@ -234,7 +255,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const PipedCommand: any
+export declare const PipedCommand: PipedCommand
 ```
 
 Added in v1.0.0
@@ -244,7 +265,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const StandardCommand: any
+export declare const StandardCommand: StandardCommand
 ```
 
 Added in v1.0.0
@@ -256,7 +277,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const isCommand: any
+export declare const isCommand: (u: unknown) => u is Command
 ```
 
 Added in v1.0.0

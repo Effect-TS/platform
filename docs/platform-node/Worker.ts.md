@@ -34,7 +34,7 @@ Also includes exports from [`@effect/platform/Worker`](https://effect-ts.github.
 ```ts
 export declare const makePool: <I, E, O>(
   options: Worker.WorkerPool.Options<I, WorkerThreads.Worker>
-) => Effect.Effect<any, never, Worker.WorkerPool<I, E, O>>
+) => Effect.Effect<Scope.Scope | Worker.WorkerManager, never, Worker.WorkerPool<I, E, O>>
 ```
 
 Added in v1.0.0

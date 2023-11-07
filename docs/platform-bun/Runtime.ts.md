@@ -29,7 +29,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const RunMain: any
+export declare const RunMain: RunMain
 ```
 
 Added in v1.0.0
@@ -39,7 +39,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Teardown: any
+export declare const Teardown: Teardown
 ```
 
 Added in v1.0.0

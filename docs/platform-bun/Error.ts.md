@@ -30,7 +30,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const BadArgument: any
+export declare const BadArgument: (props: Omit<BadArgument, PlatformError.ProvidedFields>) => BadArgument
 ```
 
 Added in v1.0.0
@@ -40,7 +40,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SystemError: any
+export declare const SystemError: (props: Omit<SystemError, PlatformError.ProvidedFields>) => SystemError
 ```
 
 Added in v1.0.0
@@ -52,7 +52,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const PlatformError: any
+export declare const PlatformError: PlatformError
 ```
 
 Added in v1.0.0
@@ -62,7 +62,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SystemErrorReason: any
+export declare const SystemErrorReason: SystemErrorReason
 ```
 
 Added in v1.0.0
@@ -74,7 +74,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const PlatformErrorTypeId: any
+export declare const PlatformErrorTypeId: typeof PlatformErrorTypeId
 ```
 
 Added in v1.0.0

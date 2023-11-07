@@ -63,7 +63,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const MakeDirectoryOptions: any
+export declare const MakeDirectoryOptions: MakeDirectoryOptions
 ```
 
 Added in v1.0.0
@@ -73,7 +73,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const MakeTempDirectoryOptions: any
+export declare const MakeTempDirectoryOptions: MakeTempDirectoryOptions
 ```
 
 Added in v1.0.0
@@ -83,7 +83,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const MakeTempFileOptions: any
+export declare const MakeTempFileOptions: MakeTempFileOptions
 ```
 
 Added in v1.0.0
@@ -93,7 +93,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const OpenFileOptions: any
+export declare const OpenFileOptions: OpenFileOptions
 ```
 
 Added in v1.0.0
@@ -103,7 +103,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const ReadDirectoryOptions: any
+export declare const ReadDirectoryOptions: ReadDirectoryOptions
 ```
 
 Added in v1.0.0
@@ -113,7 +113,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const RemoveOptions: any
+export declare const RemoveOptions: RemoveOptions
 ```
 
 Added in v1.0.0
@@ -123,7 +123,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SeekMode: any
+export declare const SeekMode: SeekMode
 ```
 
 Added in v1.0.0
@@ -133,7 +133,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SinkOptions: any
+export declare const SinkOptions: SinkOptions
 ```
 
 Added in v1.0.0
@@ -143,7 +143,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const StreamOptions: any
+export declare const StreamOptions: StreamOptions
 ```
 
 Added in v1.0.0
@@ -153,7 +153,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const WriteFileOptions: any
+export declare const WriteFileOptions: WriteFileOptions
 ```
 
 Added in v1.0.0

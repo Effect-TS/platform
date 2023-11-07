@@ -33,8 +33,8 @@ Also includes exports from [`@effect/platform/Worker`](https://effect-ts.github.
 
 ```ts
 export declare const makePool: <I, E, O>(
-  options: Worker.WorkerPool.Options<I, any>
-) => Effect.Effect<any, never, Worker.WorkerPool<I, E, O>>
+  options: Worker.WorkerPool.Options<I, Worker | SharedWorker>
+) => Effect.Effect<Scope.Scope | Worker.WorkerManager, never, Worker.WorkerPool<I, E, O>>
 ```
 
 Added in v1.0.0
@@ -46,7 +46,7 @@ Added in v1.0.0
 ```ts
 export declare const makePoolLayer: <Tag, I, E, O>(
   tag: Context.Tag<Tag, Worker.WorkerPool<I, E, O>>,
-  options: Worker.WorkerPool.Options<I, any>
+  options: Worker.WorkerPool.Options<I, Worker | SharedWorker>
 ) => Layer.Layer<never, never, Tag>
 ```
 

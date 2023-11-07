@@ -1,8 +1,5 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "include": [
-    "src"
-  ],
+  "extends": "./tsconfig.src.json",
   "references": [
     {
       "path": "../platform"
@@ -12,9 +9,9 @@
     }
   ],
   "compilerOptions": {
+    "tsBuildInfoFile": ".tsbuildinfo/build.tsbuildinfo",
     "outDir": "build/esm",
     "declarationDir": "build/dts",
-    "tsBuildInfoFile": ".tsbuildinfo/build.tsbuildinfo",
-    "rootDir": "src"
+    "stripInternal": true
   }
 }
