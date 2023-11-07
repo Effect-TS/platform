@@ -5,12 +5,7 @@ import { defineProject } from "vitest/config"
 export default defineProject({
   test: {
     include: ["./test/**/*.test.ts"],
-    browser: {
-      enabled: true,
-      name: "chromium",
-      provider: "playwright",
-      headless: true
-    }
+    environment: "happy-dom"
   },
   resolve: {
     alias: {
