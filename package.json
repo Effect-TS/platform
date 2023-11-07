@@ -6,7 +6,7 @@
   ],
   "scripts": {
     "clean": "node scripts/clean.mjs",
-    "build": "pnpm ",
+    "build": "tsc -b tsconfig.build.json",
     "circular": "madge --extensions ts --circular --no-color --no-spinner packages/*/src",
     "test": "vitest",
     "coverage": "vitest --coverage",
