@@ -30,8 +30,14 @@
     "build-cjs": "babel build/esm --plugins @babel/transform-export-namespace-from --plugins @babel/transform-modules-commonjs --out-dir build/cjs --source-maps",
     "build-annotate": "babel build --plugins annotate-pure-calls --out-dir build --source-maps"
   },
+  "effect": {
+    "publicModules": [
+      "*.ts"
+    ]
+  },
   "dependencies": {
     "find-my-way": "^7.7.0",
+    "multipasta": "^0.1.5",
     "path-browserify": "^1.0.1"
   },
   "peerDependencies": {
