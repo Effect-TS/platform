@@ -17,6 +17,7 @@ Added in v1.0.0
   - [feed](#feed)
   - [flatten](#flatten)
   - [pipeTo](#pipeto)
+  - [runInShell](#runinshell)
   - [stderr](#stderr)
   - [stdin](#stdin)
   - [stdout](#stdout)
@@ -107,6 +108,22 @@ command1 | command2
 
 ```ts
 export declare const pipeTo: { (into: Command): (self: Command) => Command; (self: Command, into: Command): Command }
+```
+
+Added in v1.0.0
+
+## runInShell
+
+Allows for specifying whether or not a `Command` should be run inside a
+shell.
+
+**Signature**
+
+```ts
+export declare const runInShell: {
+  (shell: string | boolean): (self: Command) => Command
+  (self: Command, shell: string | boolean): Command
+}
 ```
 
 Added in v1.0.0
@@ -338,6 +355,7 @@ export interface StandardCommand extends Command.Proto, Pipeable {
   readonly args: ReadonlyArray<string>
   readonly env: HashMap<string, string>
   readonly cwd: Option<string>
+  readonly shell: boolean | string
   readonly stdin: Option<Command.Input>
   readonly stdout: Command.Output
   readonly stderr: Command.Output

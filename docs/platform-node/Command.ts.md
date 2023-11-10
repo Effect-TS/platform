@@ -17,6 +17,7 @@ Added in v1.0.0
   - [feed](#feed)
   - [flatten](#flatten)
   - [pipeTo](#pipeto)
+  - [runInShell](#runinshell)
   - [stderr](#stderr)
   - [stdin](#stdin)
   - [stdout](#stdout)
@@ -82,6 +83,19 @@ Added in v1.0.0
 
 ```ts
 export declare const pipeTo: { (into: Command): (self: Command) => Command; (self: Command, into: Command): Command }
+```
+
+Added in v1.0.0
+
+## runInShell
+
+**Signature**
+
+```ts
+export declare const runInShell: {
+  (shell: string | boolean): (self: Command) => Command
+  (self: Command, shell: string | boolean): Command
+}
 ```
 
 Added in v1.0.0
