@@ -25,7 +25,7 @@ Added in v1.0.0
 
 ```ts
 export declare const fromWritable: <E, A = string | Uint8Array>(
-  evaluate: LazyArg<Writable | NodeJS.WritableStream>,
+  evaluate: LazyArg<any>,
   onError: (error: unknown) => E,
   options?: FromWritableOptions | undefined
 ) => Sink<never, E, A, never, void>

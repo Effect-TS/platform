@@ -86,7 +86,7 @@ Added in v1.0.0
 
 ```ts
 export declare const fromReadable: <E, A = Uint8Array>(
-  evaluate: LazyArg<Readable | NodeJS.ReadableStream>,
+  evaluate: LazyArg<any>,
   onError: (error: unknown) => E,
   { chunkSize }?: FromReadableOptions | undefined
 ) => Stream<never, E, A>
@@ -102,7 +102,7 @@ Added in v1.0.0
 
 ```ts
 export declare const toString: <E>(
-  readable: LazyArg<Readable | NodeJS.ReadableStream>,
+  readable: LazyArg<any>,
   options: {
     readonly onFailure: (error: unknown) => E
     readonly encoding?: BufferEncoding | undefined
@@ -119,7 +119,7 @@ Added in v1.0.0
 
 ```ts
 export declare const toUint8Array: <E>(
-  readable: LazyArg<Readable | NodeJS.ReadableStream>,
+  readable: LazyArg<any>,
   options: { readonly onFailure: (error: unknown) => E; readonly maxBytes?: SizeInput | undefined }
 ) => Effect<never, E, Uint8Array>
 ```

@@ -12,6 +12,11 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [constructors](#constructors)
+  - [formData](#formdata)
+  - [fromPullConfig](#frompullconfig)
+  - [makeChannel](#makechannel)
+  - [makeConfig](#makeconfig)
 - [conversions](#conversions)
   - [toRecord](#torecord)
 - [errors](#errors)
@@ -20,15 +25,11 @@ Added in v1.0.0
 - [fiber refs](#fiber-refs)
   - [fieldMimeTypes](#fieldmimetypes)
   - [maxFieldSize](#maxfieldsize)
-  - [maxFields](#maxfields)
   - [maxFileSize](#maxfilesize)
-  - [maxFiles](#maxfiles)
   - [maxParts](#maxparts)
   - [withFieldMimeTypes](#withfieldmimetypes)
   - [withMaxFieldSize](#withmaxfieldsize)
-  - [withMaxFields](#withmaxfields)
   - [withMaxFileSize](#withmaxfilesize)
-  - [withMaxFiles](#withmaxfiles)
   - [withMaxParts](#withmaxparts)
 - [models](#models)
   - [Field (interface)](#field-interface)
@@ -48,6 +49,57 @@ Added in v1.0.0
     - [Proto (interface)](#proto-interface)
 
 ---
+
+# constructors
+
+## formData
+
+**Signature**
+
+```ts
+export declare const formData: (
+  stream: Stream.Stream<never, FormDataError, Part>
+) => Effect.Effect<FileSystem.FileSystem | Path.Path | Scope.Scope, FormDataError, FormData>
+```
+
+Added in v1.0.0
+
+## fromPullConfig
+
+**Signature**
+
+```ts
+export declare const fromPullConfig: <IE>(
+  config: Multipasta.PullConfig<Cause.Cause<IE>>
+) => Channel.Channel<never, unknown, unknown, unknown, FormDataError | IE, Chunk.Chunk<Part>, unknown>
+```
+
+Added in v1.0.0
+
+## makeChannel
+
+**Signature**
+
+```ts
+export declare const makeChannel: <IE>(
+  headers: Record<string, string>,
+  bufferSize?: number
+) => Channel.Channel<never, IE, Chunk.Chunk<Uint8Array>, unknown, FormDataError | IE, Chunk.Chunk<Part>, unknown>
+```
+
+Added in v1.0.0
+
+## makeConfig
+
+**Signature**
+
+```ts
+export declare const makeConfig: (
+  headers: Record<string, string>
+) => Effect.Effect<never, never, Omit<Multipasta.PullConfig<any>, "pull">>
+```
+
+Added in v1.0.0
 
 # conversions
 
@@ -81,7 +133,7 @@ Added in v1.0.0
 export interface FormDataError extends Data.Case {
   readonly [ErrorTypeId]: ErrorTypeId
   readonly _tag: "FormDataError"
-  readonly reason: "FileTooLarge" | "FieldTooLarge" | "InternalError" | "Parse"
+  readonly reason: "FileTooLarge" | "FieldTooLarge" | "BodyTooLarge" | "TooManyParts" | "InternalError" | "Parse"
   readonly error: unknown
 }
 ```
@@ -110,32 +162,12 @@ export declare const maxFieldSize: FiberRef.FiberRef<FileSystem.Size>
 
 Added in v1.0.0
 
-## maxFields
-
-**Signature**
-
-```ts
-export declare const maxFields: FiberRef.FiberRef<Option.Option<number>>
-```
-
-Added in v1.0.0
-
 ## maxFileSize
 
 **Signature**
 
 ```ts
 export declare const maxFileSize: FiberRef.FiberRef<Option.Option<FileSystem.Size>>
-```
-
-Added in v1.0.0
-
-## maxFiles
-
-**Signature**
-
-```ts
-export declare const maxFiles: FiberRef.FiberRef<Option.Option<number>>
 ```
 
 Added in v1.0.0
@@ -176,19 +208,6 @@ export declare const withMaxFieldSize: {
 
 Added in v1.0.0
 
-## withMaxFields
-
-**Signature**
-
-```ts
-export declare const withMaxFields: {
-  (count: Option.Option<number>): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
-  <R, E, A>(effect: Effect.Effect<R, E, A>, count: Option.Option<number>): Effect.Effect<R, E, A>
-}
-```
-
-Added in v1.0.0
-
 ## withMaxFileSize
 
 **Signature**
@@ -197,19 +216,6 @@ Added in v1.0.0
 export declare const withMaxFileSize: {
   (size: Option.Option<FileSystem.SizeInput>): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
   <R, E, A>(effect: Effect.Effect<R, E, A>, size: Option.Option<FileSystem.SizeInput>): Effect.Effect<R, E, A>
-}
-```
-
-Added in v1.0.0
-
-## withMaxFiles
-
-**Signature**
-
-```ts
-export declare const withMaxFiles: {
-  (count: Option.Option<number>): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
-  <R, E, A>(effect: Effect.Effect<R, E, A>, count: Option.Option<number>): Effect.Effect<R, E, A>
 }
 ```
 
