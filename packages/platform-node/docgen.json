@@ -1,7 +1,6 @@
 {
   "exclude": ["src/internal/**/*.ts"],
   "parseCompilerOptions": {
-    "noEmit": true,
     "strict": true,
     "target": "ES2022",
     "lib": ["ES2022", "DOM"],
@@ -11,7 +10,6 @@
     }
   },
   "examplesCompilerOptions": {
-    "noEmit": true,
     "strict": true,
     "target": "ES2022",
     "lib": ["ES2022", "DOM"],

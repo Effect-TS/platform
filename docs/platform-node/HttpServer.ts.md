@@ -126,7 +126,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const request: any
+export declare const request: typeof request
 ```
 
 Added in v1.0.0
