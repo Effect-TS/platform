@@ -65,6 +65,9 @@ export * as Sink from "./Sink.js"
  */
 export * as Stream from "./Stream.js"
 
+
+export * as Terminal from "./Terminal.js"
+
 /**
  * @since 1.0.0
  *
