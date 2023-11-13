@@ -17,6 +17,7 @@ Added in v1.0.0
 - [layer](#layer)
   - [layer](#layer-1)
 - [model](#model)
+  - [File](#file)
   - [MakeDirectoryOptions](#makedirectoryoptions)
   - [MakeTempDirectoryOptions](#maketempdirectoryoptions)
   - [MakeTempFileOptions](#maketempfileoptions)
@@ -57,6 +58,16 @@ export declare const layer: Layer<never, never, FileSystem>
 Added in v1.0.0
 
 # model
+
+## File
+
+**Signature**
+
+```ts
+export declare const File: File
+```
+
+Added in v1.0.0
 
 ## MakeDirectoryOptions
 
