@@ -21,10 +21,6 @@ export interface Terminal {
    */
   readonly readInput: Effect<never, QuitException, UserInput>
   /**
-   * Reads a full line of text from the default standard input.
-   */
-  readonly readLine: Effect<never, QuitException, string>
-  /**
    * Displays text to the the default standard output.
    */
   readonly display: (text: string) => Effect<never, PlatformError, void>

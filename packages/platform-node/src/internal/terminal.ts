@@ -3,7 +3,6 @@ import * as Terminal from "@effect/platform/Terminal"
 import * as Effect from "effect/Effect"
 import * as Layer from "effect/Layer"
 import * as Option from "effect/Option"
-import * as Ref from "effect/Ref"
 import * as readline from "node:readline"
 
 const defaultShouldQuit = (input: Terminal.UserInput): boolean =>
@@ -58,20 +57,6 @@ export const make = (
       })
     })
 
-    const readLine = Ref.make("").pipe(Effect.flatMap((ref) =>
-      readInput.pipe(
-        Effect.tap(({ input }) =>
-          Ref.update(ref, (line) =>
-            Option.match(input, {
-              onNone: () => line,
-              onSome: (char) => line + char
-            }))
-        ),
-        Effect.repeatUntil((input) => input.key.name === "enter" || input.key.name === "return"),
-        Effect.zipRight(Ref.get(ref))
-      )
-    ))
-
     const display = (prompt: string): Effect.Effect<never, Error.PlatformError, void> =>
       Effect.uninterruptible(
         Effect.async((resume) => {
@@ -90,7 +75,6 @@ export const make = (
 
     return Terminal.Terminal.of({
       readInput,
-      readLine,
       display
     })
   })
