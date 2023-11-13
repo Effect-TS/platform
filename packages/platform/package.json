@@ -16,9 +16,12 @@
   "license": "MIT",
   "sideEffects": false,
   "effect": {
-    "publicModules": [
-      "*.ts"
-    ]
+    "generateExports": {
+      "include": [
+        "*.ts",
+        "Http/*.ts"
+      ]
+    }
   },
   "scripts": {
     "build": "pnpm build-prepare && pnpm build-esm && pnpm build-cjs && pnpm build-annotate && build-utils pack-v2",
