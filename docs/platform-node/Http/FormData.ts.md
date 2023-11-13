@@ -17,6 +17,8 @@ Also includes exports from [`@effect/platform/Http/FormData`](https://effect-ts.
 - [constructors](#constructors)
   - [formData](#formdata)
   - [stream](#stream)
+- [conversions](#conversions)
+  - [fileToReadable](#filetoreadable)
 - [exports](#exports)
   - [From "@effect/platform/Http/FormData"](#from-effectplatformhttpformdata)
 
@@ -32,7 +34,7 @@ Also includes exports from [`@effect/platform/Http/FormData`](https://effect-ts.
 export declare const formData: (
   source: Readable,
   headers: IncomingHttpHeaders
-) => Effect.Effect<Path.Path | FileSystem.FileSystem | Scope.Scope, FormData.FormDataError, FormData>
+) => Effect.Effect<FileSystem.FileSystem | Path.Path | Scope.Scope, FormData.FormDataError, FormData.PersistedFormData>
 ```
 
 Added in v1.0.0
@@ -46,6 +48,18 @@ export declare const stream: (
   source: Readable,
   headers: IncomingHttpHeaders
 ) => Stream.Stream<never, FormData.FormDataError, FormData.Part>
+```
+
+Added in v1.0.0
+
+# conversions
+
+## fileToReadable
+
+**Signature**
+
+```ts
+export declare const fileToReadable: (file: FormData.File) => Readable
 ```
 
 Added in v1.0.0

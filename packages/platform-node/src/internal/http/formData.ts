@@ -11,6 +11,7 @@ import type { Readable } from "node:stream"
 import * as NodeStreamP from "node:stream/promises"
 import * as NodeStream from "../stream.js"
 
+/** @internal */
 export const stream = (
   source: Readable,
   headers: IncomingHttpHeaders
@@ -79,6 +80,9 @@ class FileImpl implements FormData.File {
     this.content = NodeStream.fromReadable(() => file, (error) => FormData.FormDataError("InternalError", error))
   }
 }
+
+/** @internal */
+export const fileToReadable = (file: FormData.File): Readable => (file as FileImpl).file
 
 function convertError(error: MultipartError): FormData.FormDataError {
   switch (error._tag) {

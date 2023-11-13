@@ -14,11 +14,8 @@ Added in v1.0.0
 
 - [constructors](#constructors)
   - [formData](#formdata)
-  - [fromPullConfig](#frompullconfig)
   - [makeChannel](#makechannel)
   - [makeConfig](#makeconfig)
-- [conversions](#conversions)
-  - [toRecord](#torecord)
 - [errors](#errors)
   - [FormDataError](#formdataerror)
   - [FormDataError (interface)](#formdataerror-interface)
@@ -35,10 +32,14 @@ Added in v1.0.0
   - [Field (interface)](#field-interface)
   - [File (interface)](#file-interface)
   - [Part (type alias)](#part-type-alias)
+  - [PersistedFile (interface)](#persistedfile-interface)
+  - [PersistedFormData (interface)](#persistedformdata-interface)
+- [refinements](#refinements)
+  - [isField](#isfield)
 - [schema](#schema)
   - [filesSchema](#filesschema)
   - [schemaJson](#schemajson)
-  - [schemaRecord](#schemarecord)
+  - [schemaPersisted](#schemapersisted)
 - [type ids](#type-ids)
   - [ErrorTypeId](#errortypeid)
   - [ErrorTypeId (type alias)](#errortypeid-type-alias)
@@ -58,20 +59,9 @@ Added in v1.0.0
 
 ```ts
 export declare const formData: (
-  stream: Stream.Stream<never, FormDataError, Part>
-) => Effect.Effect<FileSystem.FileSystem | Path.Path | Scope.Scope, FormDataError, FormData>
-```
-
-Added in v1.0.0
-
-## fromPullConfig
-
-**Signature**
-
-```ts
-export declare const fromPullConfig: <IE>(
-  config: Multipasta.PullConfig<Cause.Cause<IE>>
-) => Channel.Channel<never, unknown, unknown, unknown, FormDataError | IE, Chunk.Chunk<Part>, unknown>
+  stream: Stream.Stream<never, FormDataError, Part>,
+  writeFile?: ((path: string, file: File) => Effect.Effect<FileSystem.FileSystem, FormDataError, void>) | undefined
+) => Effect.Effect<FileSystem.FileSystem | Path.Path | Scope.Scope, FormDataError, PersistedFormData>
 ```
 
 Added in v1.0.0
@@ -94,21 +84,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const makeConfig: (
-  headers: Record<string, string>
-) => Effect.Effect<never, never, Omit<Multipasta.PullConfig<any>, "pull">>
-```
-
-Added in v1.0.0
-
-# conversions
-
-## toRecord
-
-**Signature**
-
-```ts
-export declare const toRecord: (formData: FormData) => Record<string, string | Array<globalThis.File>>
+export declare const makeConfig: (headers: Record<string, string>) => Effect.Effect<never, never, Multipasta.BaseConfig>
 ```
 
 Added in v1.0.0
@@ -277,6 +253,46 @@ export type Part = Field | File
 
 Added in v1.0.0
 
+## PersistedFile (interface)
+
+**Signature**
+
+```ts
+export interface PersistedFile extends Part.Proto {
+  readonly _tag: "PersistedFile"
+  readonly key: string
+  readonly name: string
+  readonly contentType: string
+  readonly path: string
+}
+```
+
+Added in v1.0.0
+
+## PersistedFormData (interface)
+
+**Signature**
+
+```ts
+export interface PersistedFormData {
+  readonly [key: string]: ReadonlyArray<PersistedFile> | string
+}
+```
+
+Added in v1.0.0
+
+# refinements
+
+## isField
+
+**Signature**
+
+```ts
+export declare const isField: (u: unknown) => u is Field
+```
+
+Added in v1.0.0
+
 # schema
 
 ## filesSchema
@@ -284,7 +300,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const filesSchema: Schema.Schema<readonly globalThis.File[], readonly globalThis.File[]>
+export declare const filesSchema: Schema.Schema<readonly PersistedFile[], readonly PersistedFile[]>
 ```
 
 Added in v1.0.0
@@ -297,21 +313,21 @@ Added in v1.0.0
 export declare const schemaJson: <I, A>(
   schema: Schema.Schema<I, A>
 ) => {
-  (field: string): (formData: FormData) => Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
-  (formData: FormData, field: string): Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
+  (field: string): (formData: PersistedFormData) => Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
+  (formData: PersistedFormData, field: string): Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
 }
 ```
 
 Added in v1.0.0
 
-## schemaRecord
+## schemaPersisted
 
 **Signature**
 
 ```ts
-export declare const schemaRecord: <I extends Readonly<Record<string, string | readonly globalThis.File[]>>, A>(
+export declare const schemaPersisted: <I extends PersistedFormData, A>(
   schema: Schema.Schema<I, A>
-) => (formData: FormData) => Effect.Effect<never, ParseResult.ParseError, A>
+) => (formData: PersistedFormData) => Effect.Effect<never, ParseResult.ParseError, A>
 ```
 
 Added in v1.0.0

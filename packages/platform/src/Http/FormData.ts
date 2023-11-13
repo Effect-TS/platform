@@ -73,6 +73,26 @@ export interface File extends Part.Proto {
 
 /**
  * @since 1.0.0
+ * @category models
+ */
+export interface PersistedFile extends Part.Proto {
+  readonly _tag: "PersistedFile"
+  readonly key: string
+  readonly name: string
+  readonly contentType: string
+  readonly path: string
+}
+
+/**
+ * @since 1.0.0
+ * @category models
+ */
+export interface PersistedFormData {
+  readonly [key: string]: ReadonlyArray<PersistedFile> | string
+}
+
+/**
+ * @since 1.0.0
  * @category type ids
  */
 export const ErrorTypeId: unique symbol = internal.ErrorTypeId
@@ -102,6 +122,12 @@ export const FormDataError: (
   reason: FormDataError["reason"],
   error: unknown
 ) => FormDataError = internal.FormDataError
+
+/**
+ * @since 1.0.0
+ * @category refinements
+ */
+export const isField: (u: unknown) => u is Field = internal.isField
 
 /**
  * @since 1.0.0
@@ -165,15 +191,9 @@ export const withFieldMimeTypes: {
 
 /**
  * @since 1.0.0
- * @category conversions
- */
-export const toRecord: (formData: FormData) => Record<string, string | Array<globalThis.File>> = internal.toRecord
-
-/**
- * @since 1.0.0
  * @category schema
  */
-export const filesSchema: Schema.Schema<ReadonlyArray<globalThis.File>, ReadonlyArray<globalThis.File>> =
+export const filesSchema: Schema.Schema<ReadonlyArray<PersistedFile>, ReadonlyArray<PersistedFile>> =
   internal.filesSchema
 
 /**
@@ -183,17 +203,17 @@ export const filesSchema: Schema.Schema<ReadonlyArray<globalThis.File>, Readonly
 export const schemaJson: <I, A>(
   schema: Schema.Schema<I, A>
 ) => {
-  (field: string): (formData: FormData) => Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
-  (formData: FormData, field: string): Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
+  (field: string): (formData: PersistedFormData) => Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
+  (formData: PersistedFormData, field: string): Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
 } = internal.schemaJson
 
 /**
  * @since 1.0.0
  * @category schema
  */
-export const schemaRecord: <I extends Readonly<Record<string, string | ReadonlyArray<globalThis.File>>>, A>(
+export const schemaPersisted: <I extends PersistedFormData, A>(
   schema: Schema.Schema<I, A>
-) => (formData: FormData) => Effect.Effect<never, ParseResult.ParseError, A> = internal.schemaRecord
+) => (formData: PersistedFormData) => Effect.Effect<never, ParseResult.ParseError, A> = internal.schemaPersisted
 
 /**
  * @since 1.0.0
@@ -219,4 +239,5 @@ export const makeConfig: (headers: Record<string, string>) => Effect.Effect<neve
 export const formData: (
   stream: Stream.Stream<never, FormDataError, Part>,
   writeFile?: (path: string, file: File) => Effect.Effect<FileSystem.FileSystem, FormDataError, void>
-) => Effect.Effect<FileSystem.FileSystem | Path.Path | Scope.Scope, FormDataError, FormData> = internal.formData
+) => Effect.Effect<FileSystem.FileSystem | Path.Path | Scope.Scope, FormDataError, PersistedFormData> =
+  internal.formData

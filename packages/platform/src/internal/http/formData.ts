@@ -12,7 +12,7 @@ import { globalValue } from "effect/GlobalValue"
 import * as Option from "effect/Option"
 import * as Predicate from "effect/Predicate"
 import * as Queue from "effect/Queue"
-import * as ReadonlyArray from "effect/ReadonlyArray"
+import type * as Scope from "effect/Scope"
 import * as Stream from "effect/Stream"
 import * as MP from "multipasta"
 import * as FileSystem from "../../FileSystem.js"
@@ -36,6 +36,10 @@ export const FormDataError = (reason: FormData.FormDataError["reason"], error: u
     reason,
     error
   })
+
+/** @internal */
+export const isField = (u: unknown): u is FormData.Field =>
+  Predicate.hasProperty(u, TypeId) && Predicate.isTagged(u, "Field")
 
 /** @internal */
 export const maxParts: FiberRef.FiberRef<Option.Option<number>> = globalValue(
@@ -86,49 +90,32 @@ export const withFieldMimeTypes = dual<
 >(2, (effect, mimeTypes) => Effect.locally(effect, fieldMimeTypes, Chunk.fromIterable(mimeTypes)))
 
 /** @internal */
-export const toRecord = (formData: globalThis.FormData): Record<string, Array<globalThis.File> | string> =>
-  ReadonlyArray.reduce(
-    formData.entries(),
-    {} as Record<string, Array<globalThis.File> | string>,
-    (acc, [key, value]) => {
-      if (Predicate.isString(value)) {
-        acc[key] = value
-      } else {
-        const existing = acc[key]
-        if (Array.isArray(existing)) {
-          existing.push(value)
-        } else {
-          acc[key] = [value]
-        }
-      }
-      return acc
-    }
-  )
-/** @internal */
-export const filesSchema: Schema.Schema<ReadonlyArray<File>, ReadonlyArray<File>> = Schema.array(
-  pipe(
-    Schema.instanceOf(Blob),
-    Schema.filter(
-      (blob): blob is File => "name" in blob
+export const filesSchema: Schema.Schema<ReadonlyArray<FormData.PersistedFile>, ReadonlyArray<FormData.PersistedFile>> =
+  Schema
+    .array(
+      pipe(
+        Schema.object,
+        Schema.filter(
+          (file): file is FormData.PersistedFile => TypeId in file && "_tag" in file && file._tag === "PersistedFile"
+        )
+      ) as any as Schema.Schema<FormData.PersistedFile, FormData.PersistedFile>
     )
-  ) as any as Schema.Schema<File, File>
-)
 
 /** @internal */
-export const schemaRecord = <I extends Readonly<Record<string, string | ReadonlyArray<globalThis.File>>>, A>(
+export const schemaPersisted = <I extends FormData.PersistedFormData, A>(
   schema: Schema.Schema<I, A>
 ) => {
   const parse = Schema.parse(schema)
-  return (formData: globalThis.FormData) => parse(toRecord(formData))
+  return (formData: FormData.PersistedFormData) => parse(formData)
 }
 
 /** @internal */
 export const schemaJson = <I, A>(schema: Schema.Schema<I, A>): {
   (
     field: string
-  ): (formData: globalThis.FormData) => Effect.Effect<never, FormData.FormDataError | ParseResult.ParseError, A>
+  ): (formData: FormData.PersistedFormData) => Effect.Effect<never, FormData.FormDataError | ParseResult.ParseError, A>
   (
-    formData: globalThis.FormData,
+    formData: FormData.PersistedFormData,
     field: string
   ): Effect.Effect<never, FormData.FormDataError | ParseResult.ParseError, A>
 } => {
@@ -136,20 +123,22 @@ export const schemaJson = <I, A>(schema: Schema.Schema<I, A>): {
   return dual<
     (
       field: string
-    ) => (formData: globalThis.FormData) => Effect.Effect<never, FormData.FormDataError | ParseResult.ParseError, A>,
+    ) => (
+      formData: FormData.PersistedFormData
+    ) => Effect.Effect<never, FormData.FormDataError | ParseResult.ParseError, A>,
     (
-      formData: globalThis.FormData,
+      formData: FormData.PersistedFormData,
       field: string
     ) => Effect.Effect<never, FormData.FormDataError | ParseResult.ParseError, A>
   >(2, (formData, field) =>
     pipe(
-      Effect.succeed(formData.get(field)),
+      Effect.succeed(formData[field]),
       Effect.filterOrFail(
-        (field) => Predicate.isString(field),
-        () => FormDataError("Parse", `schemaJson: field was not a string`)
+        isField,
+        () => FormDataError("Parse", `schemaJson: was not a field`)
       ),
       Effect.tryMap({
-        try: (field) => JSON.parse(field as string),
+        try: (field) => JSON.parse(field.value),
         catch: (error) => FormDataError("Parse", `schemaJson: field was not valid json: ${error}`)
       }),
       Effect.flatMap(parse)
@@ -236,7 +225,7 @@ const makeFromQueue = <IE>(
     const parser = MP.make({
       ...config,
       onField(info, value) {
-        partsBuffer.push(new FieldImpl(info, value))
+        partsBuffer.push(new FieldImpl(info.name, info.contentType, MP.decodeField(info, value)))
       },
       onFile(info) {
         let chunks: Array<Uint8Array> = []
@@ -345,18 +334,13 @@ function convertError(error: MP.MultipartError): FormData.FormDataError {
 class FieldImpl implements FormData.Field {
   readonly [TypeId]: FormData.TypeId
   readonly _tag = "Field"
-  readonly key: string
-  readonly contentType: string
-  readonly value: string
 
   constructor(
-    info: MP.PartInfo,
-    value: Uint8Array
+    readonly key: string,
+    readonly contentType: string,
+    readonly value: string
   ) {
     this[TypeId] = TypeId
-    this.key = info.name
-    this.contentType = info.contentType
-    this.value = MP.decodeField(info, value)
   }
 }
 
@@ -394,7 +378,7 @@ const defaultWriteFile = (path: string, file: FormData.File) =>
 export const formData = (
   stream: Stream.Stream<never, FormData.FormDataError, FormData.Part>,
   writeFile = defaultWriteFile
-) =>
+): Effect.Effect<FileSystem.FileSystem | Path.Path | Scope.Scope, FormData.FormDataError, FormData.PersistedFormData> =>
   pipe(
     Effect.Do,
     Effect.bind("fs", () => FileSystem.FileSystem),
@@ -403,18 +387,25 @@ export const formData = (
     Effect.flatMap(({ dir, path: path_ }) =>
       Stream.runFoldEffect(
         stream,
-        new globalThis.FormData(),
+        Object.create(null) as Record<string, Array<FormData.PersistedFile> | string>,
         (formData, part) => {
           if (part._tag === "Field") {
-            formData.append(part.key, part.value)
+            formData[part.key] = part.value
             return Effect.succeed(formData)
           }
           const file = part
           const path = path_.join(dir, path_.basename(file.name).slice(-128))
-          const blob = "Bun" in globalThis ?
-            (globalThis as any).Bun.file(path, { type: file.contentType })
-            : new Blob([], { type: file.contentType })
-          formData.append(part.key, blob, path)
+          if (!Array.isArray(formData[part.key])) {
+            formData[part.key] = []
+          }
+          ;(formData[part.key] as Array<FormData.PersistedFile>).push(
+            new PersistedFileImpl(
+              file.key,
+              file.name,
+              file.contentType,
+              path
+            )
+          )
           return Effect.as(writeFile(path, file), formData)
         }
       )
@@ -424,3 +415,17 @@ export const formData = (
       BadArgument: (err) => Effect.fail(FormDataError("InternalError", err))
     })
   )
+
+class PersistedFileImpl implements FormData.PersistedFile {
+  readonly [TypeId]: FormData.TypeId
+  readonly _tag = "PersistedFile"
+
+  constructor(
+    readonly key: string,
+    readonly name: string,
+    readonly contentType: string,
+    readonly path: string
+  ) {
+    this[TypeId] = TypeId
+  }
+}
