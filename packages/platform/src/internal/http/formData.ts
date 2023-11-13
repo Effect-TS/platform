@@ -159,7 +159,7 @@ export const schemaJson = <I, A>(schema: Schema.Schema<I, A>): {
 /** @internal */
 export const makeConfig = (
   headers: Record<string, string>
-): Effect.Effect<never, never, Omit<MP.PullConfig<any>, "pull">> =>
+): Effect.Effect<never, never, MP.BaseConfig> =>
   Effect.map(
     Effect.all({
       maxParts: Effect.map(FiberRef.get(maxParts), Option.getOrUndefined),
@@ -198,12 +198,12 @@ export const makeChannel = <IE>(
       makeConfig(headers),
       Queue.bounded<Chunk.Chunk<Uint8Array> | null>(bufferSize)
     ]),
-    ([config, queue]) => makeFromQueue<IE>(config, queue),
+    ([config, queue]) => makeFromQueue(config, queue),
     ([, queue]) => Queue.shutdown(queue)
   )
 
 const makeFromQueue = <IE>(
-  config: Omit<MP.PullConfig<any>, "pull">,
+  config: MP.BaseConfig,
   queue: Queue.Queue<Chunk.Chunk<Uint8Array> | null>
 ): Channel.Channel<
   never,
@@ -215,7 +215,9 @@ const makeFromQueue = <IE>(
   unknown
 > =>
   Channel.suspend(() => {
-    let error = Option.none<Cause.Cause<IE>>()
+    let error = Option.none<Cause.Cause<IE | FormData.FormDataError>>()
+    let partsBuffer: Array<FormData.Part> = []
+    let partsFinished = false
 
     const input: AsyncInput.AsyncInputProducer<IE, Chunk.Chunk<Uint8Array>, unknown> = {
       awaitRead: () => Effect.unit,
@@ -230,93 +232,114 @@ const makeFromQueue = <IE>(
         return Queue.offer(queue, null)
       }
     }
-    const takeInput = Queue.take(queue)
 
-    const output = fromPullConfig<IE>({
+    const parser = MP.make({
       ...config,
-      pull(cb) {
-        Effect.runCallback(takeInput, function(exit) {
-          if (exit._tag === "Success" && exit.value !== null) {
-            cb(null, Chunk.toReadonlyArray(exit.value))
+      onField(info, value) {
+        partsBuffer.push(new FieldImpl(info, value))
+      },
+      onFile(info) {
+        let chunks: Array<Uint8Array> = []
+        let finished = false
+        const take: Channel.Channel<never, unknown, unknown, unknown, never, Chunk.Chunk<Uint8Array>, void> = Channel
+          .suspend(() => {
+            if (finished) {
+              return Channel.unit
+            } else if (chunks.length === 0) {
+              return Channel.zipRight(pump, take)
+            }
+            const chunk = Chunk.unsafeFromArray(chunks)
+            chunks = []
+            return Channel.zipRight(
+              Channel.write(chunk),
+              Channel.zipRight(pump, take)
+            )
+          })
+        partsBuffer.push(new FileImpl(info, take))
+        return function(chunk) {
+          if (chunk === null) {
+            finished = true
           } else {
-            cb(Option.getOrNull(error), null)
+            chunks.push(chunk)
           }
-        })
+        }
+      },
+      onError(error_) {
+        error = Option.some(Cause.fail(convertError(error_)))
+      },
+      onDone() {
+        partsFinished = true
       }
     })
 
-    return Channel.embedInput(output, input)
-  })
-
-/** @internal */
-export const fromPullConfig = <IE>(config: MP.PullConfig<Cause.Cause<IE>>) =>
-  Channel.suspend(() => {
-    const parser = MP.makePull(config)
-
-    const takeOutput = Effect.async<never, IE | FormData.FormDataError, Chunk.Chunk<FormData.Part> | null>((resume) => {
-      parser(function(err, data) {
-        if (err) {
-          const error = err.errors[0]
-          if (Cause.isCause(error)) {
-            return resume(Effect.failCause(error))
+    const pump = Channel.flatMap(
+      Queue.take(queue),
+      (chunk) =>
+        Channel.sync(() => {
+          if (chunk === null) {
+            parser.end()
+          } else {
+            Chunk.forEach(chunk, function(buf) {
+              parser.write(buf)
+            })
           }
+        })
+    )
 
-          switch (error._tag) {
-            case "ReachedLimit": {
-              switch (error.limit) {
-                case "MaxParts": {
-                  resume(Effect.fail(FormDataError("TooManyParts", err)))
-                  break
-                }
-                case "MaxFieldSize": {
-                  resume(Effect.fail(FormDataError("FieldTooLarge", err)))
-                  break
-                }
-                case "MaxPartSize": {
-                  resume(Effect.fail(FormDataError("FileTooLarge", err)))
-                  break
-                }
-                case "MaxTotalSize": {
-                  resume(Effect.fail(FormDataError("BodyTooLarge", err)))
-                  break
-                }
-              }
-              break
-            }
-            default: {
-              resume(Effect.fail(FormDataError("Parse", err)))
-              break
-            }
-          }
-        } else if (data === null) {
-          resume(Effect.succeed(null))
-        } else {
-          resume(Effect.succeed(Chunk.unsafeFromArray(data.map(convertPart))))
+    const takeParts = Channel.zipRight(
+      pump,
+      Channel.suspend(() => {
+        if (partsBuffer.length === 0) {
+          return Channel.unit
         }
+        const parts = Chunk.unsafeFromArray(partsBuffer)
+        partsBuffer = []
+        return Channel.write(parts)
       })
-    })
+    )
 
-    const outputLoop: Channel.Channel<
+    const partsChannel: Channel.Channel<
       never,
       unknown,
       unknown,
       unknown,
-      FormData.FormDataError | IE,
+      IE | FormData.FormDataError,
       Chunk.Chunk<FormData.Part>,
-      unknown
-    > = Channel.flatMap(
-      takeOutput,
-      (chunk) => chunk === null ? Channel.unit : Channel.flatMap(Channel.write(chunk), (_) => outputLoop)
-    )
+      void
+    > = Channel.suspend(() => {
+      if (error._tag === "Some") {
+        return Channel.failCause(error.value)
+      } else if (partsFinished) {
+        return Channel.unit
+      }
+      return Channel.zipRight(takeParts, partsChannel)
+    })
 
-    return outputLoop
+    return Channel.embedInput(partsChannel, input)
   })
 
-const convertPart = (part: MP.Part): FormData.Part => {
-  if (part._tag === "File") {
-    return new FileImpl(part)
+function convertError(error: MP.MultipartError): FormData.FormDataError {
+  switch (error._tag) {
+    case "ReachedLimit": {
+      switch (error.limit) {
+        case "MaxParts": {
+          return FormDataError("TooManyParts", error)
+        }
+        case "MaxFieldSize": {
+          return FormDataError("FieldTooLarge", error)
+        }
+        case "MaxPartSize": {
+          return FormDataError("FileTooLarge", error)
+        }
+        case "MaxTotalSize": {
+          return FormDataError("BodyTooLarge", error)
+        }
+      }
+    }
+    default: {
+      return FormDataError("Parse", error)
+    }
   }
-  return new FieldImpl(part)
 }
 
 class FieldImpl implements FormData.Field {
@@ -327,12 +350,13 @@ class FieldImpl implements FormData.Field {
   readonly value: string
 
   constructor(
-    field: MP.Field
+    info: MP.PartInfo,
+    value: Uint8Array
   ) {
     this[TypeId] = TypeId
-    this.key = field.info.name
-    this.contentType = field.info.contentType
-    this.value = MP.decodeField(field.info, field.value)
+    this.key = info.name
+    this.contentType = info.contentType
+    this.value = MP.decodeField(info, value)
   }
 }
 
@@ -342,40 +366,41 @@ class FileImpl implements FormData.File {
   readonly key: string
   readonly name: string
   readonly contentType: string
+  readonly content: Stream.Stream<never, FormData.FormDataError, Uint8Array>
 
-  constructor(private file: MP.File) {
+  constructor(
+    info: MP.PartInfo,
+    channel: Channel.Channel<never, unknown, unknown, unknown, never, Chunk.Chunk<Uint8Array>, void>
+  ) {
     this[TypeId] = TypeId
-    this.key = file.info.name
-    this.name = file.info.filename ?? file.info.name
-    this.contentType = file.info.contentType
-  }
-
-  get content(): Stream.Stream<never, FormData.FormDataError, Uint8Array> {
-    return fileStream(this.file)
+    this.key = info.name
+    this.name = info.filename ?? info.name
+    this.contentType = info.contentType
+    this.content = Stream.fromChannel(channel)
   }
 }
 
-const fileStream = (file: MP.File): Stream.Stream<never, never, Uint8Array> =>
-  Stream.repeatEffectChunkOption(Effect.async<never, Option.Option<never>, Chunk.Chunk<Uint8Array>>((resume) => {
-    file.read(function(chunk) {
-      if (chunk === null) {
-        resume(Effect.fail(Option.none()))
-      } else {
-        resume(Effect.succeed(Chunk.unsafeFromArray(chunk)))
-      }
-    })
-  }))
+const defaultWriteFile = (path: string, file: FormData.File) =>
+  Effect.flatMap(
+    FileSystem.FileSystem,
+    (fs) =>
+      Effect.mapError(
+        Stream.run(file.content, fs.sink(path)),
+        (error) => FormDataError("InternalError", error)
+      )
+  )
 
 /** @internal */
 export const formData = (
-  stream: Stream.Stream<never, FormData.FormDataError, FormData.Part>
+  stream: Stream.Stream<never, FormData.FormDataError, FormData.Part>,
+  writeFile = defaultWriteFile
 ) =>
   pipe(
     Effect.Do,
     Effect.bind("fs", () => FileSystem.FileSystem),
     Effect.bind("path", () => Path.Path),
     Effect.bind("dir", ({ fs }) => fs.makeTempDirectoryScoped()),
-    Effect.flatMap(({ dir, fs, path: path_ }) =>
+    Effect.flatMap(({ dir, path: path_ }) =>
       Stream.runFoldEffect(
         stream,
         new globalThis.FormData(),
@@ -385,12 +410,12 @@ export const formData = (
             return Effect.succeed(formData)
           }
           const file = part
-          const path = path_.join(dir, file.name)
+          const path = path_.join(dir, path_.basename(file.name).slice(-128))
           const blob = "Bun" in globalThis ?
             (globalThis as any).Bun.file(path, { type: file.contentType })
             : new Blob([], { type: file.contentType })
           formData.append(part.key, blob, path)
-          return Effect.as(Stream.run(file.content, fs.sink(path)), formData)
+          return Effect.as(writeFile(path, file), formData)
         }
       )
     ),

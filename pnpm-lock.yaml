@@ -86,7 +86,7 @@ importers:
         specifier: ^6.1.0
         version: 6.1.0(typescript@5.2.2)
       prettier:
-        specifier: ^3.0.3
+        specifier: ^3.1.0
         version: 3.1.0
       typescript:
         specifier: ^5.2.2
@@ -104,14 +104,14 @@ importers:
         specifier: ^7.7.0
         version: 7.7.0
       multipasta:
-        specifier: ^0.1.5
+        specifier: ^0.1.11
         version: 0.1.11
       path-browserify:
         specifier: ^1.0.1
         version: 1.0.1
     devDependencies:
       '@effect/schema':
-        specifier: ^0.47.3
+        specifier: ^0.47.6
         version: 0.47.6(effect@2.0.0-next.54)(fast-check@3.13.2)
       '@types/path-browserify':
         specifier: ^1.0.2
@@ -145,7 +145,7 @@ importers:
         version: link:../platform-node/dist
     devDependencies:
       '@effect/schema':
-        specifier: ^0.47.3
+        specifier: ^0.47.6
         version: 0.47.6(effect@2.0.0-next.54)(fast-check@3.13.2)
       bun-types:
         specifier: ^1.0.11
@@ -164,11 +164,11 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       multipasta:
-        specifier: ^0.1.5
+        specifier: ^0.1.11
         version: 0.1.11
     devDependencies:
       '@effect/schema':
-        specifier: ^0.47.3
+        specifier: ^0.47.6
         version: 0.47.6(effect@2.0.0-next.54)(fast-check@3.13.2)
       '@types/mime':
         specifier: ^3.0.4
@@ -177,7 +177,7 @@ importers:
         specifier: ^20.9.0
         version: 20.9.0
       '@types/tar':
-        specifier: ^6.1.8
+        specifier: ^6.1.9
         version: 6.1.9
       effect:
         specifier: 2.0.0-next.54

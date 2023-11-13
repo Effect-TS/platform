@@ -16,12 +16,9 @@
   "license": "MIT",
   "sideEffects": false,
   "effect": {
-    "generateExports": {
-      "include": [
-        "*.ts",
-        "Http/*.ts"
-      ]
-    }
+    "publicModules": [
+      "*.ts"
+    ]
   },
   "scripts": {
     "build": "pnpm build-prepare && pnpm build-esm && pnpm build-cjs && pnpm build-annotate && build-utils pack-v2",
@@ -32,7 +29,7 @@
   },
   "dependencies": {
     "find-my-way": "^7.7.0",
-    "multipasta": "^0.1.5",
+    "multipasta": "^0.1.11",
     "path-browserify": "^1.0.1"
   },
   "peerDependencies": {
@@ -40,7 +37,7 @@
     "effect": "2.0.0-next.54"
   },
   "devDependencies": {
-    "@effect/schema": "^0.47.3",
+    "@effect/schema": "^0.47.6",
     "@types/path-browserify": "^1.0.2",
     "effect": "2.0.0-next.54"
   }

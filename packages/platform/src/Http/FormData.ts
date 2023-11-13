@@ -3,7 +3,6 @@
  */
 import type * as ParseResult from "@effect/schema/ParseResult"
 import type * as Schema from "@effect/schema/Schema"
-import type * as Cause from "effect/Cause"
 import type * as Channel from "effect/Channel"
 import type * as Chunk from "effect/Chunk"
 import type * as Data from "effect/Data"
@@ -210,23 +209,14 @@ export const makeChannel: <IE>(
  * @since 1.0.0
  * @category constructors
  */
-export const fromPullConfig: <IE>(
-  config: Multipasta.PullConfig<Cause.Cause<IE>>
-) => Channel.Channel<never, unknown, unknown, unknown, FormDataError | IE, Chunk.Chunk<Part>, unknown> =
-  internal.fromPullConfig
-
-/**
- * @since 1.0.0
- * @category constructors
- */
-export const makeConfig: (
-  headers: Record<string, string>
-) => Effect.Effect<never, never, Omit<Multipasta.PullConfig<any>, "pull">> = internal.makeConfig
+export const makeConfig: (headers: Record<string, string>) => Effect.Effect<never, never, Multipasta.BaseConfig> =
+  internal.makeConfig
 
 /**
  * @since 1.0.0
  * @category constructors
  */
 export const formData: (
-  stream: Stream.Stream<never, FormDataError, Part>
+  stream: Stream.Stream<never, FormDataError, Part>,
+  writeFile?: (path: string, file: File) => Effect.Effect<FileSystem.FileSystem, FormDataError, void>
 ) => Effect.Effect<FileSystem.FileSystem | Path.Path | Scope.Scope, FormDataError, FormData> = internal.formData
