@@ -23,6 +23,7 @@ Added in v1.0.0
   - [From "./KeyValueStore.js"](#from-keyvaluestorejs)
   - [From "./Path.js"](#from-pathjs)
   - [From "./Runtime.js"](#from-runtimejs)
+  - [From "./Terminal.js"](#from-terminaljs)
   - [From "./Worker.js"](#from-workerjs)
   - [From "./WorkerError.js"](#from-workererrorjs)
   - [From "./WorkerRunner.js"](#from-workerrunnerjs)
@@ -147,6 +148,18 @@ Re-exports all named exports from the "./Runtime.js" module as `Runtime`.
 
 ```ts
 export * as Runtime from "./Runtime.js"
+```
+
+Added in v1.0.0
+
+## From "./Terminal.js"
+
+Re-exports all named exports from the "./Terminal.js" module as `Terminal`.
+
+**Signature**
+
+```ts
+export * as Terminal from "./Terminal.js"
 ```
 
 Added in v1.0.0

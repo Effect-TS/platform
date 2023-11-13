@@ -151,7 +151,7 @@ Added in v1.0.0
 export interface Base extends Data.Case {
   readonly [PlatformErrorTypeId]: typeof PlatformErrorTypeId
   readonly _tag: string
-  readonly module: "Command" | "FileSystem" | "Path" | "KeyValueStore" | "Clipboard" | "Stream"
+  readonly module: "Clipboard" | "Command" | "FileSystem" | "KeyValueStore" | "Path" | "Stream" | "Terminal"
   readonly method: string
   readonly message: string
 }

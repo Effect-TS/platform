@@ -13,7 +13,7 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [accessors](#accessors)
-  - [formDataRecord](#formdatarecord)
+  - [persistedFormData](#persistedformdata)
 - [context](#context)
   - [ServerRequest](#serverrequest)
 - [fiber refs](#fiber-refs)
@@ -34,15 +34,15 @@ Added in v1.0.0
 
 # accessors
 
-## formDataRecord
+## persistedFormData
 
 **Signature**
 
 ```ts
-export declare const formDataRecord: Effect.Effect<
+export declare const persistedFormData: Effect.Effect<
   Scope.Scope | Path.Path | FileSystem.FileSystem | ServerRequest,
   FormData.FormDataError,
-  Record<string, string | File[]>
+  unknown
 >
 ```
 
@@ -85,7 +85,11 @@ export interface ServerRequest extends IncomingMessage.IncomingMessage<Error.Req
   readonly originalUrl: string
   readonly method: Method
 
-  readonly formData: Effect.Effect<Scope.Scope | FileSystem.FileSystem | Path.Path, FormData.FormDataError, FormData>
+  readonly formData: Effect.Effect<
+    Scope.Scope | FileSystem.FileSystem | Path.Path,
+    FormData.FormDataError,
+    FormData.PersistedFormData
+  >
   readonly formDataStream: Stream.Stream<never, FormData.FormDataError, FormData.Part>
 
   readonly modify: (options: {
@@ -129,7 +133,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const schemaFormData: <I extends Readonly<Record<string, string | readonly File[]>>, A>(
+export declare const schemaFormData: <I extends FormData.PersistedFormData, A>(
   schema: Schema.Schema<I, A>
 ) => Effect.Effect<
   Scope.Scope | Path.Path | FileSystem.FileSystem | ServerRequest,

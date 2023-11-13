@@ -12,32 +12,34 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [conversions](#conversions)
-  - [toRecord](#torecord)
+- [constructors](#constructors)
+  - [formData](#formdata)
+  - [makeChannel](#makechannel)
+  - [makeConfig](#makeconfig)
 - [errors](#errors)
   - [FormDataError](#formdataerror)
   - [FormDataError (interface)](#formdataerror-interface)
 - [fiber refs](#fiber-refs)
   - [fieldMimeTypes](#fieldmimetypes)
   - [maxFieldSize](#maxfieldsize)
-  - [maxFields](#maxfields)
   - [maxFileSize](#maxfilesize)
-  - [maxFiles](#maxfiles)
   - [maxParts](#maxparts)
   - [withFieldMimeTypes](#withfieldmimetypes)
   - [withMaxFieldSize](#withmaxfieldsize)
-  - [withMaxFields](#withmaxfields)
   - [withMaxFileSize](#withmaxfilesize)
-  - [withMaxFiles](#withmaxfiles)
   - [withMaxParts](#withmaxparts)
 - [models](#models)
   - [Field (interface)](#field-interface)
   - [File (interface)](#file-interface)
   - [Part (type alias)](#part-type-alias)
+  - [PersistedFile (interface)](#persistedfile-interface)
+  - [PersistedFormData (interface)](#persistedformdata-interface)
+- [refinements](#refinements)
+  - [isField](#isfield)
 - [schema](#schema)
   - [filesSchema](#filesschema)
   - [schemaJson](#schemajson)
-  - [schemaRecord](#schemarecord)
+  - [schemaPersisted](#schemapersisted)
 - [type ids](#type-ids)
   - [ErrorTypeId](#errortypeid)
   - [ErrorTypeId (type alias)](#errortypeid-type-alias)
@@ -49,14 +51,40 @@ Added in v1.0.0
 
 ---
 
-# conversions
+# constructors
 
-## toRecord
+## formData
 
 **Signature**
 
 ```ts
-export declare const toRecord: (formData: FormData) => Record<string, string | Array<globalThis.File>>
+export declare const formData: (
+  stream: Stream.Stream<never, FormDataError, Part>,
+  writeFile?: ((path: string, file: File) => Effect.Effect<FileSystem.FileSystem, FormDataError, void>) | undefined
+) => Effect.Effect<FileSystem.FileSystem | Path.Path | Scope.Scope, FormDataError, PersistedFormData>
+```
+
+Added in v1.0.0
+
+## makeChannel
+
+**Signature**
+
+```ts
+export declare const makeChannel: <IE>(
+  headers: Record<string, string>,
+  bufferSize?: number
+) => Channel.Channel<never, IE, Chunk.Chunk<Uint8Array>, unknown, FormDataError | IE, Chunk.Chunk<Part>, unknown>
+```
+
+Added in v1.0.0
+
+## makeConfig
+
+**Signature**
+
+```ts
+export declare const makeConfig: (headers: Record<string, string>) => Effect.Effect<never, never, Multipasta.BaseConfig>
 ```
 
 Added in v1.0.0
@@ -81,7 +109,7 @@ Added in v1.0.0
 export interface FormDataError extends Data.Case {
   readonly [ErrorTypeId]: ErrorTypeId
   readonly _tag: "FormDataError"
-  readonly reason: "FileTooLarge" | "FieldTooLarge" | "InternalError" | "Parse"
+  readonly reason: "FileTooLarge" | "FieldTooLarge" | "BodyTooLarge" | "TooManyParts" | "InternalError" | "Parse"
   readonly error: unknown
 }
 ```
@@ -110,32 +138,12 @@ export declare const maxFieldSize: FiberRef.FiberRef<FileSystem.Size>
 
 Added in v1.0.0
 
-## maxFields
-
-**Signature**
-
-```ts
-export declare const maxFields: FiberRef.FiberRef<Option.Option<number>>
-```
-
-Added in v1.0.0
-
 ## maxFileSize
 
 **Signature**
 
 ```ts
 export declare const maxFileSize: FiberRef.FiberRef<Option.Option<FileSystem.Size>>
-```
-
-Added in v1.0.0
-
-## maxFiles
-
-**Signature**
-
-```ts
-export declare const maxFiles: FiberRef.FiberRef<Option.Option<number>>
 ```
 
 Added in v1.0.0
@@ -176,19 +184,6 @@ export declare const withMaxFieldSize: {
 
 Added in v1.0.0
 
-## withMaxFields
-
-**Signature**
-
-```ts
-export declare const withMaxFields: {
-  (count: Option.Option<number>): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
-  <R, E, A>(effect: Effect.Effect<R, E, A>, count: Option.Option<number>): Effect.Effect<R, E, A>
-}
-```
-
-Added in v1.0.0
-
 ## withMaxFileSize
 
 **Signature**
@@ -197,19 +192,6 @@ Added in v1.0.0
 export declare const withMaxFileSize: {
   (size: Option.Option<FileSystem.SizeInput>): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
   <R, E, A>(effect: Effect.Effect<R, E, A>, size: Option.Option<FileSystem.SizeInput>): Effect.Effect<R, E, A>
-}
-```
-
-Added in v1.0.0
-
-## withMaxFiles
-
-**Signature**
-
-```ts
-export declare const withMaxFiles: {
-  (count: Option.Option<number>): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
-  <R, E, A>(effect: Effect.Effect<R, E, A>, count: Option.Option<number>): Effect.Effect<R, E, A>
 }
 ```
 
@@ -271,6 +253,46 @@ export type Part = Field | File
 
 Added in v1.0.0
 
+## PersistedFile (interface)
+
+**Signature**
+
+```ts
+export interface PersistedFile extends Part.Proto {
+  readonly _tag: "PersistedFile"
+  readonly key: string
+  readonly name: string
+  readonly contentType: string
+  readonly path: string
+}
+```
+
+Added in v1.0.0
+
+## PersistedFormData (interface)
+
+**Signature**
+
+```ts
+export interface PersistedFormData {
+  readonly [key: string]: ReadonlyArray<PersistedFile> | string
+}
+```
+
+Added in v1.0.0
+
+# refinements
+
+## isField
+
+**Signature**
+
+```ts
+export declare const isField: (u: unknown) => u is Field
+```
+
+Added in v1.0.0
+
 # schema
 
 ## filesSchema
@@ -278,7 +300,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const filesSchema: Schema.Schema<readonly globalThis.File[], readonly globalThis.File[]>
+export declare const filesSchema: Schema.Schema<readonly PersistedFile[], readonly PersistedFile[]>
 ```
 
 Added in v1.0.0
@@ -291,21 +313,21 @@ Added in v1.0.0
 export declare const schemaJson: <I, A>(
   schema: Schema.Schema<I, A>
 ) => {
-  (field: string): (formData: FormData) => Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
-  (formData: FormData, field: string): Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
+  (field: string): (formData: PersistedFormData) => Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
+  (formData: PersistedFormData, field: string): Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
 }
 ```
 
 Added in v1.0.0
 
-## schemaRecord
+## schemaPersisted
 
 **Signature**
 
 ```ts
-export declare const schemaRecord: <I extends Readonly<Record<string, string | readonly globalThis.File[]>>, A>(
+export declare const schemaPersisted: <I extends PersistedFormData, A>(
   schema: Schema.Schema<I, A>
-) => (formData: FormData) => Effect.Effect<never, ParseResult.ParseError, A>
+) => (formData: PersistedFormData) => Effect.Effect<never, ParseResult.ParseError, A>
 ```
 
 Added in v1.0.0

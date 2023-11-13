@@ -96,6 +96,10 @@ user and display messages to a user.
 ```ts
 export interface Terminal {
   /**
+   * The number of columns available on the platform's terminal interface.
+   */
+  readonly columns: number
+  /**
    * Reads a single input event from the default standard input.
    */
   readonly readInput: Effect<never, QuitException, UserInput>

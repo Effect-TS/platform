@@ -26,6 +26,7 @@ Added in v1.0.0
   - [From "./Runtime.js"](#from-runtimejs)
   - [From "./Sink.js"](#from-sinkjs)
   - [From "./Stream.js"](#from-streamjs)
+  - [From "./Terminal.js"](#from-terminaljs)
   - [From "./Worker.js"](#from-workerjs)
   - [From "./WorkerRunner.js"](#from-workerrunnerjs)
 
@@ -187,6 +188,18 @@ Re-exports all named exports from the "./Stream.js" module as `Stream`.
 
 ```ts
 export * as Stream from "./Stream.js"
+```
+
+Added in v1.0.0
+
+## From "./Terminal.js"
+
+Re-exports all named exports from the "./Terminal.js" module as `Terminal`.
+
+**Signature**
+
+```ts
+export * as Terminal from "./Terminal.js"
 ```
 
 Added in v1.0.0
