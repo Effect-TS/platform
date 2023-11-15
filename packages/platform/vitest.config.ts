@@ -1,5 +1,4 @@
-/// <reference types="vitest" />
-import path from "path"
+import * as path from "path"
 import { defineProject } from "vitest/config"
 
 export default defineProject({

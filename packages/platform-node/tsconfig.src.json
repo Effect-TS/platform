@@ -1,13 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": [
-    "src"
-  ],
-  "references": [
-    {
-      "path": "../platform"
-    }
-  ],
+  "include": ["src"],
+  "references": [{ "path": "../platform" }],
   "compilerOptions": {
     "tsBuildInfoFile": ".tsbuildinfo/src.tsbuildinfo",
     "rootDir": "src",
