@@ -104,8 +104,8 @@ importers:
         specifier: ^7.7.0
         version: 7.7.0
       multipasta:
-        specifier: ^0.1.15
-        version: 0.1.15
+        specifier: ^0.1.17
+        version: 0.1.17
       path-browserify:
         specifier: ^1.0.1
         version: 1.0.1
@@ -164,8 +164,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       multipasta:
-        specifier: ^0.1.15
-        version: 0.1.15
+        specifier: ^0.1.17
+        version: 0.1.17
     devDependencies:
       '@effect/schema':
         specifier: ^0.48.0
@@ -4141,8 +4141,8 @@ packages:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
     dev: true
 
-  /multipasta@0.1.15:
-    resolution: {integrity: sha512-mxwpIFmpBRFJfoOU2DJdBd/rL3rf5RWsd7OamXqaukWudWkIYcsOfVABLuVG1Tf9qhsVWMIPwSa6Mgj5j1Hgwg==}
+  /multipasta@0.1.17:
+    resolution: {integrity: sha512-v48jVpoqqVwNr+ortHYSp8z8LNCTvRt9AxTxG28y+1xE8yYS9lwfpnLRTlgiQANZBzpc0+kSrG0MvUfTSMf4Qw==}
     dev: false
 
   /nanoid@3.3.7:
