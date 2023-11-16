@@ -104,7 +104,7 @@ Added in v1.0.0
 ```ts
 export interface BackingWorker<I, O> {
   readonly fiber: Fiber.Fiber<WorkerError, never>
-  readonly send: (message: I, transfers?: ReadonlyArray<unknown>) => Effect.Effect<never, never, void>
+  readonly send: (message: I, transfers?: ReadonlyArray<unknown>) => Effect.Effect<never, WorkerError, void>
   readonly queue: Queue.Dequeue<BackingWorker.Message<O>>
 }
 ```
@@ -146,8 +146,8 @@ Added in v1.0.0
 export interface Worker<I, E, O> {
   readonly id: number
   readonly join: Effect.Effect<never, WorkerError, never>
-  readonly execute: (message: I) => Stream.Stream<never, E, O>
-  readonly executeEffect: (message: I) => Effect.Effect<never, E, O>
+  readonly execute: (message: I) => Stream.Stream<never, E | WorkerError, O>
+  readonly executeEffect: (message: I) => Effect.Effect<never, E | WorkerError, O>
 }
 ```
 
