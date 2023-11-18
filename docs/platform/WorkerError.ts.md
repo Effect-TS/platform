@@ -28,7 +28,11 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const WorkerError: (reason: "spawn" | "decode" | "send" | "unknown", error: unknown) => WorkerError
+export declare const WorkerError: (
+  reason: "spawn" | "decode" | "send" | "unknown",
+  error: unknown,
+  stack?: string
+) => WorkerError
 ```
 
 Added in v1.0.0
@@ -43,6 +47,7 @@ export interface WorkerError extends Data.Case {
   readonly _tag: "WorkerError"
   readonly reason: "spawn" | "decode" | "send" | "unknown"
   readonly error: unknown
+  readonly stack?: string
 }
 ```
 
