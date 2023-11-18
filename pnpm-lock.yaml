@@ -36,7 +36,7 @@ importers:
         version: 0.4.1
       '@effect/docgen':
         specifier: ^0.3.3
-        version: 0.3.3(tsx@4.1.2)(typescript@5.2.2)
+        version: 0.3.3(tsx@4.1.3)(typescript@5.2.2)
       '@effect/eslint-plugin':
         specifier: ^0.1.2
         version: 0.1.2
@@ -88,6 +88,9 @@ importers:
       prettier:
         specifier: ^3.1.0
         version: 3.1.0
+      tsx:
+        specifier: ^4.1.3
+        version: 4.1.3
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -695,7 +698,7 @@ packages:
     hasBin: true
     dev: true
 
-  /@effect/docgen@0.3.3(tsx@4.1.2)(typescript@5.2.2):
+  /@effect/docgen@0.3.3(tsx@4.1.3)(typescript@5.2.2):
     resolution: {integrity: sha512-9UtuKZ2r1ZPfAf9RxkZ7u5H8Lc8HdrzXIROJrs8DXxNDBDeFdZWbMksCfIPqSkFGDgBrCIOEFDUS11JCmk/udA==}
     engines: {node: '>=16.17.1'}
     hasBin: true
@@ -707,7 +710,7 @@ packages:
       glob: 10.3.10
       markdown-toc: github.com/effect-ts/markdown-toc/4bfeb0f140105440ea0d12df2fa23199cc3ec1d5
       prettier: 3.1.0
-      tsx: 4.1.2
+      tsx: 4.1.3
       typescript: 5.2.2
     dev: true
 
@@ -5387,8 +5390,8 @@ packages:
       typescript: 5.2.2
     dev: true
 
-  /tsx@4.1.2:
-    resolution: {integrity: sha512-1spM1bFV6MP2s4tO4tDC7g52fsaFdtEWdO4GfGdqi20qUgPbnAJqixOyIAvCSx1DDj3YIUB4CD06owTWUsOAuQ==}
+  /tsx@4.1.3:
+    resolution: {integrity: sha512-DLiTy1eri4nhqgVVy+15YKC6Ij2BMFxGdDMkVrSDkNuISUJLv7n0NgZpFLpdM+qmwXar34XllgYi4cxkNMbDwQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     dependencies:
