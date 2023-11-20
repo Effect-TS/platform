@@ -38,7 +38,12 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type BunContext = CommandExecutor.CommandExecutor | FileSystem.FileSystem | Path.Path | Worker.WorkerManager
+export type BunContext =
+  | CommandExecutor.CommandExecutor
+  | FileSystem.FileSystem
+  | Path.Path
+  | Terminal.Terminal
+  | Worker.WorkerManager
 ```
 
 Added in v1.0.0
