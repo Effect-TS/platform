@@ -16,6 +16,7 @@ Added in v1.0.0
   - [setBody](#setbody)
   - [setHeader](#setheader)
   - [setHeaders](#setheaders)
+  - [setStatus](#setstatus)
 - [constructors](#constructors)
   - [empty](#empty)
   - [file](#file)
@@ -79,6 +80,19 @@ Added in v1.0.0
 export declare const setHeaders: {
   (input: Headers.Input): (self: ServerResponse) => ServerResponse
   (self: ServerResponse, input: Headers.Input): ServerResponse
+}
+```
+
+Added in v1.0.0
+
+## setStatus
+
+**Signature**
+
+```ts
+export declare const setStatus: {
+  (status: number, statusText?: string | undefined): (self: ServerResponse) => ServerResponse
+  (self: ServerResponse, status: number, statusText?: string | undefined): ServerResponse
 }
 ```
 
