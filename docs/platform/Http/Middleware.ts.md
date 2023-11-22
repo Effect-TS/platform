@@ -17,8 +17,10 @@ Added in v1.0.0
   - [make](#make)
   - [xForwardedHeaders](#xforwardedheaders)
 - [fiber refs](#fiber-refs)
+  - [currentTracerDisabledWhen](#currenttracerdisabledwhen)
   - [loggerDisabled](#loggerdisabled)
   - [withLoggerDisabled](#withloggerdisabled)
+  - [withTracerDisabledWhen](#withtracerdisabledwhen)
 - [models](#models)
   - [Middleware (interface)](#middleware-interface)
 - [utils](#utils)
@@ -61,6 +63,16 @@ Added in v1.0.0
 
 # fiber refs
 
+## currentTracerDisabledWhen
+
+**Signature**
+
+```ts
+export declare const currentTracerDisabledWhen: FiberRef.FiberRef<Predicate.Predicate<ServerRequest.ServerRequest>>
+```
+
+Added in v1.0.0
+
 ## loggerDisabled
 
 **Signature**
@@ -77,6 +89,24 @@ Added in v1.0.0
 
 ```ts
 export declare const withLoggerDisabled: <R, E, A>(self: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
+```
+
+Added in v1.0.0
+
+## withTracerDisabledWhen
+
+**Signature**
+
+```ts
+export declare const withTracerDisabledWhen: {
+  (
+    predicate: Predicate.Predicate<ServerRequest.ServerRequest>
+  ): <R, E, A>(effect: Effect.Effect<R, E, A>) => Effect.Effect<R, E, A>
+  <R, E, A>(
+    effect: Effect.Effect<R, E, A>,
+    predicate: Predicate.Predicate<ServerRequest.ServerRequest>
+  ): Effect.Effect<R, E, A>
+}
 ```
 
 Added in v1.0.0
