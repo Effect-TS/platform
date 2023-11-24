@@ -18,6 +18,7 @@ Added in v1.0.0
 - [constructors](#constructors)
   - [fromDuplex](#fromduplex)
   - [fromReadable](#fromreadable)
+  - [fromReadableChannel](#fromreadablechannel)
 - [conversions](#conversions)
   - [toString](#tostring)
   - [toUint8Array](#touint8array)
@@ -91,6 +92,20 @@ export declare const fromReadable: <E, A = Uint8Array>(
   onError: (error: unknown) => E,
   { chunkSize }?: FromReadableOptions
 ) => Stream<never, E, A>
+```
+
+Added in v1.0.0
+
+## fromReadableChannel
+
+**Signature**
+
+```ts
+export declare const fromReadableChannel: <E, A = Uint8Array>(
+  evaluate: LazyArg<Readable | NodeJS.ReadableStream>,
+  onError: (error: unknown) => E,
+  chunkSize: number | undefined
+) => Channel<never, unknown, unknown, unknown, E, Chunk<A>, void>
 ```
 
 Added in v1.0.0
