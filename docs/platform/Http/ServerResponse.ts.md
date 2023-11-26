@@ -30,6 +30,8 @@ Added in v1.0.0
   - [uint8Array](#uint8array)
   - [unsafeJson](#unsafejson)
   - [urlParams](#urlparams)
+- [conversions](#conversions)
+  - [toWeb](#toweb)
 - [models](#models)
   - [Options (interface)](#options-interface)
   - [ServerResponse (interface)](#serverresponse-interface)
@@ -227,6 +229,18 @@ Added in v1.0.0
 
 ```ts
 export declare const urlParams: (body: UrlParams.Input, options?: Options.WithContent) => ServerResponse
+```
+
+Added in v1.0.0
+
+# conversions
+
+## toWeb
+
+**Signature**
+
+```ts
+export declare const toWeb: (response: ServerResponse, withoutBody?: boolean) => Response
 ```
 
 Added in v1.0.0
