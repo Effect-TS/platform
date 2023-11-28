@@ -16,6 +16,8 @@ Added in v1.0.0
   - [persistedFormData](#persistedformdata)
 - [context](#context)
   - [ServerRequest](#serverrequest)
+- [conversions](#conversions)
+  - [fromWeb](#fromweb)
 - [fiber refs](#fiber-refs)
   - [maxBodySize](#maxbodysize)
 - [models](#models)
@@ -56,6 +58,18 @@ Added in v1.0.0
 
 ```ts
 export declare const ServerRequest: Context.Tag<ServerRequest, ServerRequest>
+```
+
+Added in v1.0.0
+
+# conversions
+
+## fromWeb
+
+**Signature**
+
+```ts
+export declare const fromWeb: (request: Request) => ServerRequest
 ```
 
 Added in v1.0.0
