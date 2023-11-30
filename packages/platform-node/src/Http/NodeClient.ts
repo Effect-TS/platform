@@ -62,8 +62,7 @@ export const makeAgentLayer: (options?: Https.AgentOptions) => Layer.Layer<never
  * @since 1.0.0
  * @category agent
  */
-export const fromAgent: (agent: HttpAgent) => Client.Client.Default =
-  internal.fromAgent
+export const fromAgent: (agent: HttpAgent) => Client.Client.Default = internal.fromAgent
 
 /**
  * @since 1.0.0
