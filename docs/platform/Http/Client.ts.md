@@ -32,6 +32,8 @@ Added in v1.0.0
 - [mapping & sequencing](#mapping--sequencing)
   - [map](#map)
   - [mapEffect](#mapeffect)
+  - [mapInputRequest](#mapinputrequest)
+  - [mapInputRequestEffect](#mapinputrequesteffect)
   - [mapRequest](#maprequest)
   - [mapRequestEffect](#maprequesteffect)
   - [tap](#tap)
@@ -40,10 +42,12 @@ Added in v1.0.0
   - [transformResponse](#transformresponse)
 - [models](#models)
   - [Client (interface)](#client-interface)
+  - [Fetch (interface)](#fetch-interface)
 - [schema](#schema)
   - [schemaFunction](#schemafunction)
 - [tags](#tags)
   - [Client](#client)
+  - [Fetch](#fetch-1)
 - [type ids](#type-ids)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
@@ -312,6 +316,39 @@ export declare const mapEffect: {
 
 Added in v1.0.0
 
+## mapInputRequest
+
+**Signature**
+
+```ts
+export declare const mapInputRequest: {
+  (
+    f: (a: ClientRequest.ClientRequest) => ClientRequest.ClientRequest
+  ): <R, E, A>(self: Client<R, E, A>) => Client<R, E, A>
+  <R, E, A>(self: Client<R, E, A>, f: (a: ClientRequest.ClientRequest) => ClientRequest.ClientRequest): Client<R, E, A>
+}
+```
+
+Added in v1.0.0
+
+## mapInputRequestEffect
+
+**Signature**
+
+```ts
+export declare const mapInputRequestEffect: {
+  <R2, E2>(
+    f: (a: ClientRequest.ClientRequest) => Effect.Effect<R2, E2, ClientRequest.ClientRequest>
+  ): <R, E, A>(self: Client<R, E, A>) => Client<R2 | R, E2 | E, A>
+  <R, E, A, R2, E2>(
+    self: Client<R, E, A>,
+    f: (a: ClientRequest.ClientRequest) => Effect.Effect<R2, E2, ClientRequest.ClientRequest>
+  ): Client<R | R2, E | E2, A>
+}
+```
+
+Added in v1.0.0
+
 ## mapRequest
 
 **Signature**
@@ -429,6 +466,18 @@ export interface Client<R, E, A> extends Pipeable {
 
 Added in v1.0.0
 
+## Fetch (interface)
+
+**Signature**
+
+```ts
+export interface Fetch {
+  readonly _: unique symbol
+}
+```
+
+Added in v1.0.0
+
 # schema
 
 ## schemaFunction
@@ -463,6 +512,16 @@ Added in v1.0.0
 
 ```ts
 export declare const Client: Context.Tag<Client.Default, Client.Default>
+```
+
+Added in v1.0.0
+
+## Fetch
+
+**Signature**
+
+```ts
+export declare const Fetch: Context.Tag<Fetch, typeof globalThis.fetch>
 ```
 
 Added in v1.0.0
