@@ -114,8 +114,8 @@ importers:
         version: 1.0.1
     devDependencies:
       '@effect/schema':
-        specifier: ^0.49.0
-        version: 0.49.0(effect@2.0.0-next.56)(fast-check@3.14.0)
+        specifier: ^0.50.0
+        version: 0.50.0(effect@2.0.0-next.56)(fast-check@3.14.0)
       '@types/path-browserify':
         specifier: ^1.0.2
         version: 1.0.2
@@ -148,8 +148,8 @@ importers:
         version: link:../platform-node/dist
     devDependencies:
       '@effect/schema':
-        specifier: ^0.49.0
-        version: 0.49.0(effect@2.0.0-next.56)(fast-check@3.14.0)
+        specifier: ^0.50.0
+        version: 0.50.0(effect@2.0.0-next.56)(fast-check@3.14.0)
       bun-types:
         specifier: ^1.0.13
         version: 1.0.13
@@ -171,8 +171,8 @@ importers:
         version: 0.1.19
     devDependencies:
       '@effect/schema':
-        specifier: ^0.49.0
-        version: 0.49.0(effect@2.0.0-next.56)(fast-check@3.14.0)
+        specifier: ^0.50.0
+        version: 0.50.0(effect@2.0.0-next.56)(fast-check@3.14.0)
       '@types/mime':
         specifier: ^3.0.4
         version: 3.0.4
@@ -726,8 +726,8 @@ packages:
     resolution: {integrity: sha512-e8vfKbjnbYiyneBincEFS0tzXluopGK77OkVFbPRtUbNDS5tJfb+jiwOQEiqASDsadcZmd+9J9+Q6v/z7GuN2g==}
     dev: true
 
-  /@effect/schema@0.49.0(effect@2.0.0-next.56)(fast-check@3.14.0):
-    resolution: {integrity: sha512-mz6F+l2r1w02243tyKlVvJ6SZ1VEAHkHf4pGa8kmTDtWzYqqA3dBq6x5198WqSlcFzAa+61QcjcJqJsY9yfszg==}
+  /@effect/schema@0.50.0(effect@2.0.0-next.56)(fast-check@3.14.0):
+    resolution: {integrity: sha512-kzFwbKDvv7TjHe0ZL1jq9KmZ6HzeVd8m4acpfRxfMKglEVQq/srT0JmvW1AD4kBLrN+4IAuCZBL892E9Z0YhWQ==}
     peerDependencies:
       effect: 2.0.0-next.56
       fast-check: ^3.13.2
