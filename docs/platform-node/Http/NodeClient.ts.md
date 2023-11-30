@@ -18,6 +18,7 @@ Added in v1.0.0
   - [HttpAgentTypeId](#httpagenttypeid)
   - [HttpAgentTypeId (type alias)](#httpagenttypeid-type-alias)
   - [agentLayer](#agentlayer)
+  - [fromAgent](#fromagent)
   - [makeAgent](#makeagent)
   - [makeAgentLayer](#makeagentlayer)
 - [constructors](#constructors)
@@ -80,6 +81,16 @@ Added in v1.0.0
 
 ```ts
 export declare const agentLayer: Layer.Layer<never, never, HttpAgent>
+```
+
+Added in v1.0.0
+
+## fromAgent
+
+**Signature**
+
+```ts
+export declare const fromAgent: (agent: HttpAgent) => Client.Client.Default
 ```
 
 Added in v1.0.0
