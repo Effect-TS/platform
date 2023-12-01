@@ -244,7 +244,7 @@ Start running the command and return a handle to the running process.
 **Signature**
 
 ```ts
-export declare const start: (command: Command) => Effect<CommandExecutor, PlatformError, Process>
+export declare const start: (command: Command) => Effect<CommandExecutor | Scope, PlatformError, Process>
 ```
 
 Added in v1.0.0

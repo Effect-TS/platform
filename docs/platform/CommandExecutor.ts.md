@@ -61,7 +61,7 @@ Added in v1.0.0
 
 ```ts
 export declare const makeExecutor: (
-  start: (command: Command) => Effect<never, PlatformError, Process>
+  start: (command: Command) => Effect<Scope, PlatformError, Process>
 ) => CommandExecutor
 ```
 
@@ -83,7 +83,7 @@ export interface CommandExecutor {
   /**
    * Start running the command and return a handle to the running process.
    */
-  readonly start: (command: Command) => Effect<never, PlatformError, Process>
+  readonly start: (command: Command) => Effect<Scope, PlatformError, Process>
   /**
    * Runs the command returning the entire output as a string with the
    * specified encoding.
