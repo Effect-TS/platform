@@ -109,7 +109,7 @@ export const make = (
 
     return Terminal.Terminal.of({
       // The columns property can be undefined if stdout was redirected
-      columns: output.columns || 0,
+      columns: Effect.sync(() => output.columns || 0),
       readInput,
       readLine,
       display

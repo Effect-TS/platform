@@ -19,7 +19,7 @@ export interface Terminal {
   /**
    * The number of columns available on the platform's terminal interface.
    */
-  readonly columns: number
+  readonly columns: Effect<never, never, number>
   /**
    * Reads a single input event from the default standard input.
    */
