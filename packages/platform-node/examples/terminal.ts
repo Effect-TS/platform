@@ -18,7 +18,6 @@ const program = Effect.gen(function*(_) {
 const MainLive = Terminal.layer
 
 program.pipe(
-  Effect.tapErrorCause(Effect.logError),
   Effect.provide(MainLive),
   Runtime.runMain
 )
