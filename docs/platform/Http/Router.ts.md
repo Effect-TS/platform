@@ -34,6 +34,8 @@ Added in v1.0.0
   - [RouteContext](#routecontext)
   - [params](#params)
   - [schemaParams](#schemaparams)
+  - [schemaPathParams](#schemapathparams)
+  - [schemaSearchParams](#schemasearchparams)
   - [searchParams](#searchparams)
 - [routing](#routing)
   - [all](#all)
@@ -401,6 +403,30 @@ Added in v1.0.0
 
 ```ts
 export declare const schemaParams: <I extends Readonly<Record<string, string>>, A>(
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<RouteContext, ParseResult.ParseError, A>
+```
+
+Added in v1.0.0
+
+## schemaPathParams
+
+**Signature**
+
+```ts
+export declare const schemaPathParams: <I extends Readonly<Record<string, string>>, A>(
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<RouteContext, ParseResult.ParseError, A>
+```
+
+Added in v1.0.0
+
+## schemaSearchParams
+
+**Signature**
+
+```ts
+export declare const schemaSearchParams: <I extends Readonly<Record<string, string>>, A>(
   schema: Schema.Schema<I, A>
 ) => Effect.Effect<RouteContext, ParseResult.ParseError, A>
 ```
