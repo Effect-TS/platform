@@ -33,9 +33,9 @@ Also includes exports from [`@effect/platform/Http/Server`](https://effect-ts.gi
 
 ```ts
 export declare const make: (
-  evaluate: LazyArg<Http.Server>,
+  evaluate: LazyArg<Http.Server<typeof Http.IncomingMessage, typeof Http.ServerResponse>>,
   options: Net.ListenOptions
-) => Effect.Effect<Scope.Scope, never, Server.Server>
+) => Effect.Effect<Scope.Scope, ServeError, Server.Server>
 ```
 
 Added in v1.0.0
@@ -88,9 +88,9 @@ Added in v1.0.0
 
 ```ts
 export declare const layer: (
-  evaluate: LazyArg<Http.Server<typeof Http.IncomingMessage, typeof Http.ServerResponse>>,
+  evaluate: LazyArg<Http.Server>,
   options: Net.ListenOptions
-) => Layer.Layer<never, never, Server.Server | Platform.Platform>
+) => Layer.Layer<never, ServeError, Server.Server | Platform.Platform>
 ```
 
 Added in v1.0.0
@@ -101,9 +101,9 @@ Added in v1.0.0
 
 ```ts
 export declare const layerConfig: (
-  evaluate: LazyArg<Http.Server<typeof Http.IncomingMessage, typeof Http.ServerResponse>>,
+  evaluate: LazyArg<Http.Server>,
   options: Config.Config.Wrap<Net.ListenOptions>
-) => Layer.Layer<never, ConfigError.ConfigError, Server.Server | Platform.Platform>
+) => Layer.Layer<never, ServeError | ConfigError.ConfigError, Server.Server | Platform.Platform>
 ```
 
 Added in v1.0.0
