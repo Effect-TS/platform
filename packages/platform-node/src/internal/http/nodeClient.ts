@@ -142,7 +142,7 @@ const sendBody = (
   })
 
 const waitForResponse = (nodeRequest: Http.ClientRequest, request: ClientRequest.ClientRequest) =>
-  Effect.async<never, never, Http.IncomingMessage>((resume) => {
+  Effect.async<never, Error.RequestError, Http.IncomingMessage>((resume) => {
     nodeRequest.on("error", (error) => {
       resume(Effect.fail(Error.RequestError({
         request,
@@ -150,11 +150,11 @@ const waitForResponse = (nodeRequest: Http.ClientRequest, request: ClientRequest
         error
       })))
     })
-    
+
     nodeRequest.on("response", (response) => {
       resume(Effect.succeed(response))
     })
-    
+
     return Effect.sync(() => {
       nodeRequest.removeAllListeners("error")
       nodeRequest.removeAllListeners("response")
