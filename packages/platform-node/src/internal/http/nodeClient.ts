@@ -156,6 +156,7 @@ const waitForResponse = (nodeRequest: Http.ClientRequest, request: ClientRequest
     })
     
     return Effect.sync(() => {
+      nodeRequest.removeAllListeners("error")
       nodeRequest.removeAllListeners("response")
     })
   })
