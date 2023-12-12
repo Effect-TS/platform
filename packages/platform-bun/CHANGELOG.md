@@ -1,5 +1,41 @@
 # @effect/platform-bun
 
+## 0.23.0
+
+### Minor Changes
+
+- [#331](https://github.com/Effect-TS/platform/pull/331) [`db1ca18`](https://github.com/Effect-TS/platform/commit/db1ca18725f9dd4be1c36ddc80faa3aa53c10eb7) Thanks [@tim-smart](https://github.com/tim-smart)! - update effect
+
+### Patch Changes
+
+- Updated dependencies [[`db1ca18`](https://github.com/Effect-TS/platform/commit/db1ca18725f9dd4be1c36ddc80faa3aa53c10eb7)]:
+  - @effect/platform-node@0.35.0
+  - @effect/platform@0.34.0
+
+## 0.22.3
+
+### Patch Changes
+
+- Updated dependencies [[`5c75749`](https://github.com/Effect-TS/platform/commit/5c75749d451f8e79e1cb8057729691e4b3c1c6aa)]:
+  - @effect/platform-node@0.34.3
+
+## 0.22.2
+
+### Patch Changes
+
+- Updated dependencies [[`162aa91`](https://github.com/Effect-TS/platform/commit/162aa915934112983c543a6be2a9d7091b86fac9)]:
+  - @effect/platform@0.33.1
+  - @effect/platform-node@0.34.2
+
+## 0.22.1
+
+### Patch Changes
+
+- [#324](https://github.com/Effect-TS/platform/pull/324) [`6b90c81`](https://github.com/Effect-TS/platform/commit/6b90c81391e613a25db564aebb9a64971ce077a5) Thanks [@tim-smart](https://github.com/tim-smart)! - improve serve api
+
+- Updated dependencies [[`6b90c81`](https://github.com/Effect-TS/platform/commit/6b90c81391e613a25db564aebb9a64971ce077a5)]:
+  - @effect/platform-node@0.34.1
+
 ## 0.22.0
 
 ### Minor Changes

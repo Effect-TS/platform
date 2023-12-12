@@ -52,6 +52,7 @@ export const make = (
         const app = (middleware
           ? middleware(App.withDefaultMiddleware(respond(httpApp)))
           : App.withDefaultMiddleware(respond(httpApp))) as App.Default<never, unknown>
+
         return pipe(
           Effect.all([Effect.runtime<never>(), Effect.fiberId]),
           Effect.zipLeft(
@@ -163,7 +164,7 @@ export const layerConfig = (
   options: Config.Config.Wrap<Omit<ServeOptions, "fetch" | "error">>
 ) =>
   Layer.merge(
-    Layer.scoped(Server.Server, Effect.flatMap(Effect.config(Config.unwrap(options)), make)),
+    Layer.scoped(Server.Server, Effect.flatMap(Config.unwrap(options), make)),
     Platform.layer
   )
 

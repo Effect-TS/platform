@@ -1,7 +1,7 @@
 {
   "name": "@effect/platform-node",
   "type": "module",
-  "version": "0.34.0",
+  "version": "0.35.0",
   "description": "Unified interfaces for common platform-specific services",
   "publishConfig": {
     "access": "public",
@@ -39,14 +39,14 @@
   },
   "peerDependencies": {
     "@effect/platform": "workspace:*",
-    "effect": "2.0.0-next.59"
+    "effect": "2.0.0-next.60"
   },
   "devDependencies": {
-    "@effect/schema": "^0.52.0",
+    "@effect/schema": "^0.53.0",
     "@types/mime": "^3.0.4",
-    "@types/node": "^20.10.3",
+    "@types/node": "^20.10.4",
     "@types/tar": "^6.1.10",
-    "effect": "2.0.0-next.59",
+    "effect": "2.0.0-next.60",
     "tar": "^6.2.0"
   }
 }

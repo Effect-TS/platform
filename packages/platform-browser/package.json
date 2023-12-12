@@ -1,7 +1,7 @@
 {
   "name": "@effect/platform-browser",
   "type": "module",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "Unified interfaces for common platform-specific services",
   "publishConfig": {
     "access": "public",
@@ -32,10 +32,10 @@
   },
   "peerDependencies": {
     "@effect/platform": "workspace:*",
-    "effect": "2.0.0-next.59"
+    "effect": "2.0.0-next.60"
   },
   "devDependencies": {
-    "effect": "2.0.0-next.59",
+    "effect": "2.0.0-next.60",
     "happy-dom": "^12.10.3"
   }
 }
