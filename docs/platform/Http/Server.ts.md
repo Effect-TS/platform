@@ -39,27 +39,23 @@ Added in v1.0.0
 export declare const serve: {
   (): <R, E>(
     httpApp: App.Default<R, E>
-  ) => Effect.Effect<Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
+  ) => Effect.Effect<Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>, never, void>
   <R, E, App extends App.Default<any, any>>(
     middleware: Middleware.Middleware.Applied<R, E, App>
   ): (
     httpApp: App.Default<R, E>
   ) => Effect.Effect<
     Scope.Scope | Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>,
-    Error.ServeError,
-    never
+    never,
+    void
   >
   <R, E>(
     httpApp: App.Default<R, E>
-  ): Effect.Effect<Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
+  ): Effect.Effect<Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>, never, void>
   <R, E, App extends App.Default<any, any>>(
     httpApp: App.Default<R, E>,
     middleware: Middleware.Middleware.Applied<R, E, App>
-  ): Effect.Effect<
-    Scope.Scope | Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>,
-    Error.ServeError,
-    never
-  >
+  ): Effect.Effect<Scope.Scope | Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>, never, void>
 }
 ```
 
@@ -86,7 +82,7 @@ export declare const make: (options: {
   readonly serve: (
     httpApp: App.Default<never, unknown>,
     middleware?: Middleware.Middleware
-  ) => Effect.Effect<Scope.Scope, Error.ServeError, never>
+  ) => Effect.Effect<Scope.Scope, never, void>
   readonly address: Address
 }) => Server
 ```
@@ -127,15 +123,11 @@ export interface Server {
   readonly serve: {
     <R, E>(
       httpApp: App.Default<R, E>
-    ): Effect.Effect<Exclude<R, ServerRequest.ServerRequest> | Scope.Scope, Error.ServeError, never>
+    ): Effect.Effect<Exclude<R, ServerRequest.ServerRequest> | Scope.Scope, never, void>
     <R, E, App extends App.Default<any, any>>(
       httpApp: App.Default<R, E>,
       middleware: Middleware.Middleware.Applied<R, E, App>
-    ): Effect.Effect<
-      Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest> | Scope.Scope,
-      Error.ServeError,
-      never
-    >
+    ): Effect.Effect<Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest> | Scope.Scope, never, void>
   }
   readonly address: Address
 }

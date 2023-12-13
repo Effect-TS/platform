@@ -5,7 +5,6 @@ import type * as Scope from "effect/Scope"
 import type * as App from "../../Http/App.js"
 import type * as Middleware from "../../Http/Middleware.js"
 import type * as Server from "../../Http/Server.js"
-import type * as Error from "../../Http/ServerError.js"
 import type * as ServerRequest from "../../Http/ServerRequest.js"
 
 /** @internal */
@@ -27,7 +26,7 @@ export const make = (
     readonly serve: (
       httpApp: App.Default<never, unknown>,
       middleware?: Middleware.Middleware
-    ) => Effect.Effect<Scope.Scope, Error.ServeError, never>
+    ) => Effect.Effect<Scope.Scope, never, void>
     readonly address: Server.Address
   }
 ): Server.Server => Object.assign(Object.create(serverProto), options)
@@ -39,28 +38,28 @@ export const serve = dual<
       httpApp: App.Default<R, E>
     ) => Effect.Effect<
       Server.Server | Scope.Scope | Exclude<R, ServerRequest.ServerRequest>,
-      Error.ServeError,
-      never
+      never,
+      void
     >
     <R, E, App extends App.Default<any, any>>(middleware: Middleware.Middleware.Applied<R, E, App>): (
       httpApp: App.Default<R, E>
     ) => Effect.Effect<
       Server.Server | Scope.Scope | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>,
-      Error.ServeError,
-      never
+      never,
+      void
     >
   },
   {
     <R, E>(
       httpApp: App.Default<R, E>
-    ): Effect.Effect<Server.Server | Scope.Scope | Exclude<R, ServerRequest.ServerRequest>, Error.ServeError, never>
+    ): Effect.Effect<Server.Server | Scope.Scope | Exclude<R, ServerRequest.ServerRequest>, never, void>
     <R, E, App extends App.Default<any, any>>(
       httpApp: App.Default<R, E>,
       middleware: Middleware.Middleware.Applied<R, E, App>
     ): Effect.Effect<
       Server.Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest> | Scope.Scope,
-      Error.ServeError,
-      never
+      never,
+      void
     >
   }
 >(
@@ -70,8 +69,8 @@ export const serve = dual<
     middleware: Middleware.Middleware.Applied<R, E, App>
   ): Effect.Effect<
     Server.Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest> | Scope.Scope,
-    Error.ServeError,
-    never
+    never,
+    void
   > =>
     Effect.flatMap(
       serverTag,
