@@ -27,6 +27,7 @@ Added in v1.0.0
   - [From "./Sink.js"](#from-sinkjs)
   - [From "./Stream.js"](#from-streamjs)
   - [From "./Terminal.js"](#from-terminaljs)
+  - [From "./Transferable.js"](#from-transferablejs)
   - [From "./Worker.js"](#from-workerjs)
   - [From "./WorkerRunner.js"](#from-workerrunnerjs)
 
@@ -203,6 +204,20 @@ export * as Terminal from "./Terminal.js"
 ```
 
 Added in v1.0.0
+
+## From "./Transferable.js"
+
+Re-exports all named exports from the "./Transferable.js" module as `Transferable`.
+
+**Signature**
+
+```ts
+export * as Transferable from "./Transferable.js"
+```
+
+Added in v1.0.0
+
+Also includes exports from [`@effect/platform/Transferable`](https://effect-ts.github.io/platform/platform/Transferable.ts.html).
 
 ## From "./Worker.js"
 

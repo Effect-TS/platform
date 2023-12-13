@@ -16,22 +16,31 @@ Added in v1.0.0
   - [makeManager](#makemanager)
   - [makePool](#makepool)
   - [makePoolLayer](#makepoollayer)
+  - [makePoolSerialized](#makepoolserialized)
+  - [makeSerialized](#makeserialized)
 - [layers](#layers)
   - [layerManager](#layermanager)
+  - [makePoolSerializedLayer](#makepoolserializedlayer)
 - [models](#models)
   - [BackingWorker (interface)](#backingworker-interface)
   - [BackingWorker (namespace)](#backingworker-namespace)
     - [Message (type alias)](#message-type-alias)
   - [PlatformWorker (interface)](#platformworker-interface)
+  - [SerializedWorker (interface)](#serializedworker-interface)
+  - [SerializedWorker (namespace)](#serializedworker-namespace)
+    - [Options (interface)](#options-interface)
+  - [SerializedWorkerPool (interface)](#serializedworkerpool-interface)
+  - [SerializedWorkerPool (namespace)](#serializedworkerpool-namespace)
+    - [Options (type alias)](#options-type-alias)
   - [Worker (interface)](#worker-interface)
   - [Worker (namespace)](#worker-namespace)
-    - [Options (interface)](#options-interface)
+    - [Options (interface)](#options-interface-1)
     - [Request (type alias)](#request-type-alias)
     - [Response (type alias)](#response-type-alias)
   - [WorkerManager (interface)](#workermanager-interface)
   - [WorkerPool (interface)](#workerpool-interface)
   - [WorkerPool (namespace)](#workerpool-namespace)
-    - [Options (type alias)](#options-type-alias)
+    - [Options (type alias)](#options-type-alias-1)
   - [WorkerQueue (interface)](#workerqueue-interface)
 - [tags](#tags)
   - [PlatformWorker](#platformworker)
@@ -83,6 +92,30 @@ export declare const makePoolLayer: <W>(
 
 Added in v1.0.0
 
+## makePoolSerialized
+
+**Signature**
+
+```ts
+export declare const makePoolSerialized: <W>() => <I extends Schema.TaggedRequest.Any>(
+  options: SerializedWorkerPool.Options<I, W>
+) => Effect.Effect<Scope.Scope | WorkerManager, never, SerializedWorkerPool<I>>
+```
+
+Added in v1.0.0
+
+## makeSerialized
+
+**Signature**
+
+```ts
+export declare const makeSerialized: <I extends Schema.TaggedRequest.Any, W = unknown>(
+  options: SerializedWorker.Options<I, W>
+) => Effect.Effect<Scope.Scope | WorkerManager, WorkerError, SerializedWorker<I>>
+```
+
+Added in v1.0.0
+
 # layers
 
 ## layerManager
@@ -91,6 +124,21 @@ Added in v1.0.0
 
 ```ts
 export declare const layerManager: Layer.Layer<PlatformWorker, never, WorkerManager>
+```
+
+Added in v1.0.0
+
+## makePoolSerializedLayer
+
+**Signature**
+
+```ts
+export declare const makePoolSerializedLayer: <W>(
+  managerLayer: Layer.Layer<never, never, WorkerManager>
+) => <Tag, I extends Schema.TaggedRequest.Any>(
+  tag: Context.Tag<Tag, SerializedWorkerPool<I>>,
+  options: SerializedWorkerPool.Options<I, W>
+) => Layer.Layer<never, never, Tag>
 ```
 
 Added in v1.0.0
@@ -134,6 +182,100 @@ export interface PlatformWorker {
   readonly [PlatformWorkerTypeId]: PlatformWorkerTypeId
   readonly spawn: <I, O>(worker: unknown) => Effect.Effect<Scope.Scope, WorkerError, BackingWorker<I, O>>
 }
+```
+
+Added in v1.0.0
+
+## SerializedWorker (interface)
+
+**Signature**
+
+```ts
+export interface SerializedWorker<I extends Schema.TaggedRequest.Any> {
+  readonly id: number
+  readonly join: Effect.Effect<never, WorkerError, never>
+  readonly execute: <Req extends I>(
+    message: Req
+  ) => Req extends Serializable.WithResult<infer _IE, infer E, infer _IA, infer A>
+    ? Stream.Stream<never, E | WorkerError | ParseResult.ParseError, A>
+    : never
+  readonly executeEffect: <Req extends I>(
+    message: Req
+  ) => Req extends Serializable.WithResult<infer _IE, infer E, infer _IA, infer A>
+    ? Effect.Effect<never, E | WorkerError | ParseResult.ParseError, A>
+    : never
+}
+```
+
+Added in v1.0.0
+
+## SerializedWorker (namespace)
+
+Added in v1.0.0
+
+### Options (interface)
+
+**Signature**
+
+```ts
+export interface Options<I, W = unknown> {
+  readonly spawn: (id: number) => W
+  readonly permits?: number
+  readonly queue?: WorkerQueue<I>
+}
+```
+
+Added in v1.0.0
+
+## SerializedWorkerPool (interface)
+
+**Signature**
+
+```ts
+export interface SerializedWorkerPool<I extends Schema.TaggedRequest.Any> {
+  readonly backing: Pool.Pool<WorkerError, SerializedWorker<I>>
+  readonly broadcast: <Req extends I>(
+    message: Req
+  ) => Req extends Serializable.WithResult<infer _IE, infer E, infer _IA, infer _A>
+    ? Effect.Effect<never, E | WorkerError | ParseResult.ParseError, void>
+    : never
+  readonly execute: <Req extends I>(
+    message: Req
+  ) => Req extends Serializable.WithResult<infer _IE, infer E, infer _IA, infer A>
+    ? Stream.Stream<never, E | WorkerError | ParseResult.ParseError, A>
+    : never
+  readonly executeEffect: <Req extends I>(
+    message: Req
+  ) => Req extends Serializable.WithResult<infer _IE, infer E, infer _IA, infer A>
+    ? Effect.Effect<never, E | WorkerError | ParseResult.ParseError, A>
+    : never
+}
+```
+
+Added in v1.0.0
+
+## SerializedWorkerPool (namespace)
+
+Added in v1.0.0
+
+### Options (type alias)
+
+**Signature**
+
+```ts
+export type Options<I, W = unknown> = SerializedWorker.Options<I, W> &
+  (
+    | {
+        readonly onCreate?: (worker: Worker<I, unknown, unknown>) => Effect.Effect<never, WorkerError, void>
+        readonly size: number
+      }
+    | {
+        readonly onCreate?: (worker: Worker<I, unknown, unknown>) => Effect.Effect<never, WorkerError, void>
+        readonly minSize: number
+        readonly maxSize: number
+        readonly timeToLive: Duration.DurationInput
+      }
+  )
 ```
 
 Added in v1.0.0

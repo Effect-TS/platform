@@ -1,6 +1,6 @@
 ---
 title: Worker.ts
-nav_order: 19
+nav_order: 20
 parent: "@effect/platform-bun"
 ---
 
@@ -17,6 +17,8 @@ Also includes exports from [`@effect/platform/Worker`](https://effect-ts.github.
 - [constructors](#constructors)
   - [makePool](#makepool)
   - [makePoolLayer](#makepoollayer)
+  - [makePoolSerialized](#makepoolserialized)
+  - [makePoolSerializedLayer](#makepoolserializedlayer)
 - [exports](#exports)
   - [From "@effect/platform/Worker"](#from-effectplatformworker)
 - [layers](#layers)
@@ -47,6 +49,31 @@ Added in v1.0.0
 export declare const makePoolLayer: <Tag, I, E, O>(
   tag: Context.Tag<Tag, Worker.WorkerPool<I, E, O>>,
   options: Worker.WorkerPool.Options<I, Worker>
+) => Layer.Layer<never, never, Tag>
+```
+
+Added in v1.0.0
+
+## makePoolSerialized
+
+**Signature**
+
+```ts
+export declare const makePoolSerialized: <I extends Schema.TaggedRequest.Any>(
+  options: Worker.SerializedWorkerPool.Options<I, Worker>
+) => Effect.Effect<Scope.Scope | Worker.WorkerManager, never, Worker.SerializedWorkerPool<I>>
+```
+
+Added in v1.0.0
+
+## makePoolSerializedLayer
+
+**Signature**
+
+```ts
+export declare const makePoolSerializedLayer: <Tag, I extends Schema.TaggedRequest.Any>(
+  tag: Context.Tag<Tag, Worker.SerializedWorkerPool<I>>,
+  options: Worker.SerializedWorkerPool.Options<I, Worker>
 ) => Layer.Layer<never, never, Tag>
 ```
 

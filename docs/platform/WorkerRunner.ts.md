@@ -14,6 +14,7 @@ Added in v1.0.0
 
 - [constructors](#constructors)
   - [make](#make)
+  - [makeSerialized](#makeserialized)
 - [models](#models)
   - [BackingRunner (interface)](#backingrunner-interface)
   - [BackingRunner (namespace)](#backingrunner-namespace)
@@ -40,6 +41,40 @@ export declare const make: <I, R, E, O>(
   process: (request: I) => Stream.Stream<R, E, O> | Effect.Effect<R, E, O>,
   options?: Runner.Options<O> | undefined
 ) => Effect.Effect<PlatformRunner | R | Scope.Scope, WorkerError, never>
+```
+
+Added in v1.0.0
+
+## makeSerialized
+
+**Signature**
+
+```ts
+export declare const makeSerialized: <
+  I,
+  A extends Schema.TaggedRequest.Any,
+  Handlers extends {
+    readonly [K in A["_tag"]]: Extract<A, { readonly _tag: K }> extends Serializable.SerializableWithResult<
+      infer _IS,
+      infer S,
+      infer _IE,
+      infer E,
+      infer _IO,
+      infer O
+    >
+      ? (_: S) => Stream.Stream<any, E, O> | Effect.Effect<any, E, O>
+      : never
+  }
+>(
+  schema: Schema.Schema<I, A>,
+  handlers: Handlers
+) => Effect.Effect<
+  | PlatformRunner
+  | Scope.Scope
+  | (ReturnType<Handlers[keyof Handlers]> extends Stream.Stream<infer R, infer _E, infer _A> ? R : never),
+  WorkerError,
+  never
+>
 ```
 
 Added in v1.0.0
