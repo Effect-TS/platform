@@ -1,6 +1,7 @@
 import * as Context from "effect/Context"
 import * as Effect from "effect/Effect"
 import { dual } from "effect/Function"
+import * as Layer from "effect/Layer"
 import type * as Scope from "effect/Scope"
 import type * as App from "../../Http/App.js"
 import type * as Middleware from "../../Http/Middleware.js"
@@ -33,6 +34,55 @@ export const make = (
 
 /** @internal */
 export const serve = dual<
+  {
+    (): <R, E>(
+      httpApp: App.Default<R, E>
+    ) => Layer.Layer<
+      Server.Server | Exclude<R, ServerRequest.ServerRequest>,
+      never,
+      never
+    >
+    <R, E, App extends App.Default<any, any>>(middleware: Middleware.Middleware.Applied<R, E, App>): (
+      httpApp: App.Default<R, E>
+    ) => Layer.Layer<
+      Server.Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>,
+      never,
+      never
+    >
+  },
+  {
+    <R, E>(
+      httpApp: App.Default<R, E>
+    ): Layer.Layer<Server.Server | Exclude<R, ServerRequest.ServerRequest>, never, never>
+    <R, E, App extends App.Default<any, any>>(
+      httpApp: App.Default<R, E>,
+      middleware: Middleware.Middleware.Applied<R, E, App>
+    ): Layer.Layer<
+      Server.Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>,
+      never,
+      never
+    >
+  }
+>(
+  (args) => Effect.isEffect(args[0]),
+  <R, E, App extends App.Default<any, any>>(
+    httpApp: App.Default<R, E>,
+    middleware?: Middleware.Middleware.Applied<R, E, App>
+  ): Layer.Layer<
+    Server.Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>,
+    never,
+    never
+  > =>
+    Layer.scopedDiscard(
+      Effect.flatMap(
+        serverTag,
+        (server) => server.serve(httpApp, middleware!)
+      )
+    ) as any
+)
+
+/** @internal */
+export const serveEffect = dual<
   {
     (): <R, E>(
       httpApp: App.Default<R, E>

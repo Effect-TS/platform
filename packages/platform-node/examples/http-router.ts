@@ -30,10 +30,9 @@ const HttpLive = Http.router.empty.pipe(
       })))
       console.log("got files", data.files)
       return Http.response.empty()
-    })
+    }).pipe(Effect.scoped)
   ),
   Http.server.serve(Http.middleware.logger),
-  Layer.scopedDiscard,
   Layer.provide(ServerLive),
   Layer.provide(NodeContext.layer)
 )

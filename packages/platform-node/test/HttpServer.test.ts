@@ -64,7 +64,7 @@ describe("HttpServer", () => {
             ({ id }) => todoResponse({ id, title: "test" })
           )
         ),
-        Http.server.serve()
+        Http.server.serveEffect()
       )
       const client = yield* _(makeTodoClient)
       const todo = yield* _(client(HttpC.request.get("/todos/1")))
@@ -88,7 +88,7 @@ describe("HttpServer", () => {
             return yield* _(Http.response.json({ ok: "file" in formData }))
           }).pipe(Effect.scoped)
         ),
-        Http.server.serve()
+        Http.server.serveEffect()
       )
       const client = yield* _(makeClient)
       const formData = new FormData()
@@ -117,7 +117,7 @@ describe("HttpServer", () => {
           }).pipe(Effect.scoped)
         ),
         Effect.tapErrorCause(Effect.logError),
-        Http.server.serve()
+        Http.server.serveEffect()
       )
       const client = yield* _(makeClient)
       const formData = new FormData()
@@ -145,7 +145,7 @@ describe("HttpServer", () => {
           error.reason === "FileTooLarge" ?
             Http.response.empty({ status: 413 }) :
             Effect.fail(error)),
-        Http.server.serve(),
+        Http.server.serveEffect(),
         Http.formData.withMaxFileSize(Option.some(100))
       )
       const client = yield* _(makeClient)
@@ -174,7 +174,7 @@ describe("HttpServer", () => {
           error.reason === "FieldTooLarge" ?
             Http.response.empty({ status: 413 }) :
             Effect.fail(error)),
-        Http.server.serve(),
+        Http.server.serveEffect(),
         Http.formData.withMaxFieldSize(100)
       )
       const client = yield* _(makeClient)
@@ -196,7 +196,7 @@ describe("HttpServer", () => {
       yield* _(
         Http.router.empty,
         Http.router.mount("/child", child),
-        Http.server.serve()
+        Http.server.serveEffect()
       )
       const client = yield* _(makeClient)
       const todo = yield* _(client(HttpC.request.get("/child/1")), Effect.flatMap((_) => _.text))
@@ -214,7 +214,7 @@ describe("HttpServer", () => {
       yield* _(
         Http.router.empty,
         Http.router.mountApp("/child", child),
-        Http.server.serve()
+        Http.server.serveEffect()
       )
       const client = yield* _(makeClient)
       const todo = yield* _(client(HttpC.request.get("/child/1")), Effect.flatMap((_) => _.text))
@@ -244,7 +244,7 @@ describe("HttpServer", () => {
           )
         ),
         Effect.tapErrorCause(Effect.logError),
-        Http.server.serve()
+        Http.server.serveEffect()
       )
       const client = yield* _(makeClient)
       const res = yield* _(client(HttpC.request.get("/")))
@@ -276,7 +276,7 @@ describe("HttpServer", () => {
               )
           })
         ),
-        Http.server.serve()
+        Http.server.serveEffect()
       )
       const client = yield* _(makeClient)
       const res = yield* _(client(HttpC.request.get("/")))
@@ -303,7 +303,7 @@ describe("HttpServer", () => {
             ({ id, title }) => todoResponse({ id, title })
           )
         ),
-        Http.server.serve()
+        Http.server.serveEffect()
       )
       const client = yield* _(makeTodoClient)
       const todo = yield* _(
@@ -329,7 +329,7 @@ describe("HttpServer", () => {
           )
         ),
         Http.router.catchTag("ParseError", (error) => Http.response.unsafeJson({ error }, { status: 400 })),
-        Http.server.serve()
+        Http.server.serveEffect()
       )
       const client = yield* _(makeClient)
       const response = yield* _(
@@ -350,7 +350,7 @@ describe("HttpServer", () => {
             (_) => Http.response.json({ spanId: _.spanId, parent: _.parent })
           )
         ),
-        Http.server.serve()
+        Http.server.serveEffect()
       )
       const client = yield* _(makeClient)
       const requestSpan = yield* _(Effect.makeSpan("client request"))

@@ -3,6 +3,7 @@
  */
 import type * as Context from "effect/Context"
 import type * as Effect from "effect/Effect"
+import type * as Layer from "effect/Layer"
 import type * as Scope from "effect/Scope"
 import * as internal from "../internal/http/server.js"
 import type * as App from "./App.js"
@@ -103,31 +104,41 @@ export const make: (
  * @category accessors
  */
 export const serve: {
+  (): <R, E>(httpApp: App.Default<R, E>) => Layer.Layer<Server | Exclude<R, ServerRequest.ServerRequest>, never, never>
+  <R, E, App extends App.Default<any, any>>(
+    middleware: Middleware.Middleware.Applied<R, E, App>
+  ): (
+    httpApp: App.Default<R, E>
+  ) => Layer.Layer<Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>, never, never>
+  <R, E>(httpApp: App.Default<R, E>): Layer.Layer<Server | Exclude<R, ServerRequest.ServerRequest>, never, never>
+  <R, E, App extends App.Default<any, any>>(
+    httpApp: App.Default<R, E>,
+    middleware: Middleware.Middleware.Applied<R, E, App>
+  ): Layer.Layer<Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>, never, never>
+} = internal.serve
+
+/**
+ * @since 1.0.0
+ * @category accessors
+ */
+export const serveEffect: {
   (): <R, E>(
     httpApp: App.Default<R, E>
-  ) => Effect.Effect<
-    Server | Scope.Scope | Exclude<R, ServerRequest.ServerRequest>,
-    never,
-    void
-  >
+  ) => Effect.Effect<Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>, never, void>
   <R, E, App extends App.Default<any, any>>(
     middleware: Middleware.Middleware.Applied<R, E, App>
   ): (
     httpApp: App.Default<R, E>
   ) => Effect.Effect<
-    Server | Scope.Scope | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>,
+    Scope.Scope | Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>,
     never,
     void
   >
   <R, E>(
     httpApp: App.Default<R, E>
-  ): Effect.Effect<Server | Scope.Scope | Exclude<R, ServerRequest.ServerRequest>, never, void>
+  ): Effect.Effect<Scope.Scope | Server | Exclude<R, ServerRequest.ServerRequest>, never, void>
   <R, E, App extends App.Default<any, any>>(
     httpApp: App.Default<R, E>,
     middleware: Middleware.Middleware.Applied<R, E, App>
-  ): Effect.Effect<
-    Server | Scope.Scope | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>,
-    never,
-    void
-  >
-} = internal.serve
+  ): Effect.Effect<Scope.Scope | Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>, never, void>
+} = internal.serveEffect
