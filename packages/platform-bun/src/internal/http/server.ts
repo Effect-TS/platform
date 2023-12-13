@@ -72,12 +72,10 @@ export const make = (
               }
               handlerStack.push(handler)
               server.reload({ fetch: handler } as ServeOptions)
-            })
-          ),
-          Effect.ensuring(
-            Effect.sync(() => {
-              handlerStack.pop()
-              server.reload({ fetch: handlerStack[handlerStack.length - 1] } as ServeOptions)
+              return Effect.sync(() => {
+                handlerStack.pop()
+                server.reload({ fetch: handlerStack[handlerStack.length - 1] } as ServeOptions)
+              })
             })
           ),
           Effect.forkScoped,
