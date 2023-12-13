@@ -12,11 +12,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "moduleResolution": "NodeNext",
-    "lib": [
-      "ES2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "isolatedModules": true,
     "sourceMap": true,
     "declarationMap": true,
@@ -25,7 +21,7 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "noEmitOnError": false,
-    "noErrorTruncation": false,
+    "noErrorTruncation": true,
     "allowJs": false,
     "checkJs": false,
     "forceConsistentCasingInFileNames": true,
@@ -39,30 +35,16 @@
     "incremental": true,
     "removeComments": false,
     "paths": {
-      "@effect/platform/test/*": [
-        "./packages/platform/test/*.js"
-      ],
-      "@effect/platform/*": [
-        "./packages/platform/src/*.js"
-      ],
-      "@effect/platform-bun/test/*": [
-        "./packages/platform-bun/test/*.js"
-      ],
-      "@effect/platform-bun/*": [
-        "./packages/platform-bun/src/*.js"
-      ],
+      "@effect/platform/test/*": ["./packages/platform/test/*.js"],
+      "@effect/platform/*": ["./packages/platform/src/*.js"],
+      "@effect/platform-bun/test/*": ["./packages/platform-bun/test/*.js"],
+      "@effect/platform-bun/*": ["./packages/platform-bun/src/*.js"],
       "@effect/platform-browser/test/*": [
         "./packages/platform-browser/test/*.js"
       ],
-      "@effect/platform-browser/*": [
-        "./packages/platform-browser/src/*.js"
-      ],
-      "@effect/platform-node/test/*": [
-        "./packages/platform-node/test/*.js"
-      ],
-      "@effect/platform-node/*": [
-        "./packages/platform-node/src/*.js"
-      ]
+      "@effect/platform-browser/*": ["./packages/platform-browser/src/*.js"],
+      "@effect/platform-node/test/*": ["./packages/platform-node/test/*.js"],
+      "@effect/platform-node/*": ["./packages/platform-node/src/*.js"]
     },
     "plugins": [
       {
