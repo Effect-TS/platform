@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@changesets/assemble-release-plan@6.0.0':
+    hash: efefrufcathrfopd2z6l62idva
+    path: patches/@changesets__assemble-release-plan@6.0.0.patch
+
 importers:
 
   .:
@@ -98,9 +103,9 @@ importers:
 
   packages/platform:
     dependencies:
-      find-my-way:
-        specifier: ^7.7.0
-        version: 7.7.0
+      find-my-way-ts:
+        specifier: ^0.1.0
+        version: 0.1.0
       multipasta:
         specifier: ^0.1.19
         version: 0.1.19
@@ -545,7 +550,7 @@ packages:
       semver: 7.5.4
     dev: true
 
-  /@changesets/assemble-release-plan@6.0.0:
+  /@changesets/assemble-release-plan@6.0.0(patch_hash=efefrufcathrfopd2z6l62idva):
     resolution: {integrity: sha512-4QG7NuisAjisbW4hkLCmGW2lRYdPrKzro+fCtZaILX+3zdUELSvYjpL4GTv0E4aM9Mef3PuIQp89VmHJ4y2bfw==}
     dependencies:
       '@babel/runtime': 7.23.5
@@ -555,6 +560,7 @@ packages:
       '@manypkg/get-packages': 1.1.3
       semver: 7.5.4
     dev: true
+    patched: true
 
   /@changesets/changelog-git@0.2.0:
     resolution: {integrity: sha512-bHOx97iFI4OClIT35Lok3sJAwM31VbUM++gnMBV16fdbtBhgYu4dxsphBF/0AZZsyAHMrnM0yFcj5gZM1py6uQ==}
@@ -578,7 +584,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.5
       '@changesets/apply-release-plan': 7.0.0
-      '@changesets/assemble-release-plan': 6.0.0
+      '@changesets/assemble-release-plan': 6.0.0(patch_hash=efefrufcathrfopd2z6l62idva)
       '@changesets/changelog-git': 0.2.0
       '@changesets/config': 3.0.0
       '@changesets/errors': 0.2.0
@@ -651,7 +657,7 @@ packages:
     resolution: {integrity: sha512-9L9xCUeD/Tb6L/oKmpm8nyzsOzhdNBBbt/ZNcjynbHC07WW4E1eX8NMGC5g5SbM5z/V+MOrYsJ4lRW41GCbg3w==}
     dependencies:
       '@babel/runtime': 7.23.5
-      '@changesets/assemble-release-plan': 6.0.0
+      '@changesets/assemble-release-plan': 6.0.0(patch_hash=efefrufcathrfopd2z6l62idva)
       '@changesets/config': 3.0.0
       '@changesets/pre': 2.0.0
       '@changesets/read': 0.6.0
@@ -3355,6 +3361,7 @@ packages:
 
   /fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
+    dev: true
 
   /fast-glob@3.3.2:
     resolution: {integrity: sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow==}
@@ -3435,13 +3442,10 @@ packages:
       to-regex-range: 5.0.1
     dev: true
 
-  /find-my-way@7.7.0:
-    resolution: {integrity: sha512-+SrHpvQ52Q6W9f3wJoJBbAQULJuNEEQwBvlvYwACDhBTLOTMiQ0HYWh4+vC3OivGP2ENcTI1oKlFA2OepJNjhQ==}
-    engines: {node: '>=14'}
+  /find-my-way-ts@0.1.0:
+    resolution: {integrity: sha512-7Zr/qrKyASGZ0Qrr8PiWFnSKVEAjPdipAXOxGczb7d6VfzpoiGc21VrS5cpg1QR5cQH5stxITsV9aB+f2TQ/XQ==}
     dependencies:
-      fast-deep-equal: 3.1.3
       fast-querystring: 1.1.2
-      safe-regex2: 2.0.0
     dev: false
 
   /find-up@4.1.0:
@@ -5466,11 +5470,6 @@ packages:
       signal-exit: 3.0.7
     dev: true
 
-  /ret@0.2.2:
-    resolution: {integrity: sha512-M0b3YWQs7R3Z917WRQy1HHA7Ba7D8hvZg6UE5mLykJxQVE2ju0IXbGlaHPPlkY+WN7wFP+wUMXmBFA0aV6vYGQ==}
-    engines: {node: '>=4'}
-    dev: false
-
   /reusify@1.0.4:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
@@ -5535,12 +5534,6 @@ packages:
       get-intrinsic: 1.2.2
       is-regex: 1.1.4
     dev: true
-
-  /safe-regex2@2.0.0:
-    resolution: {integrity: sha512-PaUSFsUaNNuKwkBijoAPHAK6/eM6VirvyPWlZ7BAQy4D+hCvh4B6lIG+nPdhbFfIbP+gTGBcrdsOaUs0F+ZBOQ==}
-    dependencies:
-      ret: 0.2.2
-    dev: false
 
   /safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
