@@ -1,5 +1,6 @@
 import * as Schema from "@effect/schema/Schema"
 import * as Serializable from "@effect/schema/Serializable"
+import { Layer } from "effect"
 import * as Cause from "effect/Cause"
 import * as Context from "effect/Context"
 import * as Effect from "effect/Effect"
@@ -35,7 +36,7 @@ export const make = <I, R, E, O>(
     const backing = yield* _(platform.start<Worker.Worker.Request<I>, Worker.Worker.Response<E>>())
     const fiberMap = new Map<number, Fiber.Fiber<never, void>>()
 
-    const handleRequests = pipe(
+    yield* _(
       Queue.take(backing.queue),
       Effect.tap((req) => {
         const id = req[0]
@@ -104,16 +105,17 @@ export const make = <I, R, E, O>(
           Effect.tap((fiber) => Effect.sync(() => fiberMap.set(id, fiber)))
         )
       }),
-      Effect.forever
-    )
-
-    return yield* _(
-      Effect.all([
-        handleRequests,
-        Fiber.join(backing.fiber)
-      ], { concurrency: "unbounded", discard: true }) as Effect.Effect<R, WorkerError.WorkerError, never>
+      Effect.forever,
+      Effect.forkScoped
     )
   })
+
+/** @internal */
+export const layer = <I, R, E, O>(
+  process: (request: I) => Stream.Stream<R, E, O> | Effect.Effect<R, E, O>,
+  options?: WorkerRunner.Runner.Options<E, O>
+): Layer.Layer<WorkerRunner.PlatformRunner | R, WorkerError.WorkerError, never> =>
+  Layer.scopedDiscard(make(process, options))
 
 /** @internal */
 export const makeSerialized = <
@@ -133,7 +135,7 @@ export const makeSerialized = <
   | Scope.Scope
   | (ReturnType<Handlers[keyof Handlers]> extends Stream.Stream<infer R, infer _E, infer _A> ? R : never),
   WorkerError.WorkerError,
-  never
+  void
 > => {
   const parseRequest = Schema.decode(schema)
   const effectTags = new Set<string>()
@@ -178,3 +180,23 @@ export const makeSerialized = <
     }
   })
 }
+
+/** @internal */
+export const layerSerialized = <
+  I,
+  A extends Schema.TaggedRequest.Any,
+  const Handlers extends {
+    readonly [K in A["_tag"]]: Extract<A, { readonly _tag: K }> extends
+      Serializable.SerializableWithResult<infer _IS, infer S, infer _IE, infer E, infer _IO, infer O>
+      ? (_: S) => Stream.Stream<any, E, O> | Effect.Effect<any, E, O> :
+      never
+  }
+>(
+  schema: Schema.Schema<I, A>,
+  handlers: Handlers
+): Layer.Layer<
+  | WorkerRunner.PlatformRunner
+  | (ReturnType<Handlers[keyof Handlers]> extends Stream.Stream<infer R, infer _E, infer _A> ? R : never),
+  WorkerError.WorkerError,
+  never
+> => Layer.scopedDiscard(makeSerialized(schema, handlers))

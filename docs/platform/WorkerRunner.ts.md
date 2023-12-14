@@ -15,6 +15,9 @@ Added in v1.0.0
 - [constructors](#constructors)
   - [make](#make)
   - [makeSerialized](#makeserialized)
+- [layers](#layers)
+  - [layer](#layer)
+  - [layerSerialized](#layerserialized)
 - [models](#models)
   - [BackingRunner (interface)](#backingrunner-interface)
   - [BackingRunner (namespace)](#backingrunner-namespace)
@@ -40,7 +43,7 @@ Added in v1.0.0
 export declare const make: <I, R, E, O>(
   process: (request: I) => Stream.Stream<R, E, O> | Effect.Effect<R, E, O>,
   options?: Runner.Options<E, O> | undefined
-) => Effect.Effect<PlatformRunner | R | Scope.Scope, WorkerError, never>
+) => Effect.Effect<PlatformRunner | R | Scope.Scope, WorkerError, void>
 ```
 
 Added in v1.0.0
@@ -53,7 +56,7 @@ Added in v1.0.0
 export declare const makeSerialized: <
   I,
   A extends Schema.TaggedRequest.Any,
-  Handlers extends {
+  const Handlers extends {
     readonly [K in A["_tag"]]: Extract<A, { readonly _tag: K }> extends Serializable.SerializableWithResult<
       infer _IS,
       infer S,
@@ -73,6 +76,54 @@ export declare const makeSerialized: <
   | Scope.Scope
   | (ReturnType<Handlers[keyof Handlers]> extends Stream.Stream<infer R, infer _E, infer _A> ? R : never),
   WorkerError,
+  void
+>
+```
+
+Added in v1.0.0
+
+# layers
+
+## layer
+
+**Signature**
+
+```ts
+export declare const layer: <I, R, E, O>(
+  process: (request: I) => Stream.Stream<R, E, O> | Effect.Effect<R, E, O>,
+  options?: Runner.Options<E, O> | undefined
+) => Layer.Layer<PlatformRunner | R, WorkerError, never>
+```
+
+Added in v1.0.0
+
+## layerSerialized
+
+**Signature**
+
+```ts
+export declare const layerSerialized: <
+  I,
+  A extends Schema.TaggedRequest.Any,
+  const Handlers extends {
+    readonly [K in A["_tag"]]: Extract<A, { readonly _tag: K }> extends Serializable.SerializableWithResult<
+      infer _IS,
+      infer S,
+      infer _IE,
+      infer E,
+      infer _IO,
+      infer O
+    >
+      ? (_: S) => Stream.Stream<any, E, O> | Effect.Effect<any, E, O>
+      : never
+  }
+>(
+  schema: Schema.Schema<I, A>,
+  handlers: Handlers
+) => Layer.Layer<
+  | PlatformRunner
+  | (ReturnType<Handlers[keyof Handlers]> extends Stream.Stream<infer R, infer _E, infer _A> ? R : never),
+  WorkerError,
   never
 >
 ```
@@ -87,7 +138,6 @@ Added in v1.0.0
 
 ```ts
 export interface BackingRunner<I, O> {
-  readonly fiber: Fiber.Fiber<WorkerError, never>
   readonly queue: Queue.Dequeue<I>
   readonly send: (message: O, transfers?: ReadonlyArray<unknown>) => Effect.Effect<never, never, void>
 }

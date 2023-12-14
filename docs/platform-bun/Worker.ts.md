@@ -36,7 +36,7 @@ Also includes exports from [`@effect/platform/Worker`](https://effect-ts.github.
 ```ts
 export declare const makePool: <I, E, O>(
   options: Worker.WorkerPool.Options<I, Worker>
-) => Effect.Effect<Scope.Scope | Worker.WorkerManager, never, Worker.WorkerPool<I, E, O>>
+) => Effect.Effect<Worker.WorkerManager | Scope.Scope, never, Worker.WorkerPool<I, E, O>>
 ```
 
 Added in v1.0.0
@@ -61,7 +61,7 @@ Added in v1.0.0
 ```ts
 export declare const makePoolSerialized: <I extends Schema.TaggedRequest.Any>(
   options: Worker.SerializedWorkerPool.Options<I, Worker>
-) => Effect.Effect<Scope.Scope | Worker.WorkerManager, never, Worker.SerializedWorkerPool<I>>
+) => Effect.Effect<Worker.WorkerManager | Scope.Scope, never, Worker.SerializedWorkerPool<I>>
 ```
 
 Added in v1.0.0
