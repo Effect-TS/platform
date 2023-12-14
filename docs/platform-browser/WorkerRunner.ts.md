@@ -33,7 +33,7 @@ Also includes exports from [`@effect/platform/WorkerRunner`](https://effect-ts.g
 ```ts
 export declare const make: <I, R, E, O>(
   process: (request: I) => Stream.Stream<R, E, O>,
-  options?: Runner.Runner.Options<O> | undefined
+  options?: Runner.Runner.Options<E, O> | undefined
 ) => Effect.Effect<R | Scope.Scope, WorkerError, void>
 ```
 

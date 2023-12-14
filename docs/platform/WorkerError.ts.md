@@ -29,7 +29,7 @@ Added in v1.0.0
 
 ```ts
 export declare const WorkerError: (
-  reason: "spawn" | "decode" | "send" | "unknown",
+  reason: "spawn" | "decode" | "send" | "unknown" | "encode",
   error: unknown,
   stack?: string
 ) => WorkerError
@@ -45,7 +45,7 @@ Added in v1.0.0
 export interface WorkerError extends Data.Case {
   readonly [WorkerErrorTypeId]: WorkerErrorTypeId
   readonly _tag: "WorkerError"
-  readonly reason: "spawn" | "decode" | "send" | "unknown"
+  readonly reason: "spawn" | "decode" | "send" | "unknown" | "encode"
   readonly error: unknown
   readonly stack?: string
 }

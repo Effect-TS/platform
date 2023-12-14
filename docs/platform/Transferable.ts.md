@@ -16,6 +16,11 @@ Added in v1.0.0
   - [get](#get)
 - [models](#models)
   - [Transferable (interface)](#transferable-interface)
+- [predicates](#predicates)
+  - [isTransferable](#istransferable)
+- [schema](#schema)
+  - [schema](#schema-1)
+  - [schemaFromSelf](#schemafromself)
 - [symbols](#symbols)
   - [symbol](#symbol)
 
@@ -43,6 +48,50 @@ Added in v1.0.0
 export interface Transferable {
   readonly [symbol]: () => ReadonlyArray<globalThis.Transferable>
 }
+```
+
+Added in v1.0.0
+
+# predicates
+
+## isTransferable
+
+**Signature**
+
+```ts
+export declare const isTransferable: (u: unknown) => u is Transferable
+```
+
+Added in v1.0.0
+
+# schema
+
+## schema
+
+**Signature**
+
+```ts
+export declare const schema: {
+  <A>(
+    f: (_: A) => ReadonlyArray<globalThis.Transferable>
+  ): <I>(self: Schema.Schema<I, A>) => Schema.Schema<I, A & Transferable>
+  <I, A>(
+    self: Schema.Schema<I, A>,
+    f: (_: A) => ReadonlyArray<globalThis.Transferable>
+  ): Schema.Schema<I, A & Transferable>
+}
+```
+
+Added in v1.0.0
+
+## schemaFromSelf
+
+**Signature**
+
+```ts
+export declare const schemaFromSelf: <I, A>(
+  item: Schema.Schema<I, A>
+) => Schema.Schema<I & Transferable, A & Transferable>
 ```
 
 Added in v1.0.0
