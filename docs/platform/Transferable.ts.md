@@ -71,13 +71,15 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const schema: (<A>(
-  f: (_: A) => ReadonlyArray<globalThis.Transferable>
-) => <I>(self: Schema.Schema<I, A>) => Schema.Schema<I, A & Transferable>) &
-  (<I, A>(
+export declare const schema: {
+  <A>(
+    f: (_: A) => ReadonlyArray<globalThis.Transferable>
+  ): <I>(self: Schema.Schema<I, A>) => Schema.Schema<I, A & Transferable>
+  <I, A>(
     self: Schema.Schema<I, A>,
     f: (_: A) => ReadonlyArray<globalThis.Transferable>
-  ) => Schema.Schema<I, A & Transferable>)
+  ): Schema.Schema<I, A & Transferable>
+}
 ```
 
 Added in v1.0.0

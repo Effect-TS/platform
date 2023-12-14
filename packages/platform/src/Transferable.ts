@@ -42,7 +42,15 @@ export const get = (u: unknown): ReadonlyArray<globalThis.Transferable> => {
  * @since 1.0.0
  * @category schema
  */
-export const schema = dual<
+export const schema: {
+  <A>(
+    f: (_: A) => ReadonlyArray<globalThis.Transferable>
+  ): <I>(self: Schema.Schema<I, A>) => Schema.Schema<I, A & Transferable>
+  <I, A>(
+    self: Schema.Schema<I, A>,
+    f: (_: A) => ReadonlyArray<globalThis.Transferable>
+  ): Schema.Schema<I, A & Transferable>
+} = dual<
   <A>(
     f: (_: A) => ReadonlyArray<globalThis.Transferable>
   ) => <I>(self: Schema.Schema<I, A>) => Schema.Schema<I, A & Transferable>,
