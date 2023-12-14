@@ -125,11 +125,10 @@ importers:
     publishDirectory: dist
 
   packages/platform-browser:
-    dependencies:
+    devDependencies:
       '@effect/platform':
         specifier: workspace:*
         version: link:../platform/dist
-    devDependencies:
       '@effect/schema':
         specifier: ^0.53.1
         version: 0.53.1(effect@2.0.0-next.60)(fast-check@3.14.0)
@@ -142,14 +141,13 @@ importers:
     publishDirectory: dist
 
   packages/platform-bun:
-    dependencies:
+    devDependencies:
       '@effect/platform':
         specifier: workspace:*
         version: link:../platform/dist
       '@effect/platform-node':
         specifier: workspace:*
         version: link:../platform-node/dist
-    devDependencies:
       '@effect/schema':
         specifier: ^0.53.1
         version: 0.53.1(effect@2.0.0-next.60)(fast-check@3.14.0)
@@ -163,9 +161,6 @@ importers:
 
   packages/platform-node:
     dependencies:
-      '@effect/platform':
-        specifier: workspace:*
-        version: link:../platform/dist
       mime:
         specifier: ^3.0.0
         version: 3.0.0
@@ -173,6 +168,9 @@ importers:
         specifier: ^0.1.19
         version: 0.1.19
     devDependencies:
+      '@effect/platform':
+        specifier: workspace:*
+        version: link:../platform/dist
       '@effect/schema':
         specifier: ^0.53.1
         version: 0.53.1(effect@2.0.0-next.60)(fast-check@3.14.0)
