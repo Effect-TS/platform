@@ -17,3 +17,10 @@ export class Person extends Schema.Class<Person>()({
 export class GetPersonById extends Schema.TaggedRequest<GetPersonById>()("GetPersonById", Schema.never, Person, {
   id: Schema.number
 }) {}
+
+export class SetName extends Schema.TaggedRequest<SetName>()("SetName", Schema.never, Schema.void, {
+  name: Schema.string
+}) {}
+
+export type WorkerMessage = GetUserById | GetPersonById | SetName
+export const WorkerMessage = Schema.union(GetUserById, GetPersonById, SetName)

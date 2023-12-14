@@ -222,6 +222,7 @@ export interface Options<I, W = unknown> {
   readonly spawn: (id: number) => W
   readonly permits?: number
   readonly queue?: WorkerQueue<I>
+  readonly initialMessage?: LazyArg<I>
 }
 ```
 
@@ -306,10 +307,11 @@ Added in v1.0.0
 ```ts
 export interface Options<I, W = unknown> {
   readonly spawn: (id: number) => W
-  readonly encode?: (message: I) => unknown
+  readonly encode?: (message: I) => Effect.Effect<never, WorkerError, unknown>
   readonly transfers?: (message: I) => ReadonlyArray<unknown>
   readonly permits?: number
   readonly queue?: WorkerQueue<I>
+  readonly initialMessage?: LazyArg<I>
 }
 ```
 
