@@ -46,12 +46,12 @@ const platformRunnerImpl = Runner.PlatformRunner.of({
             port.removeEventListener("error", onError as any)
           })
         }),
-        Effect.catchAllCause(Effect.logDebug),
+        Effect.ignoreLogged,
+        Effect.forever,
         Effect.annotateLogs({
           package: "@effect/platform-browser",
           module: "WorkerRunner"
         }),
-        Effect.forever,
         Effect.forkScoped
       )
       const send = (message: O, transfer?: ReadonlyArray<unknown>) =>

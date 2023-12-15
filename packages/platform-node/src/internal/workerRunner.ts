@@ -33,12 +33,12 @@ const platformRunnerImpl = Runner.PlatformRunner.of({
             resume(Effect.fail(WorkerError("unknown", error.message, error.stack)))
           })
         }),
-        Effect.catchAllCause(Effect.logDebug),
+        Effect.ignoreLogged,
+        Effect.forever,
         Effect.annotateLogs({
           package: "@effect/platform-node",
           module: "WorkerRunner"
         }),
-        Effect.forever,
         Effect.forkScoped
       )
       const send = (message: O, transfers?: ReadonlyArray<unknown>) =>

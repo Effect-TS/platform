@@ -193,7 +193,6 @@ Added in v1.0.0
 ```ts
 export interface SerializedWorker<I extends Schema.TaggedRequest.Any> {
   readonly id: number
-  readonly join: Effect.Effect<never, WorkerError, never>
   readonly execute: <Req extends I>(
     message: Req
   ) => Req extends Serializable.WithResult<infer _IE, infer E, infer _IA, infer A>
@@ -288,7 +287,6 @@ Added in v1.0.0
 ```ts
 export interface Worker<I, E, O> {
   readonly id: number
-  readonly join: Effect.Effect<never, WorkerError, never>
   readonly execute: (message: I) => Stream.Stream<never, E | WorkerError, O>
   readonly executeEffect: (message: I) => Effect.Effect<never, E | WorkerError, O>
 }
@@ -333,9 +331,9 @@ Added in v1.0.0
 
 ```ts
 export type Response<E, O = unknown> =
-  | readonly [id: number, data: 0, O]
+  | readonly [id: number, data: 0, ReadonlyArray<O>]
   | readonly [id: number, end: 1]
-  | readonly [id: number, end: 1, O]
+  | readonly [id: number, end: 1, ReadonlyArray<O>]
   | readonly [id: number, error: 2, E]
   | readonly [id: number, defect: 3, unknown]
 ```

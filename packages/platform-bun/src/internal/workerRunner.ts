@@ -38,7 +38,8 @@ const platformRunnerImpl = Runner.PlatformRunner.of({
             port.removeEventListener("error", onError)
           })
         }),
-        Effect.catchAllCause(Effect.logDebug),
+        Effect.ignoreLogged,
+        Effect.forever,
         Effect.annotateLogs({
           package: "@effect/platform-bun",
           module: "WorkerRunner"
