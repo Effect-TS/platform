@@ -3,6 +3,7 @@ import { WorkerError } from "@effect/platform/WorkerError"
 import * as Runner from "@effect/platform/WorkerRunner"
 import type * as Schema from "@effect/schema/Schema"
 import type * as Serializable from "@effect/schema/Serializable"
+import * as Cause from "effect/Cause"
 import * as Effect from "effect/Effect"
 import * as Layer from "effect/Layer"
 import * as Queue from "effect/Queue"
@@ -34,8 +35,8 @@ const platformRunnerImpl = Runner.PlatformRunner.of({
             resume(Effect.fail(WorkerError("unknown", error.message, error.stack)))
           })
         }),
-        Effect.ignoreLogged,
-        Effect.forever,
+        Effect.tapErrorCause((cause) => Cause.isInterruptedOnly(cause) ? Effect.unit : Effect.logDebug(cause)),
+        Effect.retryWhile(() => true),
         Effect.annotateLogs({
           package: "@effect/platform-node",
           module: "WorkerRunner"
