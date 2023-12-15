@@ -19,6 +19,8 @@ Added in v1.0.0
   - [runMain](#runmain-1)
 - [teardown](#teardown-1)
   - [defaultTeardown](#defaultteardown)
+- [utils](#utils)
+  - [interruptAll](#interruptall)
 
 ---
 
@@ -64,6 +66,18 @@ Added in v1.0.0
 
 ```ts
 export declare const defaultTeardown: Teardown
+```
+
+Added in v1.0.0
+
+# utils
+
+## interruptAll
+
+**Signature**
+
+```ts
+export declare const interruptAll: (id: FiberId) => Effect<never, never, void>
 ```
 
 Added in v1.0.0
