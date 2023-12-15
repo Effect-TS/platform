@@ -17,6 +17,8 @@ Added in v1.0.0
   - [Teardown (interface)](#teardown-interface)
 - [teardown](#teardown)
   - [defaultTeardown](#defaultteardown)
+- [utils](#utils)
+  - [interruptAll](#interruptall)
 
 ---
 
@@ -28,7 +30,7 @@ Added in v1.0.0
 
 ```ts
 export interface RunMain {
-  <E, A>(effect: Effect<never, E, A>, teardown?: Teardown): void
+  <E, A>(effect: Effect.Effect<never, E, A>, teardown?: Teardown): void
 }
 ```
 
@@ -54,6 +56,18 @@ Added in v1.0.0
 
 ```ts
 export declare const defaultTeardown: Teardown
+```
+
+Added in v1.0.0
+
+# utils
+
+## interruptAll
+
+**Signature**
+
+```ts
+export declare const interruptAll: (id: FiberId.FiberId) => Effect.Effect<never, never, void>
 ```
 
 Added in v1.0.0

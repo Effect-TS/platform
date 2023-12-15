@@ -1,3 +1,4 @@
+import * as Runtime from "@effect/platform/Runtime"
 import { WorkerError } from "@effect/platform/WorkerError"
 import * as Runner from "@effect/platform/WorkerRunner"
 import type * as Schema from "@effect/schema/Schema"
@@ -25,7 +26,7 @@ const platformRunnerImpl = Runner.PlatformRunner.of({
             if (message[0] === 0) {
               queue.unsafeOffer(message[1])
             } else {
-              Effect.runFork(Queue.shutdown(queue))
+              Effect.runFork(Effect.flatMap(Effect.fiberId, Runtime.interruptAll))
             }
           }
           function onError(error: ErrorEvent) {
