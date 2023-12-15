@@ -46,7 +46,7 @@ Added in v1.0.0
 ```ts
 export declare const layer: <I, R, E, O>(
   process: (request: I) => Stream.Stream<R, E, O>,
-  options?: Runner.Runner.Options<E, O> | undefined
+  options?: Runner.Runner.Options<I, E, O> | undefined
 ) => Layer.Layer<R, WorkerError, never>
 ```
 

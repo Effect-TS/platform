@@ -42,7 +42,7 @@ Added in v1.0.0
 ```ts
 export declare const make: <I, R, E, O>(
   process: (request: I) => Stream.Stream<R, E, O> | Effect.Effect<R, E, O>,
-  options?: Runner.Options<E, O> | undefined
+  options?: Runner.Options<I, E, O> | undefined
 ) => Effect.Effect<PlatformRunner | R | Scope.Scope, WorkerError, void>
 ```
 
@@ -91,7 +91,7 @@ Added in v1.0.0
 ```ts
 export declare const layer: <I, R, E, O>(
   process: (request: I) => Stream.Stream<R, E, O> | Effect.Effect<R, E, O>,
-  options?: Runner.Options<E, O> | undefined
+  options?: Runner.Options<I, E, O> | undefined
 ) => Layer.Layer<PlatformRunner | R, WorkerError, never>
 ```
 
@@ -181,9 +181,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface Options<E, O> {
-  readonly encodeOutput?: (message: O) => Effect.Effect<never, WorkerError, unknown>
-  readonly encodeError?: (message: E) => Effect.Effect<never, WorkerError, unknown>
+export interface Options<I, E, O> {
+  readonly decode?: (message: unknown) => Effect.Effect<never, WorkerError, I>
+  readonly encodeOutput?: (request: I, message: O) => Effect.Effect<never, WorkerError, unknown>
+  readonly encodeError?: (request: I, error: E) => Effect.Effect<never, WorkerError, unknown>
   readonly transfers?: (message: O | E) => ReadonlyArray<unknown>
 }
 ```
