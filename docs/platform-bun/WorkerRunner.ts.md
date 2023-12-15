@@ -70,26 +70,11 @@ Added in v1.0.0
 export declare const layerSerialized: <
   I,
   A extends Schema.TaggedRequest.Any,
-  Handlers extends {
-    readonly [K in A["_tag"]]: Extract<A, { readonly _tag: K }> extends Serializable.SerializableWithResult<
-      infer _IS,
-      infer S,
-      infer _IE,
-      infer E,
-      infer _IO,
-      infer O
-    >
-      ? (_: S) => Stream.Stream<any, E, O> | Effect.Effect<any, E, O>
-      : never
-  }
+  Handlers extends Runner.SerializedRunner.Handlers<A>
 >(
   schema: Schema.Schema<I, A>,
   handlers: Handlers
-) => Layer.Layer<
-  ReturnType<Handlers[keyof Handlers]> extends Stream.Stream<infer R, infer _E, infer _A> ? R : never,
-  WorkerError,
-  never
->
+) => Layer.Layer<Runner.SerializedRunner.HandlersContext<Handlers>, WorkerError, never>
 ```
 
 Added in v1.0.0
