@@ -48,7 +48,7 @@ export const make = (impl: {
             const end = options?.bytesToRead !== undefined ? start + Number(options.bytesToRead) : undefined
             const headers = Headers.set(options?.headers ?? Headers.empty, "etag", Etag.toString(etag))
             if (info.mtime._tag === "Some") {
-              Headers.unsafeSet(headers, "last-modified", info.mtime.value.toUTCString())
+              ;(headers as any)["last-modified"] = info.mtime.value.toUTCString()
             }
             const contentLength = end !== undefined ? end - start : Number(info.size) - start
             return impl.fileResponse(
@@ -65,10 +65,13 @@ export const make = (impl: {
       },
       fileWebResponse(file, options) {
         return Effect.map(etagGen.fromFileWeb(file), (etag) => {
-          const headers = Headers.setAll(options?.headers ?? Headers.empty, {
-            etag: Etag.toString(etag),
-            "last-modified": new Date(file.lastModified).toUTCString()
-          })
+          const headers = Headers.merge(
+            options?.headers ?? Headers.empty,
+            Headers.unsafeFromRecord({
+              etag: Etag.toString(etag),
+              "last-modified": new Date(file.lastModified).toUTCString()
+            })
+          )
           return impl.fileWebResponse(
             file,
             options?.status ?? 200,

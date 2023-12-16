@@ -15,13 +15,14 @@ Added in v1.0.0
 - [combinators](#combinators)
   - [get](#get)
   - [has](#has)
+  - [merge](#merge)
   - [remove](#remove)
   - [set](#set)
   - [setAll](#setall)
-  - [unsafeSet](#unsafeset)
 - [constructors](#constructors)
   - [empty](#empty)
   - [fromInput](#frominput)
+  - [unsafeFromRecord](#unsafefromrecord)
 - [models](#models)
   - [Headers (type alias)](#headers-type-alias)
   - [Input (type alias)](#input-type-alias)
@@ -52,6 +53,19 @@ Added in v1.0.0
 
 ```ts
 export declare const has: { (key: string): (self: Headers) => boolean; (self: Headers, key: string): boolean }
+```
+
+Added in v1.0.0
+
+## merge
+
+**Signature**
+
+```ts
+export declare const merge: {
+  (headers: Headers): (self: Headers) => Headers
+  (self: Headers, headers: Headers): Headers
+}
 ```
 
 Added in v1.0.0
@@ -89,19 +103,6 @@ export declare const setAll: { (headers: Input): (self: Headers) => Headers; (se
 
 Added in v1.0.0
 
-## unsafeSet
-
-**Signature**
-
-```ts
-export declare const unsafeSet: {
-  (key: string, value: string): (self: Headers) => Headers
-  (self: Headers, key: string, value: string): Headers
-}
-```
-
-Added in v1.0.0
-
 # constructors
 
 ## empty
@@ -120,6 +121,16 @@ Added in v1.0.0
 
 ```ts
 export declare const fromInput: (input?: Input) => Headers
+```
+
+Added in v1.0.0
+
+## unsafeFromRecord
+
+**Signature**
+
+```ts
+export declare const unsafeFromRecord: (input: ReadonlyRecord.ReadonlyRecord<string>) => Headers
 ```
 
 Added in v1.0.0

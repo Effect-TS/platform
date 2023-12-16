@@ -29,13 +29,13 @@ export type Headers = Brand.Branded<ReadonlyRecord.ReadonlyRecord<string>, Heade
  * @since 1.0.0
  * @category models
  */
-export type Input = Headers | ReadonlyRecord.ReadonlyRecord<string> | Iterable<readonly [string, string]>
+export type Input = ReadonlyRecord.ReadonlyRecord<string> | Iterable<readonly [string, string]>
 
 /**
  * @since 1.0.0
  * @category constructors
  */
-export const empty: Headers = {} as Headers
+export const empty: Headers = Object.create(null) as Headers
 
 /**
  * @since 1.0.0
@@ -54,6 +54,12 @@ export const fromInput: (input?: Input) => Headers = (input) => {
     Object.entries(input).map(([k, v]) => [k.toLowerCase(), v])
   ) as Headers
 }
+
+/**
+ * @since 1.0.0
+ * @category constructors
+ */
+export const unsafeFromRecord = (input: ReadonlyRecord.ReadonlyRecord<string>): Headers => input as Headers
 
 /**
  * @since 1.0.0
@@ -98,21 +104,6 @@ export const set: {
  * @since 1.0.0
  * @category combinators
  */
-export const unsafeSet: {
-  (key: string, value: string): (self: Headers) => Headers
-  (self: Headers, key: string, value: string): Headers
-} = dual<
-  (key: string, value: string) => (self: Headers) => Headers,
-  (self: Headers, key: string, value: string) => Headers
->(3, (self, key, value) => {
-  ;(self as any)[key.toLowerCase()] = value
-  return self
-})
-
-/**
- * @since 1.0.0
- * @category combinators
- */
 export const setAll: {
   (headers: Input): (self: Headers) => Headers
   (self: Headers, headers: Input): Headers
@@ -122,6 +113,21 @@ export const setAll: {
 >(2, (self, headers) => ({
   ...self,
   ...fromInput(headers)
+}))
+
+/**
+ * @since 1.0.0
+ * @category combinators
+ */
+export const merge: {
+  (headers: Headers): (self: Headers) => Headers
+  (self: Headers, headers: Headers): Headers
+} = dual<
+  (headers: Headers) => (self: Headers) => Headers,
+  (self: Headers, headers: Headers) => Headers
+>(2, (self, headers) => ({
+  ...self,
+  ...headers
 }))
 
 /**
