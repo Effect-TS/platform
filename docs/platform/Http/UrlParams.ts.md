@@ -149,7 +149,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type Input = UrlParams | Readonly<Record<string, string>> | Iterable<readonly [string, string]> | URLSearchParams
+export type Input = Readonly<Record<string, string>> | Iterable<readonly [string, string]> | URLSearchParams
 ```
 
 Added in v1.0.0
@@ -159,7 +159,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface UrlParams extends Chunk.Chunk<[string, string]> {}
+export interface UrlParams extends ReadonlyArray<readonly [string, string]> {}
 ```
 
 Added in v1.0.0

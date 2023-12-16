@@ -15,15 +15,20 @@ Added in v1.0.0
 - [combinators](#combinators)
   - [get](#get)
   - [has](#has)
+  - [merge](#merge)
   - [remove](#remove)
   - [set](#set)
   - [setAll](#setall)
 - [constructors](#constructors)
   - [empty](#empty)
   - [fromInput](#frominput)
+  - [unsafeFromRecord](#unsafefromrecord)
 - [models](#models)
-  - [Headers (interface)](#headers-interface)
+  - [Headers (type alias)](#headers-type-alias)
   - [Input (type alias)](#input-type-alias)
+- [type ids](#type-ids)
+  - [HeadersTypeId](#headerstypeid)
+  - [HeadersTypeId (type alias)](#headerstypeid-type-alias)
 
 ---
 
@@ -48,6 +53,19 @@ Added in v1.0.0
 
 ```ts
 export declare const has: { (key: string): (self: Headers) => boolean; (self: Headers, key: string): boolean }
+```
+
+Added in v1.0.0
+
+## merge
+
+**Signature**
+
+```ts
+export declare const merge: {
+  (headers: Headers): (self: Headers) => Headers
+  (self: Headers, headers: Headers): Headers
+}
 ```
 
 Added in v1.0.0
@@ -107,14 +125,24 @@ export declare const fromInput: (input?: Input) => Headers
 
 Added in v1.0.0
 
-# models
-
-## Headers (interface)
+## unsafeFromRecord
 
 **Signature**
 
 ```ts
-export interface Headers extends ReadonlyRecord.ReadonlyRecord<string> {}
+export declare const unsafeFromRecord: (input: ReadonlyRecord.ReadonlyRecord<string>) => Headers
+```
+
+Added in v1.0.0
+
+# models
+
+## Headers (type alias)
+
+**Signature**
+
+```ts
+export type Headers = Brand.Branded<ReadonlyRecord.ReadonlyRecord<string>, HeadersTypeId>
 ```
 
 Added in v1.0.0
@@ -124,7 +152,29 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type Input = Headers | Iterable<readonly [string, string]>
+export type Input = ReadonlyRecord.ReadonlyRecord<string> | Iterable<readonly [string, string]>
+```
+
+Added in v1.0.0
+
+# type ids
+
+## HeadersTypeId
+
+**Signature**
+
+```ts
+export declare const HeadersTypeId: typeof HeadersTypeId
+```
+
+Added in v1.0.0
+
+## HeadersTypeId (type alias)
+
+**Signature**
+
+```ts
+export type HeadersTypeId = typeof HeadersTypeId
 ```
 
 Added in v1.0.0
