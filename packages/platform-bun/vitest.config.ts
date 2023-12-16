@@ -4,7 +4,10 @@ import { defineProject } from "vitest/config"
 
 export default defineProject({
   test: {
-    include: ["./test/**/*.test.ts"]
+    include: ["./test/**/*.test.ts"],
+    sequence: {
+      concurrent: true
+    }
   },
   resolve: {
     alias: {
