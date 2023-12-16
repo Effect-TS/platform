@@ -18,12 +18,16 @@ Added in v1.0.0
   - [remove](#remove)
   - [set](#set)
   - [setAll](#setall)
+  - [unsafeSet](#unsafeset)
 - [constructors](#constructors)
   - [empty](#empty)
   - [fromInput](#frominput)
 - [models](#models)
-  - [Headers (interface)](#headers-interface)
+  - [Headers (type alias)](#headers-type-alias)
   - [Input (type alias)](#input-type-alias)
+- [type ids](#type-ids)
+  - [HeadersTypeId](#headerstypeid)
+  - [HeadersTypeId (type alias)](#headerstypeid-type-alias)
 
 ---
 
@@ -85,6 +89,19 @@ export declare const setAll: { (headers: Input): (self: Headers) => Headers; (se
 
 Added in v1.0.0
 
+## unsafeSet
+
+**Signature**
+
+```ts
+export declare const unsafeSet: {
+  (key: string, value: string): (self: Headers) => Headers
+  (self: Headers, key: string, value: string): Headers
+}
+```
+
+Added in v1.0.0
+
 # constructors
 
 ## empty
@@ -109,12 +126,12 @@ Added in v1.0.0
 
 # models
 
-## Headers (interface)
+## Headers (type alias)
 
 **Signature**
 
 ```ts
-export interface Headers extends ReadonlyRecord.ReadonlyRecord<string> {}
+export type Headers = Brand.Branded<ReadonlyRecord.ReadonlyRecord<string>, HeadersTypeId>
 ```
 
 Added in v1.0.0
@@ -124,7 +141,29 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type Input = Headers | Iterable<readonly [string, string]>
+export type Input = Headers | ReadonlyRecord.ReadonlyRecord<string> | Iterable<readonly [string, string]>
+```
+
+Added in v1.0.0
+
+# type ids
+
+## HeadersTypeId
+
+**Signature**
+
+```ts
+export declare const HeadersTypeId: typeof HeadersTypeId
+```
+
+Added in v1.0.0
+
+## HeadersTypeId (type alias)
+
+**Signature**
+
+```ts
+export type HeadersTypeId = typeof HeadersTypeId
 ```
 
 Added in v1.0.0

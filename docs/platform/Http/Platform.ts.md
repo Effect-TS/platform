@@ -36,7 +36,7 @@ export declare const make: (impl: {
     path: string,
     status: number,
     statusText: string | undefined,
-    headers: Record<string, string>,
+    headers: Headers.Headers,
     start: number,
     end: number | undefined,
     contentLength: number
@@ -45,7 +45,7 @@ export declare const make: (impl: {
     file: Body.Body.FileLike,
     status: number,
     statusText: string | undefined,
-    headers: Record<string, string>,
+    headers: Headers.Headers,
     options?: FileSystem.StreamOptions | undefined
   ) => ServerResponse.ServerResponse
 }) => Effect.Effect<FileSystem.FileSystem | Etag.Generator, never, Platform>
