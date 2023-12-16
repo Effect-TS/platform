@@ -152,7 +152,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export type Input = Headers | ReadonlyRecord.ReadonlyRecord<string> | Iterable<readonly [string, string]>
+export type Input = ReadonlyRecord.ReadonlyRecord<string> | Iterable<readonly [string, string]>
 ```
 
 Added in v1.0.0
