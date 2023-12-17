@@ -49,7 +49,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const toWebHandler: <E>(self: Default<never, E>) => (request: Request) => Promise<Response>
+export declare const toWebHandler: <E>(self: Default<Scope.Scope, E>) => (request: Request) => Promise<Response>
 ```
 
 Added in v1.0.0
@@ -60,7 +60,7 @@ Added in v1.0.0
 
 ```ts
 export declare const toWebHandlerLayer: <R, E, RE>(
-  self: Default<R, E>,
+  self: Default<Scope.Scope | R, E>,
   layer: Layer.Layer<never, RE, R>
 ) => { readonly close: () => Promise<void>; readonly handler: (request: Request) => Promise<Response> }
 ```
@@ -74,7 +74,7 @@ Added in v1.0.0
 ```ts
 export declare const toWebHandlerRuntime: <R>(
   runtime: Runtime.Runtime<R>
-) => <E>(self: Default<R, E>) => (request: Request) => Promise<Response>
+) => <E>(self: Default<Scope.Scope | R, E>) => (request: Request) => Promise<Response>
 ```
 
 Added in v1.0.0
