@@ -13,7 +13,7 @@ import type * as Path from "@effect/platform/Path"
 import * as Cause from "effect/Cause"
 import * as Config from "effect/Config"
 import * as Effect from "effect/Effect"
-import type { LazyArg } from "effect/Function"
+import { type LazyArg } from "effect/Function"
 import * as Layer from "effect/Layer"
 import * as Option from "effect/Option"
 import * as Runtime from "effect/Runtime"
@@ -71,18 +71,15 @@ export const make = (
           port: address.port
         },
       serve: (httpApp, middleware) =>
-        Effect.asUnit(
-          Effect.acquireRelease(
-            Effect.tap(makeHandler(httpApp, middleware!), (handler) =>
-              Effect.sync(() => {
-                server.on("request", handler)
-              })),
-            (handler) =>
-              Effect.sync(() => {
-                server.off("request", handler)
-              })
-          )
-        )
+        Effect.gen(function*(_) {
+          const handler = yield* _(makeHandler(httpApp, middleware!))
+          yield* _(Effect.addFinalizer(() =>
+            Effect.sync(() => {
+              server.off("request", handler)
+            })
+          ))
+          server.on("request", handler)
+        })
     })
   }).pipe(
     Effect.locally(

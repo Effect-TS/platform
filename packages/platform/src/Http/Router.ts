@@ -3,12 +3,12 @@
  */
 import type * as ParseResult from "@effect/schema/ParseResult"
 import type * as Schema from "@effect/schema/Schema"
-import type { Scope } from "effect"
 import type * as Cause from "effect/Cause"
 import type * as Chunk from "effect/Chunk"
 import type * as Context from "effect/Context"
 import type * as Effect from "effect/Effect"
 import type * as Option from "effect/Option"
+import type * as Scope from "effect/Scope"
 import * as internal from "../internal/http/router.js"
 import type * as App from "./App.js"
 import type * as Method from "./Method.js"
