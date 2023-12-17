@@ -95,6 +95,7 @@ Added in v1.0.0
 ```ts
 export interface ServerRequest extends IncomingMessage.IncomingMessage<Error.RequestError> {
   readonly [TypeId]: TypeId
+  readonly source: unknown
   readonly url: string
   readonly originalUrl: string
   readonly method: Method
