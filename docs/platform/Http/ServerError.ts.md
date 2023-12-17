@@ -22,6 +22,8 @@ Added in v1.0.0
   - [RouteNotFound (interface)](#routenotfound-interface)
   - [ServeError](#serveerror)
   - [ServeError (interface)](#serveerror-interface)
+- [predicates](#predicates)
+  - [isServerError](#isservererror)
 - [type id](#type-id)
   - [TypeId](#typeid)
   - [TypeId (type alias)](#typeid-type-alias)
@@ -29,6 +31,8 @@ Added in v1.0.0
   - [HttpError (namespace)](#httperror-namespace)
     - [Proto (interface)](#proto-interface)
     - [ProvidedFields (type alias)](#providedfields-type-alias)
+  - [clientAbortFiberId](#clientabortfiberid)
+  - [isClientAbortCause](#isclientabortcause)
 
 ---
 
@@ -141,6 +145,18 @@ export interface ServeError extends HttpError.Proto {
 
 Added in v1.0.0
 
+# predicates
+
+## isServerError
+
+**Signature**
+
+```ts
+export declare const isServerError: (u: unknown) => u is HttpServerError
+```
+
+Added in v1.0.0
+
 # type id
 
 ## TypeId
@@ -188,6 +204,26 @@ Added in v1.0.0
 
 ```ts
 export type ProvidedFields = TypeId | "_tag" | keyof Data.Case
+```
+
+Added in v1.0.0
+
+## clientAbortFiberId
+
+**Signature**
+
+```ts
+export declare const clientAbortFiberId: FiberId.FiberId
+```
+
+Added in v1.0.0
+
+## isClientAbortCause
+
+**Signature**
+
+```ts
+export declare const isClientAbortCause: <E>(cause: Cause.Cause<E>) => boolean
 ```
 
 Added in v1.0.0
