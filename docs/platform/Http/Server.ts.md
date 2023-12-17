@@ -38,17 +38,25 @@ Added in v1.0.0
 
 ```ts
 export declare const serve: {
-  (): <R, E>(httpApp: App.Default<R, E>) => Layer.Layer<Server | Exclude<R, ServerRequest.ServerRequest>, never, never>
+  (): <R, E>(
+    httpApp: App.Default<R, E>
+  ) => Layer.Layer<Server | Exclude<R, Scope.Scope | ServerRequest.ServerRequest>, never, never>
   <R, E, App extends App.Default<any, any>>(
     middleware: Middleware.Middleware.Applied<R, E, App>
   ): (
     httpApp: App.Default<R, E>
-  ) => Layer.Layer<Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>, never, never>
-  <R, E>(httpApp: App.Default<R, E>): Layer.Layer<Server | Exclude<R, ServerRequest.ServerRequest>, never, never>
+  ) => Layer.Layer<
+    Server | Exclude<Effect.Effect.Context<App>, Scope.Scope | ServerRequest.ServerRequest>,
+    never,
+    never
+  >
+  <R, E>(
+    httpApp: App.Default<R, E>
+  ): Layer.Layer<Server | Exclude<R, Scope.Scope | ServerRequest.ServerRequest>, never, never>
   <R, E, App extends App.Default<any, any>>(
     httpApp: App.Default<R, E>,
     middleware: Middleware.Middleware.Applied<R, E, App>
-  ): Layer.Layer<Server | Exclude<Effect.Effect.Context<App>, ServerRequest.ServerRequest>, never, never>
+  ): Layer.Layer<Server | Exclude<Effect.Effect.Context<App>, Scope.Scope | ServerRequest.ServerRequest>, never, never>
 }
 ```
 
