@@ -119,7 +119,7 @@ Added in v1.0.0
 
 ```ts
 export declare const schemaNoBody: <
-  I extends { readonly status?: number | undefined; readonly headers?: Headers.Headers | undefined },
+  I extends { readonly status?: number | undefined; readonly headers?: Readonly<Record<string, string>> | undefined },
   A
 >(
   schema: Schema.Schema<I, A>
