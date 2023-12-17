@@ -102,7 +102,7 @@ Added in v1.0.0
 export declare const schemaJson: <
   I extends {
     readonly status?: number | undefined
-    readonly headers?: Headers.Headers | undefined
+    readonly headers?: Readonly<Record<string, string>> | undefined
     readonly body?: unknown
   },
   A
