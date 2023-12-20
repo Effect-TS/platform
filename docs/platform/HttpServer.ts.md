@@ -16,9 +16,9 @@ Added in v1.0.0
   - [app](#app)
   - [body](#body)
   - [error](#error)
-  - [formData](#formdata)
   - [headers](#headers)
   - [middleware](#middleware)
+  - [multipart](#multipart)
   - [request](#request)
   - [response](#response)
   - [router](#router)
@@ -67,19 +67,6 @@ Added in v1.0.0
 - Docs: [Http/ServerError](https://effect-ts.github.io/platform/platform/Http/ServerError.html)
 - Module: `@effect/platform/Http/ServerError`
 
-## formData
-
-**Signature**
-
-```ts
-export declare const formData: typeof formData
-```
-
-Added in v1.0.0
-
-- Docs: [Http/FormData](https://effect-ts.github.io/platform/platform/Http/FormData.html)
-- Module: `@effect/platform/Http/FormData`
-
 ## headers
 
 **Signature**
@@ -105,6 +92,19 @@ Added in v1.0.0
 
 - Docs: [Http/Middleware](https://effect-ts.github.io/platform/platform/Http/Middleware.html)
 - Module: `@effect/platform/Http/Middleware`
+
+## multipart
+
+**Signature**
+
+```ts
+export declare const multipart: typeof multipart
+```
+
+Added in v1.0.0
+
+- Docs: [Http/Multipart](https://effect-ts.github.io/platform/platform/Http/Multipart.html)
+- Module: `@effect/platform/Http/Multipart`
 
 ## request
 

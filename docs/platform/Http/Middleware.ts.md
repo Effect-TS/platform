@@ -1,6 +1,6 @@
 ---
 title: Http/Middleware.ts
-nav_order: 17
+nav_order: 16
 parent: "@effect/platform"
 ---
 

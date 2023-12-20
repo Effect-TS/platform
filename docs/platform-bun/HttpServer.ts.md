@@ -17,9 +17,9 @@ Added in v1.0.0
   - [body](#body)
   - [error](#error)
   - [etag](#etag)
-  - [formData](#formdata)
   - [headers](#headers)
   - [middleware](#middleware)
+  - [multipart](#multipart)
   - [request](#request)
   - [response](#response)
   - [router](#router)
@@ -82,19 +82,6 @@ Added in v1.0.0
 - Docs: [Http/Etag](https://effect-ts.github.io/platform/platform-node/Http/Etag.ts.html)
 - Module: `@effect/platform-node/Http/Etag`
 
-## formData
-
-**Signature**
-
-```ts
-export declare const formData: typeof formData
-```
-
-Added in v1.0.0
-
-- Docs: [Http/FormData](https://effect-ts.github.io/platform/platform-node/Http/FormData.ts.html)
-- Module: `@effect/platform-node/Http/FormData`
-
 ## headers
 
 **Signature**
@@ -120,6 +107,19 @@ Added in v1.0.0
 
 - Docs: [Http/Middleware](https://effect-ts.github.io/platform/platform/Http/Middleware.ts.html)
 - Module: `@effect/platform/Http/Middleware`
+
+## multipart
+
+**Signature**
+
+```ts
+export declare const multipart: typeof multipart
+```
+
+Added in v1.0.0
+
+- Docs: [Http/Multipart](https://effect-ts.github.io/platform/platform-node/Http/Multipart.ts.html)
+- Module: `@effect/platform-node/Http/Multipart`
 
 ## request
 
