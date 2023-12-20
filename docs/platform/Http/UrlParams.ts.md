@@ -15,6 +15,9 @@ Added in v1.0.0
 - [combinators](#combinators)
   - [append](#append)
   - [appendAll](#appendall)
+  - [getAll](#getall)
+  - [getFirst](#getfirst)
+  - [getLast](#getlast)
   - [remove](#remove)
   - [set](#set)
   - [setAll](#setall)
@@ -26,6 +29,8 @@ Added in v1.0.0
 - [models](#models)
   - [Input (type alias)](#input-type-alias)
   - [UrlParams (interface)](#urlparams-interface)
+- [schema](#schema)
+  - [schemaJson](#schemajson)
 
 ---
 
@@ -52,6 +57,45 @@ Added in v1.0.0
 export declare const appendAll: {
   (input: Input): (self: UrlParams) => UrlParams
   (self: UrlParams, input: Input): UrlParams
+}
+```
+
+Added in v1.0.0
+
+## getAll
+
+**Signature**
+
+```ts
+export declare const getAll: {
+  (key: string): (self: UrlParams) => ReadonlyArray<string>
+  (self: UrlParams, key: string): ReadonlyArray<string>
+}
+```
+
+Added in v1.0.0
+
+## getFirst
+
+**Signature**
+
+```ts
+export declare const getFirst: {
+  (key: string): (self: UrlParams) => Option.Option<string>
+  (self: UrlParams, key: string): Option.Option<string>
+}
+```
+
+Added in v1.0.0
+
+## getLast
+
+**Signature**
+
+```ts
+export declare const getLast: {
+  (key: string): (self: UrlParams) => Option.Option<string>
+  (self: UrlParams, key: string): Option.Option<string>
 }
 ```
 
@@ -160,6 +204,23 @@ Added in v1.0.0
 
 ```ts
 export interface UrlParams extends ReadonlyArray<readonly [string, string]> {}
+```
+
+Added in v1.0.0
+
+# schema
+
+## schemaJson
+
+**Signature**
+
+```ts
+export declare const schemaJson: <I, A>(
+  schema: Schema.Schema<I, A>
+) => {
+  (field: string): (self: UrlParams) => Effect.Effect<never, ParseResult.ParseError, A>
+  (self: UrlParams, field: string): Effect.Effect<never, ParseResult.ParseError, A>
+}
 ```
 
 Added in v1.0.0

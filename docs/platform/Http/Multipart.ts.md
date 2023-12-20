@@ -313,8 +313,8 @@ Added in v1.0.0
 export declare const schemaJson: <I, A>(
   schema: Schema.Schema<I, A>
 ) => {
-  (field: string): (persisted: Persisted) => Effect.Effect<never, MultipartError | ParseResult.ParseError, A>
-  (persisted: Persisted, field: string): Effect.Effect<never, MultipartError | ParseResult.ParseError, A>
+  (field: string): (persisted: Persisted) => Effect.Effect<never, ParseResult.ParseError, A>
+  (persisted: Persisted, field: string): Effect.Effect<never, ParseResult.ParseError, A>
 }
 ```
 

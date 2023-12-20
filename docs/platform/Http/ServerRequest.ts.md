@@ -24,9 +24,9 @@ Added in v1.0.0
   - [ServerRequest (interface)](#serverrequest-interface)
 - [schema](#schema)
   - [schemaBodyForm](#schemabodyform)
+  - [schemaBodyFormJson](#schemabodyformjson)
   - [schemaBodyJson](#schemabodyjson)
   - [schemaBodyMultipart](#schemabodymultipart)
-  - [schemaBodyMultipartJson](#schemabodymultipartjson)
   - [schemaBodyUrlParams](#schemabodyurlparams)
   - [schemaHeaders](#schemaheaders)
 - [type ids](#type-ids)
@@ -129,7 +129,25 @@ export declare const schemaBodyForm: <I extends Multipart.Persisted, A>(
   schema: Schema.Schema<I, A>
 ) => Effect.Effect<
   Scope.Scope | Path.Path | FileSystem.FileSystem | ServerRequest,
-  Multipart.MultipartError | ParseResult.ParseError | Error.RequestError,
+  ParseResult.ParseError | Multipart.MultipartError | Error.RequestError,
+  A
+>
+```
+
+Added in v1.0.0
+
+## schemaBodyFormJson
+
+**Signature**
+
+```ts
+export declare const schemaBodyFormJson: <I, A>(
+  schema: Schema.Schema<I, A>
+) => (
+  field: string
+) => Effect.Effect<
+  Scope.Scope | Path.Path | FileSystem.FileSystem | ServerRequest,
+  ParseResult.ParseError | Error.RequestError,
   A
 >
 ```
@@ -157,25 +175,7 @@ export declare const schemaBodyMultipart: <I extends Multipart.Persisted, A>(
   schema: Schema.Schema<I, A>
 ) => Effect.Effect<
   Scope.Scope | Path.Path | FileSystem.FileSystem | ServerRequest,
-  Multipart.MultipartError | ParseResult.ParseError,
-  A
->
-```
-
-Added in v1.0.0
-
-## schemaBodyMultipartJson
-
-**Signature**
-
-```ts
-export declare const schemaBodyMultipartJson: <I, A>(
-  schema: Schema.Schema<I, A>
-) => (
-  field: string
-) => Effect.Effect<
-  Scope.Scope | Path.Path | FileSystem.FileSystem | ServerRequest,
-  Multipart.MultipartError | ParseResult.ParseError | Error.RequestError,
+  ParseResult.ParseError | Multipart.MultipartError,
   A
 >
 ```
