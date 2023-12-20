@@ -13,7 +13,7 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [accessors](#accessors)
-  - [persistedFormData](#persistedformdata)
+  - [persistedMultipart](#persistedmultipart)
 - [context](#context)
   - [ServerRequest](#serverrequest)
 - [conversions](#conversions)
@@ -23,10 +23,11 @@ Added in v1.0.0
 - [models](#models)
   - [ServerRequest (interface)](#serverrequest-interface)
 - [schema](#schema)
+  - [schemaBodyForm](#schemabodyform)
   - [schemaBodyJson](#schemabodyjson)
+  - [schemaBodyMultipart](#schemabodymultipart)
+  - [schemaBodyMultipartJson](#schemabodymultipartjson)
   - [schemaBodyUrlParams](#schemabodyurlparams)
-  - [schemaFormData](#schemaformdata)
-  - [schemaFormDataJson](#schemaformdatajson)
   - [schemaHeaders](#schemaheaders)
 - [type ids](#type-ids)
   - [TypeId](#typeid)
@@ -36,14 +37,14 @@ Added in v1.0.0
 
 # accessors
 
-## persistedFormData
+## persistedMultipart
 
 **Signature**
 
 ```ts
-export declare const persistedFormData: Effect.Effect<
+export declare const persistedMultipart: Effect.Effect<
   Scope.Scope | Path.Path | FileSystem.FileSystem | ServerRequest,
-  FormData.FormDataError,
+  Multipart.MultipartError,
   unknown
 >
 ```
@@ -100,12 +101,12 @@ export interface ServerRequest extends IncomingMessage.IncomingMessage<Error.Req
   readonly originalUrl: string
   readonly method: Method
 
-  readonly formData: Effect.Effect<
+  readonly multipart: Effect.Effect<
     Scope.Scope | FileSystem.FileSystem | Path.Path,
-    FormData.FormDataError,
-    FormData.PersistedFormData
+    Multipart.MultipartError,
+    Multipart.Persisted
   >
-  readonly formDataStream: Stream.Stream<never, FormData.FormDataError, FormData.Part>
+  readonly multipartStream: Stream.Stream<never, Multipart.MultipartError, Multipart.Part>
 
   readonly modify: (options: {
     readonly url?: string
@@ -119,6 +120,22 @@ Added in v1.0.0
 
 # schema
 
+## schemaBodyForm
+
+**Signature**
+
+```ts
+export declare const schemaBodyForm: <I extends Multipart.Persisted, A>(
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<
+  Scope.Scope | Path.Path | FileSystem.FileSystem | ServerRequest,
+  Multipart.MultipartError | ParseResult.ParseError | Error.RequestError,
+  A
+>
+```
+
+Added in v1.0.0
+
 ## schemaBodyJson
 
 **Signature**
@@ -131,6 +148,40 @@ export declare const schemaBodyJson: <I, A>(
 
 Added in v1.0.0
 
+## schemaBodyMultipart
+
+**Signature**
+
+```ts
+export declare const schemaBodyMultipart: <I extends Multipart.Persisted, A>(
+  schema: Schema.Schema<I, A>
+) => Effect.Effect<
+  Scope.Scope | Path.Path | FileSystem.FileSystem | ServerRequest,
+  Multipart.MultipartError | ParseResult.ParseError,
+  A
+>
+```
+
+Added in v1.0.0
+
+## schemaBodyMultipartJson
+
+**Signature**
+
+```ts
+export declare const schemaBodyMultipartJson: <I, A>(
+  schema: Schema.Schema<I, A>
+) => (
+  field: string
+) => Effect.Effect<
+  Scope.Scope | Path.Path | FileSystem.FileSystem | ServerRequest,
+  Multipart.MultipartError | ParseResult.ParseError | Error.RequestError,
+  A
+>
+```
+
+Added in v1.0.0
+
 ## schemaBodyUrlParams
 
 **Signature**
@@ -139,40 +190,6 @@ Added in v1.0.0
 export declare const schemaBodyUrlParams: <I extends Readonly<Record<string, string>>, A>(
   schema: Schema.Schema<I, A>
 ) => Effect.Effect<ServerRequest, ParseResult.ParseError | Error.RequestError, A>
-```
-
-Added in v1.0.0
-
-## schemaFormData
-
-**Signature**
-
-```ts
-export declare const schemaFormData: <I extends FormData.PersistedFormData, A>(
-  schema: Schema.Schema<I, A>
-) => Effect.Effect<
-  Scope.Scope | Path.Path | FileSystem.FileSystem | ServerRequest,
-  FormData.FormDataError | ParseResult.ParseError,
-  A
->
-```
-
-Added in v1.0.0
-
-## schemaFormDataJson
-
-**Signature**
-
-```ts
-export declare const schemaFormDataJson: <I, A>(
-  schema: Schema.Schema<I, A>
-) => (
-  field: string
-) => Effect.Effect<
-  Scope.Scope | Path.Path | FileSystem.FileSystem | ServerRequest,
-  FormData.FormDataError | ParseResult.ParseError | Error.RequestError,
-  A
->
 ```
 
 Added in v1.0.0

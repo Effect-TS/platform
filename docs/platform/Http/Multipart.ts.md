@@ -1,10 +1,10 @@
 ---
-title: Http/FormData.ts
-nav_order: 13
+title: Http/Multipart.ts
+nav_order: 17
 parent: "@effect/platform"
 ---
 
-## FormData overview
+## Multipart overview
 
 Added in v1.0.0
 
@@ -13,12 +13,12 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructors](#constructors)
-  - [formData](#formdata)
   - [makeChannel](#makechannel)
   - [makeConfig](#makeconfig)
+  - [toPersisted](#topersisted)
 - [errors](#errors)
-  - [FormDataError](#formdataerror)
-  - [FormDataError (interface)](#formdataerror-interface)
+  - [MultipartError](#multiparterror)
+  - [MultipartError (interface)](#multiparterror-interface)
 - [fiber refs](#fiber-refs)
   - [fieldMimeTypes](#fieldmimetypes)
   - [maxFieldSize](#maxfieldsize)
@@ -32,8 +32,8 @@ Added in v1.0.0
   - [Field (interface)](#field-interface)
   - [File (interface)](#file-interface)
   - [Part (type alias)](#part-type-alias)
+  - [Persisted (interface)](#persisted-interface)
   - [PersistedFile (interface)](#persistedfile-interface)
-  - [PersistedFormData (interface)](#persistedformdata-interface)
 - [refinements](#refinements)
   - [isField](#isfield)
 - [schema](#schema)
@@ -53,19 +53,6 @@ Added in v1.0.0
 
 # constructors
 
-## formData
-
-**Signature**
-
-```ts
-export declare const formData: (
-  stream: Stream.Stream<never, FormDataError, Part>,
-  writeFile?: ((path: string, file: File) => Effect.Effect<FileSystem.FileSystem, FormDataError, void>) | undefined
-) => Effect.Effect<FileSystem.FileSystem | Path.Path | Scope.Scope, FormDataError, PersistedFormData>
-```
-
-Added in v1.0.0
-
 ## makeChannel
 
 **Signature**
@@ -74,7 +61,7 @@ Added in v1.0.0
 export declare const makeChannel: <IE>(
   headers: Record<string, string>,
   bufferSize?: number
-) => Channel.Channel<never, IE, Chunk.Chunk<Uint8Array>, unknown, FormDataError | IE, Chunk.Chunk<Part>, unknown>
+) => Channel.Channel<never, IE, Chunk.Chunk<Uint8Array>, unknown, MultipartError | IE, Chunk.Chunk<Part>, unknown>
 ```
 
 Added in v1.0.0
@@ -89,26 +76,39 @@ export declare const makeConfig: (headers: Record<string, string>) => Effect.Eff
 
 Added in v1.0.0
 
-# errors
-
-## FormDataError
+## toPersisted
 
 **Signature**
 
 ```ts
-export declare const FormDataError: (reason: FormDataError["reason"], error: unknown) => FormDataError
+export declare const toPersisted: (
+  stream: Stream.Stream<never, MultipartError, Part>,
+  writeFile?: ((path: string, file: File) => Effect.Effect<FileSystem.FileSystem, MultipartError, void>) | undefined
+) => Effect.Effect<FileSystem.FileSystem | Path.Path | Scope.Scope, MultipartError, Persisted>
 ```
 
 Added in v1.0.0
 
-## FormDataError (interface)
+# errors
+
+## MultipartError
 
 **Signature**
 
 ```ts
-export interface FormDataError extends Data.Case {
+export declare const MultipartError: (reason: MultipartError["reason"], error: unknown) => MultipartError
+```
+
+Added in v1.0.0
+
+## MultipartError (interface)
+
+**Signature**
+
+```ts
+export interface MultipartError extends Data.Case {
   readonly [ErrorTypeId]: ErrorTypeId
-  readonly _tag: "FormDataError"
+  readonly _tag: "MultipartError"
   readonly reason: "FileTooLarge" | "FieldTooLarge" | "BodyTooLarge" | "TooManyParts" | "InternalError" | "Parse"
   readonly error: unknown
 }
@@ -237,7 +237,7 @@ export interface File extends Part.Proto {
   readonly key: string
   readonly name: string
   readonly contentType: string
-  readonly content: Stream.Stream<never, FormDataError, Uint8Array>
+  readonly content: Stream.Stream<never, MultipartError, Uint8Array>
 }
 ```
 
@@ -253,6 +253,18 @@ export type Part = Field | File
 
 Added in v1.0.0
 
+## Persisted (interface)
+
+**Signature**
+
+```ts
+export interface Persisted {
+  readonly [key: string]: ReadonlyArray<PersistedFile> | string
+}
+```
+
+Added in v1.0.0
+
 ## PersistedFile (interface)
 
 **Signature**
@@ -264,18 +276,6 @@ export interface PersistedFile extends Part.Proto {
   readonly name: string
   readonly contentType: string
   readonly path: string
-}
-```
-
-Added in v1.0.0
-
-## PersistedFormData (interface)
-
-**Signature**
-
-```ts
-export interface PersistedFormData {
-  readonly [key: string]: ReadonlyArray<PersistedFile> | string
 }
 ```
 
@@ -313,8 +313,8 @@ Added in v1.0.0
 export declare const schemaJson: <I, A>(
   schema: Schema.Schema<I, A>
 ) => {
-  (field: string): (formData: PersistedFormData) => Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
-  (formData: PersistedFormData, field: string): Effect.Effect<never, FormDataError | ParseResult.ParseError, A>
+  (field: string): (persisted: Persisted) => Effect.Effect<never, MultipartError | ParseResult.ParseError, A>
+  (persisted: Persisted, field: string): Effect.Effect<never, MultipartError | ParseResult.ParseError, A>
 }
 ```
 
@@ -325,9 +325,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const schemaPersisted: <I extends PersistedFormData, A>(
+export declare const schemaPersisted: <I extends Persisted, A>(
   schema: Schema.Schema<I, A>
-) => (formData: PersistedFormData) => Effect.Effect<never, ParseResult.ParseError, A>
+) => (persisted: Persisted) => Effect.Effect<never, ParseResult.ParseError, A>
 ```
 
 Added in v1.0.0
