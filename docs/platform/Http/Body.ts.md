@@ -25,6 +25,7 @@ Added in v1.0.0
   - [text](#text)
   - [uint8Array](#uint8array)
   - [unsafeJson](#unsafejson)
+  - [urlParams](#urlparams)
 - [errors](#errors)
   - [BodyError](#bodyerror)
   - [BodyError (interface)](#bodyerror-interface)
@@ -180,6 +181,16 @@ Added in v1.0.0
 
 ```ts
 export declare const unsafeJson: (body: unknown) => Uint8Array
+```
+
+Added in v1.0.0
+
+## urlParams
+
+**Signature**
+
+```ts
+export declare const urlParams: (urlParams: UrlParams.UrlParams) => Uint8Array
 ```
 
 Added in v1.0.0
