@@ -114,14 +114,14 @@ importers:
         version: 1.0.1
     devDependencies:
       '@effect/schema':
-        specifier: ^0.55.0
-        version: 0.55.0(effect@2.0.0-next.61)(fast-check@3.15.0)
+        specifier: ^0.56.0
+        version: 0.56.0(effect@2.0.0-next.62)(fast-check@3.15.0)
       '@types/path-browserify':
         specifier: ^1.0.2
         version: 1.0.2
       effect:
-        specifier: 2.0.0-next.61
-        version: 2.0.0-next.61
+        specifier: 2.0.0-next.62
+        version: 2.0.0-next.62
     publishDirectory: dist
 
   packages/platform-browser:
@@ -130,11 +130,11 @@ importers:
         specifier: workspace:^
         version: link:../platform/dist
       '@effect/schema':
-        specifier: ^0.55.0
-        version: 0.55.0(effect@2.0.0-next.61)(fast-check@3.15.0)
+        specifier: ^0.56.0
+        version: 0.56.0(effect@2.0.0-next.62)(fast-check@3.15.0)
       effect:
-        specifier: 2.0.0-next.61
-        version: 2.0.0-next.61
+        specifier: 2.0.0-next.62
+        version: 2.0.0-next.62
       happy-dom:
         specifier: ^12.10.3
         version: 12.10.3
@@ -149,14 +149,14 @@ importers:
         specifier: workspace:^
         version: link:../platform-node/dist
       '@effect/schema':
-        specifier: ^0.55.0
-        version: 0.55.0(effect@2.0.0-next.61)(fast-check@3.15.0)
+        specifier: ^0.56.0
+        version: 0.56.0(effect@2.0.0-next.62)(fast-check@3.15.0)
       bun-types:
         specifier: ^1.0.18
         version: 1.0.18
       effect:
-        specifier: 2.0.0-next.61
-        version: 2.0.0-next.61
+        specifier: 2.0.0-next.62
+        version: 2.0.0-next.62
     publishDirectory: dist
 
   packages/platform-node:
@@ -172,8 +172,8 @@ importers:
         specifier: workspace:^
         version: link:../platform/dist
       '@effect/schema':
-        specifier: ^0.55.0
-        version: 0.55.0(effect@2.0.0-next.61)(fast-check@3.15.0)
+        specifier: ^0.56.0
+        version: 0.56.0(effect@2.0.0-next.62)(fast-check@3.15.0)
       '@types/mime':
         specifier: ^3.0.4
         version: 3.0.4
@@ -184,8 +184,8 @@ importers:
         specifier: ^6.1.10
         version: 6.1.10
       effect:
-        specifier: 2.0.0-next.61
-        version: 2.0.0-next.61
+        specifier: 2.0.0-next.62
+        version: 2.0.0-next.62
       tar:
         specifier: ^6.2.0
         version: 6.2.0
@@ -774,13 +774,13 @@ packages:
     resolution: {integrity: sha512-BnlM8LlaqCAYgdRfxlbR7gXGh/FD1scL1fPgNVJEPoOM08od1jtJz+iKhwfaud8TPnnhZR+TED2h5ynjanLeCQ==}
     dev: true
 
-  /@effect/schema@0.55.0(effect@2.0.0-next.61)(fast-check@3.15.0):
-    resolution: {integrity: sha512-CWP/EMrdnwwS1t1dfAo1Z0uBFzSNiUbloRoHZBdtuTVFf03RDUk5yccm8EZilbEnAHzL4SQwyoQYD1yN6RA6dQ==}
+  /@effect/schema@0.56.0(effect@2.0.0-next.62)(fast-check@3.15.0):
+    resolution: {integrity: sha512-qVR6T9+Lbv2cAhtIAysYvHpRm8iJuMjhp++q0ZMl3ACyQM4v9mvzEg1hQxF0GpAAHS7MTagVDDXN6WCNPEK4oA==}
     peerDependencies:
-      effect: 2.0.0-next.61
+      effect: 2.0.0-next.62
       fast-check: ^3.13.2
     dependencies:
-      effect: 2.0.0-next.61
+      effect: 2.0.0-next.62
       fast-check: 3.15.0
     dev: true
 
@@ -2810,8 +2810,8 @@ packages:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: true
 
-  /effect@2.0.0-next.61:
-    resolution: {integrity: sha512-BuRr9SEwYdMVLQunATRjm3MAkTgWI21Tyn5ooWVZnTeXj0lUqSV0fjaqNFksEymssmwJ1ucogbuYQ/3RLmwxgA==}
+  /effect@2.0.0-next.62:
+    resolution: {integrity: sha512-fJhLzf5oouL4WZP314ZJgZz5Bel7OHTY+YFxO06sW1mSvqJz0s28y7jDHr5zhtTNM1YRvzbeLYUYfNaJYKqx1A==}
     dev: true
 
   /electron-to-chromium@1.4.611:
