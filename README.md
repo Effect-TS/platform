@@ -1,3 +1,11 @@
+# ⚠️ @effect/platform has moved
+
+This repository has been deprecated following the consolidation of its codebase into the [`effect` monorepo](https://github.com/Effect-TS/effect).
+
+You can find all `@effect/platform-*` packages here: https://github.com/effect-ts/effect/tree/main/packages
+
+---
+
 # API Reference
 
 For comprehensive information about the `@effect/platform` packages API, please consult our [API Reference](https://effect-ts.github.io/platform).
